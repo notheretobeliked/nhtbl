@@ -10,22 +10,7 @@ export namespace Components {
     }
     interface AppRoot {
     }
-    interface KgBackground {
-    }
-    interface KgCard {
-        "artworktitle": string;
-        "description": string;
-        "directions": string;
-        "images": Array<any>;
-        "maplink": string;
-        "name": string;
-    }
-    interface KgFooter {
-    }
-    interface KgIntro {
-        "introtext": string;
-    }
-    interface KgLogo {
+    interface NhtblLogo {
     }
 }
 declare global {
@@ -41,44 +26,16 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
-    interface HTMLKgBackgroundElement extends Components.KgBackground, HTMLStencilElement {
+    interface HTMLNhtblLogoElement extends Components.NhtblLogo, HTMLStencilElement {
     }
-    var HTMLKgBackgroundElement: {
-        prototype: HTMLKgBackgroundElement;
-        new (): HTMLKgBackgroundElement;
-    };
-    interface HTMLKgCardElement extends Components.KgCard, HTMLStencilElement {
-    }
-    var HTMLKgCardElement: {
-        prototype: HTMLKgCardElement;
-        new (): HTMLKgCardElement;
-    };
-    interface HTMLKgFooterElement extends Components.KgFooter, HTMLStencilElement {
-    }
-    var HTMLKgFooterElement: {
-        prototype: HTMLKgFooterElement;
-        new (): HTMLKgFooterElement;
-    };
-    interface HTMLKgIntroElement extends Components.KgIntro, HTMLStencilElement {
-    }
-    var HTMLKgIntroElement: {
-        prototype: HTMLKgIntroElement;
-        new (): HTMLKgIntroElement;
-    };
-    interface HTMLKgLogoElement extends Components.KgLogo, HTMLStencilElement {
-    }
-    var HTMLKgLogoElement: {
-        prototype: HTMLKgLogoElement;
-        new (): HTMLKgLogoElement;
+    var HTMLNhtblLogoElement: {
+        prototype: HTMLNhtblLogoElement;
+        new (): HTMLNhtblLogoElement;
     };
     interface HTMLElementTagNameMap {
         "app-home": HTMLAppHomeElement;
         "app-root": HTMLAppRootElement;
-        "kg-background": HTMLKgBackgroundElement;
-        "kg-card": HTMLKgCardElement;
-        "kg-footer": HTMLKgFooterElement;
-        "kg-intro": HTMLKgIntroElement;
-        "kg-logo": HTMLKgLogoElement;
+        "nhtbl-logo": HTMLNhtblLogoElement;
     }
 }
 declare namespace LocalJSX {
@@ -86,31 +43,12 @@ declare namespace LocalJSX {
     }
     interface AppRoot {
     }
-    interface KgBackground {
-    }
-    interface KgCard {
-        "artworktitle"?: string;
-        "description"?: string;
-        "directions"?: string;
-        "images"?: Array<any>;
-        "maplink"?: string;
-        "name"?: string;
-    }
-    interface KgFooter {
-    }
-    interface KgIntro {
-        "introtext"?: string;
-    }
-    interface KgLogo {
+    interface NhtblLogo {
     }
     interface IntrinsicElements {
         "app-home": AppHome;
         "app-root": AppRoot;
-        "kg-background": KgBackground;
-        "kg-card": KgCard;
-        "kg-footer": KgFooter;
-        "kg-intro": KgIntro;
-        "kg-logo": KgLogo;
+        "nhtbl-logo": NhtblLogo;
     }
 }
 export { LocalJSX as JSX };
@@ -119,11 +57,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
-            "kg-background": LocalJSX.KgBackground & JSXBase.HTMLAttributes<HTMLKgBackgroundElement>;
-            "kg-card": LocalJSX.KgCard & JSXBase.HTMLAttributes<HTMLKgCardElement>;
-            "kg-footer": LocalJSX.KgFooter & JSXBase.HTMLAttributes<HTMLKgFooterElement>;
-            "kg-intro": LocalJSX.KgIntro & JSXBase.HTMLAttributes<HTMLKgIntroElement>;
-            "kg-logo": LocalJSX.KgLogo & JSXBase.HTMLAttributes<HTMLKgLogoElement>;
+            "nhtbl-logo": LocalJSX.NhtblLogo & JSXBase.HTMLAttributes<HTMLNhtblLogoElement>;
         }
     }
 }
