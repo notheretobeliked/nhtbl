@@ -52,12 +52,12 @@ nhtbl-logo {
 }
 
 header.main-header {
-  animation:wobble 10s ease-in-out infinite;
-  transform-origin:center center;
+  @apply left-7 top-7;
+
+  animation:wobble 500s ease-in-out infinite;
+  transform-origin:left center;
   transform-style:preserve-3d;
   position: fixed;
-  top: 50px;
-  left: 50px;
   z-index: 99;
   width: 100%;
 }
@@ -70,11 +70,11 @@ header.main-header {
 }
 
 h1 {
-  animation:glow 10s ease-in-out infinite;
+  animation:glow 100s ease-in-out infinite;
   -webkit-text-stroke:1px #fff; 
   display:block;
   width:100%;
-  padding:40px;
+  padding:0;
   text-transform:uppercase;
   position:absolute;
   color:#0a0a0a;

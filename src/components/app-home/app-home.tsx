@@ -35,14 +35,8 @@ export class AppHome {
       <main class="main">
         <header class="main-header">
           <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
-          <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
-          <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
-          <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
-          <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
-          <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
-          <h1 class="font-lab-mono uppercase">NOT HERE TO BE LIKED</h1>
         </header>
-        <div class="images">
+        <div class="images max-w-5xl mx-auto">
           <ion-slides pager={true} options={this.slideOpts}>
             {this.images()?.map(image => (
               <ion-slide>
@@ -51,9 +45,9 @@ export class AppHome {
             )) }
           </ion-slides>
         </div>
-        <div class="about font-lab-mono mt-10">
-          We design for life and concoct strategies for the revolution. <a href="mailto:love@notheretobeliked.studio">Email us for advice</a>
-          <br /><br />👆 Swipe for more images.
+        <div class="about font-lab-mono mt-10 max-w-5xl mx-auto">
+          We design for life and supply strategies for survival. <a href="mailto:love@notheretobeliked.studio">Email us for advice</a>
+          <br /><br />👈Swipe for more images👉
         </div>
 
       </main>
