@@ -1,0 +1,39 @@
+@font-face {
+  font-family: Adelphe-Germinal;
+  src: url('/fonts/Adelphe-GerminalRegular.woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Adelphe-Germinal;
+  src: url('/fonts/Adelphe-GerminalItalic.woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Adelphe-Germinal;
+  src: url('/fonts/Adelphe-GerminalSemiBold.woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Adelphe-Germinal;
+  src: url('/fonts/Adelphe-GerminalSemiBoldItalic.woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Typefesse;
+  src: url('/fonts/Typefesse_Claire-Obscure.woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}

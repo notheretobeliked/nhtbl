@@ -26,7 +26,10 @@
 </div>
 <div class="h-[2000vh]">
   <div style={transformString} class="box fixed flex h-screen w-screen items-center justify-center">
-    <div class="h-screen w-screen bg-[#E3FE53] my-[5wv] mx-[5wh]"><img src="/thingy.png" alt="text" /></div>
+    <div class="relative h-screen w-screen bg-green my-[5wv] mx-[5wh] flex justify-center items-center p-8 leading-relaxed text-black">
+      <p class="max-w-4xl font-serif text-4xl lg:text-6xl"><span class="font-display">Not here to be liked</span> is a creative lab designing for change. We help movements and organisations that strive for positive change articulate difficult messages and find new audiences. We are honest about the scale of the societal crises we are all living through and believe that everyone must play their part if we are going to thrive.</p>
+      <p class="absolute bottom-20 font-serif text-base">Scroll down for context</p>
+    </div>
   </div>
 </div>
 
