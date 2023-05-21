@@ -22,11 +22,11 @@
 <svelte:window bind:scrollY={y} />
 
 <div class="fixed z-0 w-screen h-screen">
-  <img src="/bg.jpg" class="w-full h-full object-cover" alt="bg"/>
+  <img src="/bg.jpg" class="w-full h-full object-cover" alt="background"/>
 </div>
 <div class="h-[2000vh]">
   <div style={transformString} class="box fixed flex h-screen w-screen items-center justify-center">
-    <div class="h-screen w-screen bg-[#E3FE53] my-[5wv] mx-[5wh]"><img src="/thingy.png" /></div>
+    <div class="h-screen w-screen bg-[#E3FE53] my-[5wv] mx-[5wh]"><img src="/thingy.png" alt="text" /></div>
   </div>
 </div>
 
