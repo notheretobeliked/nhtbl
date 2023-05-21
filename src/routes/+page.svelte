@@ -1,2 +1,35 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  import { onMount } from 'svelte'
+  let y: number
+  let percentage: number
+  let pageHeight = 0
+  console.log(pageHeight)
+  let box: HTMLDivElement
+
+  onMount(() => {
+    pageHeight = document.documentElement.scrollHeight - window.innerHeight
+  })
+
+  let transformString: string
+
+  $: {
+    percentage = 100-((y / pageHeight)*100)
+    console.log(percentage)
+    transformString = `transform: scale(${percentage}%)`
+  }
+</script>
+
+<svelte:window bind:scrollY={y} />
+
+<div class="fixed z-0 w-screen h-screen">
+  <img src="/bg.jpg" class="w-full h-full object-cover" alt="bg"/>
+</div>
+<div class="h-[2000vh]">
+  <div style={transformString} class="box fixed flex h-screen w-screen items-center justify-center">
+    <div class="h-screen w-screen bg-[#E3FE53] my-[5wv] mx-[5wh]"><img src="/thingy.png" /></div>
+  </div>
+</div>
+
+<style>
+
+</style>
