@@ -52,12 +52,9 @@ declare module '$env/static/private' {
 	export const ZSH: string;
 	export const USER: string;
 	export const NVM_DIR: string;
-	export const LS_COLORS: string;
-	export const PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: string;
 	export const npm_package_scripts_check_watch: string;
 	export const COMMAND_MODE: string;
 	export const PNPM_SCRIPT_SRC_DIR: string;
-	export const PUPPETEER_EXECUTABLE_PATH: string;
 	export const SSH_AUTH_SOCK: string;
 	export const __CF_USER_TEXT_ENCODING: string;
 	export const npm_package_devDependencies_eslint: string;
@@ -162,12 +159,9 @@ declare module '$env/dynamic/private' {
 		ZSH: string;
 		USER: string;
 		NVM_DIR: string;
-		LS_COLORS: string;
-		PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: string;
 		npm_package_scripts_check_watch: string;
 		COMMAND_MODE: string;
 		PNPM_SCRIPT_SRC_DIR: string;
-		PUPPETEER_EXECUTABLE_PATH: string;
 		SSH_AUTH_SOCK: string;
 		__CF_USER_TEXT_ENCODING: string;
 		npm_package_devDependencies_eslint: string;
