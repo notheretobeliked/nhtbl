@@ -1,0 +1,174 @@
+query HomePageContent($uri: ID!) {
+  page(id: $uri, idType: URI) {
+    id
+    editorBlocks {
+      name
+      ...CoreParagraphFragment
+      ...AcfHomePageHeroFragment
+      ...AcfServicePushFragment
+      ...CoreColumnsFragment
+      ...CoreColumnFragment
+      ...AcfGalerieFragment
+      ...AcfPortfolioBlockFragment
+    }
+  }
+}
+
+fragment MediaDetailsFragment on MediaDetails {
+  sizes {
+    name
+    sourceUrl
+    width
+    height
+  }
+}
+
+fragment CoreColumnsFragment on CoreColumns {
+  innerBlocks {
+    parentClientId
+    clientId
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+  }
+  clientId
+  parentClientId
+}
+
+fragment CoreColumnFragment on CoreColumn {
+  anchor
+  apiVersion
+  innerBlocks {
+    clientId
+    parentClientId
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+    ...AcfServicePushFragment
+  }
+  clientId
+  parentClientId
+}
+
+fragment AcfGalerieFragment on AcfGalerie {
+  attributes {
+    align
+  }
+  galerie {
+    galerie {
+      nodes {
+        altText
+        caption(format: RENDERED)
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+      }
+    }
+  }
+  name
+}
+
+fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
+  name
+  portfolioBlock {
+    portfolioItems {
+      nodes {
+        slug
+        ... on Nhtbl_project {
+          id
+          uri
+          imageGallery {
+            imageGallery {
+              nodes {
+                altText
+                mediaDetails {
+                  ...MediaDetailsFragment
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment CoreParagraphFragment on CoreParagraph {
+  anchor
+  apiVersion
+  attributes {
+    fontSize
+    style
+    content
+  }
+}
+
+fragment AcfHomePageHeroFragment on AcfHomePageHero {
+  apiVersion
+  blockEditorCategoryName
+  attributes {
+    align
+    backgroundColor
+  }
+  homePageHero {
+    images {
+      nodes {
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+        altText
+      }
+    }
+  }
+  innerBlocks {
+    apiVersion
+    blockEditorCategoryName
+    clientId
+    name
+    parentClientId
+    renderedHtml
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+    ...AcfServicePushFragment
+  }
+}
+
+fragment CoreHeadingFragment on CoreHeading {
+  anchor
+  apiVersion
+  attributes {
+    content
+    fontFamily
+    fontSize
+    textColor
+    textAlign
+  }
+}
+
+fragment AcfServicePushFragment on AcfServicePush {
+  clientId
+  name
+  parentClientId
+  servicePush {
+    service {
+      nodes {
+        slug
+        ... on Page {
+          id
+          title
+          uri
+          featuredImage {
+            node {
+              altText
+              mediaDetails {
+                ...MediaDetailsFragment
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  innerBlocks {
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+  }
+}

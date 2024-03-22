@@ -1,0 +1,31 @@
+import { GRAPHQL_ENDPOINT } from '$env/static/private'
+import type { PostsQueryVariables } from '$lib/generated/graphql'
+
+import { error } from '@sveltejs/kit'
+
+export function checkResponse(response: Response) {
+  const { headers, ok } = response
+  if (!ok) {
+    throw error(502, 'Bad Gateway')
+  }
+
+  if (!headers.get('content-type')?.includes('application/json')) {
+    throw error(502, 'Bad Gateway: expected JSON data from GraphQL backend')
+  }
+}
+
+type QueryVariables = PostsQueryVariables
+
+export async function graphqlQuery(query: string, variables: QueryVariables = {}) {
+    console.log(GRAPHQL_ENDPOINT)
+  return fetch(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  })
+}
