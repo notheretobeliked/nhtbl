@@ -9,6 +9,6 @@
   </script>
 
 {#if block.name === 'acf/home-page-hero'}
-    <HomePageHero content={block.innerBlocks} images={block.homePageHero.images.nodes}/>
+    <HomePageHero content={block.children} images={block.homePageHero.images.nodes}/>
 {/if}
   

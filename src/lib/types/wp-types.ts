@@ -59,6 +59,10 @@ interface AcfServicePush {
   }
   innerBlocks: (CoreParagraph | CoreHeading)[]
 }
+interface ImageNode {
+    altText: string
+    mediaDetais: MediaDetails[]
+}
 
 interface Page {
   id: string

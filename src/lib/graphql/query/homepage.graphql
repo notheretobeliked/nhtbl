@@ -4,14 +4,21 @@ query HomePageContent($uri: ID!) {
     editorBlocks {
       name
       ...CoreParagraphFragment
+      ...CoreHeadingFragment
       ...AcfHomePageHeroFragment
       ...AcfServicePushFragment
       ...CoreColumnsFragment
       ...CoreColumnFragment
       ...AcfGalerieFragment
       ...AcfPortfolioBlockFragment
+      ...CoreGroupFragment
     }
   }
+}
+
+fragment CoreGroupFragment on CoreGroup {
+  parentClientId
+  clientId
 }
 
 fragment MediaDetailsFragment on MediaDetails {
@@ -24,12 +31,6 @@ fragment MediaDetailsFragment on MediaDetails {
 }
 
 fragment CoreColumnsFragment on CoreColumns {
-  innerBlocks {
-    parentClientId
-    clientId
-    ...CoreParagraphFragment
-    ...CoreHeadingFragment
-  }
   clientId
   parentClientId
 }
@@ -37,21 +38,16 @@ fragment CoreColumnsFragment on CoreColumns {
 fragment CoreColumnFragment on CoreColumn {
   anchor
   apiVersion
-  innerBlocks {
-    clientId
-    parentClientId
-    ...CoreParagraphFragment
-    ...CoreHeadingFragment
-    ...AcfServicePushFragment
-  }
-  clientId
   parentClientId
+  clientId
 }
 
 fragment AcfGalerieFragment on AcfGalerie {
   attributes {
     align
   }
+  clientId
+  parentClientId
   galerie {
     galerie {
       nodes {
@@ -68,6 +64,8 @@ fragment AcfGalerieFragment on AcfGalerie {
 
 fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
   name
+  clientId
+  parentClientId
   portfolioBlock {
     portfolioItems {
       nodes {
@@ -92,8 +90,8 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
 }
 
 fragment CoreParagraphFragment on CoreParagraph {
-  anchor
-  apiVersion
+  clientId
+  parentClientId
   attributes {
     fontSize
     style
@@ -104,6 +102,8 @@ fragment CoreParagraphFragment on CoreParagraph {
 fragment AcfHomePageHeroFragment on AcfHomePageHero {
   apiVersion
   blockEditorCategoryName
+  clientId
+  parentClientId
   attributes {
     align
     backgroundColor
@@ -118,22 +118,11 @@ fragment AcfHomePageHeroFragment on AcfHomePageHero {
       }
     }
   }
-  innerBlocks {
-    apiVersion
-    blockEditorCategoryName
-    clientId
-    name
-    parentClientId
-    renderedHtml
-    ...CoreParagraphFragment
-    ...CoreHeadingFragment
-    ...AcfServicePushFragment
-  }
 }
 
 fragment CoreHeadingFragment on CoreHeading {
-  anchor
-  apiVersion
+  parentClientId
+  clientId
   attributes {
     content
     fontFamily
@@ -145,6 +134,7 @@ fragment CoreHeadingFragment on CoreHeading {
 
 fragment AcfServicePushFragment on AcfServicePush {
   clientId
+  parentClientId
   name
   parentClientId
   servicePush {
@@ -166,9 +156,5 @@ fragment AcfServicePushFragment on AcfServicePush {
         }
       }
     }
-  }
-  innerBlocks {
-    ...CoreParagraphFragment
-    ...CoreHeadingFragment
   }
 }

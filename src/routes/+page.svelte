@@ -7,7 +7,9 @@
 
   const images = data.images
   const content = data.content
-  const blocks = data.data.page.editorBlocks
+  const blocks = data.editorBlocks
+
+  console.log(data)
   
 
 
