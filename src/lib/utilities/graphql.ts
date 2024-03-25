@@ -17,7 +17,6 @@ export function checkResponse(response: Response) {
 type QueryVariables = PostsQueryVariables
 
 export async function graphqlQuery(query: string, variables: QueryVariables = {}) {
-    console.log(GRAPHQL_ENDPOINT)
   return fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
