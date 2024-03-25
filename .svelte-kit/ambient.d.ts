@@ -98,6 +98,7 @@ declare module '$env/static/private' {
 	export const LANG: string;
 	export const npm_package_name: string;
 	export const npm_package_devDependencies_storybook: string;
+	export const npm_package_dependencies_svelte_bricks: string;
 	export const NODE_PATH: string;
 	export const npm_package_scripts_build: string;
 	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
@@ -246,6 +247,7 @@ declare module '$env/dynamic/private' {
 		LANG: string;
 		npm_package_name: string;
 		npm_package_devDependencies_storybook: string;
+		npm_package_dependencies_svelte_bricks: string;
 		NODE_PATH: string;
 		npm_package_scripts_build: string;
 		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;

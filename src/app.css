@@ -4,3 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.text-2xl,
+.text-3xl {
+    @apply font-display;
+}

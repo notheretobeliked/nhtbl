@@ -12,7 +12,7 @@
     "format": "prettier --plugin-search-dir . --write .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "gen:graphql":"export $(grep ^GRAPHQL_ENDPOINT .env | xargs) && graphql-codegen --config codegen.json"
+    "gen:graphql": "export $(grep ^GRAPHQL_ENDPOINT .env | xargs) && graphql-codegen --config codegen.json"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.2.22",
@@ -61,5 +61,8 @@
   "peerDependencies": {
     "@types/node": "^20.11.30",
     "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "svelte-bricks": "^0.2.1"
   }
 }

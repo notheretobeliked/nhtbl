@@ -1,5 +1,15 @@
 {
 	"/": [
-		"src/routes/+page.server.ts"
+		"src/routes/+page.server.ts",
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/portfolio": [
+		"src/routes/portfolio/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/[...all]": [
+		"src/routes/[...all]/+page.server.ts",
+		"src/routes/+layout.server.ts"
 	]
 }
