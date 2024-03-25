@@ -1,24 +1,63 @@
-query HomePageContent($uri: ID!) {
+query PageContent($uri: ID!) {
   page(id: $uri, idType: URI) {
     id
     editorBlocks {
       name
+      parentClientId
+      clientId
       ...CoreParagraphFragment
       ...CoreHeadingFragment
       ...AcfHomePageHeroFragment
       ...AcfServicePushFragment
       ...CoreColumnsFragment
-      ...CoreColumnFragment
       ...AcfGalerieFragment
       ...AcfPortfolioBlockFragment
       ...CoreGroupFragment
+      ...PortfolioBlockDetailsFragment
     }
   }
 }
 
-fragment CoreGroupFragment on CoreGroup {
-  parentClientId
-  clientId
+fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
+  name
+  portfolioBlock {
+    portfolioItems {
+      nodes {
+        slug
+        ... on Nhtbl_project {
+          imageGallery {
+            imageGallery {
+              nodes {
+                altText
+                mediaDetails {
+                  sizes {
+                    sourceUrl
+                    width
+                    height
+                    name
+                  }
+                }
+              }
+            }
+          }
+          content(format: RENDERED)
+          featuredImage {
+            node {
+              altText
+              mediaDetails {
+                sizes {
+                  height
+                  width
+                  name
+                  sourceUrl
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 fragment MediaDetailsFragment on MediaDetails {
@@ -30,24 +69,22 @@ fragment MediaDetailsFragment on MediaDetails {
   }
 }
 
-fragment CoreColumnsFragment on CoreColumns {
-  clientId
-  parentClientId
+fragment CoreGroupFragment on CoreGroup {
+  attributes {
+    backgroundColor
+  }
 }
 
-fragment CoreColumnFragment on CoreColumn {
-  anchor
-  apiVersion
-  parentClientId
-  clientId
+fragment CoreColumnsFragment on CoreColumns {
+  attributes {
+    layout
+    className
+    verticalAlignment
+    style
+  }
 }
 
 fragment AcfGalerieFragment on AcfGalerie {
-  attributes {
-    align
-  }
-  clientId
-  parentClientId
   galerie {
     galerie {
       nodes {
@@ -59,13 +96,9 @@ fragment AcfGalerieFragment on AcfGalerie {
       }
     }
   }
-  name
 }
 
 fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
-  name
-  clientId
-  parentClientId
   portfolioBlock {
     portfolioItems {
       nodes {
@@ -90,22 +123,17 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
 }
 
 fragment CoreParagraphFragment on CoreParagraph {
-  clientId
-  parentClientId
   attributes {
-    fontSize
-    style
     content
+    fontFamily
+    fontSize
+    textColor
+    align
   }
 }
 
 fragment AcfHomePageHeroFragment on AcfHomePageHero {
-  apiVersion
-  blockEditorCategoryName
-  clientId
-  parentClientId
   attributes {
-    align
     backgroundColor
   }
   homePageHero {
@@ -121,22 +149,17 @@ fragment AcfHomePageHeroFragment on AcfHomePageHero {
 }
 
 fragment CoreHeadingFragment on CoreHeading {
-  parentClientId
-  clientId
   attributes {
     content
     fontFamily
     fontSize
     textColor
     textAlign
+    level
   }
 }
 
 fragment AcfServicePushFragment on AcfServicePush {
-  clientId
-  parentClientId
-  name
-  parentClientId
   servicePush {
     service {
       nodes {

@@ -37,23 +37,30 @@ function flatListToHierarchical<T extends Record<string, any>>(
 }
 
 export const load: PageServerLoad = async function load({ params, url }) {
-  const uri = `/${params.all || ''}`
+  const uri = `/${params.all || ''}`;
 
   try {
     const response = await graphqlQuery(PageContent, { uri: uri })
     checkResponse(response)
     const { data }: { data: PostsQuery } = await response.json()
 
-    if (!data) {
-      throw error(404, 'Page not found')
+    if (data.page === null) {
+      error(404, {
+        message: 'Not found'
+      });
     }
-	
 
-    const editorBlocks = flatListToHierarchical(data.page.editorBlocks)
 
+    
+
+    let editorBlocks = []
+
+  	editorBlocks = data.page.editorBlocks && flatListToHierarchical(data.page.editorBlocks)
+
+    
     return {
       data: data,
-      editorBlocks: editorBlocks,
+      editorBlocks: editorBlocks
     }
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }

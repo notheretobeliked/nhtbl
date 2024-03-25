@@ -1,0 +1,11 @@
+query Menu {
+  menu(id: "primary_navigation", idType: LOCATION) {
+    menuItems {
+      nodes {
+        label
+        order
+        uri
+      }
+    }
+  }
+}
