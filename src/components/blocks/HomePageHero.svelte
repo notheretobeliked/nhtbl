@@ -2,56 +2,63 @@
   import { onMount } from 'svelte'
   export let images
   export let content
+  import BlockRenderer from '$components/BlockRenderer.svelte'
 
-
-  let y:number
-  let percentage: number
+  let y: number
+  let percentage: number = 100
   let stopAnimationPoint: number
-  let pageHeight = 0
+  let pageHeight: number = 3000
+  let stopHeight: number = 3000
+  let stopped: boolean = false
+  let topStart: number = 0
 
-  const findImageSize = (sizes, name) => sizes.find(size => size.name === name)?.sourceUrl || '';
-
-
-  onMount(() => {
-    pageHeight = document.documentElement.scrollHeight - window.innerHeight
-    stopAnimationPoint = (pageHeight - window.innerHeight) * 0.6
-  })
+  const findImageSize = (sizes, name) => sizes.find(size => size.name === name)?.sourceUrl || ''
 
   let transformString: string
 
   let bgdiv: HTMLDivElement
+  let scaleFactor = 1
+  let transformPercentage = percentage
+
+  onMount(() => {
+    pageHeight = 3000 + window.innerHeight
+    stopHeight = 3000 - window.innerHeight
+    stopAnimationPoint = 3000
+    topStart = 3000 - window.innerHeight
+  })
 
   $: {
     percentage = 100 - (y / pageHeight) * 100
-    console.log(percentage)
-    if (percentage > 60) {
+    if (y > stopHeight) {
+      stopped = true
+    } else stopped = false
+
+
+    if (!stopped) {
       transformString = `transform: scale(${percentage}%)`
-    } else {
-      transformString = `transform: scale(60%); position: absolute; top:160%;`
-    }
+    } else transformString = `transform: scale(35%); position:absolute; top:${topStart}px`
   }
 </script>
 
 <svelte:window bind:scrollY={y} />
-<div class="h-[500vh]">
-  <div class={percentage > 60 ? 'fixed z-0 w-screen h-screen' : 'absolute z-0 w-screen h-screen'} style={percentage < 60 ? `top: ${stopAnimationPoint}px` : ''} bind:this={bgdiv}>
-    {#each images as image, index}
-      <img
-        src={findImageSize(image.mediaDetails.sizes, '1536x1536')}
-        alt={image.alt}
-        class="absolute top-0 left-0 w-full duration-1000 h-full object-cover transition-all {percentage <= 100 - (100 / images.length) * index &&
-        percentage > 100 - (100 / images.length) * (index + 1)
-          ? 'opacity-100'
-          : 'opacity-0'}"
-      />
-    {/each}
-  </div>
-
+<div class="{stopped ? 'absolute' : 'fixed top-0'} w-screen h-screen -z-10 top-0" bind:this={bgdiv} style={stopped ? `top:${topStart}px` : ''}>
+  {#each images as image, index}
+    <img
+      src={findImageSize(image.mediaDetails.sizes, 'medium_large')}
+      alt={image.alt}
+      class="absolute top-0 left-0 w-full duration-1000 h-full object-cover transition-all {percentage <= 100 - (100 / images.length) * index &&
+      percentage > 100 - (100 / images.length) * (index + 1)
+        ? 'opacity-100'
+        : 'opacity-0'}"
+    />
+  {/each}
+</div>
+<div class="h-[3000px] relative">
   <div style={transformString} class="box fixed flex h-screen w-screen items-center justify-center">
-    <div class="relative h-screen w-screen bg-green my-[5wv] mx-[5wh] flex justify-center items-center p-8 leading-relaxed text-black">
-      <div class="max-w-4xl font-serif text-2xl md:text-4xl lg:text-6xl box-container flex flex-col">
-        {#each content as contentItem, index}
-          <p class="text-{contentItem.attributes.fontSize}">{@html contentItem.attributes.content}</p>
+    <div class="relative h-screen w-screen bg-nhtbl-green-base my-[5wv] mx-[5wh] flex justify-center items-center p-8 leading-relaxed text-black">
+      <div class="max-w-4xl font-serif text-2xl md:text-4xl lg:text-6xl box-container flex flex-col gap-7">
+        {#each content as block, index}
+          <BlockRenderer {block} />
         {/each}
       </div>
     </div>
@@ -59,7 +66,7 @@
   <div class="fixed bottom-10 font-serif text-base text-center w-full">
     {#if percentage > 90}
       Scroll for more...
-    {:else if percentage > 60}
+    {:else if percentage > 1 && !stopped}
       <span class="text-white">Keep scrolling...</span>
     {/if}
   </div>
