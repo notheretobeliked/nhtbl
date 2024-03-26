@@ -137,7 +137,7 @@ fragment AcfHomePageHeroFragment on AcfHomePageHero {
     backgroundColor
   }
   homePageHero {
-    images {
+    images(first:100) {
       nodes {
         mediaDetails {
           ...MediaDetailsFragment
