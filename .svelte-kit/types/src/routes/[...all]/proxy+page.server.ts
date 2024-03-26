@@ -59,10 +59,10 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
     let editorBlocks = []
 
   	editorBlocks = data.page.editorBlocks && flatListToHierarchical(data.page.editorBlocks)
-
     
     return {
       data: data,
+      uri: uri,
       editorBlocks: editorBlocks
     }
   } catch (err: unknown) {

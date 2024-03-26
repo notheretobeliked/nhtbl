@@ -26,5 +26,6 @@ export async function graphqlQuery(query: string, variables: QueryVariables = {}
       query,
       variables,
     }),
+    cache: 'no-cache', // This tells the fetch to bypass the cache
   })
 }

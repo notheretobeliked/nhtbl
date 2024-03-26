@@ -6,7 +6,6 @@
 
   $: {
     blocks = data.editorBlocks
-    data = data
   }
   
 
@@ -14,7 +13,7 @@
 </script>
 
 <div>
-  {#each blocks as block, index}
+  {#each blocks as block, index (block.clientId)}
   <BlockRenderer block={block} />
   {/each}
 </div>

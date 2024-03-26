@@ -1,6 +1,7 @@
 query PageContent($uri: ID!) {
   page(id: $uri, idType: URI) {
     id
+    slug
     editorBlocks {
       name
       parentClientId

@@ -8,6 +8,7 @@
     import CoreGroup from '$components/blocks/CoreGroup.svelte';
     import CoreColumns from '$components/blocks/CoreColumns.svelte';
     import CoreColumn from '$components/blocks/CoreColumn.svelte';
+    import CoreSpacer from './blocks/CoreSpacer.svelte';
     import PortfolioBlock from './blocks/PortfolioBlock.svelte';
     export let block:EditorBlock;
     
@@ -40,6 +41,10 @@
 
 {#if block.name === 'core/heading'}
     <CoreHeading block={block} />
+{/if}
+
+{#if block.name === 'core/spacer'}
+    <CoreSpacer block={block} />
 {/if}
 
 {#if block.name === 'acf/portfolio-block'}

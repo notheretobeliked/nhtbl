@@ -1,8 +1,6 @@
 <script lang="ts">
     export let block:Array<any>;
     const { content, fontSize, level } = block.attributes
-    console.log(fontSize)
-    
   </script>
 {#if level === 1}
 <h1 class="text-{fontSize} font-display mb-7">{@html content }</h1>

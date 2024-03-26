@@ -2,9 +2,7 @@
   import type { PageData } from './$types'
   export let data: PageData
   import PortfolioItem from '$components/PortfolioItem.svelte';
-  const projects = data.data.nhtblProjects.nodes
-  
-  console.log(projects)
+  $: projects = data.data.nhtblProjects.nodes
   
 </script>
 

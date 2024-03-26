@@ -4,17 +4,15 @@
   export let data: PageData
   let blocks = []
 
-  $: {
-    blocks = data.editorBlocks
-    data = data.data
-    console.log(blocks)
-  }  
+  $: blocks = data.editorBlocks
+
+  console.log(data)
 
 
 </script>
 
 <div>
-  {#each blocks as block, index}
+  {#each blocks as block, index (block.clientId)}
   <BlockRenderer block={block} />
   {/each}
 </div>

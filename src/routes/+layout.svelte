@@ -3,7 +3,6 @@
   import type { PageData } from "./$types"
   export let data: PageData
   const menuItems = data.data.menu.menuItems.nodes
-  console.log(menuItems)
   import Button from '$components/Button.svelte'
 </script>
 <header>
