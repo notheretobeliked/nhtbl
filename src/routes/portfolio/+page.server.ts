@@ -1,3 +1,5 @@
+export const prerender = true;
+
 import type { PostsQuery } from '$lib/generated/graphql'
 import Projects from '$lib/graphql/query/projects.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
