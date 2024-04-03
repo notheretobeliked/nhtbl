@@ -26,12 +26,13 @@ const PortfolioItem = create_ssr_component(($$result, $$props, $$bindings, slots
     $$result,
     {
       imageSize: "medium_large",
-      imageObject: block.featuredImage.node
+      imageObject: block.featuredImage.node,
+      fit: "contain"
     },
     {},
     {}
   )}</div>` : ``}
-
+ 
 ${``}`;
 });
 const Masonry_svelte_svelte_type_style_lang = "";

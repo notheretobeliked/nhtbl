@@ -3,10 +3,21 @@ import { g as graphqlQuery, c as checkResponse } from "../../chunks/graphql.js";
 import { e as error } from "../../chunks/index.js";
 const prerender = true;
 function normalizeEditorBlock(block) {
+  if (!block.attributes) {
+    block.attributes = {};
+  }
   if (block.name.startsWith("acf/")) {
     if ("alignment" in block.attributes) {
       block.attributes.align = block.attributes.align || block.attributes.alignment;
       delete block.attributes.alignment;
+    }
+  }
+  if (typeof block.attributes.style === "string") {
+    try {
+      block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ""));
+    } catch (error2) {
+      console.error("Error parsing style attribute:", error2);
+      block.attributes.style = null;
     }
   }
   if (block.children) {
@@ -32,7 +43,7 @@ function flatListToHierarchical(data = [], { idKey = "clientId", parentKey = "pa
   return tree.map(normalizeEditorBlock);
 }
 const load = async function load2({ params, url }) {
-  const uri = `/${params.all || ""}`;
+  const uri = `/`;
   try {
     const response = await graphqlQuery(PageContent, { uri });
     checkResponse(response);

@@ -3,11 +3,10 @@ import { B as BlockRenderer } from "../../../chunks/BlockRenderer.js";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { data } = $$props;
   let blocks = [];
-  console.log(blocks);
   if ($$props.data === void 0 && $$bindings.data && data !== void 0)
     $$bindings.data(data);
   blocks = data.editorBlocks;
-  return `<div>${each(blocks, (block, index) => {
+  return `<div class="py-24">${each(blocks, (block, index) => {
     return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block }, {}, {})}`;
   })}
 </div>`;

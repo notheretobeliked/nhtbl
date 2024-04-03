@@ -1,39 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
 @font-face {
-  font-family: Adelphe-Germinal;
-  src: url('/fonts/Adelphe-GerminalRegular.woff2');
-  font-weight: 400;
+  font-family: 'Avara';
+  src:    url('/fonts/Avara-Bold.woff2') format('woff2'),
+          url('/fonts/Avara-Bold.woff') format('woff');
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: Adelphe-Germinal;
-  src: url('/fonts/Adelphe-GerminalItalic.woff2');
-  font-weight: 400;
+  font-family: 'Avara';
+  src:    url('/fonts/Avara-BoldItalic.woff2') format('woff2'),
+          url('/fonts/Avara-BoldItalic.woff') format('woff');
+  font-weight: 500;
   font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Adelphe-Germinal;
-  src: url('/fonts/Adelphe-GerminalSemiBold.woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Adelphe-Germinal;
-  src: url('/fonts/Adelphe-GerminalSemiBoldItalic.woff2');
-  font-weight: 600;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Typefesse;
-  src: url('/fonts/Typefesse_Claire-Obscure.woff2');
-  font-weight: 800;
-  font-style: normal;
   font-display: swap;
 }

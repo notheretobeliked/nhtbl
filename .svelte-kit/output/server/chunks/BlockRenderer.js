@@ -3,52 +3,106 @@ import { I as Image, M as Masonry, P as PortfolioItem } from "./Masonry.js";
 import { w as writable } from "./index2.js";
 const CoreParagraph = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { block } = $$props;
-  const { content, fontSize = null } = block.attributes;
-  const classNames = (fontSize2) => {
-    if (!fontSize2)
-      return null;
+  const { content, fontSize, textColor, textAlign } = block.attributes;
+  const classNames = (fontSize2, textColor2, textAlign2) => {
+    let textClasses, alignClasses, colorClasses = "";
     switch (fontSize2) {
-      case "lg":
-        return "font-display text-lg";
-      case "xl":
-        return "font-display text-xl";
-      case "2xl":
-        return "font-display text-2xl";
       case "base":
-        return "font-sans text-base";
-      default:
-        return null;
+        textClasses = "text-sans text-sm md:text-base";
+        break;
+      case "lg":
+        textClasses = "font-display text-base md:text-lg";
+        break;
+      case "xl":
+        textClasses = "font-display text-lg md:text-xl";
+        break;
+      case "2xl":
+        textClasses = "font-display text-xl md:text-2xl";
+        break;
+      case null:
+        textClasses = "text-sans text-sm md:text-base";
+        break;
     }
+    switch (textAlign2) {
+      case "center":
+        alignClasses = "text-center";
+        break;
+      case "left":
+        alignClasses = "text-left";
+        break;
+      case "right":
+        alignClasses = "text-right";
+        break;
+      case null:
+        alignClasses = "text-left";
+        break;
+    }
+    colorClasses = `text-${textColor2}`;
+    return `${textClasses} ${alignClasses} ${colorClasses}`;
   };
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
   return `
-<p${add_attribute("class", classNames(fontSize), 0)}><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></p>`;
+<p${add_attribute("class", classNames(fontSize, textColor, textAlign), 0)}><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></p>`;
 });
 const CoreHeading = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { block } = $$props;
-  const { content, fontSize, level } = block.attributes;
+  const { content, fontSize, textColor, textAlign, level } = block.attributes;
+  const classNames = (fontSize2, textColor2, textAlign2) => {
+    let textClasses, alignClasses, colorClasses = "";
+    switch (fontSize2) {
+      case "base":
+        textClasses = "text-sm md:text-base";
+        break;
+      case "lg":
+        textClasses = "text-base md:text-lg";
+        break;
+      case "xl":
+        textClasses = "text-lg md:text-xl";
+        break;
+      case "2xl":
+        textClasses = "text-xl md:text-2xl";
+        break;
+      case null:
+        textClasses = "text-sm md:text-base";
+        break;
+    }
+    switch (textAlign2) {
+      case "center":
+        alignClasses = "text-center";
+        break;
+      case "left":
+        alignClasses = "text-left";
+        break;
+      case "right":
+        alignClasses = "text-right";
+        break;
+      case null:
+        alignClasses = "text-left";
+        break;
+    }
+    colorClasses = `text-${textColor2}`;
+    return `${textClasses} ${alignClasses} ${colorClasses}`;
+  };
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
-  return `${level === 1 ? `<h1 class="${"text-" + escape(fontSize, true) + " font-display mb-7"}"><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></h1>` : ``}
-${level === 2 ? `<h2 class="${"text-" + escape(fontSize, true) + " font-display mb-7"}"><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></h2>` : ``}
-${level === 3 ? `<h3 class="${"text-" + escape(fontSize, true) + " font-display"}"><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></h3>` : ``}`;
+  return `${level === 1 ? `<h1 class="${escape(classNames(fontSize, textColor, textAlign), true) + " font-display"}"><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></h1>` : ``}
+${level === 2 ? `<h2 class="${escape(classNames(fontSize, textColor, textAlign), true) + " font-display"}"><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></h2>` : ``}
+${level === 3 ? `<h3 class="${escape(classNames(fontSize, textColor, textAlign), true) + " font-display"}"><!-- HTML_TAG_START -->${content}<!-- HTML_TAG_END --></h3>` : ``}`;
 });
 const HomePageHero = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { images } = $$props;
-  let { content } = $$props;
+  let { block } = $$props;
+  const images = block.homePageHero.images.nodes;
+  const content = block.children;
   let y;
   let percentage = 100;
   let pageHeight = 3e3;
   let stopped = false;
   let topStart = 0;
-  const findImageSize = (sizes, name) => sizes.find((size) => size.name === name)?.sourceUrl || "";
   let transformString;
   let bgdiv;
-  if ($$props.images === void 0 && $$bindings.images && images !== void 0)
-    $$bindings.images(images);
-  if ($$props.content === void 0 && $$bindings.content && content !== void 0)
-    $$bindings.content(content);
+  if ($$props.block === void 0 && $$bindings.block && block !== void 0)
+    $$bindings.block(block);
   {
     {
       percentage = 100 - y / pageHeight * 100;
@@ -60,14 +114,24 @@ const HomePageHero = create_ssr_component(($$result, $$props, $$bindings, slots)
     }
   }
   return `
-<div class="${escape(stopped ? "absolute" : "fixed top-0", true) + " w-screen h-screen -z-10 top-0"}"${add_attribute("style", stopped ? `top:${topStart}px` : "", 0)}${add_attribute("this", bgdiv, 0)}>${each(images, (image, index) => {
-    return `<img${add_attribute("src", findImageSize(image.mediaDetails.sizes, "medium_large"), 0)}${add_attribute("alt", image.alt, 0)} class="${"absolute top-0 left-0 w-full duration-1000 h-full object-cover transition-all " + escape(
+<div class="${escape(stopped ? "absolute" : "fixed top-0", true) + " w-full !px-0 h-screen -z-10 top-0"}"${add_attribute("style", stopped ? `top:${topStart}px` : "", 0)}${add_attribute("this", bgdiv, 0)}>${each(images, (image, index) => {
+    return `<div class="${"absolute top-0 left-0 w-full duration-1000 h-full object-cover transition-all " + escape(
       percentage <= 100 - 100 / images.length * index && percentage > 100 - 100 / images.length * (index + 1) ? "opacity-100" : "opacity-0",
       true
-    )}">`;
+    )}">${validate_component(Image, "Image").$$render(
+      $$result,
+      {
+        imageObject: image,
+        imageSize: "large",
+        fit: "cover"
+      },
+      {},
+      {}
+    )}
+  </div>`;
   })}</div>
-<div class="h-[3000px] relative"><div${add_attribute("style", transformString, 0)} class="box fixed flex h-screen w-screen items-center justify-center"><div class="relative h-screen w-screen bg-nhtbl-green-base my-[5wv] mx-[5wh] flex justify-center items-center p-8 leading-relaxed text-black"><div class="max-w-4xl font-serif text-2xl md:text-4xl lg:text-6xl box-container flex flex-col gap-7">${each(content, (block, index) => {
-    return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block }, {}, {})}`;
+<div class="h-[3000px] relative"><div${add_attribute("style", transformString, 0)} class="box fixed flex h-screen w-screen items-center justify-center"><div class="relative h-screen w-screen bg-nhtbl-green-base my-[5wv] mx-[5wh] flex justify-center items-center p-4 md:p-8 leading-relaxed text-black"><div class="max-w-4xl font-serif text-2xl md:text-4xl lg:text-6xl box-container">${each(content, (block2) => {
+    return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block: block2 }, {}, {})}`;
   })}</div></div></div>
   <div class="fixed bottom-10 font-serif text-base text-center w-full">${percentage > 90 ? `Scroll for more...` : `${percentage > 1 && !stopped ? `<span class="text-white">Keep scrolling...</span>` : ``}`}</div>
 </div>`;
@@ -76,7 +140,6 @@ const ServicePush = create_ssr_component(($$result, $$props, $$bindings, slots) 
   let { block } = $$props;
   const imageObject = block.servicePush.service.nodes[0].featuredImage.node;
   const uri = block.servicePush.service.nodes[0].uri;
-  console.log(block);
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
   return `<div class="group aspect-video rotate-1 max-w-[750px] relative bg-nhtbl-green-base mb-12 transition-colors duration-300 hover:bg-nhtbl-purple-base"><a${add_attribute("href", uri, 0)} class="block absolute inset-0"><div class="absolute inset-0 -z-0">${validate_component(Image, "Image").$$render(
@@ -99,8 +162,8 @@ const CoreGroup = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   const bgColor = block.attributes.backgroundColor ?? "white";
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
-  return `<div class="${"bg-" + escape(bgColor, true) + " px-16 py-16"}"><div class="${"m-auto " + escape(bgColor === "black" && "!text-white", true)}">${each(children, (block2, index) => {
-    return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block: block2 }, {}, {})}`;
+  return `<div class="px-2 md:px-0"><div class="${"m-auto " + escape(bgColor === "black" && "!text-white", true)}">${each(children, (block2, index) => {
+    return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block: block2, removePadding: true }, {}, {})}`;
   })}</div></div>`;
 });
 const CoreColumns = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -122,9 +185,10 @@ const CoreColumn = create_ssr_component(($$result, $$props, $$bindings, slots) =
 });
 const CoreSpacer = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { block } = $$props;
+  const height = block.attributes.height ? block.attributes.height : "5px";
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
-  return `<div class="h-[5rem]"></div>`;
+  return `<div style="${"height:" + escape(height, true)}"></div>`;
 });
 const PortfolioBlock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { block } = $$props;
@@ -190,57 +254,74 @@ const Carousel = create_ssr_component(($$result, $$props, $$bindings, slots) => 
 const GalerieBlock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { block } = $$props;
   const images = block.galerie.galerie.nodes;
-  console.log(images);
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
   return `${validate_component(Carousel, "Carousel").$$render($$result, { autoplay: true, images }, {}, {})}`;
 });
+function isACFHomePageHero(block2) {
+  return block2.homePageHero !== void 0;
+}
+function isACFServicePush(block2) {
+  return block2.servicePush !== void 0;
+}
+function mapSpacingToTailwind(styleObj) {
+  let classes = "";
+  const topPadding = styleObj?.spacing?.padding?.top?.replace("spacing|", "");
+  const bottomPadding = styleObj?.spacing?.padding?.bottom?.replace("spacing|", "");
+  if (topPadding) {
+    const topValue = parseInt(topPadding, 10) / 10;
+    classes += ` pt-${topValue}`;
+  }
+  if (bottomPadding) {
+    const bottomValue = parseInt(bottomPadding, 10) / 10;
+    classes += ` pb-${bottomValue}`;
+  }
+  return classes.trim();
+}
 const BlockRenderer = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { block } = $$props;
   const align = block.attributes.align || "none";
+  const bgColor = block.attributes.backgroundColor ?? "white";
+  const spacingClasses = block.attributes.style ? mapSpacingToTailwind(block.attributes.style) : "";
   const classNames = (align2) => {
+    let baseClasses = "";
     switch (align2) {
       case "full":
-        return "px-2 w-full max-w-full";
+        baseClasses = "w-full max-w-full";
+        break;
       case "wide":
-        return "px-2 w-full max-w-[980px] mx-auto";
+        baseClasses = "w-full max-w-[980px] mx-auto";
+        break;
       case "none":
-        return "px-2 w-full max-w-[852px] mx-auto";
+        baseClasses = "w-full max-w-[852px] mx-auto";
+        break;
       case null:
-        return "px-2 w-full";
+        baseClasses = "w-full";
+        break;
     }
+    return `${baseClasses} ${spacingClasses}`;
   };
   if ($$props.block === void 0 && $$bindings.block && block !== void 0)
     $$bindings.block(block);
-  return `<div${add_attribute("class", classNames(align), 0)}>${block.name === "acf/home-page-hero" ? `${validate_component(HomePageHero, "HomePageHero").$$render(
-    $$result,
-    {
-      content: block.children,
-      images: block.homePageHero.images.nodes
-    },
-    {},
-    {}
-  )}` : ``}
-  
-${block.name === "acf/service-push" ? `${validate_component(ServicePush, "ServicePush").$$render($$result, { block }, {}, {})}` : ``}
+  return `<div class="${escape(classNames(align), true) + " bg-" + escape(bgColor, true) + " !px-0"}">${isACFHomePageHero(block) ? `${validate_component(HomePageHero, "HomePageHero").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "core/group" ? `${validate_component(CoreGroup, "CoreGroup").$$render($$result, { block }, {}, {})}` : ``}
+  ${isACFServicePush(block) ? `${validate_component(ServicePush, "ServicePush").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "core/columns" ? `${validate_component(CoreColumns, "CoreColumns").$$render($$result, { block }, {}, {})}` : ``}
+  ${block.name === "core/group" ? `${validate_component(CoreGroup, "CoreGroup").$$render($$result, { block }, {}, {})}` : ``}
 
+  ${block.name === "core/columns" ? `${validate_component(CoreColumns, "CoreColumns").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "core/column" ? `${validate_component(CoreColumn, "CoreColumn").$$render($$result, { block }, {}, {})}` : ``}
+  ${block.name === "core/column" ? `${validate_component(CoreColumn, "CoreColumn").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "core/paragraph" ? `${validate_component(CoreParagraph, "CoreParagraph").$$render($$result, { block }, {}, {})}` : ``}
+  ${block.name === "core/paragraph" ? `${validate_component(CoreParagraph, "CoreParagraph").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "core/heading" ? `${validate_component(CoreHeading, "CoreHeading").$$render($$result, { block }, {}, {})}` : ``}
+  ${block.name === "core/heading" ? `${validate_component(CoreHeading, "CoreHeading").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "core/spacer" ? `${validate_component(CoreSpacer, "CoreSpacer").$$render($$result, { block }, {}, {})}` : ``}
+  ${block.name === "core/spacer" ? `${validate_component(CoreSpacer, "CoreSpacer").$$render($$result, { block }, {}, {})}` : ``}
 
-${block.name === "acf/portfolio-block" ? `${validate_component(PortfolioBlock, "PortfolioBlock").$$render($$result, { block }, {}, {})}` : ``}
+  ${block.name === "acf/portfolio-block" ? `${validate_component(PortfolioBlock, "PortfolioBlock").$$render($$result, { block }, {}, {})}` : ``}
 
-
-${block.name === "acf/galerie" ? `${validate_component(GalerieBlock, "GalerieBlock").$$render($$result, { block }, {}, {})}` : ``}</div>`;
+  ${block.name === "acf/galerie" ? `${validate_component(GalerieBlock, "GalerieBlock").$$render($$result, { block }, {}, {})}` : ``}</div>`;
 });
 export {
   BlockRenderer as B

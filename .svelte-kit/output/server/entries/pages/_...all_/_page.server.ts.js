@@ -12,6 +12,14 @@ function normalizeEditorBlock(block) {
       delete block.attributes.alignment;
     }
   }
+  if (typeof block.attributes.style === "string") {
+    try {
+      block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ""));
+    } catch (error2) {
+      console.error("Error parsing style attribute:", error2);
+      block.attributes.style = null;
+    }
+  }
   if (block.children) {
     block.children = block.children.map(normalizeEditorBlock);
   }
