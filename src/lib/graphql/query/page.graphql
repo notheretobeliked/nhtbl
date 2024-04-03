@@ -1,7 +1,6 @@
 query PageContent($uri: ID!) {
   page(id: $uri, idType: URI) {
     id
-    slug
     editorBlocks {
       name
       parentClientId
@@ -21,6 +20,9 @@ query PageContent($uri: ID!) {
 
 fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
   name
+  attributes {
+    alignment: align
+  }
   portfolioBlock {
     portfolioItems {
       nodes {
@@ -73,6 +75,7 @@ fragment MediaDetailsFragment on MediaDetails {
 fragment CoreGroupFragment on CoreGroup {
   attributes {
     backgroundColor
+    align
   }
 }
 
@@ -82,10 +85,14 @@ fragment CoreColumnsFragment on CoreColumns {
     className
     verticalAlignment
     style
+    align
   }
 }
 
 fragment AcfGalerieFragment on AcfGalerie {
+  attributes {
+    alignment: align
+  }
   galerie {
     galerie {
       nodes {
@@ -100,6 +107,9 @@ fragment AcfGalerieFragment on AcfGalerie {
 }
 
 fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
+  attributes {
+    alignment: align
+  }
   portfolioBlock {
     portfolioItems {
       nodes {
@@ -136,9 +146,10 @@ fragment CoreParagraphFragment on CoreParagraph {
 fragment AcfHomePageHeroFragment on AcfHomePageHero {
   attributes {
     backgroundColor
+    alignment: align
   }
   homePageHero {
-    images(first:100) {
+    images(first: 100) {
       nodes {
         mediaDetails {
           ...MediaDetailsFragment
@@ -157,10 +168,14 @@ fragment CoreHeadingFragment on CoreHeading {
     textColor
     textAlign
     level
+    align
   }
 }
 
 fragment AcfServicePushFragment on AcfServicePush {
+  attributes {
+    alignment: align
+  }
   servicePush {
     service {
       nodes {

@@ -6,7 +6,7 @@
 
   $: blocks = data.editorBlocks
 
-  console.log(data)
+  console.log(blocks)
 
 
 </script>

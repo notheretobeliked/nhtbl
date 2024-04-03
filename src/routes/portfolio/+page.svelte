@@ -1,13 +1,16 @@
 <script lang="ts">
   import type { PageData } from './$types'
+  import type { PortfolioItemNode } from '$lib/types/wp-types.ts'
   export let data: PageData
-  import PortfolioItem from '$components/PortfolioItem.svelte';
-  $: projects = data.data.nhtblProjects.nodes
-  
+  import PortfolioItem from '$components/PortfolioItem.svelte'
+  import Masonry from 'svelte-bricks'
+  let [minColWidth, maxColWidth, gap] = [400, 800, 30]
+  let items: PortfolioItemNode[] = data.data.nhtblProjects.nodes
+  $: items
 </script>
 
-<ul class="grid grid-cols-2 lg:grid-cols-3 bg-black min-h-screen">
-{#each projects as project}
-<li><PortfolioItem data={project} /></li>
-{/each}
-</ul>
+<div class="bg-black">
+  <Masonry {items} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
+    <PortfolioItem block={item} />
+  </Masonry>
+</div>

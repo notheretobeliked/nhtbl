@@ -4,13 +4,15 @@
   export let data: PageData
   const menuItems = data.data.menu.menuItems.nodes
   import Button from '$components/Button.svelte'
+  import { page } from '$app/stores'; // Importing $page store
+
 </script>
 <header>
   <nav class="fixed z-30 w-full flex px-4 justify-between items-center">
     <a href="/"><img src="/Nhtbl-logo.png" width="89" height="89" alt="A happy face drawn by a child" /></a>
     <ul class="flex flex-row gap-7 justify-end">
       {#each menuItems as menuItem, index}
-      <Button label={menuItem.label} url={menuItem.uri} />
+      <Button active="{$page.url.pathname === menuItem.uri}" label={menuItem.label} url={menuItem.uri} />
       {/each}
     </ul>
   </nav>

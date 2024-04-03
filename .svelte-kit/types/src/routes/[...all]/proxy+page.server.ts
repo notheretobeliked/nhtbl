@@ -13,6 +13,30 @@ interface HierarchicalOptions {
   childrenKey?: string
 }
 
+function normalizeEditorBlock(block: any) {
+  // Ensure attributes exists before attempting to access it
+  if (!block.attributes) {
+    block.attributes = {}; // Initialize with an empty object if it doesn't exist
+  }
+
+  if (block.name.startsWith('acf/')) {
+    if ('alignment' in block.attributes) {
+      // Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
+      block.attributes.align = block.attributes.align || block.attributes.alignment;
+      // Remove the 'alignment' attribute to avoid confusion
+      delete block.attributes.alignment;
+    }
+  }
+
+  // Normalize child blocks recursively
+  if (block.children) {
+    block.children = block.children.map(normalizeEditorBlock);
+  }
+
+  return block;
+}
+
+
 function flatListToHierarchical<T extends Record<string, any>>(
   data: T[] = [],
   { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
@@ -22,7 +46,6 @@ function flatListToHierarchical<T extends Record<string, any>>(
 
   data.forEach(item => {
     const newItem: T = { ...item }
-    // Adjusted to handle both undefined and null as "0" (root)
     const parentId: string = newItem[parentKey] == null ? '0' : newItem[parentKey]
 
     childrenOf[newItem[idKey]] = childrenOf[newItem[idKey]] || []
@@ -36,7 +59,7 @@ function flatListToHierarchical<T extends Record<string, any>>(
     }
   })
 
-  return tree
+  return tree.map(normalizeEditorBlock); // Normalize each root level block
 }
 
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
@@ -53,13 +76,8 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
       });
     }
 
+    let editorBlocks = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : [];
 
-    
-
-    let editorBlocks = []
-
-  	editorBlocks = data.page.editorBlocks && flatListToHierarchical(data.page.editorBlocks)
-    
     return {
       data: data,
       uri: uri,

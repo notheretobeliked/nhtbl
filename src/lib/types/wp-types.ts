@@ -1,133 +1,95 @@
-interface HomePageContentResponse {
+export interface HomePageContentResponse {
   page: {
     id: string
     editorBlocks: EditorBlock[]
   }
 }
-
-type EditorBlock = CoreParagraph | AcfHomePageHero | AcfServicePush | CoreColumns | CoreColumn | AcfGalerie | AcfPortfolioBlock
-
-// CoreParagraphFragment
-interface CoreParagraph {
-  anchor?: string
-  apiVersion: string
-  attributes: {
-    fontSize?: string
-    style?: string
-    content: string
-  }
+export interface EditorBlock {
+  name: string
+  parentClientId: string | null
+  clientId: string
+  attributes: Attributes
+  children?: EditorBlock[]
 }
 
-// AcfHomePageHeroFragment
-interface AcfHomePageHero {
-  apiVersion: string
-  blockEditorCategoryName: string
-  attributes: {
-    align?: string
-    backgroundColor?: string
-  }
+export interface Attributes {
+  backgroundColor?: string
+  content?: string
+  fontFamily?: string | null
+  fontSize?: string | null
+  textColor?: string | null
+  align?: "full" | "wide " | '' | null
+  level?: number | null
+}
+
+export interface ACFHomePageHero extends EditorBlock {
   homePageHero: {
     images: {
-      nodes: MediaDetails[]
+      nodes: ImageObject[]
     }
   }
-  innerBlocks: (CoreParagraph | CoreHeading | AcfServicePush)[]
 }
 
-// CoreHeadingFragment
-interface CoreHeading {
-  anchor?: string
-  apiVersion: string
-  attributes: {
-    content: string
-    fontFamily?: string
-    fontSize?: string
-    textColor?: string
-    textAlign?: string
-  }
-}
-
-// AcfServicePushFragment
-interface AcfServicePush {
-  clientId: string
-  name: string
-  parentClientId?: string
+export interface ACFServicePush extends EditorBlock {
   servicePush: {
     service: {
-      nodes: Page[]
+      nodes: ServiceNode[]
     }
   }
-  innerBlocks: (CoreParagraph | CoreHeading)[]
-}
-interface ImageNode {
-    altText: string
-    mediaDetais: MediaDetails[]
 }
 
-interface Page {
+export interface ACFPortfolioBlock extends EditorBlock {
+  portfolioBlock: {
+    portfolioItems: {
+      nodes: PortfolioItemNode[]
+    }
+  }
+}
+
+export interface ServiceNode {
+  slug: string
   id: string
   title: string
   uri: string
-  featuredImage?: {
-    node: MediaDetails
-  }
+  featuredImage: FeaturedImage
 }
 
-// CoreColumns and CoreColumn Fragments (considering them similar in structure for the example)
-interface CoreColumns {
-  innerBlocks: (CoreParagraph | CoreHeading)[]
-  clientId: string
-  parentClientId?: string
-}
-
-interface CoreColumn extends CoreColumns {
-  anchor?: string
-  apiVersion: string
-}
-
-// AcfGalerieFragment
-interface AcfGalerie {
-  attributes: {
-    align?: string
-  }
-  galerie: {
-    galerie: {
-      nodes: {
-        altText?: string
-        caption?: string
-        mediaDetails: MediaDetails
-      }[]
-    }
-  }
-  name: string
-}
-
-// AcfPortfolioBlockFragment
-interface AcfPortfolioBlock {
-  name: string
-  portfolioBlock: {
-    portfolioItems: {
-      nodes: NhtblProject[]
-    }
-  }
-}
-
-interface NhtblProject {
+export interface PortfolioItemNode {
+  slug: string
   id: string
   uri: string
   imageGallery: {
     imageGallery: {
-      nodes: MediaDetails[]
+      nodes: ImageObject[]
     }
   }
+  content: string
+  featuredImage: FeaturedImage
 }
 
-// MediaDetailsFragment and related structures
-interface MediaDetails {
-  sizes: {
-    name?: string
-    sourceUrl: string
-    width: number
-    height: number
-  }[]
+export interface FeaturedImage {
+  node: ImageObject
+}
+
+export type ImageSize = {
+  name: string
+  sourceUrl: string
+  width: string
+  height: string
+}
+
+export type MediaDetails = {
+  sizes: ImageSize[]
+}
+
+export type ImageObject = {
+  altText: string
+  caption: null | string
+  mediaDetails: MediaDetails
+}
+
+export interface ProjectsQueryResult {
+  nhtblProjects: {
+    nodes: PortfolioItemNode[] // Assuming PortfolioItemNode represents your project structure
+  }
 }

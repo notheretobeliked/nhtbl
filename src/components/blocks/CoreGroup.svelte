@@ -6,9 +6,10 @@
 </script>
 
 <div class="bg-{bgColor} px-16 py-16">
-<div class="max-w-[856px] m-auto {bgColor === 'black' && '!text-white'}">
+<div class="m-auto {bgColor === 'black' && '!text-white'}">
   {#each children as block, index}
     <BlockRenderer {block} />
   {/each}
 </div>
 </div>
+

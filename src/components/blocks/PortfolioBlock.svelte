@@ -1,11 +1,15 @@
 <script lang="ts">
   export let block: EditorBlock
   import PortfolioItem from '$components/PortfolioItem.svelte'
-  const projects = block.portfolioBlock.portfolioItems.nodes
+  import type { PortfolioItemNode } from '$lib/types/wp-types.ts'
+  import Masonry from 'svelte-bricks'
+  let [minColWidth, maxColWidth, gap] = [400, 800, 30]
+  let items: PortfolioItemNode[] = block.portfolioBlock.portfolioItems.nodes
+  $: items
 </script>
 
-<ul class="grid grid-cols-2 lg:grid-cols-3 bg-black min-h-screen">
-  {#each projects as project}
-    <li><PortfolioItem data={project} /></li>
-  {/each}
-</ul>
+<div class="bg-black">
+  <Masonry {items} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
+    <PortfolioItem block={item} />
+  </Masonry>
+</div>

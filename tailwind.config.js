@@ -4,7 +4,13 @@ export default {
   safelist: [
     'grid-cols-2',
     'grid-cols-3',
-    'bg-black'
+    'bg-black',
+    'bg-nhtbl-purple-light',
+    'object-cover',
+    'object-fit',
+    'object-fill',
+    'object-none',
+    'object-contain',
   ],
   theme: {
     fontFamily: {

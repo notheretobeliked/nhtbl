@@ -1,23 +1,23 @@
 <script lang="ts">
-    export let block:EditorBlock
-    import BlockRenderer from '$components/BlockRenderer.svelte';
-    import Button from '$components/Button.svelte'
-    const url = block.servicePush.service.nodes[0].uri
-    const altText= block.servicePush.service.nodes[0].featuredImage.node.altText
-    const findImageSize = (sizes, name) => sizes.find(size => size.name === name)?.sourceUrl || '';
-    const imgSrc = findImageSize(block.servicePush.service.nodes[0].featuredImage.node.mediaDetails.sizes, 'medium')
+  import type { EditorBlock } from '$lib/types/wp-types.ts'
+  export let block: EditorBlock
+  import BlockRenderer from '$components/BlockRenderer.svelte'
+  import Image from '$components/Image.svelte'
+  const imageObject = block.servicePush.service.nodes[0].featuredImage.node
+  const uri = block.servicePush.service.nodes[0].uri
+  console.log(block)
+  
 </script>
 
-<div class="grid grid-cols-2 gap-7">
-    <div class="h-full flex flex-col justify-between">
-        <div>
-          {#each block.children as block, index}
-            <BlockRenderer block={block} />
-          {/each}
-        </div>
-        <Button label="Explore" url={url} />
+<div class="group aspect-video rotate-1 max-w-[750px] relative bg-nhtbl-green-base mb-12 transition-colors duration-300 hover:bg-nhtbl-purple-base">
+  <a href="{uri}" class="block absolute inset-0">
+    <div class="absolute inset-0 -z-0">
+      <Image {imageObject} imageSize="medium_large" fit="cover" />
     </div>
-    <div class="aspect-square">
-        <img src="{imgSrc}" alt="{altText}" class="w-full h-full object-cover" />
+    <div class="absolute bottom-0 left-0 w-full py-3 px-6 bg-nhtbl-green-base group-hover:bg-nhtbl-purple-base transition-colors duration-300">
+      {#each block.children as block}
+        <BlockRenderer {block} />
+      {/each}
     </div>
+  </a>
 </div>
