@@ -14,22 +14,28 @@ interface HierarchicalOptions {
 }
 
 function normalizeEditorBlock(block: any) {
-	if (block.name.startsWith('acf/')) {
-	  if ('alignment' in block.attributes) {
-		// Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
-		block.attributes.align = block.attributes.align || block.attributes.alignment;
-		// Remove the 'alignment' attribute to avoid confusion
-		delete block.attributes.alignment;
-	  }
-	}
-  
-	// Normalize child blocks recursively
-	if (block.children) {
-	  block.children = block.children.map(normalizeEditorBlock);
-	}
-  
-	return block;
+  // Ensure attributes exists before attempting to access it
+  if (!block.attributes) {
+    block.attributes = {}; // Initialize with an empty object if it doesn't exist
   }
+
+  if (block.name.startsWith('acf/')) {
+    if ('alignment' in block.attributes) {
+      // Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
+      block.attributes.align = block.attributes.align || block.attributes.alignment;
+      // Remove the 'alignment' attribute to avoid confusion
+      delete block.attributes.alignment;
+    }
+  }
+
+  // Normalize child blocks recursively
+  if (block.children) {
+    block.children = block.children.map(normalizeEditorBlock);
+  }
+
+  return block;
+}
+
 
 function flatListToHierarchical<T extends Record<string, any>>(
   data: T[] = [],
@@ -57,7 +63,7 @@ function flatListToHierarchical<T extends Record<string, any>>(
 }
 
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
-  const uri = `/${params.all || ''}`;
+  const uri = `/`;
 
   try {
     const response = await graphqlQuery(PageContent, { uri: uri })

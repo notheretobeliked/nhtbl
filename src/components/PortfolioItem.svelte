@@ -19,10 +19,10 @@
 
 {#if block?.featuredImage?.node?.mediaDetails?.sizes}
   <div on:click={openSlideshow} on:keypress={openSlideshow} style="cursor: pointer;">
-    <Image imageSize="medium_large" imageObject={block.featuredImage.node} />
+    <Image imageSize="medium_large" imageObject={block.featuredImage.node} fit='contain' />
   </div>
 {/if}
-
+ 
 {#if showModal}
   <Modal on:close={() => (showModal = false)}>
     <div class="flex flex-row w-full overflow-x-auto h-[50vh]">
