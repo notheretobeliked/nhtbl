@@ -5,11 +5,10 @@
   const bgColor = block.attributes.backgroundColor ?? 'white'
 </script>
 
-<div class="bg-{bgColor} px-16 py-16">
-<div class="m-auto {bgColor === 'black' && '!text-white'}">
-  {#each children as block, index}
-    <BlockRenderer {block} />
-  {/each}
+<div class="px-2 md:px-0">
+  <div class="m-auto {bgColor === 'black' && '!text-white'}">
+    {#each children as block, index}
+      <BlockRenderer {block} removePadding />
+    {/each}
+  </div>
 </div>
-</div>
-

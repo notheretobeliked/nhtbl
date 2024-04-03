@@ -103,6 +103,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.0.1
     version: 3.3.2(@babel/core@7.24.0)(postcss@8.4.23)(svelte@3.59.1)
+  svelte-hamburgers:
+    specifier: ^4.2.0
+    version: 4.2.0(svelte@3.59.1)
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2(ts-node@10.9.2)
@@ -9083,6 +9086,14 @@ packages:
       eslint-scope: 7.2.0
       eslint-visitor-keys: 3.4.1
       espree: 9.5.2
+      svelte: 3.59.1
+    dev: true
+
+  /svelte-hamburgers@4.2.0(svelte@3.59.1):
+    resolution: {integrity: sha512-6Iq0uHXHeQZMvsn6Ft84qdSpf+PfmhwdyuSVoJeGHG6UfazB5ffJoMmahs9y9THAtvnBl+Hzus5BOy80PzWy0w==}
+    peerDependencies:
+      svelte: ^3.46.4 || ^4.0.0
+    dependencies:
       svelte: 3.59.1
     dev: true
 

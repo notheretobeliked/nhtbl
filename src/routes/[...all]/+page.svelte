@@ -6,12 +6,11 @@
 
   $: blocks = data.editorBlocks
 
-  console.log(blocks)
 
 
 </script>
 
-<div>
+<div class="py-24">
   {#each blocks as block, index (block.clientId)}
   <BlockRenderer block={block} />
   {/each}

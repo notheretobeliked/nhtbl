@@ -23,7 +23,7 @@
   </div>
 {/if}
  
-{#if showModal}
+{#if showModal && block?.imageGallery?.imageGallery?.nodes.length > 0}
   <Modal on:close={() => (showModal = false)}>
     <div class="flex flex-row w-full overflow-x-auto h-[50vh]">
       {#each block?.imageGallery?.imageGallery?.nodes as { mediaDetails, altText }}

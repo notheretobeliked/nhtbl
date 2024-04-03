@@ -1,20 +1,18 @@
 <script lang="ts">
   import "../app.css";
   import type { PageData } from "./$types"
-  export let data: PageData
-  const menuItems = data.data.menu.menuItems.nodes
-  import Button from '$components/Button.svelte'
   import { page } from '$app/stores'; // Importing $page store
+  export let data: PageData
+  let menuItems = data.data.menu.menuItems.nodes
+  let currentPage = $page.url.pathname
+  
+  import Header from "$components/Header.svelte";
+
+  $: {
+    menuItems
+    currentPage
+  }
 
 </script>
-<header>
-  <nav class="fixed z-30 w-full flex px-4 justify-between items-center">
-    <a href="/"><img src="/Nhtbl-logo.png" width="89" height="89" alt="A happy face drawn by a child" /></a>
-    <ul class="flex flex-row gap-7 justify-end">
-      {#each menuItems as menuItem, index}
-      <Button active="{$page.url.pathname === menuItem.uri}" label={menuItem.label} url={menuItem.uri} />
-      {/each}
-    </ul>
-  </nav>
-</header>
+<Header {menuItems} {currentPage} />
 <slot />

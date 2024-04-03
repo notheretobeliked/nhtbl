@@ -10,7 +10,10 @@ export default {
     'object-fit',
     'object-fill',
     'object-none',
+    'text-xl',
     'object-contain',
+    ...Array.from({ length: 8 }, (_, i) => `pt-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `pb-${i + 1}`),
   ],
   theme: {
     fontFamily: {
@@ -54,7 +57,23 @@ export default {
       // => @media (min-width: 1536px) { ... }
     },
 
-    extend: {},
+    extend: {
+      spacing: {
+        // Assuming the base size is 0.25rem for 'spacing|10'
+        // Tailwind uses rem units by default, where 1rem usually equals 16px.
+        // Adjust these values as necessary for your design system
+        1: '0.25rem', // Represents 'spacing|20', equivalent to 8px.
+        2: '0.5rem', // Represents 'spacing|20', equivalent to 8px
+        3: '0.7rem', // Represents 'spacing|20', equivalent to 8px
+        4: '1rem',   // Represents 'spacing|40', equivalent to 16px
+        5: '1.5rem',   // Represents 'spacing|40', equivalent to 16px
+        6: '2.25rem', // Represents 'spacing|60', equivalent to 24px
+        7: '3.5rem', // Represents 'spacing|60', equivalent to 24px
+        8: '5rem',   // Represents 'spacing|80', equivalent to 32px
+        // Add additional values if you need more steps between or beyond these values.
+      },
+    },
+
   },
   plugins: [],
 }

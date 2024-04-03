@@ -7,6 +7,7 @@ query PageContent($uri: ID!) {
       clientId
       ...CoreParagraphFragment
       ...CoreHeadingFragment
+      ...CoreSpacerFragment
       ...AcfHomePageHeroFragment
       ...AcfServicePushFragment
       ...CoreColumnsFragment
@@ -76,6 +77,13 @@ fragment CoreGroupFragment on CoreGroup {
   attributes {
     backgroundColor
     align
+    style
+  }
+}
+
+fragment CoreSpacerFragment on CoreSpacer {
+  attributes {
+	  height
   }
 }
 
@@ -140,6 +148,7 @@ fragment CoreParagraphFragment on CoreParagraph {
     fontSize
     textColor
     align
+    style
   }
 }
 
@@ -169,6 +178,7 @@ fragment CoreHeadingFragment on CoreHeading {
     textAlign
     level
     align
+    style
   }
 }
 

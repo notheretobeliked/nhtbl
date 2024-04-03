@@ -4,7 +4,6 @@
   import type { EditorBlock } from '$lib/types/wp-types.ts'
   export let data: PageData
   let blocks: EditorBlock[] = data.editorBlocks as EditorBlock[];
-  console.log(blocks)
 
   $: {
     blocks
@@ -14,11 +13,12 @@
 
 </script>
 
-<div>
+<main class="main w-full overflow-x-hidden">
   {#each blocks as block, index (block.clientId)}
-  <BlockRenderer block={block} key={index}/>
+    <BlockRenderer block={block} />
   {/each}
-</div>
-<style>
+</main>
+
+<style lang="postcss">
 
 </style>

@@ -28,6 +28,19 @@ function normalizeEditorBlock(block: any) {
     }
   }
 
+
+  // Check if 'style' attribute exists and is a string
+  if (typeof block.attributes.style === 'string') {
+    try {
+      // Parse the 'style' string as JSON
+      block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ""));
+    } catch (error) {
+      console.error('Error parsing style attribute:', error);
+      // Handle the error as you see fit (e.g., log it, ignore it, set style to null)
+      block.attributes.style = null; // Example error handling
+    }
+  }
+
   // Normalize child blocks recursively
   if (block.children) {
     block.children = block.children.map(normalizeEditorBlock);

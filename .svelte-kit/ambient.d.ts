@@ -48,6 +48,7 @@ declare module '$env/static/private' {
 	export const npm_package_devDependencies_vite: string;
 	export const HOMEBREW_REPOSITORY: string;
 	export const TMPDIR: string;
+	export const npm_package_devDependencies_svelte_hamburgers: string;
 	export const npm_package_scripts_lint: string;
 	export const npm_package_peerDependencies_ts_node: string;
 	export const TERM_PROGRAM_VERSION: string;
@@ -197,6 +198,7 @@ declare module '$env/dynamic/private' {
 		npm_package_devDependencies_vite: string;
 		HOMEBREW_REPOSITORY: string;
 		TMPDIR: string;
+		npm_package_devDependencies_svelte_hamburgers: string;
 		npm_package_scripts_lint: string;
 		npm_package_peerDependencies_ts_node: string;
 		TERM_PROGRAM_VERSION: string;

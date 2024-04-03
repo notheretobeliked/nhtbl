@@ -4,6 +4,13 @@ export interface HomePageContentResponse {
     editorBlocks: EditorBlock[]
   }
 }
+
+export interface MenuItem {
+  label: string
+  order: number
+  uri: string
+}
+
 export interface EditorBlock {
   name: string
   parentClientId: string | null
@@ -18,8 +25,10 @@ export interface Attributes {
   fontFamily?: string | null
   fontSize?: string | null
   textColor?: string | null
-  align?: "full" | "wide " | '' | null
+  textAlign?: string | null
+  align?: 'full' | 'wide ' | '' | null
   level?: number | null
+  height?: string
 }
 
 export interface ACFHomePageHero extends EditorBlock {

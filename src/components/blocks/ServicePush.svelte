@@ -1,11 +1,10 @@
 <script lang="ts">
-  import type { EditorBlock } from '$lib/types/wp-types.ts'
-  export let block: EditorBlock
+  import type { ACFServicePush } from '$lib/types/wp-types'
+  export let block: ACFServicePush
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import Image from '$components/Image.svelte'
   const imageObject = block.servicePush.service.nodes[0].featuredImage.node
   const uri = block.servicePush.service.nodes[0].uri
-  console.log(block)
   
 </script>
 
