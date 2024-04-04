@@ -1,5 +1,5 @@
 // @ts-nocheck
-export const prerender = true;
+export const prerender = false
 
 import type { PostsQuery } from '$lib/generated/graphql'
 import PageContent from '$lib/graphql/query/page.graphql?raw'
@@ -14,42 +14,49 @@ interface HierarchicalOptions {
 }
 
 function normalizeEditorBlock(block: any) {
-  // Ensure attributes exists before attempting to access it
-  if (!block.attributes) {
-    block.attributes = {}; // Initialize with an empty object if it doesn't exist
+	// Ensure attributes exists before attempting to access it
+	if (!block.attributes) {
+	  block.attributes = {} // Initialize with an empty object if it doesn't exist
+	}
+  
+	if (block.name.startsWith('acf/')) {
+	  if ('alignment' in block.attributes) {
+		// Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
+		block.attributes.align = block.attributes.align || block.attributes.alignment
+		// Remove the 'alignment' attribute to avoid confusion
+		delete block.attributes.alignment
+	  }
+	}
+  
+	// Check if 'style' attribute exists and is a string
+	if (typeof block.attributes.style === 'string') {
+	  try {
+		// Parse the 'style' string as JSON
+		block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ''))
+	  } catch (error) {
+		console.error('Error parsing style attribute:', error)
+		// Handle the error as you see fit (e.g., log it, ignore it, set style to null)
+		block.attributes.style = null // Example error handling
+	  }
+	}
+  
+	if (typeof block.attributes.layout === 'string') {
+	  try {
+		block.attributes.layout = JSON.parse(block.attributes.layout);
+	  } catch (error) {
+		console.error('Error parsing layout attribute:', error);
+		block.attributes.layout = null; // Or handle the error as needed
+	  }
+	}
+  
+	// Normalize child blocks recursively
+	if (block.children) {
+	  block.children = block.children.map(normalizeEditorBlock)
+	}
+  
+	return block
   }
-
-  if (block.name.startsWith('acf/')) {
-    if ('alignment' in block.attributes) {
-      // Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
-      block.attributes.align = block.attributes.align || block.attributes.alignment;
-      // Remove the 'alignment' attribute to avoid confusion
-      delete block.attributes.alignment;
-    }
-  }
-
-
-  // Check if 'style' attribute exists and is a string
-  if (typeof block.attributes.style === 'string') {
-    try {
-      // Parse the 'style' string as JSON
-      block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ""));
-    } catch (error) {
-      console.error('Error parsing style attribute:', error);
-      // Handle the error as you see fit (e.g., log it, ignore it, set style to null)
-      block.attributes.style = null; // Example error handling
-    }
-  }
-
-  // Normalize child blocks recursively
-  if (block.children) {
-    block.children = block.children.map(normalizeEditorBlock);
-  }
-
-  return block;
-}
-
-
+  
 function flatListToHierarchical<T extends Record<string, any>>(
   data: T[] = [],
   { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
@@ -72,11 +79,11 @@ function flatListToHierarchical<T extends Record<string, any>>(
     }
   })
 
-  return tree.map(normalizeEditorBlock); // Normalize each root level block
+  return tree.map(normalizeEditorBlock) // Normalize each root level block
 }
 
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
-  const uri = `/`;
+  const uri = `/`
 
   try {
     const response = await graphqlQuery(PageContent, { uri: uri })
@@ -85,16 +92,16 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
 
     if (data.page === null) {
       error(404, {
-        message: 'Not found'
-      });
+        message: 'Not found',
+      })
     }
 
-    let editorBlocks = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : [];
+    let editorBlocks = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : []
 
     return {
       data: data,
       uri: uri,
-      editorBlocks: editorBlocks
+      editorBlocks: editorBlocks,
     }
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }

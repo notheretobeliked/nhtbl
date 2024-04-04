@@ -11,6 +11,34 @@ export interface MenuItem {
   uri: string
 }
 
+export interface CoreButtonsAttributes extends Attributes {
+  layout: {
+    justifyContent: "space-between" | "left" | "right" | "center"
+    type: "flex"
+  }
+}
+
+export interface CoreButtonsBlock extends EditorBlock {
+  name: 'core/buttons'
+  attributes: CoreButtonsAttributes
+  children: EditorBlock[]
+}
+
+export interface CoreButtonAttributes extends Attributes {
+    linkTarget?: "_blank" | "_self" | "_parent" | "_top";
+    text?: string;
+    url?: string;
+    // fontSize is already defined in Attributes but reiterated here for clarity
+    fontSize?: string | null;
+    // Include any other attributes specific to core/button here
+  }
+  
+  export interface CoreButtonBlock extends EditorBlock {
+    name: 'core/button';
+    attributes: CoreButtonAttributes;
+    children: []; // CoreButtonBlock does not have children
+  }
+
 export interface EditorBlock {
   name: string
   parentClientId: string | null
@@ -26,9 +54,15 @@ export interface Attributes {
   fontSize?: string | null
   textColor?: string | null
   textAlign?: string | null
-  align?: 'full' | 'wide ' | '' | null
+  align?: 'full' | 'wide ' | 'center' | 'right' | '' | null
   level?: number | null
   height?: string
+  layout?: Layout | string
+}
+
+export interface Layout {
+  type: string
+  justifyContent: string
 }
 
 export interface ACFHomePageHero extends EditorBlock {
@@ -67,6 +101,7 @@ export interface PortfolioItemNode {
   slug: string
   id: string
   uri: string
+  title: string
   imageGallery: {
     imageGallery: {
       nodes: ImageObject[]

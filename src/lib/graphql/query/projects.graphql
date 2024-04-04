@@ -19,6 +19,7 @@ query Projects {
       content(format: RENDERED)
       slug
       uri
+      title(format: RENDERED)
       featuredImage {
         node {
           altText

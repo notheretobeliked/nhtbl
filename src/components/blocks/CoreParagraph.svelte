@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { EditorBlock } from '$lib/types/wp-types'
     export let block:EditorBlock;
-    const { content, fontSize, textColor, textAlign } = block.attributes
+    const { content, fontSize, textColor, align } = block.attributes
 
 
-    const classNames = (fontSize:string, textColor:string, textAlign:string ) => {
+    const classNames = (fontSize:string, textColor:string, align:string ) => {
         let textClasses:string, alignClasses:string, colorClasses:string = '';
         switch (fontSize) {
             case "base":
@@ -23,7 +23,7 @@
                 textClasses = 'text-sans text-sm md:text-base';
                 break;
         }
-        switch (textAlign) {
+        switch (align) {
             case "center":
                 alignClasses = 'text-center';
                 break;
@@ -44,4 +44,4 @@
 </script>
 
 <!-- Use the class directive in Svelte to dynamically set classes -->
-<p class={classNames(fontSize, textColor, textAlign)}>{@html content}</p>
+<p class={classNames(fontSize, textColor, align)}>{@html content}</p>

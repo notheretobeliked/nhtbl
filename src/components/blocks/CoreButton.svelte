@@ -1,0 +1,34 @@
+<script lang="ts">
+  import type { CoreButtonBlock } from '$lib/types/wp-types'
+  import Button from '$components/Button.svelte'
+
+  // Expect a core/button block
+  export let block: CoreButtonBlock
+  const classNames = (fontSize: string, textColor: string) => {
+    let textClasses: string,
+      alignClasses: string,
+      colorClasses: string = ''
+    switch (fontSize) {
+      case 'base':
+        textClasses = 'text-sans text-sm md:text-base'
+        break
+      case 'lg':
+        textClasses = 'font-display text-base md:text-lg'
+        break
+      case 'xl':
+        textClasses = 'font-display text-lg md:text-xl'
+        break
+      case '2xl':
+        textClasses = 'font-display text-xl md:text-2xl'
+        break
+      case null:
+        textClasses = 'text-sans text-sm md:text-base'
+        break
+    }
+    colorClasses = `text-${textColor}`
+
+    return `${textClasses} ${alignClasses} ${colorClasses}` // Combine base classes with spacing classes
+  }
+</script>
+
+<Button textClass={classNames(block.attributes.fontSize, block.attributes.textColor)} url={block.attributes.url} label={block.attributes.text} />

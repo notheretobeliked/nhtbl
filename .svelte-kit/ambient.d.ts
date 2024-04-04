@@ -93,6 +93,7 @@ declare module '$env/static/private' {
 	export const PWD: string;
 	export const npm_package_devDependencies__storybook_addon_svelte_csf: string;
 	export const npm_package_devDependencies_tailwindcss: string;
+	export const npm_package_dependencies_svelte_inview: string;
 	export const npm_command: string;
 	export const npm_package_scripts_preview: string;
 	export const npm_lifecycle_event: string;
@@ -243,6 +244,7 @@ declare module '$env/dynamic/private' {
 		PWD: string;
 		npm_package_devDependencies__storybook_addon_svelte_csf: string;
 		npm_package_devDependencies_tailwindcss: string;
+		npm_package_dependencies_svelte_inview: string;
 		npm_command: string;
 		npm_package_scripts_preview: string;
 		npm_lifecycle_event: string;

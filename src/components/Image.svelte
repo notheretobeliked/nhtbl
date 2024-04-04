@@ -4,6 +4,7 @@
   export let imageObject: ImageObject
   export let imageSize: 'medium' | 'medium_large' | 'large' | 'full' = 'medium'
   export let fit: "cover" | "contain" | "fill" | "none" = "none"
+  export let extraClasses:string = '';
 
   const findImageSizeData = (property: keyof ImageSize, sizes: ImageSize[], name: string): string => sizes.find(size => size.name === name)?.[property] || ''
   const getSrcSet = (sizes: ImageSize[]): string => {
@@ -15,4 +16,4 @@
   const height = findImageSizeData('height', imageObject.mediaDetails.sizes, imageSize)
 </script>
 
-<img class="w-full h-full object-{fit}" {src} alt={imageObject.altText} {width} {height} srcset={getSrcSet(imageObject.mediaDetails.sizes)} sizes="(max-width: 600px) 480px, 800px" />
+<img class="w-full h-full object-{fit} {extraClasses}" {src} alt={imageObject.altText} {width} {height} srcset={getSrcSet(imageObject.mediaDetails.sizes)} sizes="(max-width: 600px) 480px, 800px" />

@@ -1,19 +1,24 @@
 query PageContent($uri: ID!) {
   page(id: $uri, idType: URI) {
     id
+    backgroundColour {
+      backgroundColour
+    }
     editorBlocks {
       name
       parentClientId
       clientId
       ...CoreParagraphFragment
       ...CoreHeadingFragment
-      ...CoreSpacerFragment
       ...AcfHomePageHeroFragment
       ...AcfServicePushFragment
       ...CoreColumnsFragment
       ...AcfGalerieFragment
       ...AcfPortfolioBlockFragment
       ...CoreGroupFragment
+      ...CoreButtonFragment
+      ...CoreButtonsFragment
+      ...CoreSpacerFragment
       ...PortfolioBlockDetailsFragment
     }
   }
@@ -29,6 +34,7 @@ fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
       nodes {
         slug
         ... on Nhtbl_project {
+          title(format: RENDERED)
           imageGallery {
             imageGallery {
               nodes {
@@ -81,9 +87,14 @@ fragment CoreGroupFragment on CoreGroup {
   }
 }
 
-fragment CoreSpacerFragment on CoreSpacer {
+fragment CoreButtonFragment on CoreButton {
   attributes {
-	  height
+    backgroundColor
+    style
+    fontSize
+    linkTarget
+    text
+    url
   }
 }
 
@@ -148,7 +159,6 @@ fragment CoreParagraphFragment on CoreParagraph {
     fontSize
     textColor
     align
-    style
   }
 }
 
@@ -178,7 +188,20 @@ fragment CoreHeadingFragment on CoreHeading {
     textAlign
     level
     align
+  }
+}
+
+fragment CoreSpacerFragment on CoreSpacer {
+  attributes {
+    height
     style
+  }
+}
+
+fragment CoreButtonsFragment on CoreButtons {
+  attributes {
+    align
+    layout
   }
 }
 

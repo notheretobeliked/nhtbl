@@ -1,5 +1,19 @@
 <script lang="ts">
+  import { inview } from 'svelte-inview'
+  import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
+
+  let isInView: boolean
+  const options: Options = {
+    rootMargin: '-50px',
+    unobserveOnEnter: true,
+  }
+
+  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
+    isInView = detail.inView
+  }
+
   import type { EditorBlock, ACFHomePageHero, ACFServicePush } from '$lib/types/wp-types'
+
   import CoreParagraph from '$components/blocks/CoreParagraph.svelte'
   import CoreHeading from '$components/blocks/CoreHeading.svelte'
 
@@ -11,6 +25,8 @@
   import CoreSpacer from './blocks/CoreSpacer.svelte'
   import PortfolioBlock from './blocks/PortfolioBlock.svelte'
   import GalerieBlock from './blocks/GalerieBlock.svelte'
+  import CoreButtons from './blocks/CoreButtons.svelte'
+  import CoreButton from './blocks/CoreButton.svelte'
 
   export let block: EditorBlock
 
@@ -59,6 +75,9 @@
       case 'none':
         baseClasses = 'w-full max-w-[852px] mx-auto'
         break
+      case 'center':
+        baseClasses = 'w-full max-w-[852px] mx-auto'
+        break
       case null:
         baseClasses = 'w-full'
         break
@@ -67,44 +86,54 @@
   }
 </script>
 
-<div class="{classNames(align)} bg-{bgColor} !px-0">
-  {#if isACFHomePageHero(block)}
-    <HomePageHero {block} />
-  {/if}
+<div class="{classNames(align)} bg-{bgColor} !px-0" use:inview={options} on:inview_change={handleChange}>
+  <div class="transition-all duration-[800ms] ease-in-out {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
+    {#if isACFHomePageHero(block)}
+      <HomePageHero {block} />
+    {/if}
 
-  {#if isACFServicePush(block)}
-    <ServicePush {block} />
-  {/if}
+    {#if isACFServicePush(block)}
+      <ServicePush {block} />
+    {/if}
 
-  {#if block.name === 'core/group'}
-    <CoreGroup {block} />
-  {/if}
+    {#if block.name === 'core/group'}
+      <CoreGroup {block} />
+    {/if}
 
-  {#if block.name === 'core/columns'}
-    <CoreColumns {block} />
-  {/if}
+    {#if block.name === 'core/buttons'}
+      <CoreButtons {block} />
+    {/if}
 
-  {#if block.name === 'core/column'}
-    <CoreColumn {block} />
-  {/if}
+    {#if block.name === 'core/button'}
+      <CoreButton {block} />
+    {/if}
 
-  {#if block.name === 'core/paragraph'}
-    <CoreParagraph {block} />
-  {/if}
+    {#if block.name === 'core/columns'}
+      <CoreColumns {block} />
+    {/if}
 
-  {#if block.name === 'core/heading'}
-    <CoreHeading {block} />
-  {/if}
+    {#if block.name === 'core/column'}
+      <CoreColumn {block} />
+    {/if}
 
-  {#if block.name === 'core/spacer'}
-    <CoreSpacer {block} />
-  {/if}
+    {#if block.name === 'core/paragraph'}
+      <CoreParagraph {block} />
+    {/if}
 
-  {#if block.name === 'acf/portfolio-block'}
-    <PortfolioBlock {block} />
-  {/if}
+    {#if block.name === 'core/heading'}
+      <CoreHeading {block} />
+    {/if}
 
-  {#if block.name === 'acf/galerie'}
-    <GalerieBlock {block} />
-  {/if}
+    {#if block.name === 'core/spacer'}
+      <CoreSpacer {block} />
+    {/if}
+
+    {#if block.name === 'acf/portfolio-block'}
+      <PortfolioBlock {block} />
+    {/if}
+
+    {#if block.name === 'acf/galerie'}
+      <GalerieBlock {block} />
+    {/if}
+  </div>
 </div>

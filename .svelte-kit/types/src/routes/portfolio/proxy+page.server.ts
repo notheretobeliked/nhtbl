@@ -1,5 +1,5 @@
 // @ts-nocheck
-export const prerender = true;
+export const prerender = false
 
 import type { PostsQuery } from '$lib/generated/graphql'
 import Projects from '$lib/graphql/query/projects.graphql?raw'
@@ -13,9 +13,8 @@ interface HierarchicalOptions {
   childrenKey?: string
 }
 
-
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
-  const uri = `/${params.all || ''}`;
+  const uri = `/${params.all || ''}`
 
   try {
     const response = await graphqlQuery(Projects, { uri: uri })
@@ -24,11 +23,10 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
 
     if (data.page === null) {
       error(404, {
-        message: 'Not found'
-      });
+        message: 'Not found',
+      })
     }
 
-    
     return {
       data: data,
     }

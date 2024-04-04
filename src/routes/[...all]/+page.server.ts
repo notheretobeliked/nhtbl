@@ -39,6 +39,15 @@ function normalizeEditorBlock(block: any) {
     }
   }
 
+  if (typeof block.attributes.layout === 'string') {
+    try {
+      block.attributes.layout = JSON.parse(block.attributes.layout);
+    } catch (error) {
+      console.error('Error parsing layout attribute:', error);
+      block.attributes.layout = null; // Or handle the error as needed
+    }
+  }
+
   // Normalize child blocks recursively
   if (block.children) {
     block.children = block.children.map(normalizeEditorBlock)
@@ -88,9 +97,12 @@ export const load: PageServerLoad = async function load({ params, url }) {
 
     let editorBlocks = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : []
 
+    const backgroundColour = data.page.backgroundColour.backgroundColour ?? 'white';
+
     return {
       data: data,
       uri: uri,
+      backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
     }
   } catch (err: unknown) {

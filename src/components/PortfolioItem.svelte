@@ -23,11 +23,12 @@
   </div>
 {/if}
  
-{#if showModal && block?.imageGallery?.imageGallery?.nodes.length > 0}
+{#if showModal }
   <Modal on:close={() => (showModal = false)}>
-    <div class="flex flex-row w-full overflow-x-auto h-[50vh]">
+    <h3 class="text-nhtbl-green-base text-center font-display mb-2">{@html block.title}</h3>
+    <div class="flex flex-row w-full overflow-x-auto h-[80vh] gap-4">
       {#each block?.imageGallery?.imageGallery?.nodes as { mediaDetails, altText }}
-        <div class="h-[50vh]">
+        <div class="h-[80vh]">
           <img
             srcset={getSrcSet(mediaDetails.sizes)}
             sizes="(max-width: 600px) 480px, 800px"
@@ -38,6 +39,6 @@
         </div>
       {/each}
     </div>
-    <div class="text-nhtbl-green-base">{@html block.content}</div>
+    <div class="text-nhtbl-green-base mt-1">{@html block.content}</div>
   </Modal>
 {/if}
