@@ -4,7 +4,7 @@
 
   // Expect a core/button block
   export let block: CoreButtonBlock
-  const classNames = (fontSize: string, textColor: string) => {
+  const classNames = (fontSize: string | null, textColor: string | null | undefined) => {
     let textClasses = '',
       colorClasses = textColor ? `text-${textColor}` : ''
 
@@ -31,4 +31,4 @@
   }
 </script>
 
-<Button textClass={classNames(block.attributes.fontSize, block.attributes.textColor)} url={block.attributes.url} label={block.attributes.text} />
+<Button textClass={classNames(block.attributes.fontSize?? null, block.attributes.textColor)} url={block.attributes.url} label={block.attributes.text} />

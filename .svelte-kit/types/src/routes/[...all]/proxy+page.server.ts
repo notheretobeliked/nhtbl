@@ -109,8 +109,8 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {
-      throw error(httpError.status ?? 500, httpError.message)
+      error(httpError.status ?? 500, httpError.message);
     }
-    throw error(500, err as string)
+    error(500, err as string);
   }
 }

@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { pushState } from '$app/navigation';
+  import { page } from '$app/stores'
+
+  import { pushState } from '$app/navigation'
 
   import Image from '$components/Image.svelte'
   import Modal from '$components/Modal.svelte' // Assume you have a Modal component for the slideshow
@@ -12,8 +14,10 @@
   let showModal: boolean = false
 
   const openSlideshow = (event): void => {
-    if (!useHrefs) event.preventDefault()
-    showModal = true
+    event.preventDefault
+    pushState(block.uri, {
+      showModal: true,
+    })
   }
 
   const getSrcSet = (sizes: ImageSize[]): string => {
@@ -29,8 +33,8 @@
   </a>
 {/if}
 
-{#if showModal || isActive}
-  <Modal on:close={() => useHrefs ? location.href = '/portfolio' : showModal =! showModal }>
+{#if $page.state.showModal || isActive}
+  <Modal on:close={() => (useHrefs ? (location.href = '/portfolio') : (showModal = !showModal))}>
     <h3 class="text-nhtbl-green-base text-center font-display mb-2">{@html block.title}</h3>
     <div class="flex flex-row w-full overflow-x-auto h-[80vh] gap-4">
       {#each block?.imageGallery?.imageGallery?.nodes as { mediaDetails, altText }}

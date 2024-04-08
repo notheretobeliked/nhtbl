@@ -28,7 +28,7 @@
 <div class="carousel relative aspect-video">
     {#each images as image, index (image.mediaDetails.sizes[0].sourceUrl)}
       {#if $currentSlideIndex === index}
-        <div in:fade={{ duration: 500 }} out:fade={{ duration: 500 }}>
+        <div in:fade|global={{ duration: 500 }} out:fade|global={{ duration: 500 }}>
           <div class="w-full aspect-video absolute inset-0">
             <Image imageObject={image} imageSize="large" fit="contain" />
           </div>

@@ -6,11 +6,11 @@ import { error } from '@sveltejs/kit'
 export function checkResponse(response: Response) {
   const { headers, ok } = response
   if (!ok) {
-    throw error(502, 'Bad Gateway')
+    error(502, 'Bad Gateway');
   }
 
   if (!headers.get('content-type')?.includes('application/json')) {
-    throw error(502, 'Bad Gateway: expected JSON data from GraphQL backend')
+    error(502, 'Bad Gateway: expected JSON data from GraphQL backend');
   }
 }
 
