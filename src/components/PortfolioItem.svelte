@@ -1,30 +1,36 @@
 <script lang="ts">
+  import { pushState } from '$app/navigation';
+
   import Image from '$components/Image.svelte'
   import Modal from '$components/Modal.svelte' // Assume you have a Modal component for the slideshow
   import type { PortfolioItemNode, ImageSize } from '$lib/types/wp-types.ts'
 
-  export let block:PortfolioItemNode
+  export let block: PortfolioItemNode
+  export let isActive: boolean = false
+  export let useHrefs: boolean = false
 
-  let showModal:boolean = false
+  let showModal: boolean = false
 
-  const openSlideshow = () => {
+  const openSlideshow = (event): void => {
+    if (!useHrefs) event.preventDefault()
     showModal = true
   }
 
   const getSrcSet = (sizes: ImageSize[]): string => {
-  return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
-}
-
+    return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
+  }
 </script>
 
 {#if block?.featuredImage?.node?.mediaDetails?.sizes}
-  <div on:click={openSlideshow} on:keypress={openSlideshow} style="cursor: pointer;">
-    <Image imageSize="medium_large" imageObject={block.featuredImage.node} fit='contain' />
-  </div>
+  <a href={block.uri} on:click={openSlideshow} on:keypress={openSlideshow}>
+    <div style="cursor: pointer;">
+      <Image imageSize="medium_large" imageObject={block.featuredImage.node} fit="contain" />
+    </div>
+  </a>
 {/if}
- 
-{#if showModal }
-  <Modal on:close={() => (showModal = false)}>
+
+{#if showModal || isActive}
+  <Modal on:close={() => useHrefs ? location.href = '/portfolio' : showModal =! showModal }>
     <h3 class="text-nhtbl-green-base text-center font-display mb-2">{@html block.title}</h3>
     <div class="flex flex-row w-full overflow-x-auto h-[80vh] gap-4">
       {#each block?.imageGallery?.imageGallery?.nodes as { mediaDetails, altText }}
