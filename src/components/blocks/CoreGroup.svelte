@@ -8,7 +8,7 @@
 <div class="px-2 md:px-0">
   <div class="m-auto {bgColor === 'black' && '!text-white'}">
     {#each children as block, index}
-      <BlockRenderer {block} removePadding />
+      <BlockRenderer {block}  />
     {/each}
   </div>
 </div>

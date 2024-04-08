@@ -9,6 +9,7 @@ export interface MenuItem {
   label: string
   order: number
   uri: string
+  current: boolean
 }
 
 export interface CoreButtonsAttributes extends Attributes {
@@ -28,10 +29,9 @@ export interface CoreButtonAttributes extends Attributes {
     linkTarget?: "_blank" | "_self" | "_parent" | "_top";
     text?: string;
     url?: string;
-    // fontSize is already defined in Attributes but reiterated here for clarity
-    fontSize?: string | null;
-    // Include any other attributes specific to core/button here
-  }
+    fontSize?: string | null
+    align?: 'full' | 'wide ' | 'center' | 'right' | '' | null
+}
   
   export interface CoreButtonBlock extends EditorBlock {
     name: 'core/button';
@@ -55,9 +55,11 @@ export interface Attributes {
   textColor?: string | null
   textAlign?: string | null
   align?: 'full' | 'wide ' | 'center' | 'right' | '' | null
+  alignment?: 'full' | 'wide ' | 'center' | 'right' | '' | null
   level?: number | null
   height?: string
-  layout?: Layout | string
+  layout?: Layout | string | null
+  style?: string | null
 }
 
 export interface Layout {

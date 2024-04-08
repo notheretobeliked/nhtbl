@@ -5,9 +5,9 @@
   // Expect a core/button block
   export let block: CoreButtonBlock
   const classNames = (fontSize: string, textColor: string) => {
-    let textClasses: string,
-      alignClasses: string,
-      colorClasses: string = ''
+    let textClasses = '',
+      colorClasses = textColor ? `text-${textColor}` : ''
+
     switch (fontSize) {
       case 'base':
         textClasses = 'text-sans text-sm md:text-base'
@@ -16,7 +16,7 @@
         textClasses = 'font-display text-base md:text-lg'
         break
       case 'xl':
-        textClasses = 'font-display text-lg md:text-xl'
+        textClasses = 'font-display text-base md:text-lg lg:text-xl'
         break
       case '2xl':
         textClasses = 'font-display text-xl md:text-2xl'
@@ -27,7 +27,7 @@
     }
     colorClasses = `text-${textColor}`
 
-    return `${textClasses} ${alignClasses} ${colorClasses}` // Combine base classes with spacing classes
+    return `${textClasses} ${colorClasses}` // Combine base classes with spacing classes
   }
 </script>
 

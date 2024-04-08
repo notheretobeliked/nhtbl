@@ -1,18 +1,25 @@
 <script lang="ts">
   import "../app.css";
+  import { page } from '$app/stores';
   import type { PageData } from "./$types"
-  import { page } from '$app/stores'; // Importing $page store
   export let data: PageData
-  let menuItems = data.data.menu.menuItems.nodes
-  let currentPage = $page.url.pathname
+  let {editorBlocks, seo, menu, backgroundColour, uri } = data
+
   
+  const menuItems = menu.menuItems.nodes
+
   import Header from "$components/Header.svelte";
 
+  
   $: {
     menuItems
-    currentPage
+    uri
+    
   }
 
 </script>
-<Header {menuItems} {currentPage} />
+
+{#key $page.url.pathname}
+  <Header {menuItems} />
+{/key}
 <slot />

@@ -37,7 +37,7 @@ export default {
       'sm': '.875rem',
       'base': ['1rem', '1.25'],
       'lg': ['1.25rem', '1.35'],
-      'xl': ['2rem', '1.3'],
+      'xl': ['1.75rem', '1.25'],
       '2xl': ['2.875rem', '1.2'],
      },
     screens: {

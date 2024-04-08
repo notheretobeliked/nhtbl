@@ -1,4 +1,4 @@
-query Menu {
+query PageMeta($uri: ID!) {
   menu(id: "primary_navigation", idType: LOCATION) {
     menuItems {
       nodes {
@@ -8,4 +8,43 @@ query Menu {
       }
     }
   }
+  page(id: $uri, idType: URI) {
+    seo {
+        ...SeoFragment
+    }
+  }
 }
+
+fragment SeoFragment on PostTypeSEO {
+  metaDesc
+  metaKeywords
+  opengraphSiteName
+  opengraphTitle
+  opengraphPublisher
+  opengraphUrl
+  title
+  twitterDescription
+  twitterTitle
+  twitterImage {
+    altText
+    mediaDetails {
+      ...MediaDetailsFragment
+    }
+  }
+  opengraphImage {
+    altText
+    mediaDetails {
+      ...MediaDetailsFragment
+    }
+  }
+}
+
+fragment MediaDetailsFragment on MediaDetails {
+  sizes {
+    name
+    sourceUrl
+    width
+    height
+  }
+}
+

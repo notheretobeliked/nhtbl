@@ -4,7 +4,7 @@
   import type { EditorBlock } from '$lib/types/wp-types.ts'
   export let data: PageData
   let blocks: EditorBlock[] = data.editorBlocks as EditorBlock[];
-
+  
   $: {
     blocks
   }

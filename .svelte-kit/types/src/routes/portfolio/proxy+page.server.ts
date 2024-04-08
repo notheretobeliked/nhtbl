@@ -13,7 +13,7 @@ interface HierarchicalOptions {
   childrenKey?: string
 }
 
-export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
+export const load = async function load({ params }: Parameters<PageServerLoad>[0]) {
   const uri = `/${params.all || ''}`
 
   try {

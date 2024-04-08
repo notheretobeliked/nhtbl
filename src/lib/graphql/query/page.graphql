@@ -21,6 +21,33 @@ query PageContent($uri: ID!) {
       ...CoreSpacerFragment
       ...PortfolioBlockDetailsFragment
     }
+    seo {
+      ...SeoFragment
+    }
+  }
+}
+
+fragment SeoFragment on PostTypeSEO {
+  metaDesc
+  metaKeywords
+  opengraphSiteName
+  opengraphTitle
+  opengraphPublisher
+  opengraphUrl
+  title
+  twitterDescription
+  twitterTitle
+  twitterImage {
+    altText
+    mediaDetails {
+      ...MediaDetailsFragment
+    }
+  }
+  opengraphImage {
+    altText
+    mediaDetails {
+      ...MediaDetailsFragment
+    }
   }
 }
 
@@ -95,6 +122,14 @@ fragment CoreButtonFragment on CoreButton {
     linkTarget
     text
     url
+  }
+  innerBlocks {
+    apiVersion
+    blockEditorCategoryName
+    clientId
+    name
+    parentClientId
+    renderedHtml
   }
 }
 
