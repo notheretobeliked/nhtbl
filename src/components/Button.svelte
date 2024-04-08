@@ -7,6 +7,6 @@
   if (active) colourClass = "bg-nhtbl-purple-base"
 </script>
 
-<a href={url} class="{colourClass} rounded-full hover:bg-nhtbl-purple-base py-2 px-4 border-black border {textClass}" role="button">
+<a href={url} class="{colourClass} rounded-full hover:bg-nhtbl-purple-base py-2 px-4 border-black border {textClass} font-display" role="button">
   {label}
 </a>

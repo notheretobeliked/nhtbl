@@ -1,12 +1,37 @@
 <script lang="ts">
-  export let block: EditorBlock
-  import PortfolioItem from '$components/PortfolioItem.svelte'
-  import type { PortfolioItemNode } from '$lib/types/wp-types.ts'
-  import Masonry from 'svelte-bricks'
-  let [minColWidth, maxColWidth, gap] = [400, 800, 30]
-  let items: PortfolioItemNode[] = block.portfolioBlock.portfolioItems.nodes
-  $: items
-</script>
+    import { onMount, onDestroy } from 'svelte';
+    import type { ACFPortfolioBlock, PortfolioItemNode } from '$lib/types/wp-types';
+    import PortfolioItem from '$components/PortfolioItem.svelte';
+    import Masonry from 'svelte-bricks';
+  
+    export let block: ACFPortfolioBlock;
+    let items: PortfolioItemNode[] = block.portfolioBlock.portfolioItems.nodes;
+  
+    let minColWidth = 140; // Default value for mobile screens
+    let maxColWidth = 1200;
+    let gap = 30;
+  
+    // Reactive statement to update minColWidth based on window width
+    $: {
+      if (typeof window !== 'undefined') {
+        minColWidth = window.innerWidth >= 768 ? 420 : 140; // 768px is a common breakpoint for iPads
+      }
+    }
+  
+    // Resize listener to react to window size changes
+    onMount(() => {
+      const handleResize = () => {
+        minColWidth = window.innerWidth >= 768 ? 420 : 140;
+      };
+  
+      window.addEventListener('resize', handleResize);
+  
+      // Cleanup to remove event listener
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    });
+  </script>
 
 <div class="bg-black">
   <Masonry {items} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
