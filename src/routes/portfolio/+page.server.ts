@@ -1,4 +1,4 @@
-export const prerender = true
+export const prerender = false
 
 import type { PostsQuery } from '$lib/generated/graphql'
 import Projects from '$lib/graphql/query/projects.graphql?raw'
