@@ -1,6 +1,5 @@
 export const prerender = false
 
-import type { PostsQuery } from '$lib/generated/graphql'
 import Projects from '$lib/graphql/query/projects.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
 import { error } from '@sveltejs/kit'
@@ -18,7 +17,7 @@ export const load: PageServerLoad = async function load({ params }) {
   try {
     const response = await graphqlQuery(Projects, { uri: '/portfolio' })
     checkResponse(response)
-    const { data }: { data: PostsQuery } = await response.json()
+    const { data }: { data } = await response.json()
 
     if (data.page === null) {
       error(404, {

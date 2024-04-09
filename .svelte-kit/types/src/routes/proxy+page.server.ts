@@ -1,5 +1,5 @@
 // @ts-nocheck
-export const prerender = true
+export const prerender = false
 
 import type { PostsQuery } from '$lib/generated/graphql'
 import PageContent from '$lib/graphql/query/page.graphql?raw'

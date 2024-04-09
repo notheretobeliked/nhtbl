@@ -1,5 +1,5 @@
 // @ts-nocheck
-export const prerender = true
+export const prerender = false
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
 import { error } from '@sveltejs/kit'
@@ -98,7 +98,7 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
   try {
     const response = await graphqlQuery(PageContent, { uri: uri })
     checkResponse(response)
-    const { data }: { data: PageData } = await response.json()
+    const { data }: { data } = await response.json()
 
     if (data.page === null) {
       error(404, {

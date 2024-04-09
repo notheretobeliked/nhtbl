@@ -1,7 +1,6 @@
 // @ts-nocheck
-export const prerender = true
+export const prerender = false
 
-import type { PostsQuery } from '$lib/generated/graphql'
 import Projects from '$lib/graphql/query/projects.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
 import { error } from '@sveltejs/kit'
@@ -19,7 +18,7 @@ export const load = async function load({ params }: Parameters<PageServerLoad>[0
   try {
     const response = await graphqlQuery(Projects, { uri: '/portfolio' })
     checkResponse(response)
-    const { data }: { data: PostsQuery } = await response.json()
+    const { data }: { data } = await response.json()
 
     if (data.page === null) {
       error(404, {

@@ -38,16 +38,21 @@
   <Modal on:close={() => (useHrefs ? (location.href = '/portfolio') : (showModal = !showModal))}>
     <h3 class="text-nhtbl-green-base text-center font-display mb-2">{@html block.title}</h3>
     <div class="flex flex-row w-full overflow-x-auto h-[80vh] gap-4">
-      {#each block?.imageGallery?.imageGallery?.nodes as { mediaDetails, altText }}
-        <div class="h-[80vh]">
+        {#each block?.imageGallery?.imageGallery?.nodes as mediaNode}
+        {#if mediaNode.mediaType === 'image'}
           <img
-            srcset={getSrcSet(mediaDetails.sizes)}
+            srcset={getSrcSet(mediaNode.mediaDetails.sizes)}
             sizes="(max-width: 600px) 480px, 800px"
-            src={mediaDetails.sizes.find(size => size.name === 'large')?.sourceUrl ?? 'fallbackImageUrl'}
-            alt={altText}
+            src={mediaNode.mediaDetails.sizes?.find(size => size.name === 'large')?.sourceUrl ?? 'fallbackImageUrl'}
+            alt={mediaNode.altText}
             class="h-full w-auto max-w-none"
           />
-        </div>
+        {:else if mediaNode.mediaType === 'file' && mediaNode.mimeType === 'video/mp4'}
+          <video controls autoplay loop class="h-full w-auto max-w-none">
+            <source src={mediaNode.mediaItemUrl} type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {/if}
       {/each}
     </div>
     <div class="text-nhtbl-green-base mt-1">{@html block.content}</div>

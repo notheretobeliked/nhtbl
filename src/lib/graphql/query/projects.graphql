@@ -4,6 +4,9 @@ query Projects {
       imageGallery {
         imageGallery {
           nodes {
+            mediaType
+            mimeType
+            mediaItemUrl
             altText
             mediaDetails {
               sizes {

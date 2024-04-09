@@ -97,7 +97,7 @@ export const load: PageServerLoad = async function load({ params, url }) {
   try {
     const response = await graphqlQuery(PageContent, { uri: uri })
     checkResponse(response)
-    const { data }: { data: PageData } = await response.json()
+    const { data }: { data } = await response.json()
 
     if (data.page === null) {
       error(404, {

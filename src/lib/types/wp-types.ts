@@ -105,11 +105,11 @@ export interface PortfolioItemNode {
   id: string
   uri: string
   title: string
-  imageGallery: {
-    imageGallery: {
-      nodes: ImageObject[]
-    }
-  }
+  imageGallery?: {
+    imageGallery?: {
+      nodes: PortfolioMedia[];
+    };
+  };
   content: string
   featuredImage: FeaturedImage
 }
@@ -133,11 +133,26 @@ export enum ImageSizeName {
     width: number; // Assuming you might want to process these as numbers
     height: number;
   }
-  
+
+  export type MediaSize = {
+    sourceUrl: string;
+    width: number;
+    height: number;
+    name: string;
+  };
+
   export type MediaDetails = {
-    sizes: ImageSize[];
-  }
+    sizes: MediaSize[] | null;
+  };
   
+  export type PortfolioMedia = {
+    altText: string;
+    mediaDetails: MediaDetails;
+    mediaType: 'image' | 'file'; // Consider using more specific types if you have a limited set
+    mimeType: string;
+    mediaItemUrl: string;
+  };
+
   export type ImageObject = {
     altText: string;
     caption: string | null;
