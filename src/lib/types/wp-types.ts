@@ -105,8 +105,8 @@ export interface PortfolioItemNode {
   id: string
   uri: string
   title: string
-  imageGallery?: {
-    imageGallery?: {
+  imageGallery: {
+    imageGallery: {
       nodes: PortfolioMedia[];
     };
   };

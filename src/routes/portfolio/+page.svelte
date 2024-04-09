@@ -42,6 +42,6 @@ import { page } from '$app/stores';
 
 <div class="bg-black">
   <Masonry {items} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
-    <PortfolioItem block={item} isActive={item.uri === currentPagePath} />
+    <PortfolioItem block={item}  />
   </Masonry>
 </div>

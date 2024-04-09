@@ -151,6 +151,9 @@ fragment AcfGalerieFragment on AcfGalerie {
     galerie {
       nodes {
         altText
+        mediaType
+        mimeType
+        mediaItemUrl
         caption(format: RENDERED)
         mediaDetails {
           ...MediaDetailsFragment
@@ -175,6 +178,10 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
             imageGallery {
               nodes {
                 altText
+                mediaType
+                mimeType
+                mediaItemUrl
+
                 mediaDetails {
                   ...MediaDetailsFragment
                 }
@@ -209,6 +216,9 @@ fragment AcfHomePageHeroFragment on AcfHomePageHero {
           ...MediaDetailsFragment
         }
         altText
+        mediaType
+        mimeType
+        mediaItemUrl
       }
     }
   }

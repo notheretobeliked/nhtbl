@@ -4,7 +4,7 @@
   export let active: boolean = false
   export let textClass: string = "text-base";
   export let colourClass: string = "bg-nhtbl-green-base"; // Assuming this is a default style
-  export let textColourClass: string = ""; // Assuming this is a default style
+  export let textColourClass: string = "text-black"; // Assuming this is a default style
   if (active) colourClass = "bg-black text-nhtbl-green-base border-nhtbl-green-base"
   
 </script>

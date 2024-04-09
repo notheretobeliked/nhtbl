@@ -27,6 +27,7 @@ export const load: PageServerLoad = async function load({ params }) {
 
     return {
       data: data,
+      uri: uri
     }
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }

@@ -28,6 +28,7 @@ export const load = async function load({ params }: Parameters<PageServerLoad>[0
 
     return {
       data: data,
+      uri: uri
     }
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
