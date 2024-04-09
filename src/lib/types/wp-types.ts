@@ -22,7 +22,7 @@ export interface CoreButtonsAttributes extends Attributes {
 export interface CoreButtonsBlock extends EditorBlock {
   name: 'core/buttons'
   attributes: CoreButtonsAttributes
-  children: EditorBlock[]
+  children: CoreButtonBlock[]
 }
 
 export interface CoreButtonAttributes extends Attributes {
@@ -80,6 +80,7 @@ export interface ACFServicePush extends EditorBlock {
     service: {
       nodes: ServiceNode[]
     }
+    backgroundColour: 'transparent' | 'black' | 'white' | 'nhtbl-green-base'  | 'nhtbl-purple-base'  | 'nhtbl-purple-light' | null
   }
 }
 
@@ -117,22 +118,33 @@ export interface FeaturedImage {
   node: ImageObject
 }
 
-export type ImageSize = {
-  name: string
-  sourceUrl: string
-  width: string
-  height: string
-}
-
-export type MediaDetails = {
-  sizes: ImageSize[]
-}
-
-export type ImageObject = {
-  altText: string
-  caption: null | string
-  mediaDetails: MediaDetails
-}
+// Enum for known size names
+export enum ImageSizeName {
+    Medium = "medium",
+    Large = "large",
+    Thumbnail = "thumbnail",
+    MediumLarge = "medium_large",
+  }
+  
+  // More specific ImageSize type with width and height as numbers and name as enum
+  export type ImageSize = {
+    name: ImageSizeName;
+    sourceUrl: string;
+    width: number; // Assuming you might want to process these as numbers
+    height: number;
+  }
+  
+  export type MediaDetails = {
+    sizes: ImageSize[];
+  }
+  
+  export type ImageObject = {
+    altText: string;
+    caption: string | null;
+    mediaDetails: MediaDetails;
+    // Add optional properties here if needed
+  }
+  
 
 export interface ProjectsQueryResult {
   nhtblProjects: {

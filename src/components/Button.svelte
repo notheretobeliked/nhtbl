@@ -4,9 +4,11 @@
   export let active: boolean = false
   export let textClass: string = "text-base";
   export let colourClass: string = "bg-nhtbl-green-base"; // Assuming this is a default style
-  if (active) colourClass = "bg-nhtbl-purple-base"
+  export let textColourClass: string = ""; // Assuming this is a default style
+  if (active) colourClass = "bg-black text-nhtbl-green-base border-nhtbl-green-base"
+  
 </script>
 
-<a href={url} class="{colourClass} rounded-full hover:bg-nhtbl-purple-base py-2 px-4 border-black border {textClass} font-display" role="button">
+<a href={url} class="{colourClass} rounded-full transition-all duration-500 hover:bg-black hover:text-nhtbl-green-base hover:border-nhtbl-green-base py-2 px-4 border-black border {textClass} {textColourClass} font-display cursor-pointer" role="button">
   {label}
 </a>

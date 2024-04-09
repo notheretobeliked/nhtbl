@@ -2,6 +2,8 @@
   import { inview } from 'svelte-inview'
   import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
 
+  export let forceFull:boolean = false
+
   let isInView: boolean
   const options: Options = {
     rootMargin: '-50px',
@@ -38,7 +40,8 @@
     return (block as ACFServicePush).servicePush !== undefined
   }
 
-  const align = block.attributes.align || 'none'
+  let align = block.attributes.align || 'none'
+  if (forceFull) align = 'full'
   const bgColor = block.attributes.backgroundColor ?? 'white'
 
   // Adjusted function to work directly with the style object

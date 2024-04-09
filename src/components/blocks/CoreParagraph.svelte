@@ -38,6 +38,7 @@
                 break;
         }
         colorClasses = `text-${textColor}`
+        if (textColor === 'nhtbl-green-base') colorClasses = `${colorClasses} group-hover:text-black transition-color duration-300`
 
         return `${textClasses} ${alignClasses} ${colorClasses}`; // Combine base classes with spacing classes
     }

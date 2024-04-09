@@ -14,10 +14,11 @@
   let showModal: boolean = false
 
   const openSlideshow = (event): void => {
+    
     event.preventDefault
-    pushState(block.uri, {
-      showModal: true,
-    })
+    
+      showModal = true
+    
   }
 
   const getSrcSet = (sizes: ImageSize[]): string => {
@@ -42,7 +43,7 @@
           <img
             srcset={getSrcSet(mediaDetails.sizes)}
             sizes="(max-width: 600px) 480px, 800px"
-            src={mediaDetails.sizes.find(size => size.name === 'large').sourceUrl}
+            src={mediaDetails.sizes.find(size => size.name === 'large')?.sourceUrl ?? 'fallbackImageUrl'}
             alt={altText}
             class="h-full w-auto max-w-none"
           />

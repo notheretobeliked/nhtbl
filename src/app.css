@@ -8,3 +8,7 @@
 .text-3xl {
     @apply font-display;
 }
+
+.alignwide {
+    @apply max-w-[1100px] mx-auto;
+}

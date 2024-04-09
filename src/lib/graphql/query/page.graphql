@@ -243,6 +243,7 @@ fragment CoreButtonsFragment on CoreButtons {
 fragment AcfServicePushFragment on AcfServicePush {
   attributes {
     alignment: align
+    backgroundColor
   }
   servicePush {
     service {

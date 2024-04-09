@@ -38,7 +38,6 @@ import { page } from '$app/stores';
   });
 
   $: items
-  console.log(data)
 </script>
 
 <div class="bg-black">

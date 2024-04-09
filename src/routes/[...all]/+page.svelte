@@ -4,8 +4,7 @@
   import type { PageData } from './$types'
   export let data: PageData
   let editorBlocks:EditorBlock[], backgroundColour:string, uri:string
-  
-  console.log(data)
+
 
   $: {
     ({editorBlocks, backgroundColour, uri } = data)

@@ -1,5 +1,5 @@
 // @ts-nocheck
-export const prerender = false
+export const prerender = true
 
 import type { PostsQuery } from '$lib/generated/graphql'
 import PageContent from '$lib/graphql/query/page.graphql?raw'
@@ -28,17 +28,29 @@ function normalizeEditorBlock(block: any) {
 	  }
 	}
   
-	// Check if 'style' attribute exists and is a string
-	if (typeof block.attributes.style === 'string') {
-	  try {
-		// Parse the 'style' string as JSON
-		block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ''))
-	  } catch (error) {
-		console.error('Error parsing style attribute:', error)
-		// Handle the error as you see fit (e.g., log it, ignore it, set style to null)
-		block.attributes.style = null // Example error handling
-	  }
-	}
+  // Check if 'style' attribute exists and is a string
+  if (typeof block.attributes.style === 'string') {
+    try {
+      // Parse the 'style' string as JSON
+      block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ''))
+
+      // Check and transform the color within 'elements.link' after parsing
+      if (
+        block.attributes.style.elements &&
+        block.attributes.style.elements.link &&
+        block.attributes.style.elements.link.color &&
+        block.attributes.style.elements.link.color.text
+      ) {
+        // Extracting color value after '|'
+        const colorValue = block.attributes.style.elements.link.color.text.split('|')[1]
+        // Assigning the extracted color value to a new property
+        block.attributes.textColor = colorValue
+      }
+    } catch (error) {
+      console.error('Error parsing style attribute:', error)
+      block.attributes.style = null // Example error handling
+    }
+  }
   
 	if (typeof block.attributes.layout === 'string') {
 	  try {
