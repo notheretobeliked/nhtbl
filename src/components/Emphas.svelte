@@ -26,7 +26,7 @@
 
 {#if version === 'bubble'}
   <span class="relative inline-block">
-    <strong>{content}</strong>
+    {content}
     <div class="absolute -inset-10">
       <svg
         version="1.1"
