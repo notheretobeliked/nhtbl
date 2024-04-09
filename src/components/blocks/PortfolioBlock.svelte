@@ -36,7 +36,7 @@
 
 <div class="bg-black relative -mb-24">
   <Masonry {items} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
-    <PortfolioItem block={item} />
+    <PortfolioItem block={item} noLink />
   </Masonry>
   <div class="absolute bottom-0 h-[100vh] w-full flex flex-col justify-end bg-gradient-to-t from-black to-transparent">
     <div class="flex justify-center">
