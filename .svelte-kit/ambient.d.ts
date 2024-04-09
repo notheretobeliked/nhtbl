@@ -36,6 +36,7 @@ declare module '$env/static/private' {
 	export const TERM_PROGRAM: string;
 	export const npm_package_devDependencies_eslint_plugin_svelte: string;
 	export const npm_package_devDependencies_schema_dts: string;
+	export const npm_package_dependencies_cheerio: string;
 	export const NODE: string;
 	export const NVM_CD_FLAGS: string;
 	export const npm_package_devDependencies_prettier_plugin_svelte: string;
@@ -190,6 +191,7 @@ declare module '$env/dynamic/private' {
 		TERM_PROGRAM: string;
 		npm_package_devDependencies_eslint_plugin_svelte: string;
 		npm_package_devDependencies_schema_dts: string;
+		npm_package_dependencies_cheerio: string;
 		NODE: string;
 		NVM_CD_FLAGS: string;
 		npm_package_devDependencies_prettier_plugin_svelte: string;

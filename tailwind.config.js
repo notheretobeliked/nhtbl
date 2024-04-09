@@ -12,6 +12,8 @@ export default {
     'object-none',
     'text-xl',
     'object-contain',
+    'stroke-nhtbl-green-base',
+    'stroke-black',
     ...Array.from({ length: 8 }, (_, i) => `pt-${i + 1}`),
     ...Array.from({ length: 8 }, (_, i) => `pb-${i + 1}`),
   ],

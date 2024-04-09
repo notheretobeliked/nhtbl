@@ -65,6 +65,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "cheerio": "1.0.0-rc.12",
     "svelte-bricks": "^0.2.1",
     "svelte-inview": "^4.0.2"
   }
