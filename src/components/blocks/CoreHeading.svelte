@@ -58,33 +58,33 @@
 
 {#if level === 1}
   <h1 class="{classNames(fontSize, textColor, textAlign)} font-display">
-    {#each segments as segment}
-      {#if segment.type === 'svg'}
-        <Emphas content={segment.content} version={segment.version} stroke={textColor} />
+    {#each segments as { type, content, version, key } (key)}
+      {#if type === 'svg'}
+        <Emphas {content} {version} stroke={textColor || 'black'} />
       {:else}
-        {@html segment.content} <!-- Make sure to sanitize if needed -->
+        {@html content} <!-- Ensure this is safe to use -->
       {/if}
     {/each}
   </h1>
 {/if}
 {#if level === 2}
   <h2 class="{classNames(fontSize, textColor, textAlign)}  font-display">
-    {#each segments as segment}
-      {#if segment.type === 'svg'}
-        <Emphas content={segment.content} version={segment.version} stroke={textColor} />
+    {#each segments as { type, content, version, key } (key)}
+      {#if type === 'svg'}
+        <Emphas {content} {version} stroke={textColor || 'black'} />
       {:else}
-        {@html segment.content} <!-- Make sure to sanitize if needed -->
+        {@html content} <!-- Ensure this is safe to use -->
       {/if}
     {/each}
   </h2>
 {/if}
 {#if level === 3}
   <h3 class="{classNames(fontSize, textColor, textAlign)}  font-display">
-    {#each segments as segment}
-      {#if segment.type === 'svg'}
-        <Emphas content={segment.content} version={segment.version} stroke={textColor} />
+    {#each segments as { type, content, version, key } (key)}
+      {#if type === 'svg'}
+        <Emphas {content} {version} stroke={textColor || 'black'} />
       {:else}
-        {@html segment.content} <!-- Make sure to sanitize if needed -->
+        {@html content} <!-- Ensure this is safe to use -->
       {/if}
     {/each}
   </h3>

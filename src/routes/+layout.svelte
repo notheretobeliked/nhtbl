@@ -5,6 +5,8 @@
   export let data: PageData
   let {editorBlocks, seo, menu, backgroundColour, uri } = data
 
+  console.log(data)
+
   
   const menuItems = menu.menuItems.nodes
 
