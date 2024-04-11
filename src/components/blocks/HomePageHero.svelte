@@ -49,7 +49,7 @@
     percentage > 100 - (100 / images.length) * (index + 1)
       ? 'opacity-100'
       : 'opacity-0'}">
-      <Image imageObject={image} imageSize="large" fit="cover" />
+      <Image imageObject={image} lazy={false} imageSize="medium" fit="cover" />
   </div>
   {/each}
 </div>
