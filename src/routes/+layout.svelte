@@ -7,14 +7,20 @@
   import OpenGraph from '$components/SEO/OpenGraph.svelte'
   import Header from '$components/Header.svelte'
   export let data: PageData
-  let { seo, menu } = data
-  console.log(seo)
+  let { seo, menu, uri } = data
+
   const menuItems = menu.menuItems.nodes
   const image = seo.opengraphImage
   const metadescription = seo.metaDesc
   const pageTitle = seo.title
-  const siteUrl = seo.opengraphUrl
+  const siteUrl = seo.siteUrl
   const siteTitle = seo.opengraphSiteName // Assuming this is used for og:site_name
+
+  $: {
+  menuItems
+  uri
+  seo
+}
 </script>
 
 {#key $page.url.pathname}
@@ -26,5 +32,10 @@
     {siteUrl} />
 {/key}
 
+
+{#key $page.url.pathname}
 <Header {menuItems} />
+{/key}
+
+
 <slot />
