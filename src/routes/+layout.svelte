@@ -1,7 +1,6 @@
 <script lang="ts">
   import '../app.css'
   import { page } from '$app/stores'
-  import type { LayoutAPIResponse } from '$lib/types/wp-types'
   import type { PageData } from './$types'
   import Twitter from '$components/SEO/Twitter.svelte'
   import OpenGraph from '$components/SEO/OpenGraph.svelte'

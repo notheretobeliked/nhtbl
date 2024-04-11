@@ -1,5 +1,5 @@
 query Projects {
-  nhtblProjects(first: 100) {
+  nhtblProjects(first: 100, where: {orderby: {field: MENU_ORDER, order: ASC}}) {
     nodes {
       imageGallery {
         imageGallery {
