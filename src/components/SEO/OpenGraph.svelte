@@ -19,6 +19,7 @@
 </script>
 
 <svelte:head>
+  <title>{pageTitle}</title>
   <meta name="description" content={metadescription} />
   <meta property="og:site_name" content={siteTitle} />
   <meta property="og:locale" content={ogLanguage} />
