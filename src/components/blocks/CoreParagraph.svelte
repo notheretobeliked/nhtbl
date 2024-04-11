@@ -5,7 +5,6 @@
   import type { ContentSegment } from '$lib/utilities/utilities' // Adjust the path as necessary
 
   export let block: EditorBlock
-  console.log(block)
 
   import Emphas from '$components/Emphas.svelte'
   const { content, fontSize, textColor, align } = block.attributes

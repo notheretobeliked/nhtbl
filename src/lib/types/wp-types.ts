@@ -1,3 +1,36 @@
+export interface LayoutAPIResponse {
+    menu: Menu;
+    page: {
+        seo: SEO;
+    }
+    uri: string;
+  }
+  
+  export interface Menu {
+    menuItems: {
+      nodes: MenuItem[]; // You already have MenuItem defined
+    };
+  }
+  
+  // Assuming SEO structure needs to be defined based on your new data
+  export interface SEO {
+    metaDesc: string;
+    metaKeywords: string;
+    opengraphSiteName: string;
+    opengraphTitle: string;
+    opengraphPublisher: string;
+    opengraphUrl: string;
+    title: string;
+    twitterDescription: string;
+    twitterTitle: string;
+    twitterImage: ImageObject | null; // Adjust based on your actual data
+    opengraphImage: ImageObject | null;
+  }
+  
+  
+  // Adjust or extend MediaDetails and MediaSize if necessary to match the new structure
+  
+
 export interface HomePageContentResponse {
   page: {
     id: string

@@ -27,12 +27,14 @@ fragment SeoFragment on PostTypeSEO {
   twitterTitle
   twitterImage {
     altText
+    caption
     mediaDetails {
       ...MediaDetailsFragment
     }
   }
   opengraphImage {
     altText
+    caption
     mediaDetails {
       ...MediaDetailsFragment
     }
