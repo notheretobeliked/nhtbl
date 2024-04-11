@@ -5,7 +5,7 @@
   
 </script>
 
-<div class="grid grid-cols-{columns} gap-7 mb-7">
+<div class="grid md:grid-cols-{columns} gap-7 mb-7">
   {#each block.children as block, index}
     <BlockRenderer {block} />
   {/each}
