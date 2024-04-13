@@ -27,7 +27,7 @@ export const load = async function load({ params }: Parameters<PageServerLoad>[0
     }
 
     const siteUrl = data.page.seo.opengraphUrl.replace(new URL(data.page.seo.opengraphUrl).origin, PUBLIC_SITE_URL);
-    console.log(siteUrl)
+    
 
 
     // Assuming your GraphQL query correctly fetches the SEO data as per your LayoutAPIResponse type
