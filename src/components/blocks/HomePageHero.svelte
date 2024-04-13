@@ -18,8 +18,6 @@
   let transformString: string
 
   let bgdiv: HTMLDivElement
-  let scaleFactor = 1
-  let transformPercentage = percentage
 
   onMount(() => {
     pageHeight = 3000 + window.innerHeight
@@ -72,28 +70,3 @@
   </div>
 </div>
 
-<style lang="postcss">
-  /* purgecss start ignore */
-
-  .box-container p {
-    @apply mb-8;
-  }
-
-  .box-container p strong {
-    @apply relative;
-    margin-right: 5px;
-  }
-
-  .box-container p strong::after {
-    background-image: url('/svgs/line.svg');
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 8px;
-    background-size: cover;
-  }
-  /* purgecss end ignore */
-</style>
