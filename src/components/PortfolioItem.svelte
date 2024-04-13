@@ -30,7 +30,6 @@
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            console.log('hit')
             entry.target.play()
           } else {
             entry.target.pause()
@@ -56,7 +55,7 @@
     
   <a href={block.uri} on:click={openSlideshow} on:keypress={openSlideshow}>
     <div class="cursor-pointer relative" on:mouseenter={() =>isHover =! isHover} on:mouseleave={() =>isHover =! isHover}>
-      <Image imageSize="medium_large" imageObject={block.featuredImage.node} fit="contain" />
+      <Image imageSize="medium" imageObject={block.featuredImage.node} fit="contain" />
       {#if isHover && !noLink }
       <div
       transition:scale={{ duration: 300, opacity: 0.5, easing: quintOut }} class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex content-center items-center">
