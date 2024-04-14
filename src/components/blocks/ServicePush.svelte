@@ -16,7 +16,7 @@
         <figure class="aspect-[3/2] overflow-hidden relative">
           <Image
             imageObject={serviceBlock.featuredImage.node}
-            imageSize="medium"
+            imageSize="small"
             fit="cover"
             extraClasses="w-full h-full absolute inset-0 transition-transform duration-500 ease-in-out group-hover:scale-105 w-full h-full"
           />
