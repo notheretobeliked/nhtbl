@@ -2,8 +2,8 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   safelist: [
-    'grid-cols-2',
-    'grid-cols-3',
+    'md:grid-cols-2',
+    'md:grid-cols-3',
     'bg-black',
     'bg-nhtbl-purple-light',
     'object-cover',
