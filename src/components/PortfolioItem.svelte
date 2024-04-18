@@ -58,11 +58,11 @@
       {#if isHover && !noLink}
         <div transition:scale={{ duration: 300, opacity: 0.5, easing: quintOut }} class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex flex-col justify-center content-center items-center">
           <p class="text-black text-xl font-display text-center w-full">{block.title}</p>
-          {#if block.nhtblClients?.nodes?.length}
-            {#each block.nhtblClients.nodes as client}
-              <p class="text-black text-small md:text-base mt-2 font-display text-center w-full">{client.name}</p>
-            {/each}
-          {/if}
+          {#if block.nhtblClients && block.nhtblClients.nodes.length > 0}
+          <p class="text-black text-small md:text-base mt-2 font-display text-center w-full">
+            {block.nhtblClients.nodes.map(client => client.name).join(', ')}
+          </p>
+        {/if}
         </div>
       {/if}
     </div>
