@@ -1,5 +1,5 @@
 // @ts-nocheck
-export const prerender = false
+export const prerender = true
 
 import Projects from '$lib/graphql/query/projects.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'

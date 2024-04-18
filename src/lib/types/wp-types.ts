@@ -125,6 +125,11 @@ export interface ACFPortfolioBlock extends EditorBlock {
   }
 }
 
+export interface NameAndSlug {
+  slug: string
+  name: string
+}
+
 export interface ServiceNode {
   slug: string
   id: string
@@ -143,6 +148,10 @@ export interface PortfolioItemNode {
       nodes: PortfolioMedia[]
     }
   }
+  nhtblClients: {
+    nodes: NameAndSlug[]
+  }
+  
   content: string
   featuredImage: FeaturedImage
 }
@@ -152,14 +161,7 @@ export interface FeaturedImage {
 }
 
 // Enum for known size names
-export enum ImageSizeName {
-  Medium = 'medium',
-  Large = 'large',
-  Thumbnail = 'thumbnail',
-  MediumLarge = 'medium_large',
-  CustomSize1536 = '1536x1536',
-  CustomSize2048 = '2048x2048',
-}
+export type ImageSizeName = 'medium' | 'large' | 'thumbnail' | 'medium_large' | '1536x1536' | '2048x2048'
 
 // More specific ImageSize type with width and height as numbers and name as enum
 export type ImageSize = {

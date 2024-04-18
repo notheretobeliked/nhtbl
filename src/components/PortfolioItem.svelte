@@ -9,8 +9,8 @@
 
   export let block: PortfolioItemNode
   export let isActive: boolean = false
-  export let useHrefs: boolean = false
   export let noLink: boolean = false
+  console.log(block)
 
   let isHover: boolean = false
   let showModal: boolean = false
@@ -52,14 +52,17 @@
 </script>
 
 {#if block?.featuredImage?.node?.mediaDetails?.sizes}
-    
   <a href={block.uri} on:click={openSlideshow} on:keypress={openSlideshow}>
-    <div class="cursor-pointer relative" on:mouseenter={() =>isHover =! isHover} on:mouseleave={() =>isHover =! isHover}>
+    <div class="cursor-pointer relative" on:mouseenter={() => (isHover = !isHover)} on:mouseleave={() => (isHover = !isHover)}>
       <Image imageSize="medium" imageObject={block.featuredImage.node} fit="contain" />
-      {#if isHover && !noLink }
-      <div
-      transition:scale={{ duration: 300, opacity: 0.5, easing: quintOut }} class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex content-center items-center">
+      {#if isHover && !noLink}
+        <div transition:scale={{ duration: 300, opacity: 0.5, easing: quintOut }} class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex flex-col justify-center content-center items-center">
           <p class="text-black text-xl font-display text-center w-full">{block.title}</p>
+          {#if block.nhtblClients?.nodes?.length}
+            {#each block.nhtblClients.nodes as client}
+              <p class="text-black text-small md:text-base mt-2 font-display text-center w-full">Working with {client.name}</p>
+            {/each}
+          {/if}
         </div>
       {/if}
     </div>

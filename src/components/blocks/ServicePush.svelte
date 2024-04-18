@@ -2,7 +2,6 @@
   import type { ACFServicePush, ServiceNode } from '$lib/types/wp-types'
   export let block: ACFServicePush
   import BlockRenderer from '$components/BlockRenderer.svelte'
-  import Button from '$components/Button.svelte'
   import Image from '$components/Image.svelte'
 
   const uri = block.servicePush.service.nodes[0].uri
@@ -16,7 +15,7 @@
         <figure class="aspect-[3/2] overflow-hidden relative">
           <Image
             imageObject={serviceBlock.featuredImage.node}
-            imageSize="small"
+            imageSize='medium'
             fit="cover"
             extraClasses="w-full h-full absolute inset-0 transition-transform duration-500 ease-in-out group-hover:scale-105 w-full h-full"
           />

@@ -1,5 +1,5 @@
 query Projects {
-  nhtblProjects(first: 100, where: {orderby: {field: MENU_ORDER, order: ASC}}) {
+  nhtblProjects(first: 100, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
     nodes {
       imageGallery {
         imageGallery {
@@ -22,6 +22,13 @@ query Projects {
       content(format: RENDERED)
       slug
       uri
+      nhtblClients {
+        nodes {
+          name
+          slug
+        }
+      }
+
       title(format: RENDERED)
       featuredImage {
         node {

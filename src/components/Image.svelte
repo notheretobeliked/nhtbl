@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { ImageObject } from '$lib/types/wp-types.ts'
-  import { ImageSizeName } from '$lib/types/wp-types'
+import type { ImageObject, ImageSizeName } from '$lib/types/wp-types.ts'
   import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
 
   export let imageObject: ImageObject
+  console.log(imageObject)
   export let lazy: boolean = true
   export let imageSize: ImageSizeName
   export let fit: 'cover' | 'contain' | 'fill' | 'none' = 'none'
@@ -15,11 +15,13 @@
 
   function determineSizes(sizeName: ImageSizeName): string {
     switch (sizeName) {
-      case ImageSizeName.Medium:
+      case 'thumbnail':
+        return '(max-width: 600px) 50vw, (max-width: 900px) 50vw, 25vw'
+      case 'medium':
         return '(max-width: 600px) 100vw, (max-width: 900px) 50vw, 25vw'
-      case ImageSizeName.MediumLarge:
+      case 'medium_large':
         return '(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw'
-      case ImageSizeName.Large:
+      case 'large':
         return '(max-width: 600px) 100vw, 50vw'
       default:
         return '100vw' // Fallback size for any unhandled cases
