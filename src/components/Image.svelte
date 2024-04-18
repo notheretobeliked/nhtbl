@@ -38,6 +38,4 @@ import type { ImageObject, ImageSizeName } from '$lib/types/wp-types.ts'
   alt={imageObject.altText}
   {width}
   {height}
-  srcset={getSrcSet(imageObject.mediaDetails.sizes)}
-  {sizes}
 />
