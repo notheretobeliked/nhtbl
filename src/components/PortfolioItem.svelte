@@ -60,7 +60,7 @@
           <p class="text-black text-xl font-display text-center w-full">{block.title}</p>
           {#if block.nhtblClients?.nodes?.length}
             {#each block.nhtblClients.nodes as client}
-              <p class="text-black text-small md:text-base mt-2 font-display text-center w-full">Working with {client.name}</p>
+              <p class="text-black text-small md:text-base mt-2 font-display text-center w-full">{client.name}</p>
             {/each}
           {/if}
         </div>
