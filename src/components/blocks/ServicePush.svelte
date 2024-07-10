@@ -3,15 +3,13 @@
   export let block: ACFServicePush
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import Image from '$components/Image.svelte'
-
-  const uri = block.servicePush.service.nodes[0].uri
   const colour = block.attributes.backgroundColor ?? 'transparent'
 </script>
 
 {#each block.servicePush.service.nodes as serviceBlock}
   <div class="group relative bg-{colour} transition-colors hover:bg-nhtbl-purple-base duration-300 px-4 py-8 cursor-pointer">
-    <a href={serviceBlock.uri} class="inset-0 flex flex-row gap-4 alignwide ">
-      <div class="w-[41.66666667%]">
+    <a href={serviceBlock.uri} class="inset-0 flex flex-col md:flex-row gap-4 alignwide ">
+      <div class="md:w-[41.66666667%]">
         <figure class="aspect-[3/2] overflow-hidden relative">
           <Image
             imageObject={serviceBlock.featuredImage.node}

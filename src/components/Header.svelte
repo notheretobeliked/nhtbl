@@ -3,7 +3,6 @@
   import type { MenuItem } from '$lib/types/wp-types'
   export let menuItems: MenuItem[]
   import Button from '$components/Button.svelte'
-  import { Hamburger } from 'svelte-hamburgers'
   $: currentPagePath = $page.url.pathname
   $: menuItems = menuItems.map(item => ({
     ...item,
@@ -67,7 +66,7 @@
     >
       {#each menuItems as menuItem}
         <li>
-          <Button active={menuItem.current} label={menuItem.label} url={menuItem.uri} />
+          <Button active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" />
         </li>
       {/each}
     </ul>
