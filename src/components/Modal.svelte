@@ -13,8 +13,8 @@
     })
   </script>
   
-  <div class="fixed flex inset-0 p-4 lg:p-12 justify-center items-center z-50 w-full h-full bg-black backdrop-blur-lg bg-opacity-40">
-    <button transition:scale|global={{ duration: 300 }} class="w-12 h-12 fixed inset-4 border-none bg-transparent text-xl cursor-pointer text-nhtbl-green-base {showButton ?? 'hidden'}" on:click={close}>
+  <div class="fixed flex inset-0 p-4 lg:p-12 justify-center items-center z-40 w-full h-full bg-black backdrop-blur-lg bg-opacity-40">
+    <button transition:scale|global={{ duration: 300 }} class="w-12 h-12 fixed inset-4 border-none bg-transparent text-xl cursor-pointer text-nhtbl-green-base  z-50 {showButton ?? 'hidden'}" on:click={close}>
       <svg width="48" height="46" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_1583_784)">
           <path
