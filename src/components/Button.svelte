@@ -9,6 +9,6 @@
   
 </script>
 
-<a href={url} class="{colourClass} rounded-full transition-all duration-500 hover:bg-black hover:text-nhtbl-green-base hover:border-nhtbl-green-base py-2 px-4 border-black border {textClass} {textColourClass} font-display cursor-pointer" role="button">
+<a href={url} class="{colourClass} rounded-full transition-all duration-500 hover:bg-black hover:text-nhtbl-green-base hover:border-nhtbl-green-base pt-3 pb-2 px-4 border-black border {textClass} {textColourClass} font-display cursor-pointer" role="button">
   {label}
 </a>
