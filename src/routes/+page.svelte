@@ -1,7 +1,7 @@
 <script lang="ts">
   import BlockRenderer from '$components/BlockRenderer.svelte';
   import type { PageData } from './$types'
-  import type { EditorBlock } from '$lib/types/wp-types.ts'
+  import type { EditorBlock } from '$lib/graphql/generated'
   export let data: PageData
   let blocks: EditorBlock[] = data.editorBlocks as EditorBlock[];
   

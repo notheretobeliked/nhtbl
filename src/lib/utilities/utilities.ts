@@ -1,4 +1,5 @@
 import type { ImageSize } from "$lib/types/wp-types"
+import type { EditorBlock } from "$lib/graphql/generated"
 
 export interface HierarchicalOptions {
   idKey?: string
@@ -15,13 +16,13 @@ export interface ContentSegment {
 
 export function flatListToHierarchical<T extends Record<string, any>>(
   data: T[] = [],
-  { idKey = 'clientId', parentKey = 'parentId', childrenKey = 'children' }: HierarchicalOptions = {},
+  { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
 ): T[] {
   const tree: T[] = []
   const childrenOf: Record<string, T[]> = {}
 
   data.forEach(item => {
-    const newItem: T = { ...item }
+    const newItem: any = { ...item }
     const id: string = newItem[idKey]
     const parentId: string = newItem[parentKey] || '0'
 

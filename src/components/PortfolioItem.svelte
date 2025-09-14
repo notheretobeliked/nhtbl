@@ -10,7 +10,6 @@
   export let block: PortfolioItemNode
   export let isActive: boolean = false
   export let noLink: boolean = false
-  console.log(block)
 
   let isHover: boolean = false
   let showModal: boolean = false

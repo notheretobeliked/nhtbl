@@ -1,6 +1,4 @@
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
-import type { PostsQueryVariables } from '$lib/generated/graphql'
-
 import { error } from '@sveltejs/kit'
 
 export function checkResponse(response: Response) {
@@ -14,9 +12,7 @@ export function checkResponse(response: Response) {
   }
 }
 
-type QueryVariables = PostsQueryVariables
-
-export async function graphqlQuery(query: string, variables: QueryVariables = {}) {
+export async function graphqlQuery(query: string, variables: Record<string, any> = {}) {
   return fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -26,6 +22,6 @@ export async function graphqlQuery(query: string, variables: QueryVariables = {}
       query,
       variables,
     }),
-    cache: 'no-cache', // This tells the fetch to bypass the cache
+    cache: 'no-cache',
   })
 }

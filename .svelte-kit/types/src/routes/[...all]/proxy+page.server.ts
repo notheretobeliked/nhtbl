@@ -1,11 +1,10 @@
 // @ts-nocheck
 export const prerender = true
 import PageContent from '$lib/graphql/query/page.graphql?raw'
-import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { EditorBlock } from '$lib/types/wp-types'
-import type { PageData } from '../$types'
+import type { EditorBlock } from '$lib/graphql/generated'
 
 interface HierarchicalOptions {
   idKey?: string
@@ -75,7 +74,7 @@ function flatListToHierarchical(data: EditorBlock[] = [], { idKey = 'clientId', 
   const childrenOf: Record<string, EditorBlock[]> = {}
 
   data.forEach(item => {
-    const newItem: T = { ...item }
+    const newItem: EditorBlock = { ...item }
     const parentId: string = newItem[parentKey] == null ? '0' : newItem[parentKey]
 
     childrenOf[newItem[idKey]] = childrenOf[newItem[idKey]] || []
@@ -94,11 +93,9 @@ function flatListToHierarchical(data: EditorBlock[] = [], { idKey = 'clientId', 
 
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
   const uri = `/${params.all || ''}`
-
+  
   try {
-    const response = await graphqlQuery(PageContent, { uri: uri })
-    checkResponse(response)
-    const { data }: { data } = await response.json()
+    const data = await urqlQuery(PageContent, { uri: uri })
 
     if (data.page === null) {
       error(404, {
@@ -110,12 +107,13 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
 
     const backgroundColour = data.page.backgroundColour.backgroundColour ?? 'white'
 
-    return {
-      data: data,
+    const returnData = {
       uri: uri,
       backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
     }
+    
+    return JSON.parse(JSON.stringify(returnData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {

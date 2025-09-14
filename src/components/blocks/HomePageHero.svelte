@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { ACFHomePageHero } from '$lib/types/wp-types'
-  export let block: ACFHomePageHero
+  // TODO: Migrate to generated AcfHomePageHero type when image types are aligned
+  export let block: any
   const images = block.homePageHero.images.nodes
   const content = block.children
   import BlockRenderer from '$components/BlockRenderer.svelte'

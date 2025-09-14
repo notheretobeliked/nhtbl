@@ -7,7 +7,7 @@
   import Modal from '$components/Modal.svelte'
   import { onMount, onDestroy } from 'svelte'
   import type { PageData } from './$types'
-  import type { PortfolioItemNode } from '$lib/types/wp-types.ts'
+  import type { PortfolioItemNode } from '$lib/types/wp-types'
   export let data: PageData
   import PortfolioItem from '$components/PortfolioItem.svelte'
   import Masonry from 'svelte-bricks'

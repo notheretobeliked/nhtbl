@@ -1,5 +1,5 @@
 import { P as PageContent } from "../../chunks/page.js";
-import { g as graphqlQuery, c as checkResponse } from "../../chunks/graphql.js";
+import { u as urqlQuery } from "../../chunks/client.js";
 import { e as error } from "../../chunks/index.js";
 const prerender = true;
 function normalizeEditorBlock(block) {
@@ -15,9 +15,21 @@ function normalizeEditorBlock(block) {
   if (typeof block.attributes.style === "string") {
     try {
       block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ""));
+      if (block.attributes.style.elements && block.attributes.style.elements.link && block.attributes.style.elements.link.color && block.attributes.style.elements.link.color.text) {
+        const colorValue = block.attributes.style.elements.link.color.text.split("|")[1];
+        block.attributes.textColor = colorValue;
+      }
     } catch (error2) {
       console.error("Error parsing style attribute:", error2);
       block.attributes.style = null;
+    }
+  }
+  if (typeof block.attributes.layout === "string") {
+    try {
+      block.attributes.layout = JSON.parse(block.attributes.layout);
+    } catch (error2) {
+      console.error("Error parsing layout attribute:", error2);
+      block.attributes.layout = null;
     }
   }
   if (block.children) {
@@ -45,9 +57,7 @@ function flatListToHierarchical(data = [], { idKey = "clientId", parentKey = "pa
 const load = async function load2({ params, url }) {
   const uri = `/`;
   try {
-    const response = await graphqlQuery(PageContent, { uri });
-    checkResponse(response);
-    const { data } = await response.json();
+    const data = await urqlQuery(PageContent, { uri });
     if (data.page === null) {
       error(404, {
         message: "Not found"
@@ -62,9 +72,9 @@ const load = async function load2({ params, url }) {
   } catch (err) {
     const httpError = err;
     if (httpError.message) {
-      throw error(httpError.status ?? 500, httpError.message);
+      error(httpError.status ?? 500, httpError.message);
     }
-    throw error(500, err);
+    error(500, err);
   }
 };
 export {

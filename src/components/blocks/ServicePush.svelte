@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { ACFServicePush, ServiceNode } from '$lib/types/wp-types'
-  export let block: ACFServicePush
+  import type { ServiceNode } from '$lib/types/wp-types'
+  // TODO: Migrate to generated AcfServicePush type when ServiceNode type is aligned
+  export let block: any
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import Button from '$components/Button.svelte'
   import Image from '$components/Image.svelte'
@@ -21,8 +22,8 @@
         </figure>
       </div>
       <div class="transition-colors duration-300 flex flex-col gap-3 w-full">
-        {#each block.children as block}
-          <BlockRenderer {block} forceFull />
+        {#each block.children as childBlock}
+          <BlockRenderer block={childBlock} forceFull />
         {/each}
         <div class="flex-shrink mt-4">
           <Button font="sans" url={serviceBlock.uri} label="Find out more" />

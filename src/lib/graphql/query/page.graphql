@@ -20,6 +20,8 @@ query PageContent($uri: ID!) {
       ...CoreButtonsFragment
       ...CoreSpacerFragment
       ...PortfolioBlockDetailsFragment
+      ...AcfLinkBlockFragment
+      ...CoreImageFragment
     }
     seo {
       ...SeoFragment
@@ -54,7 +56,7 @@ fragment SeoFragment on PostTypeSEO {
 fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
   name
   attributes {
-    alignment: align
+    align
   }
   portfolioBlock {
     portfolioItems {
@@ -62,7 +64,7 @@ fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
         slug
         ... on Nhtbl_project {
           title(format: RENDERED)
-          imageGallery {
+          projectData {
             imageGallery {
               nodes {
                 altText
@@ -114,6 +116,22 @@ fragment CoreGroupFragment on CoreGroup {
   }
 }
 
+fragment CoreImageFragment on CoreImage {
+  attributes {
+    alt
+    align
+    aspectRatio
+    borderColor
+    caption
+    cssClassName
+    sizeSlug
+    style
+  }
+  mediaDetails {
+    ...MediaDetailsFragment
+  }
+}
+
 fragment CoreButtonFragment on CoreButton {
   attributes {
     backgroundColor
@@ -133,6 +151,43 @@ fragment CoreButtonFragment on CoreButton {
   }
 }
 
+fragment AcfLinkBlockFragment on AcfLinkBlock {
+  innerBlocks {
+      name
+      parentClientId
+      clientId
+      ...CoreParagraphFragment
+      ...CoreHeadingFragment
+      ...AcfHomePageHeroFragment
+      ...AcfServicePushFragment
+      ...CoreColumnsFragment
+      ...AcfGalerieFragment
+      ...AcfPortfolioBlockFragment
+      ...CoreGroupFragment
+      ...CoreButtonFragment
+      ...CoreButtonsFragment
+      ...CoreSpacerFragment
+      ...PortfolioBlockDetailsFragment
+      ...CoreImageFragment
+  }
+  attributes {
+    align
+    backgroundColor
+  }
+  linkBlock {
+    internalLink {
+      nodes {
+        slug
+        uri
+      }
+    }
+    externalLink {
+      url
+      title
+      target
+    }
+  }
+}
 fragment CoreColumnsFragment on CoreColumns {
   attributes {
     layout
@@ -145,7 +200,7 @@ fragment CoreColumnsFragment on CoreColumns {
 
 fragment AcfGalerieFragment on AcfGalerie {
   attributes {
-    alignment: align
+    align
   }
   galerie {
     galerie {
@@ -180,7 +235,7 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
               slug
             }
           }
-          imageGallery {
+          projectData {
             imageGallery {
               nodes {
                 altText
@@ -213,7 +268,7 @@ fragment CoreParagraphFragment on CoreParagraph {
 fragment AcfHomePageHeroFragment on AcfHomePageHero {
   attributes {
     backgroundColor
-    alignment: align
+    align
   }
   homePageHero {
     images(first: 100) {
@@ -258,7 +313,7 @@ fragment CoreButtonsFragment on CoreButtons {
 
 fragment AcfServicePushFragment on AcfServicePush {
   attributes {
-    alignment: align
+    align
     backgroundColor
   }
   servicePush {

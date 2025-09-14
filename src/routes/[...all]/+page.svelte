@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { EditorBlock } from '$lib/types/wp-types'
+  import type { EditorBlock } from '$lib/graphql/generated'
   import BlockRenderer from '$components/BlockRenderer.svelte';
   import type { PageData } from './$types'
   export let data: PageData

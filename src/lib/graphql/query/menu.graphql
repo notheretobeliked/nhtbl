@@ -10,12 +10,6 @@ query PageMeta($uri: ID!) {
   }
   page(id: $uri, idType: URI) {
     seo {
-        ...SeoFragment
-    }
-  }
-}
-
-fragment SeoFragment on PostTypeSEO {
   metaDesc
   metaKeywords
   opengraphSiteName
@@ -39,7 +33,10 @@ fragment SeoFragment on PostTypeSEO {
       ...MediaDetailsFragment
     }
   }
+    }
+  }
 }
+
 
 fragment MediaDetailsFragment on MediaDetails {
   sizes {

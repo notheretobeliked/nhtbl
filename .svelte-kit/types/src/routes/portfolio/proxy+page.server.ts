@@ -2,7 +2,7 @@
 export const prerender = true
 
 import Projects from '$lib/graphql/query/projects.graphql?raw'
-import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 
@@ -16,9 +16,7 @@ export const load = async function load({ params }: Parameters<PageServerLoad>[0
   const uri = `/${params.all || ''}`
 
   try {
-    const response = await graphqlQuery(Projects, { uri: '/portfolio' })
-    checkResponse(response)
-    const { data }: { data } = await response.json()
+    const data = await urqlQuery(Projects, { uri: '/portfolio' })
 
     if (data.page === null) {
       error(404, {
@@ -26,9 +24,7 @@ export const load = async function load({ params }: Parameters<PageServerLoad>[0
       })
     }
 
-    return {
-      data: data,
-    }
+    return JSON.parse(JSON.stringify({ data: data }))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {

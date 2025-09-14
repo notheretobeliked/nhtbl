@@ -3,7 +3,6 @@ import type { ImageObject, ImageSizeName } from '$lib/types/wp-types.ts'
   import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
 
   export let imageObject: ImageObject
-  console.log(imageObject)
   export let lazy: boolean = true
   export let imageSize: ImageSizeName
   export let fit: 'cover' | 'contain' | 'fill' | 'none' = 'none'

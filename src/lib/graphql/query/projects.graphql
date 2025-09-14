@@ -1,7 +1,7 @@
 query Projects {
   nhtblProjects(first: 100, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
     nodes {
-      imageGallery {
+      projectData {
         imageGallery {
           nodes {
             mediaType

@@ -1,9 +1,9 @@
 // @ts-nocheck
 export const prerender = true
 
-import type { PostsQuery } from '$lib/generated/graphql'
+import type { PostsQuery } from '$lib/graphql/generated'
 import PageContent from '$lib/graphql/query/page.graphql?raw'
-import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 
@@ -98,9 +98,7 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
   const uri = `/`
 
   try {
-    const response = await graphqlQuery(PageContent, { uri: uri })
-    checkResponse(response)
-    const { data }: { data: PostsQuery } = await response.json()
+    const data: PostsQuery = await urqlQuery(PageContent, { uri: uri })
 
     if (data.page === null) {
       error(404, {
@@ -110,11 +108,13 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
 
     let editorBlocks = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : []
 
-    return {
-      data: data,
+    const returnData = {
       uri: uri,
       editorBlocks: editorBlocks,
     }
+    
+    // Ensure serializable
+    return JSON.parse(JSON.stringify(returnData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {
