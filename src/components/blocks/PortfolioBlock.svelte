@@ -39,7 +39,7 @@
 
 	// Search functionality (only if enabled)
 	let searchTerm = $state('')
-	let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list'>(enableSearch ? 'list' : displayMode)
+	let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list'>(displayMode)
 	
 	// Function to handle service tag clicks from child components
 	const handleServiceClick = (serviceName: string) => {
