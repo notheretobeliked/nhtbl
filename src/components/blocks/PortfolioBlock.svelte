@@ -78,12 +78,12 @@
 
 	// Masonry settings
 	let minColWidth = $state(300)
-	let maxColWidth = $state(500)
+	let maxColWidth = $state(600)
 	let gap = $state(30)
 
 	onMount(() => {
 		const updateColWidth = () => {
-			minColWidth = window.innerWidth >= 768 ? 300 : 200
+			minColWidth = window.innerWidth >= 768 ? 300 : 120
 		}
 		
 		updateColWidth()
@@ -212,7 +212,7 @@
 	{:else if viewMode === 'list'}
 	<!-- List Layout -->
 	<div class="portfolio-list {alignmentClass} my-8">
-		<div class="space-y-3">
+		<div class="space-y-5">
 		{#each filteredProjects as project (project.slug)}
 			<FeaturedProject 
 				displayMode="grid" 
@@ -254,14 +254,7 @@
 		background-color: #999;
 	}
 	.full-width-breakout {
-		width: 100vw;
-		position: relative;
-		left: 50%;
-		right: 50%;
-		margin-left: -50vw;
-		margin-right: -50vw;
-		padding-left: 2rem;
-		padding-right: 2rem;
+		@apply px-2 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw];
 	}
 
 	/* Ensure the masonry container takes full width */

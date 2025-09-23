@@ -127,15 +127,15 @@
         <Image {imageObject} imageSize="medium" fit="contain" />
         {#if isHover}
           <div class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex flex-col justify-center content-center items-center">
-            <p class="text-black text-xl font-display text-center w-full">{project.title}</p>
+            <p class="text-black text-base lg:text-lg font-display text-center w-full">{project.title}</p>
             {#if clientNames}
-              <p class="text-black text-small md:text-base mt-2 font-display text-center w-full">
-                {clientNames}
+              <p class="text-black text-sm mt-2 font-sans text-center w-full">
+                {clientNames} {yearDisplay ? ` ${yearDisplay}` :  ''}
               </p>
             {/if}
             {#if yearDisplay}
               <p class="text-black text-small md:text-base mt-1 font-display text-center w-full">
-                {yearDisplay}
+                
               </p>
             {/if}
             {#if serviceNames.length > 0}
@@ -168,7 +168,7 @@
   <article class="featured-project p-2 group hover:bg-white duration-300 transition-all rounded-lg hover:!text-black">
     <a class={displayMode === 'block' ? 'contents' : 'grid grid-cols-[1fr_4fr] gap-4'} href={project.uri}>
       <!-- Image -->
-      <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-full' : 'w-56'}">
+      <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-full' : 'w-20 lg:w-56'}">
         <Image {imageObject} imageSize="large" fit="cover" extraClasses="w-full" />
       </div>
       <div class={displayMode === 'block' ? 'contents' : 'flex flex-col'}>
