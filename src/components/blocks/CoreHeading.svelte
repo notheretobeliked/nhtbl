@@ -70,7 +70,7 @@
   </h1>
 {/if}
 {#if level === 2}
-  <h2 class="{classNames(fontSize, textColor, textAlign)}  font-display {hasSvg && 'ml-6 md:ml-0'}">
+  <h2 class="{classNames(fontSize, textColor, textAlign)}  font-display mb-2 {hasSvg && 'ml-6 md:ml-0'}">
     {#each segments as { type, content, version, key } (key)}
       {#if type === 'svg'}
         <Emphas {content} {version} stroke={textColor || 'black'} />

@@ -87,7 +87,7 @@
 </script>
 
 <!-- Use the class directive in Svelte to dynamically set classes -->
-<p class={classNames(fontSize, textColor, align, fontFamily)}>
+<p class="{classNames(fontSize, textColor, align, fontFamily)} mb-2">
   {#each segments as { type, content, version, key } (key)}
     {#if type === 'svg'}
       <Emphas {content} {version} stroke={textColor || 'black'} />

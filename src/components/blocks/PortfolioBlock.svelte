@@ -41,6 +41,13 @@
 	let searchTerm = $state('')
 	let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list'>(enableSearch ? 'list' : displayMode)
 	
+	// Function to handle service tag clicks from child components
+	const handleServiceClick = (serviceName: string) => {
+		if (enableSearch) {
+			searchTerm = serviceName
+		}
+	}
+	
 	let filteredProjects = $derived.by(() => {
 		if (!enableSearch || !searchTerm.trim()) {
 			return projects
@@ -92,14 +99,14 @@
 
 {#if enableSearch}
 <!-- Portfolio Controls (only show when search is enabled) -->
-<div class="portfolio-controls {alignmentClass} mb-8">
+<div class="portfolio-controls {alignmentClass} mb-8 sticky top-24 w-full z-40">
 	<!-- View Mode Toggle Buttons -->
 	<div class="flex items-center gap-4 justify-between mb-6">
 	<!-- Search Box -->
 	<div class="relative w-full">
 		<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 			<!-- Search Icon SVG -->
-			<svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			<svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="black">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 			</svg>
 		</div>
@@ -107,8 +114,20 @@
 			type="text"
 			bind:value={searchTerm}
 			placeholder="Search projects by title, client, service, or description..."
-			class="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:border-white focus:outline-none transition-colors text-black placeholder-gray-400"
+			class="w-full pl-10 pr-12 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:border-white focus:outline-none transition-colors text-black placeholder-gray-400"
 		/>
+		{#if searchTerm}
+			<button
+				onclick={() => (searchTerm = '')}
+				class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+				aria-label="Clear search"
+			>
+				<!-- X Icon SVG -->
+				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="black">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</button>
+		{/if}
 	</div>
 		<div class="flex gap-2">
 			<button
@@ -160,7 +179,12 @@
 		<div class="cards-container flex gap-4 overflow-x-auto pb-4">
 			{#each filteredProjects as project (project.slug)}
 				<div class="flex-shrink-0 w-80">
-					<FeaturedProject displayMode="block" project={project} />
+					<FeaturedProject 
+						displayMode="block" 
+						project={project} 
+						{enableSearch}
+						onServiceClick={handleServiceClick}
+					/>
 				</div>
 			{/each}
 		</div>
@@ -171,7 +195,12 @@
 	<div class="portfolio-masonry my-16 full-width-breakout">
 		{#if filteredProjects.length > 0}
 			<Masonry items={filteredProjects} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
-				<FeaturedProject displayMode="masonryBlock" project={item} />
+				<FeaturedProject 
+					displayMode="masonryBlock" 
+					project={item} 
+					{enableSearch}
+					onServiceClick={handleServiceClick}
+				/>
 			</Masonry>
 		{:else}
 			<div class="text-center py-12 {alignmentClass}">
@@ -184,9 +213,14 @@
 	<!-- List Layout -->
 	<div class="portfolio-list {alignmentClass} my-8">
 		<div class="space-y-3">
-			{#each filteredProjects as project (project.slug)}
-				<FeaturedProject displayMode="grid" project={project} />
-			{/each}
+		{#each filteredProjects as project (project.slug)}
+			<FeaturedProject 
+				displayMode="grid" 
+				project={project} 
+				{enableSearch}
+				onServiceClick={handleServiceClick}
+			/>
+		{/each}
 		</div>
 		
 		{#if filteredProjects.length === 0}

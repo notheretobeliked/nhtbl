@@ -56,6 +56,7 @@ declare module '$env/static/private' {
 	export const MallocNanoZone: string;
 	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const VOLTA_HOME: string;
+	export const ZDOTDIR: string;
 	export const npm_package_private: string;
 	export const npm_package_devDependencies__storybook_addon_interactions: string;
 	export const npm_package_devDependencies__storybook_blocks: string;
@@ -74,6 +75,7 @@ declare module '$env/static/private' {
 	export const PNPM_SCRIPT_SRC_DIR: string;
 	export const SSH_AUTH_SOCK: string;
 	export const npm_package_devDependencies_eslint_plugin_storybook: string;
+	export const VSCODE_PROFILE_INITIALIZED: string;
 	export const __CF_USER_TEXT_ENCODING: string;
 	export const npm_package_devDependencies__storybook_sveltekit: string;
 	export const npm_package_devDependencies_eslint: string;
@@ -86,7 +88,7 @@ declare module '$env/static/private' {
 	export const npm_package_devDependencies__graphql_codegen_cli: string;
 	export const npm_config_frozen_lockfile: string;
 	export const PATH: string;
-	export const LaunchInstanceID: string;
+	export const USER_ZDOTDIR: string;
 	export const __CFBundleIdentifier: string;
 	export const PWD: string;
 	export const npm_package_devDependencies__storybook_addon_svelte_csf: string;
@@ -112,6 +114,7 @@ declare module '$env/static/private' {
 	export const XPC_SERVICE_NAME: string;
 	export const npm_package_version: string;
 	export const npm_package_devDependencies__sveltejs_adapter_auto: string;
+	export const VSCODE_INJECTION: string;
 	export const npm_package_devDependencies__graphql_codegen_introspection: string;
 	export const npm_package_devDependencies__graphql_codegen_typescript_document_nodes: string;
 	export const npm_package_devDependencies_autoprefixer: string;
@@ -142,7 +145,6 @@ declare module '$env/static/private' {
 	export const npm_package_devDependencies__types_node: string;
 	export const DISPLAY: string;
 	export const npm_package_dependencies__urql_core: string;
-	export const SECURITYSESSIONID: string;
 	export const npm_package_scripts_check: string;
 	export const COLORTERM: string;
 	export const npm_package_devDependencies__graphql_codegen_typescript_operations: string;
@@ -207,6 +209,7 @@ declare module '$env/dynamic/private' {
 		MallocNanoZone: string;
 		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		VOLTA_HOME: string;
+		ZDOTDIR: string;
 		npm_package_private: string;
 		npm_package_devDependencies__storybook_addon_interactions: string;
 		npm_package_devDependencies__storybook_blocks: string;
@@ -225,6 +228,7 @@ declare module '$env/dynamic/private' {
 		PNPM_SCRIPT_SRC_DIR: string;
 		SSH_AUTH_SOCK: string;
 		npm_package_devDependencies_eslint_plugin_storybook: string;
+		VSCODE_PROFILE_INITIALIZED: string;
 		__CF_USER_TEXT_ENCODING: string;
 		npm_package_devDependencies__storybook_sveltekit: string;
 		npm_package_devDependencies_eslint: string;
@@ -237,7 +241,7 @@ declare module '$env/dynamic/private' {
 		npm_package_devDependencies__graphql_codegen_cli: string;
 		npm_config_frozen_lockfile: string;
 		PATH: string;
-		LaunchInstanceID: string;
+		USER_ZDOTDIR: string;
 		__CFBundleIdentifier: string;
 		PWD: string;
 		npm_package_devDependencies__storybook_addon_svelte_csf: string;
@@ -263,6 +267,7 @@ declare module '$env/dynamic/private' {
 		XPC_SERVICE_NAME: string;
 		npm_package_version: string;
 		npm_package_devDependencies__sveltejs_adapter_auto: string;
+		VSCODE_INJECTION: string;
 		npm_package_devDependencies__graphql_codegen_introspection: string;
 		npm_package_devDependencies__graphql_codegen_typescript_document_nodes: string;
 		npm_package_devDependencies_autoprefixer: string;
@@ -293,7 +298,6 @@ declare module '$env/dynamic/private' {
 		npm_package_devDependencies__types_node: string;
 		DISPLAY: string;
 		npm_package_dependencies__urql_core: string;
-		SECURITYSESSIONID: string;
 		npm_package_scripts_check: string;
 		COLORTERM: string;
 		npm_package_devDependencies__graphql_codegen_typescript_operations: string;

@@ -114,7 +114,7 @@
   <!-- Render editor blocks from WordPress -->
   <div class="portfolio-content alignfull">
     {#each editorBlocks as block, index (block.clientId)}
-      <div class="portfolio-section" style="z-index: {index + 1};" data-section-index={index}>
+      <div class="portfolio-section w-screen h-screen" style="z-index: {index + 1};" data-section-index={index}>
         <BlockRenderer {block} />
       </div>
     {/each}
@@ -134,6 +134,7 @@
     background: inherit;
     will-change: transform;
   }
+
 
   /* Tall sections keep sticky positioning but with custom top values */
   .portfolio-section.tall-section {

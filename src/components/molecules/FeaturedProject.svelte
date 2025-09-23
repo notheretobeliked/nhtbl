@@ -15,9 +15,11 @@
   interface Props {
     project: ProjectData
     displayMode?: 'block' | 'grid' | 'masonryBlock'
+    enableSearch?: boolean
+    onServiceClick?: (serviceName: string) => void
   }
 
-  let { project, displayMode = 'block' }: Props = $props()
+  let { project, displayMode = 'block', enableSearch = false, onServiceClick }: Props = $props()
 
   let isHover: boolean = $state(false)
 
@@ -139,7 +141,20 @@
             {#if serviceNames.length > 0}
               <div class="services flex flex-row gap-1 mt-2 flex-wrap justify-center">
                 {#each serviceNames as serviceName}
-                  <div class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap text-black">{serviceName}</div>
+                  {#if enableSearch && onServiceClick}
+                    <button 
+                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap text-black hover:bg-black hover:text-white transition-colors cursor-pointer"
+                      onclick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        onServiceClick?.(serviceName)
+                      }}
+                    >
+                      {serviceName}
+                    </button>
+                  {:else}
+                    <div class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap text-black">{serviceName}</div>
+                  {/if}
                 {/each}
               </div>
             {/if}
@@ -161,7 +176,7 @@
           <CoreHeading block={headingBlock} />
 
         <!-- Content -->
-        <div class="mb-4">
+        <div class="mb-4 max-w-md">
           {@html project.excerpt ?? ''}
         </div>
 
@@ -176,7 +191,20 @@
         {#if serviceNames.length > 0}
           <div class="services flex flex-row gap-2 mt-4 flex-wrap">
             {#each serviceNames as serviceName}
-              <div class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap">{serviceName}</div>
+              {#if enableSearch && onServiceClick}
+                <button 
+                  class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap hover:bg-white hover:text-black transition-colors cursor-pointer"
+                  onclick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onServiceClick?.(serviceName)
+                  }}
+                >
+                  {serviceName}
+                </button>
+              {:else}
+                <div class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap">{serviceName}</div>
+              {/if}
             {/each}
           </div>
         {/if}
