@@ -1,34 +1,44 @@
 <script lang="ts">
-  import type { CoreButtonBlock } from '$lib/types/wp-types'
+  import type { CoreButton } from '$lib/graphql/generated'
   import Button from '$components/Button.svelte'
 
   // Expect a core/button block
-  export let block: CoreButtonBlock
-  const classNames = (fontSize: string | null, textColor: string | null | undefined) => {
-    let textClasses = '',
-      colorClasses = textColor ? `text-${textColor}` : ''
-
+  export let block: CoreButton
+  const getTextClass = (fontSize: string | null) => {
     switch (fontSize) {
+      case 'sm':
+        return 'text-sm'
       case 'base':
-        textClasses = 'text-sans text-sm md:text-base'
-        break
+        return 'text-sm md:text-base'
       case 'lg':
-        textClasses = 'font-display text-base md:text-lg'
-        break
+        return 'text-base md:text-lg'
       case 'xl':
-        textClasses = 'font-display text-base md:text-lg lg:text-xl'
-        break
+        return 'text-base md:text-lg lg:text-xl'
       case '2xl':
-        textClasses = 'font-display text-xl md:text-2xl'
-        break
+        return 'text-xl md:text-2xl'
       case null:
-        textClasses = 'text-sans text-sm md:text-base'
-        break
+      default:
+        return 'text-sm md:text-base'
     }
-    colorClasses = `text-${textColor}`
+  }
 
-    return `${textClasses} ${colorClasses}` // Combine base classes with spacing classes
+  const getBackgroundClass = (backgroundColor: string | null) => {
+    return backgroundColor ? `bg-${backgroundColor}` : 'bg-nhtbl-green-base'
+  }
+
+  const getBorderClass = (borderColor: string | null) => {
+    return borderColor ? `border-${borderColor} border` : 'border-black border'
+  }
+
+  const getTextColorClass = (textColor: string | null) => {
+    return textColor ? `text-${textColor}` : 'text-black'
   }
 </script>
 
-<Button textClass={classNames(block.attributes.fontSize?? null, block.attributes.textColor)} url={block.attributes.url} label={block.attributes.text} />
+<Button 
+  textClass={getTextClass(block.attributes.fontSize ?? null)}
+  colourClass={`${getBackgroundClass(block.attributes.backgroundColor ?? null)} ${getBorderClass(block.attributes.borderColor ?? null)}`}
+  textColourClass={getTextColorClass(block.attributes.textColor ?? null)}
+  url={block.attributes.url} 
+  label={block.attributes.text} 
+/>

@@ -21,7 +21,7 @@ export const load: PageServerLoad = async function load({ url }) {
     }
 
     // Check if page exists and has SEO data
-    if (!data.page || !data.page.seo) {
+    if (!data.nodeByUri || !data.nodeByUri.seo) {
       // Return menu data even if page doesn't exist, use defaults for SEO
       const fallbackData = {
         menu: JSON.parse(JSON.stringify(data.menu)), // Deep clone menu to remove any hidden references
@@ -44,11 +44,11 @@ export const load: PageServerLoad = async function load({ url }) {
       return JSON.parse(JSON.stringify(fallbackData))
     }
 
-    const siteUrl = data.page.seo.opengraphUrl.replace(new URL(data.page.seo.opengraphUrl).origin, PUBLIC_SITE_URL);
+    const siteUrl = data.nodeByUri.seo.opengraphUrl.replace(new URL(data.nodeByUri.seo.opengraphUrl).origin, PUBLIC_SITE_URL);
 
     const returnData = {
       menu: data.menu,
-      seo: { ...data.page.seo, opengraphUrl: siteUrl },
+      seo: { ...data.nodeByUri.seo, opengraphUrl: siteUrl },
       uri: uri,
     }
     

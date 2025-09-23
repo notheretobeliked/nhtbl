@@ -1,25 +1,11 @@
 <script lang="ts">
   import { inview } from 'svelte-inview'
   import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
-
-  export let forceFull:boolean = false
-
-  let isInView: boolean
-  const options: Options = {
-    rootMargin: '-50px',
-    unobserveOnEnter: true,
-  }
-
-  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
-    isInView = detail.inView
-  }
-
   import type { EditorBlock } from '$lib/graphql/generated'
   import type { WithChildren } from '$lib/types/wp-types'
 
   import CoreParagraph from '$components/blocks/CoreParagraph.svelte'
   import CoreHeading from '$components/blocks/CoreHeading.svelte'
-
   import HomePageHero from '$components/blocks/HomePageHero.svelte'
   import ServicePush from '$components/blocks/ServicePush.svelte'
   import CoreGroup from '$components/blocks/CoreGroup.svelte'
@@ -31,12 +17,29 @@
   import CoreButtons from './blocks/CoreButtons.svelte'
   import CoreButton from './blocks/CoreButton.svelte'
   import AcfLinkBlock from './blocks/AcfLinkBlock.svelte'
+  import CoreImage from './blocks/CoreImage.svelte'
+  import CoreVideo from './blocks/CoreVideo.svelte'
 
-  export let block: WithChildren<EditorBlock> & { attributes?: any }
+  interface Props {
+    forceFull?: boolean
+    block: WithChildren<EditorBlock> & { attributes?: any }
+  }
 
-  let align = block.attributes?.align || 'none'
-  if (forceFull) align = 'full'
-  const bgColor = block.attributes?.backgroundColor ?? 'white'
+  let { forceFull = false, block }: Props = $props()
+
+  let isInView = $state(false)
+
+  const options: Options = {
+    rootMargin: '-50px',
+    unobserveOnEnter: true,
+  }
+
+  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
+    isInView = detail.inView
+  }
+
+  const align = $derived(forceFull ? 'full' : block.attributes?.align || 'none')
+  const bgColor = $derived(block.attributes?.backgroundColor ?? 'none')
 
   // Adjusted function to work directly with the style object
   function mapSpacingToTailwind(styleObj: any): string {
@@ -84,7 +87,7 @@
 
   // Type-safe block name checking
   const blockName = block.name || ''
-  
+
   // Helper functions to check block types based on properties that exist in those specific ACF blocks
   function hasHomePageHero(block: any): boolean {
     return 'homePageHero' in block && block.homePageHero !== null && block.homePageHero !== undefined
@@ -96,7 +99,7 @@
 </script>
 
 <div class="{classNames(align)} bg-{bgColor} !px-0" use:inview={options} on:inview_change={handleChange}>
-  <div class="transition-all duration-[800ms] ease-in-out {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
+  <div class="transition-all duration-[800ms] ease-in-out h-full {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
     {#if hasHomePageHero(block)}
       <HomePageHero {block} />
     {/if}
@@ -135,6 +138,14 @@
 
     {#if blockName === 'core/spacer'}
       <CoreSpacer {block} />
+    {/if}
+
+    {#if blockName === 'core/image'}
+      <CoreImage {block} />
+    {/if}
+
+    {#if blockName === 'core/video'}
+      <CoreVideo {block} />
     {/if}
 
     {#if blockName === 'acf/portfolio-block'}

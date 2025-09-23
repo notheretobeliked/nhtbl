@@ -4,6 +4,7 @@
   export let block: any
   const images = block.homePageHero.images.nodes
   const content = block.children
+  
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import Image from '$components/Image.svelte'
   import { draw } from 'svelte/transition'
@@ -45,11 +46,13 @@
 <svelte:window bind:scrollY={y} />
 <div class="{stopped ? 'absolute' : 'fixed top-0'} w-full !px-0 h-screen -z-10 top-0" bind:this={bgdiv} style={stopped ? `top:${topStart}px` : ''}>
   {#each images as image, index}
+    {@const imageThreshold = (100 / images.length)}
+    {@const imageStart = imageThreshold * index}
+    {@const imageEnd = imageThreshold * (index + 1)}
+    {@const shouldBeVisible = percentage >= imageStart && percentage < imageEnd}
+    
     <div
-      class="absolute top-0 left-0 w-full duration-1000 h-full object-cover transition-all {percentage <= 100 - (100 / images.length) * index &&
-      percentage > 100 - (100 / images.length) * (index + 1)
-        ? 'opacity-100'
-        : 'opacity-0'}"
+      class="absolute top-0 left-0 w-full duration-1000 h-full object-cover transition-all {shouldBeVisible ? 'opacity-100' : 'opacity-0'}"
     >
       <Image imageObject={image} lazy={false} imageSize="medium" fit="cover" />
     </div>

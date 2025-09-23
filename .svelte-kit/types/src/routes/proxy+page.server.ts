@@ -1,11 +1,12 @@
 // @ts-nocheck
 export const prerender = true
-
-import type { PostsQuery } from '$lib/graphql/generated'
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
+import type { EditorBlock } from '$lib/graphql/generated'
+import { getAllProjects } from '$lib/utilities/projectsCache'
+import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
 
 interface HierarchicalOptions {
   idKey?: string
@@ -13,75 +14,84 @@ interface HierarchicalOptions {
   childrenKey?: string
 }
 
-function normalizeEditorBlock(block: any) {
-	// Ensure attributes exists before attempting to access it
-	if (!block.attributes) {
-	  block.attributes = {} // Initialize with an empty object if it doesn't exist
-	}
-  
-	if (block.name.startsWith('acf/')) {
-	  if ('alignment' in block.attributes) {
-		// Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
-		block.attributes.align = block.attributes.align || block.attributes.alignment
-		// Remove the 'alignment' attribute to avoid confusion
-		delete block.attributes.alignment
-	  }
-	}
-  
-  // Check if 'style' attribute exists and is a string
+function normalizeEditorBlock(block: EditorBlock & { attributes?: any; children?: any[] }): EditorBlock & { attributes?: any; children?: any[] } {
+  if (!block.attributes) {
+    block.attributes = {}
+  }
+
+  if (block.name && block.name.startsWith('acf/')) {
+    if (block.name === 'acf/portfolio-block') {
+      console.log(`🔧 [HOME] Normalizing portfolio block - BEFORE:`, {
+        align: block.attributes.align,
+        alignment: block.attributes.alignment,
+        hasAlignment: 'alignment' in block.attributes
+      })
+    }
+    
+    if ('alignment' in block.attributes) {
+      block.attributes.align = block.attributes.align || block.attributes.alignment
+      delete block.attributes.alignment
+    }
+    
+    if (block.name === 'acf/portfolio-block') {
+      console.log(`🔧 [HOME] Normalizing portfolio block - AFTER:`, {
+        align: block.attributes.align
+      })
+    }
+  }
+
   if (typeof block.attributes.style === 'string') {
     try {
-      // Parse the 'style' string as JSON
       block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ''))
-
-      // Check and transform the color within 'elements.link' after parsing
       if (
         block.attributes.style.elements &&
         block.attributes.style.elements.link &&
         block.attributes.style.elements.link.color &&
         block.attributes.style.elements.link.color.text
       ) {
-        // Extracting color value after '|'
         const colorValue = block.attributes.style.elements.link.color.text.split('|')[1]
-        // Assigning the extracted color value to a new property
-        block.attributes.textColor = colorValue
+        block.attributes.style.textColor = colorValue
       }
     } catch (error) {
       console.error('Error parsing style attribute:', error)
-      block.attributes.style = null // Example error handling
+      block.attributes.style = null
     }
   }
-  
-	if (typeof block.attributes.layout === 'string') {
-	  try {
-		block.attributes.layout = JSON.parse(block.attributes.layout);
-	  } catch (error) {
-		console.error('Error parsing layout attribute:', error);
-		block.attributes.layout = null; // Or handle the error as needed
-	  }
-	}
-  
-	// Normalize child blocks recursively
-	if (block.children) {
-	  block.children = block.children.map(normalizeEditorBlock)
-	}
-  
-	return block
+
+  if (typeof block.attributes.layout === 'string') {
+    try {
+      block.attributes.layout = JSON.parse(block.attributes.layout)
+    } catch (error) {
+      console.error('Error parsing layout attribute:', error)
+      block.attributes.layout = null
+    }
+  }
+
+  if (block.innerBlocks) {
+    block.innerBlocks = block.innerBlocks
+      .filter((childBlock): childBlock is EditorBlock => childBlock !== null)
+      .map(childBlock => normalizeEditorBlock(childBlock as EditorBlock & { attributes?: any; children?: any[] }))
   }
   
-function flatListToHierarchical<T extends Record<string, any>>(
-  data: T[] = [],
-  { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
-): T[] {
-  const tree: T[] = []
-  const childrenOf: Record<string, T[]> = {}
+  if ((block as any).children) {
+    (block as any).children = (block as any).children
+      .filter((childBlock: any): childBlock is EditorBlock => childBlock !== null)
+      .map((childBlock: any) => normalizeEditorBlock(childBlock as EditorBlock & { attributes?: any; children?: any[] }))
+  }
+
+  return block
+}
+
+function flatListToHierarchical(data: (EditorBlock & { attributes?: any; children?: any[] })[] = [], { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {}): (EditorBlock & { attributes?: any; children?: any[] })[] {
+  const tree: (EditorBlock & { attributes?: any; children?: any[] })[] = []
+  const childrenOf: Record<string, (EditorBlock & { attributes?: any; children?: any[] })[]> = {}
 
   data.forEach(item => {
-    const newItem: T = { ...item }
-    const parentId: string = newItem[parentKey] == null ? '0' : newItem[parentKey]
+    const newItem: EditorBlock & { attributes?: any; children?: any[] } = { ...item }
+    const parentId: string = (newItem as any)[parentKey] == null ? '0' : (newItem as any)[parentKey]
 
-    childrenOf[newItem[idKey]] = childrenOf[newItem[idKey]] || []
-    newItem[childrenKey] = childrenOf[newItem[idKey]]
+    childrenOf[(newItem as any)[idKey]] = childrenOf[(newItem as any)[idKey]] || []
+    ;(newItem as any)[childrenKey] = childrenOf[(newItem as any)[idKey]]
 
     if (parentId !== '0') {
       childrenOf[parentId] = childrenOf[parentId] || []
@@ -91,35 +101,128 @@ function flatListToHierarchical<T extends Record<string, any>>(
     }
   })
 
-  return tree.map(normalizeEditorBlock) // Normalize each root level block
+  return tree.map(normalizeEditorBlock)
 }
 
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
-  const uri = `/`
-
+  const uri = '/'
+  
+  console.log('🚀 [HOME] Server load called for URI:', uri)
+  
   try {
-    const data: PostsQuery = await urqlQuery(PageContent, { uri: uri })
+    const data = await urqlQuery(PageContent, { uri: uri })
 
-    if (data.page === null) {
+    if (data.nodeByUri === null) {
       error(404, {
         message: 'Not found',
       })
     }
 
-    let editorBlocks = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : []
+    let editorBlocks: (EditorBlock & { attributes?: any; children?: any[] })[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks) : []
+
+    // Recursively find portfolio blocks
+    const findPortfolioBlocks = (blocks: any[]): any[] => {
+      const portfolioBlocks: any[] = []
+      
+      const searchBlocks = (blockList: any[]) => {
+        blockList.forEach(block => {
+          if (block.name === 'acf/portfolio-block') {
+            portfolioBlocks.push(block)
+          }
+          if (block.children && Array.isArray(block.children)) {
+            searchBlocks(block.children)
+          }
+          if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+            searchBlocks(block.innerBlocks)
+          }
+        })
+      }
+      
+      searchBlocks(blocks)
+      return portfolioBlocks
+    }
+
+    const allPortfolioBlocks = findPortfolioBlocks(editorBlocks)
+    console.log(`🔍 [HOME] Found ${allPortfolioBlocks.length} portfolio blocks (including nested)`)
+
+    // Check if any blocks need external project data
+    const needsAllProjects = allPortfolioBlocks.some(block => {
+      if ((block as any).portfolioBlock) {
+        const config = (block as any).portfolioBlock
+        return config.projectSource === 'all' || 
+               config.projectSource === 'by_service' ||
+               (config.projectSource === 'specific' && 
+                (!config.specificProjects?.nodes?.[0]?.title || 
+                 !config.specificProjects?.nodes?.[0]?.featuredImage))
+      }
+      return false
+    })
+
+    let allProjects: any[] = []
+    if (needsAllProjects) {
+      console.log('📊 [HOME] Page needs external projects data, fetching...')
+      allProjects = await getAllProjects()
+    } else {
+      console.log('📊 [HOME] Page uses embedded project data, skipping external fetch')
+    }
+
+    // Recursively process portfolio blocks to resolve their projects
+    const processBlocksRecursively = (blocks: any[]): any[] => {
+      return blocks.map(block => {
+        if (block.name === 'acf/portfolio-block') {
+          console.log(`📊 [HOME] Found portfolio block!`, (block as any).portfolioBlock ? 'Has portfolioBlock data' : 'Missing portfolioBlock data')
+          console.log(`📊 [HOME] Block attributes:`, block.attributes)
+          
+          if ((block as any).portfolioBlock) {
+            const portfolioBlock = (block as any).portfolioBlock
+            console.log(`📊 [HOME] Portfolio config:`, {
+              projectSource: portfolioBlock.projectSource,
+              specificProjectsCount: portfolioBlock.specificProjects?.nodes?.length || 0,
+              displayMode: portfolioBlock.displayMode,
+              blockAlign: block.attributes?.align
+            })
+            
+            const resolvedProjects = resolvePortfolioProjects(portfolioBlock, allProjects)
+            
+            console.log(`🎯 [HOME] Portfolio block resolved ${resolvedProjects.length} projects (source: ${portfolioBlock.projectSource})`)
+            
+            return {
+              ...block,
+              resolvedProjects
+            }
+          }
+        }
+        
+        // Process children recursively
+        const processedBlock = { ...block }
+        if (block.children && Array.isArray(block.children)) {
+          processedBlock.children = processBlocksRecursively(block.children)
+        }
+        if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+          processedBlock.innerBlocks = processBlocksRecursively(block.innerBlocks)
+        }
+        
+        return processedBlock
+      })
+    }
+
+    console.log(`🔍 [HOME] Processing ${editorBlocks.length} editor blocks recursively...`)
+    editorBlocks = processBlocksRecursively(editorBlocks)
+
+    const backgroundColour = data.nodeByUri.backgroundColour?.backgroundColour ?? 'white'
 
     const returnData = {
       uri: uri,
+      backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
     }
     
-    // Ensure serializable
     return JSON.parse(JSON.stringify(returnData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {
-      error(httpError.status ?? 500, httpError.message);
+      throw error(httpError.status ?? 500, httpError.message)
     }
-    error(500, err as string);
+    throw error(500, err as string)
   }
 }

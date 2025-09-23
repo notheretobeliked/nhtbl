@@ -1,30 +1,93 @@
-query PageContent($uri: ID!) {
-  page(id: $uri, idType: URI) {
-    id
-    backgroundColour {
-      backgroundColour
+query PageContent($uri: String!) {
+  nodeByUri(uri: $uri) {
+    ... on Page {
+      id
+      backgroundColour {
+        backgroundColour
+      }
+      
+      editorBlocks {
+        name
+        parentClientId
+        clientId
+        ...CoreParagraphFragment
+        ...CoreHeadingFragment
+        ...AcfHomePageHeroFragment
+        ...AcfServicePushFragment
+        ...CoreColumnsFragment
+        ...AcfGalerieFragment
+        ...AcfPortfolioBlockFragment
+        ...CoreGroupFragment
+        ...CoreButtonFragment
+        ...CoreButtonsFragment
+        ...CoreSpacerFragment
+        ...PortfolioBlockDetailsFragment
+        ...AcfLinkBlockFragment
+        ...CoreImageFragment
+        ...CoreVideoFragment
+        ...CoreColumnFragment
+      }
+      seo {
+        ...SeoFragment
+      }
     }
-    editorBlocks {
-      name
-      parentClientId
-      clientId
-      ...CoreParagraphFragment
-      ...CoreHeadingFragment
-      ...AcfHomePageHeroFragment
-      ...AcfServicePushFragment
-      ...CoreColumnsFragment
-      ...AcfGalerieFragment
-      ...AcfPortfolioBlockFragment
-      ...CoreGroupFragment
-      ...CoreButtonFragment
-      ...CoreButtonsFragment
-      ...CoreSpacerFragment
-      ...PortfolioBlockDetailsFragment
-      ...AcfLinkBlockFragment
-      ...CoreImageFragment
-    }
-    seo {
-      ...SeoFragment
+    ... on Nhtbl_project {
+      id
+      excerpt
+      title
+      nhtblClients {
+        nodes {
+          name
+          id
+          parentId
+          slug
+        }
+      }
+      nhtblServices
+       {
+        nodes {
+          id
+          name
+          slug
+          parentId
+        }
+      }
+      projectData {
+        startDate
+        endDate
+        imageGallery {
+          nodes {
+            altText
+            mediaDetails {
+              ...MediaDetailsFragment
+            }
+          }
+        }
+      }
+      editorBlocks {
+        name
+        parentClientId
+        clientId
+        ...CoreParagraphFragment
+        ...CoreHeadingFragment
+        ...AcfHomePageHeroFragment
+        ...AcfServicePushFragment
+        ...CoreColumnsFragment
+        ...AcfGalerieFragment
+        ...AcfPortfolioBlockFragment
+        ...CoreGroupFragment
+        ...CoreButtonFragment
+        ...CoreButtonsFragment
+        ...CoreSpacerFragment
+        ...PortfolioBlockDetailsFragment
+        ...AcfLinkBlockFragment
+        ...CoreImageFragment
+        ...CoreVideoFragment
+        ...CoreColumnFragment
+      }
+      seo {
+        ...SeoFragment
+      }
     }
   }
 }
@@ -53,33 +116,50 @@ fragment SeoFragment on PostTypeSEO {
   }
 }
 
+fragment CoreVideoFragment on CoreVideo {
+  attributes {
+    autoplay
+    align
+    caption
+    controls
+    loop
+    muted
+    playsInline
+    preload
+    src
+    style
+  }
+}
+
 fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
   name
   attributes {
     align
   }
   portfolioBlock {
-    portfolioItems {
+    specificProjects {
       nodes {
         slug
         ... on Nhtbl_project {
           title(format: RENDERED)
+          excerpt(format:RENDERED)
           projectData {
-            imageGallery {
-              nodes {
-                altText
-                mediaDetails {
-                  sizes {
-                    sourceUrl
-                    width
-                    height
-                    name
-                  }
-                }
-              }
+            startDate
+            endDate
+          }
+          nhtblClients {
+            nodes {
+              name
+              slug
             }
           }
-          content(format: RENDERED)
+          nhtblServices {
+            nodes {
+              name
+              slug
+            }
+          }
+          
           featuredImage {
             node {
               altText
@@ -126,6 +206,7 @@ fragment CoreImageFragment on CoreImage {
     cssClassName
     sizeSlug
     style
+    src
   }
   mediaDetails {
     ...MediaDetailsFragment
@@ -134,7 +215,15 @@ fragment CoreImageFragment on CoreImage {
 
 fragment CoreButtonFragment on CoreButton {
   attributes {
+    className
+    gradient
+    metadata
+    rel
+    type
     backgroundColor
+    borderColor
+    textAlign
+    textColor
     style
     fontSize
     linkTarget
@@ -153,22 +242,22 @@ fragment CoreButtonFragment on CoreButton {
 
 fragment AcfLinkBlockFragment on AcfLinkBlock {
   innerBlocks {
-      name
-      parentClientId
-      clientId
-      ...CoreParagraphFragment
-      ...CoreHeadingFragment
-      ...AcfHomePageHeroFragment
-      ...AcfServicePushFragment
-      ...CoreColumnsFragment
-      ...AcfGalerieFragment
-      ...AcfPortfolioBlockFragment
-      ...CoreGroupFragment
-      ...CoreButtonFragment
-      ...CoreButtonsFragment
-      ...CoreSpacerFragment
-      ...PortfolioBlockDetailsFragment
-      ...CoreImageFragment
+    name
+    parentClientId
+    clientId
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+    ...AcfHomePageHeroFragment
+    ...AcfServicePushFragment
+    ...CoreColumnsFragment
+    ...AcfGalerieFragment
+    ...AcfPortfolioBlockFragment
+    ...CoreGroupFragment
+    ...CoreButtonFragment
+    ...CoreButtonsFragment
+    ...CoreSpacerFragment
+    ...PortfolioBlockDetailsFragment
+    ...CoreImageFragment
   }
   attributes {
     align
@@ -188,6 +277,7 @@ fragment AcfLinkBlockFragment on AcfLinkBlock {
     }
   }
 }
+
 fragment CoreColumnsFragment on CoreColumns {
   attributes {
     layout
@@ -195,6 +285,16 @@ fragment CoreColumnsFragment on CoreColumns {
     verticalAlignment
     style
     align
+    isStackedOnMobile
+  }
+}
+
+fragment CoreColumnFragment on CoreColumn {
+  attributes {
+    layout
+    className
+    verticalAlignment
+    style
   }
 }
 
@@ -223,7 +323,18 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
     alignment: align
   }
   portfolioBlock {
-    portfolioItems {
+    displayMode
+    enableSearch
+    projectSource
+    projectsPerPage
+    selectedService {
+      nodes {
+        slug
+        name
+      }
+    }
+    sortOrder
+    specificProjects {
       nodes {
         slug
         ... on Nhtbl_project {
@@ -235,19 +346,17 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
               slug
             }
           }
-          projectData {
-            imageGallery {
-              nodes {
-                altText
-                mediaType
-                mimeType
-                mediaItemUrl
-
-                mediaDetails {
-                  ...MediaDetailsFragment
-                }
-              }
+          nhtblServices {
+            nodes {
+              name
+              slug
+              parentId
+              id
             }
+          }
+          projectData {
+            startDate
+            endDate
           }
         }
       }

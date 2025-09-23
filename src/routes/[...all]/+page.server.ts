@@ -4,6 +4,8 @@ import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { EditorBlock } from '$lib/graphql/generated'
+import { getAllProjects } from '$lib/utilities/projectsCache'
+import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
 
 interface HierarchicalOptions {
   idKey?: string
@@ -18,11 +20,25 @@ function normalizeEditorBlock(block: EditorBlock) {
   }
 
   if (block.name.startsWith('acf/')) {
+    if (block.name === 'acf/portfolio-block') {
+      console.log(`🔧 [ALL] Normalizing portfolio block - BEFORE:`, {
+        align: block.attributes.align,
+        alignment: block.attributes.alignment,
+        hasAlignment: 'alignment' in block.attributes
+      })
+    }
+    
     if ('alignment' in block.attributes) {
       // Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
       block.attributes.align = block.attributes.align || block.attributes.alignment
       // Remove the 'alignment' attribute to avoid confusion
       delete block.attributes.alignment
+    }
+    
+    if (block.name === 'acf/portfolio-block') {
+      console.log(`🔧 [ALL] Normalizing portfolio block - AFTER:`, {
+        align: block.attributes.align
+      })
     }
   }
 
@@ -93,18 +109,111 @@ function flatListToHierarchical(data: EditorBlock[] = [], { idKey = 'clientId', 
 export const load: PageServerLoad = async function load({ params, url }) {
   const uri = `/${params.all || ''}`
   
+  console.log('🚀 [ALL] Server load called for URI:', uri)
+  console.log('🚀 [ALL] Params:', params)
+  
   try {
     const data = await urqlQuery(PageContent, { uri: uri })
 
-    if (data.page === null) {
+    if (data.nodeByUri === null) {
       error(404, {
         message: 'Not found',
       })
     }
 
-    let editorBlocks: EditorBlock[] = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : []
+    let editorBlocks: EditorBlock[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks) : []
 
-    const backgroundColour = data.page.backgroundColour.backgroundColour ?? 'white'
+    // Recursively find portfolio blocks
+    const findPortfolioBlocks = (blocks: any[]): any[] => {
+      const portfolioBlocks: any[] = []
+      
+      const searchBlocks = (blockList: any[]) => {
+        blockList.forEach(block => {
+          if (block.name === 'acf/portfolio-block') {
+            portfolioBlocks.push(block)
+          }
+          if (block.children && Array.isArray(block.children)) {
+            searchBlocks(block.children)
+          }
+          if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+            searchBlocks(block.innerBlocks)
+          }
+        })
+      }
+      
+      searchBlocks(blocks)
+      return portfolioBlocks
+    }
+
+    const allPortfolioBlocks = findPortfolioBlocks(editorBlocks)
+    console.log(`🔍 [ALL] Found ${allPortfolioBlocks.length} portfolio blocks (including nested)`)
+
+    // Check if any blocks need external project data (not specific projects with full data)
+    const needsAllProjects = allPortfolioBlocks.some(block => {
+      if ((block as any).portfolioBlock) {
+        const config = (block as any).portfolioBlock
+        // Only fetch allProjects for 'all' and 'by_service' modes, or 'specific' without full data
+        return config.projectSource === 'all' || 
+               config.projectSource === 'by_service' ||
+               (config.projectSource === 'specific' && 
+                (!config.specificProjects?.nodes?.[0]?.title || 
+                 !config.specificProjects?.nodes?.[0]?.featuredImage))
+      }
+      return false
+    })
+
+    let allProjects: any[] = []
+    if (needsAllProjects) {
+      console.log('📊 Page needs external projects data, fetching...')
+      allProjects = await getAllProjects()
+    } else {
+      console.log('📊 Page uses embedded project data, skipping external fetch')
+    }
+
+    // Recursively process portfolio blocks to resolve their projects
+    const processBlocksRecursively = (blocks: any[]): any[] => {
+      return blocks.map(block => {
+        if (block.name === 'acf/portfolio-block') {
+          console.log(`📊 [ALL] Found portfolio block!`, (block as any).portfolioBlock ? 'Has portfolioBlock data' : 'Missing portfolioBlock data')
+          console.log(`📊 [ALL] Block attributes:`, block.attributes)
+          
+          if ((block as any).portfolioBlock) {
+            const portfolioBlock = (block as any).portfolioBlock
+            console.log(`📊 [ALL] Portfolio config:`, {
+              projectSource: portfolioBlock.projectSource,
+              specificProjectsCount: portfolioBlock.specificProjects?.nodes?.length || 0,
+              displayMode: portfolioBlock.displayMode,
+              blockAlign: block.attributes?.align
+            })
+            
+            const resolvedProjects = resolvePortfolioProjects(portfolioBlock, allProjects)
+            
+            console.log(`🎯 [ALL] Portfolio block resolved ${resolvedProjects.length} projects (source: ${portfolioBlock.projectSource})`)
+            
+            return {
+              ...block,
+              resolvedProjects
+            }
+          }
+        }
+        
+        // Process children recursively
+        const processedBlock = { ...block }
+        if (block.children && Array.isArray(block.children)) {
+          processedBlock.children = processBlocksRecursively(block.children)
+        }
+        if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+          processedBlock.innerBlocks = processBlocksRecursively(block.innerBlocks)
+        }
+        
+        return processedBlock
+      })
+    }
+
+    console.log(`🔍 [ALL] Processing ${editorBlocks.length} editor blocks recursively...`)
+    editorBlocks = processBlocksRecursively(editorBlocks)
+
+    const backgroundColour = data.nodeByUri.backgroundColour?.backgroundColour ?? 'white'
 
     const returnData = {
       uri: uri,

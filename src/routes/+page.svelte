@@ -1,23 +1,21 @@
 <script lang="ts">
+  import type { EditorBlock } from '$lib/graphql/generated'
   import BlockRenderer from '$components/BlockRenderer.svelte';
   import type { PageData } from './$types'
-  import type { EditorBlock } from '$lib/graphql/generated'
   export let data: PageData
-  let blocks: EditorBlock[] = data.editorBlocks as EditorBlock[];
-  
-  $: {
-    blocks
-  }
-  
-  
+  let editorBlocks:EditorBlock[], backgroundColour:string, uri:string
 
+  $: {
+    ({editorBlocks, backgroundColour, uri } = data)
+    backgroundColour = backgroundColour ?? "white"
+  }
 </script>
 
-<main class="main w-full overflow-x-hidden">
-  {#each blocks as block, index (block.clientId)}
+<div class="main w-full overflow-x-hidden">
+  {#each editorBlocks as block, index (block.clientId)}
     <BlockRenderer block={block} />
   {/each}
-</main>
+</div>
 
 <style lang="postcss">
 

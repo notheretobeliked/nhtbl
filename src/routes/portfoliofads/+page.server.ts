@@ -17,7 +17,7 @@ export const load: PageServerLoad = async function load({ params }) {
   try {
     const data = await urqlQuery(Projects, { uri: '/portfolio' })
 
-    if (data.page === null) {
+    if (data.nodeByUri === null) {
       error(404, {
         message: 'Not found',
       })

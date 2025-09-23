@@ -7,7 +7,7 @@
   const bgColor = block.attributes?.backgroundColor ?? 'white'
   let link = block.linkBlock?.internalLink?.nodes[0].uri
   if (!link) link = block.linkBlock?.externalLink?.url
-  console.log(block)
+  
 </script>
 
 <a class="block" href="{link}">

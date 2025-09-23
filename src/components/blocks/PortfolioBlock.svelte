@@ -1,46 +1,237 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
-  import type { ACFPortfolioBlock, PortfolioItemNode } from '$lib/types/wp-types'
-  import PortfolioItem from '$components/PortfolioItem.svelte'
-  import Button from '$components/Button.svelte'
-  import Masonry from 'svelte-bricks'
+	import { onMount } from 'svelte'
+	import FeaturedProject from '$components/molecules/FeaturedProject.svelte'
+	import Masonry from 'svelte-bricks'
+	import type { AcfPortfolioBlock, ProjectsQuery } from '$lib/graphql/generated'
+	import { getDisplayMode } from '$lib/utilities/portfolioResolver'
 
-  export let block: ACFPortfolioBlock
-  let items: PortfolioItemNode[] = block.portfolioBlock.portfolioItems.nodes
+	interface Props {
+		block: AcfPortfolioBlock & {
+			resolvedProjects?: NonNullable<ProjectsQuery['nhtblProjects']>['nodes']
+		}
+	}
 
-  let minColWidth = 140 // Default value for mobile screens
-  let maxColWidth = 1200
-  let gap = 30
+	let { block }: Props = $props()
 
-  // Reactive statement to update minColWidth based on window width
-  $: {
-    if (typeof window !== 'undefined') {
-      minColWidth = window.innerWidth >= 768 ? 420 : 140 // 768px is a common breakpoint for iPads
-    }
-  }
-
-  // Resize listener to react to window size changes
-  onMount(() => {
-    const handleResize = () => {
-      minColWidth = window.innerWidth >= 768 ? 420 : 140
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    // Cleanup to remove event listener
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
+  $inspect(block)
+  
+  // Debug logging
+  console.log('🎨 PortfolioBlock received:', {
+    hasResolvedProjects: !!block.resolvedProjects,
+    resolvedProjectsCount: block.resolvedProjects?.length || 0,
+    hasPortfolioBlock: !!block.portfolioBlock,
+    projectSource: block.portfolioBlock?.projectSource,
+    specificProjectsCount: block.portfolioBlock?.specificProjects?.nodes?.length || 0
   })
+
+	const projects = $derived(block.resolvedProjects ?? [])
+	const config = $derived(block.portfolioBlock)
+	const displayMode = $derived(config ? getDisplayMode(config) : 'horizontal_scroll')
+	const enableSearch = $derived(config?.enableSearch ?? false)
+	const alignmentClass = $derived(block.attributes?.align === 'full' ? 'alignfull' : 'alignwide')
+	
+	// More debug logging
+	console.log('🎨 PortfolioBlock derived values:', {
+		projectsCount: projects.length,
+		displayMode,
+		enableSearch
+	})
+
+	// Search functionality (only if enabled)
+	let searchTerm = $state('')
+	let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list'>(enableSearch ? 'list' : displayMode)
+	
+	let filteredProjects = $derived.by(() => {
+		if (!enableSearch || !searchTerm.trim()) {
+			return projects
+		}
+
+		const searchLower = searchTerm.toLowerCase()
+		return projects.filter((project: any) => {
+			// Search in title
+			const titleMatch = project.title?.toLowerCase().includes(searchLower)
+			
+			// Search in excerpt (strip HTML tags)
+			const excerptText = project.excerpt?.replace(/<[^>]*>/g, '') || ''
+			const excerptMatch = excerptText.toLowerCase().includes(searchLower)
+			
+			// Search in clients
+			const clientMatch = project.nhtblClients?.nodes?.some((client: any) => 
+				client?.name?.toLowerCase().includes(searchLower)
+			)
+			
+			// Search in services
+			const serviceMatch = project.nhtblServices?.nodes?.some((service: any) => 
+				service?.name?.toLowerCase().includes(searchLower)
+			)
+			
+			return titleMatch || excerptMatch || clientMatch || serviceMatch
+		})
+	})
+
+	// Masonry settings
+	let minColWidth = $state(300)
+	let maxColWidth = $state(500)
+	let gap = $state(30)
+
+	onMount(() => {
+		const updateColWidth = () => {
+			minColWidth = window.innerWidth >= 768 ? 300 : 200
+		}
+		
+		updateColWidth()
+		window.addEventListener('resize', updateColWidth)
+		
+		return () => {
+			window.removeEventListener('resize', updateColWidth)
+		}
+	})
+
 </script>
 
-<div class="bg-black relative -mb-24">
-  <Masonry {items} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
-    <PortfolioItem block={item} noLink />
-  </Masonry>
-  <div class="absolute bottom-0 h-[100vh] w-full flex flex-col justify-end bg-gradient-to-t from-black to-transparent">
-    <div class="flex justify-center">
-      <Button textClass="text-lg" url="/portfolio" label="See more work" />
-    </div>
-  </div>
+
+{#if enableSearch}
+<!-- Portfolio Controls (only show when search is enabled) -->
+<div class="portfolio-controls {alignmentClass} mb-8">
+	<!-- View Mode Toggle Buttons -->
+	<div class="flex items-center gap-4 justify-between mb-6">
+	<!-- Search Box -->
+	<div class="relative w-full">
+		<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+			<!-- Search Icon SVG -->
+			<svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+			</svg>
+		</div>
+		<input
+			type="text"
+			bind:value={searchTerm}
+			placeholder="Search projects by title, client, service, or description..."
+			class="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:border-white focus:outline-none transition-colors text-black placeholder-gray-400"
+		/>
+	</div>
+		<div class="flex gap-2">
+			<button
+				onclick={() => (viewMode = 'list')}
+				class="p-3 rounded-lg border transition-colors {viewMode === 'list'
+					? 'bg-white text-black border-white'
+					: 'bg-transparent text-white border-gray-600 hover:border-white'}"
+				aria-label="List view"
+			>
+				<!-- List Icon SVG -->
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M3 6h18M3 12h18m-18 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+				</svg>
+			</button>
+			<button
+				onclick={() => (viewMode = 'masonry')}
+				class="p-3 rounded-lg border transition-colors {viewMode === 'masonry'
+					? 'bg-white text-black border-white'
+					: 'bg-transparent text-white border-gray-600 hover:border-white'}"
+				aria-label="Masonry view"
+			>
+				<!-- Masonry Grid Icon SVG -->
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<rect x="3" y="3" width="8" height="6" stroke="currentColor" stroke-width="2" fill="none"/>
+					<rect x="13" y="3" width="8" height="8" stroke="currentColor" stroke-width="2" fill="none"/>
+					<rect x="3" y="11" width="8" height="10" stroke="currentColor" stroke-width="2" fill="none"/>
+					<rect x="13" y="13" width="8" height="8" stroke="currentColor" stroke-width="2" fill="none"/>
+				</svg>
+			</button>
+		</div>
+	</div>
+
+
+	
+	{#if searchTerm}
+		<p class="text-gray-400 mt-3 text-sm">
+			{filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''} found for "{searchTerm}"
+		</p>
+	{/if}
 </div>
+{/if}
+
+<!-- Debug display -->
+
+<!-- Display based on mode -->
+{#if viewMode === 'horizontal_scroll'}
+	<!-- Horizontal Scroll (original carousel) -->
+	<div class="portfolio-carousel horizontal-gallery {alignmentClass} relative overflow-hidden">
+		<div class="cards-container flex gap-4 overflow-x-auto pb-4">
+			{#each filteredProjects as project (project.slug)}
+				<div class="flex-shrink-0 w-80">
+					<FeaturedProject displayMode="block" project={project} />
+				</div>
+			{/each}
+		</div>
+	</div>
+
+	{:else if viewMode === 'masonry'}
+	<!-- Masonry Layout -->
+	<div class="portfolio-masonry my-16 full-width-breakout">
+		{#if filteredProjects.length > 0}
+			<Masonry items={filteredProjects} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
+				<FeaturedProject displayMode="masonryBlock" project={item} />
+			</Masonry>
+		{:else}
+			<div class="text-center py-12 {alignmentClass}">
+				<p class="text-gray-600">No projects found.</p>
+			</div>
+		{/if}
+	</div>
+
+	{:else if viewMode === 'list'}
+	<!-- List Layout -->
+	<div class="portfolio-list {alignmentClass} my-8">
+		<div class="space-y-3">
+			{#each filteredProjects as project (project.slug)}
+				<FeaturedProject displayMode="grid" project={project} />
+			{/each}
+		</div>
+		
+		{#if filteredProjects.length === 0}
+			<div class="text-center py-12">
+				<p class="text-gray-600">No projects found.</p>
+			</div>
+		{/if}
+	</div>
+{/if}
+
+<style>
+	.cards-container {
+		scrollbar-width: thin;
+		scrollbar-color: #ccc transparent;
+	}
+	
+	.cards-container::-webkit-scrollbar {
+		height: 8px;
+	}
+	
+	.cards-container::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	
+	.cards-container::-webkit-scrollbar-thumb {
+		background-color: #ccc;
+		border-radius: 4px;
+	}
+	
+	.cards-container::-webkit-scrollbar-thumb:hover {
+		background-color: #999;
+	}
+	.full-width-breakout {
+		width: 100vw;
+		position: relative;
+		left: 50%;
+		right: 50%;
+		margin-left: -50vw;
+		margin-right: -50vw;
+		padding-left: 2rem;
+		padding-right: 2rem;
+	}
+
+	/* Ensure the masonry container takes full width */
+	.full-width-breakout :global(.masonry-container) {
+		width: 100% !important;
+	}
+</style>

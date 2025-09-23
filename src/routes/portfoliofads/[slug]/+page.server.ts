@@ -1,4 +1,3 @@
-// @ts-nocheck
 export const prerender = true
 
 import Projects from '$lib/graphql/query/projects.graphql?raw'
@@ -12,19 +11,20 @@ interface HierarchicalOptions {
   childrenKey?: string
 }
 
-export const load = async function load({ params }: Parameters<PageServerLoad>[0]) {
+export const load: PageServerLoad = async function load({ params }) {
   const uri = `/${params.all || ''}`
 
   try {
     const data = await urqlQuery(Projects, { uri: '/portfolio' })
 
-    if (data.page === null) {
+    if (data.nodeByUri === null) {
       error(404, {
         message: 'Not found',
       })
     }
 
-    return JSON.parse(JSON.stringify({ data: data }))
+    // Ensure serializable
+    return JSON.parse(JSON.stringify({ data: data, uri: uri }))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {

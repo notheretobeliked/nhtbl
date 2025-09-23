@@ -1,16 +1,21 @@
 <script lang="ts">
   import { page } from '$app/stores'
   import type { MenuItem } from '$lib/types/wp-types'
-  export let menuItems: MenuItem[]
   import Button from '$components/Button.svelte'
-  $: currentPagePath = $page.url.pathname
-  $: menuItems = menuItems.map(item => ({
-    ...item,
-    // Update 'active' or any other relevant property based on the current path
-    current: currentPagePath === item.uri,
-  }))
 
-  let open: boolean = false
+  interface Props {
+    menuItems: MenuItem[]
+  }
+
+  let { menuItems: rawMenuItems }: Props = $props();
+
+  let open = $state(false);
+
+  const currentPagePath = $derived($page.url.pathname);
+  const menuItems = $derived(rawMenuItems.map(item => ({
+    ...item,
+    current: currentPagePath === item.uri,
+  })));
 
   const toggleMenu = () => {
     open = !open
@@ -20,7 +25,7 @@
 <header>
   <nav class="fixed z-30 w-full flex px-4 pt-4 justify-between items-center h-12 md:h-24">
     <a href="/" class="z-30"><img src="/Nhtbl-logo.webp" class="z-50 h-12 w-12 md:h-20 md:w-20" width="89" height="89" alt="A happy face drawn by a child" /></a>
-    <div class="block md:hidden z-50 hamburger" on:click={toggleMenu}>
+    <div class="block md:hidden z-50 hamburger" onclick={toggleMenu}>
       {#if !open}
         <svg width="48" height="46" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path

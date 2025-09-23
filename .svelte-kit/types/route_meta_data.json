@@ -4,8 +4,12 @@
 		"src/routes/+layout.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-	"/portfolio": [
-		"src/routes/portfolio/+page.server.ts",
+	"/portfoliofads": [
+		"src/routes/portfoliofads/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/portfoliofads/[slug]": [
+		"src/routes/portfoliofads/[slug]/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
 	"/portfolio/[slug]": [

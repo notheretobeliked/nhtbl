@@ -6,8 +6,10 @@
 
   export let block: EditorBlock & { attributes?: any }
 
+  
+
   import Emphas from '$components/Emphas.svelte'
-  const { content, fontSize, textColor, align } = block.attributes
+  const { content, fontSize, textColor, align, fontFamily } = block.attributes
 
 
 
@@ -17,25 +19,50 @@
   onMount(() => {
     segments = parseContent(content)
   })
-  const classNames = (fontSize: string, textColor: string, align: string) => {
+  const classNames = (fontSize: string, textColor: string, align: string, fontFamily: string) => {
     let textClasses: string,
       alignClasses: string,
       colorClasses: string = ''
+    
+    // Handle custom font family
+    let fontClass = ''
+    if (fontFamily) {
+      fontClass = `font-${fontFamily}`
+    } else {
+      // Use predefined font families based on fontSize
+      switch (fontSize) {
+        case 'base':
+          fontClass = 'font-sans'
+          break
+        case 'lg':
+        case 'xl':
+        case '2xl':
+          fontClass = 'font-display'
+          break
+        case null:
+        default:
+          fontClass = 'font-sans'
+          break
+      }
+    }
+    
+    // Handle font size classes
     switch (fontSize) {
       case 'base':
-        textClasses = 'text-sans text-sm md:text-base'
+        textClasses = `${fontClass} text-sm md:text-base`
         break
       case 'lg':
-        textClasses = 'font-display text-base md:text-lg'
+        textClasses = `${fontClass} text-base md:text-lg`
         break
       case 'xl':
-        textClasses = 'font-display text-lg md:text-xl'
+        textClasses = `${fontClass} text-lg md:text-xl`
         break
       case '2xl':
-        textClasses = 'font-display text-xl md:text-2xl'
+        textClasses = `${fontClass} text-xl md:text-2xl`
         break
       case null:
-        textClasses = 'text-sans text-sm md:text-base'
+      default:
+        textClasses = `${fontClass} text-sm md:text-base`
         break
     }
     switch (align) {
@@ -60,7 +87,7 @@
 </script>
 
 <!-- Use the class directive in Svelte to dynamically set classes -->
-<p class={classNames(fontSize, textColor, align)}>
+<p class={classNames(fontSize, textColor, align, fontFamily)}>
   {#each segments as { type, content, version, key } (key)}
     {#if type === 'svg'}
       <Emphas {content} {version} stroke={textColor || 'black'} />
