@@ -165,7 +165,7 @@
   </article>
 {:else}
   <!-- Block and Grid Modes -->
-  <article class="featured-project p-2 group hover:bg-white duration-300 transition-all rounded-lg hover:!text-black">
+  <article class="featured-project p-2 group hover:bg-white transition-all rounded-lg hover:!text-black">
     <a class={displayMode === 'block' ? 'contents' : 'grid grid-cols-[1fr_4fr] gap-4'} href={project.uri}>
       <!-- Image -->
       <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-full' : 'w-20 lg:w-56'}">
@@ -193,7 +193,7 @@
             {#each serviceNames as serviceName}
               {#if enableSearch && onServiceClick}
                 <button 
-                  class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap hover:bg-white hover:text-black transition-colors cursor-pointer"
+                  class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap hover:bg-black/20 transition-colors cursor-pointer"
                   onclick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
