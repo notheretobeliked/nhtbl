@@ -150,7 +150,7 @@
   <div class="portfolio-carousel horizontal-gallery {alignmentClass} relative overflow-hidden">
     <div class="cards-container flex gap-4 overflow-x-auto pb-4">
       {#each filteredProjects as project (project.slug)}
-        <div class="flex-shrink-0 w-80">
+        <div class="flex-shrink-0 w-72 lg:w-[24rem]">
           <FeaturedProject displayMode="block" {project} {enableSearch} onServiceClick={handleServiceClick} />
         </div>
       {/each}

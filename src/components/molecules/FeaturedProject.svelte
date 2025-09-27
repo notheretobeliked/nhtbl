@@ -121,6 +121,8 @@
     <a href={project.uri}>
       <div 
         class="cursor-pointer relative" 
+        role="button"
+        tabindex="0"
         onmouseenter={() => (isHover = true)} 
         onmouseleave={() => (isHover = false)}
       >
@@ -168,7 +170,7 @@
   <article class="featured-project p-2 group hover:bg-white transition-all rounded-lg hover:!text-black">
     <a class={displayMode === 'block' ? 'contents' : 'grid grid-cols-[1fr_4fr] gap-4'} href={project.uri}>
       <!-- Image -->
-      <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-full' : 'w-20 lg:w-56'}">
+      <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-128' : 'w-20 lg:w-56'}">
         <Image {imageObject} imageSize="large" fit="cover" extraClasses="w-full" />
       </div>
       <div class={displayMode === 'block' ? 'contents' : 'flex flex-col'}>
