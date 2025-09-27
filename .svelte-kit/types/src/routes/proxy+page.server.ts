@@ -37,27 +37,6 @@ function normalizeEditorBlock(block: EditorBlock & { attributes?: any; children?
     block.attributes = {}
   }
 
-  if (block.name && block.name.startsWith('acf/')) {
-    if (block.name === 'acf/portfolio-block') {
-      console.log(`🔧 [HOME] Normalizing portfolio block - BEFORE:`, {
-        align: block.attributes.align,
-        alignment: block.attributes.alignment,
-        hasAlignment: 'alignment' in block.attributes
-      })
-    }
-    
-    if ('alignment' in block.attributes) {
-      block.attributes.align = block.attributes.align || block.attributes.alignment
-      delete block.attributes.alignment
-    }
-    
-    if (block.name === 'acf/portfolio-block') {
-      console.log(`🔧 [HOME] Normalizing portfolio block - AFTER:`, {
-        align: block.attributes.align
-      })
-    }
-  }
-
   if (typeof block.attributes.style === 'string') {
     try {
       block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ''))
@@ -161,7 +140,6 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
     }
 
     const allPortfolioBlocks = findPortfolioBlocks(editorBlocks)
-    console.log(`🔍 [HOME] Found ${allPortfolioBlocks.length} portfolio blocks (including nested)`)
 
     // Check if any blocks need external project data
     const needsAllProjects = allPortfolioBlocks.some(block => {
@@ -178,31 +156,19 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
 
     let allProjects: any[] = []
     if (needsAllProjects) {
-      console.log('📊 [HOME] Page needs external projects data, fetching...')
       allProjects = await getAllProjects()
-    } else {
-      console.log('📊 [HOME] Page uses embedded project data, skipping external fetch')
-    }
+    } 
 
     // Recursively process portfolio blocks to resolve their projects
     const processBlocksRecursively = (blocks: any[]): any[] => {
       return blocks.map(block => {
         if (block.name === 'acf/portfolio-block') {
-          console.log(`📊 [HOME] Found portfolio block!`, (block as any).portfolioBlock ? 'Has portfolioBlock data' : 'Missing portfolioBlock data')
-          console.log(`📊 [HOME] Block attributes:`, block.attributes)
           
           if ((block as any).portfolioBlock) {
             const portfolioBlock = (block as any).portfolioBlock
-            console.log(`📊 [HOME] Portfolio config:`, {
-              projectSource: portfolioBlock.projectSource,
-              specificProjectsCount: portfolioBlock.specificProjects?.nodes?.length || 0,
-              displayMode: portfolioBlock.displayMode,
-              blockAlign: block.attributes?.align
-            })
             
             const resolvedProjects = resolvePortfolioProjects(portfolioBlock, allProjects)
             
-            console.log(`🎯 [HOME] Portfolio block resolved ${resolvedProjects.length} projects (source: ${portfolioBlock.projectSource})`)
             
             return {
               ...block,
@@ -224,7 +190,6 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
       })
     }
 
-    console.log(`🔍 [HOME] Processing ${editorBlocks.length} editor blocks recursively...`)
     editorBlocks = processBlocksRecursively(editorBlocks)
 
     const backgroundColour = data.nodeByUri.backgroundColour?.backgroundColour ?? 'white'

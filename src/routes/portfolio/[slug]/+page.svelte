@@ -80,7 +80,7 @@
 
 <svelte:head></svelte:head>
 
-<div class="portfolio-page py-24 min-h-screen bg-black !text-white">
+<div class="portfolio-page py-24 min-h-screen bg-black !text-white  px-2">
   <h1 class="font-display text-xl lg:text-2xl alignwide my-4">
     {title}
   </h1>

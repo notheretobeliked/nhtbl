@@ -34,7 +34,7 @@
 <svelte:window bind:scrollY />
 
 <header>
-  <nav class="h-12 fixed inset-x-4 top-4 bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-4">
+  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-4">
     {#if !showScrolledVersion}
       <div class="initial" style="transform-origin: left center;" out:scale={{ duration: 400, start: 0.8 }} in:scale={{ duration: 400, delay: 400, start: 0.8 }}>
         <!-- Initial state - logo only -->
@@ -90,13 +90,13 @@
     <ul
       role="navigation"
       aria-label="Main"
-      class="fixed w-full items-center md:static md:content-center md:flex-wrap h-screen md:h-0 md:px-4 inset-0 z-10 bg-nhtbl-green-base md:bg-transparent justify-center md:flex flex-row gap-6 md:justify-end {open
+      class="fixed w-full items-center md:static md:content-center md:flex-wrap h-screen md:h-0 md:px-4 -top-3 left-0  z-30 bg-white/95 md:bg-transparent backdrop-blur-md justify-center md:flex flex-row gap-6 md:justify-end {open
         ? 'flex flex-col'
         : 'hidden'}"
     >
       {#each menuItems as menuItem}
         <li>
-          <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" />
+          <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" onclick={() => open = false} />
         </li>
       {/each}
     </ul>

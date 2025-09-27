@@ -78,7 +78,7 @@
 
 {#if enableSearch}
   <!-- Portfolio Controls (only show when search is enabled) -->
-  <div class="portfolio-controls {alignmentClass} mb-8 sticky top-24 w-full z-40">
+  <div class="portfolio-controls {alignmentClass} mb-8 sticky top-24 w-full z-10">
     <!-- View Mode Toggle Buttons -->
     <div class="flex items-center gap-4 justify-between mb-6">
       <!-- Search Box -->

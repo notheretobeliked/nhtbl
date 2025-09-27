@@ -19,12 +19,12 @@
 
 {#if shouldRender}
   <nav aria-label="Breadcrumb" class="breadcrumbs {className}">
-    <ol class="flex items-center md:space-x-1 text-sm text-gray-600">
+    <ol class="flex items-center space-x-0 md:space-x-1 text-sm text-gray-600">
       {#each validBreadcrumbs as crumb, index}
         <li class="flex items-center flex-nowrap">
           {#if index > 0}
             <svg 
-              class="w-4 h-4 mx-2 text-gray-400" 
+              class="w-4 h-4 md:mx-2 text-gray-400" 
               fill="currentColor" 
               viewBox="0 0 20 20"
               aria-hidden="true"

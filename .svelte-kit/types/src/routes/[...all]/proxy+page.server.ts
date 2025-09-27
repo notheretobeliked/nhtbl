@@ -105,8 +105,6 @@ function flatListToHierarchical(data: ExtendedEditorBlock[] = [], { idKey = 'cli
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
   const uri = `/${params.all || ''}`
   
-  console.log('🚀 [ALL] Server load called for URI:', uri)
-  console.log('🚀 [ALL] Params:', params)
   
   try {
     const data = await urqlQuery(PageContent, { uri: uri })
@@ -142,7 +140,6 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
     }
 
     const allPortfolioBlocks = findPortfolioBlocks(editorBlocks)
-    console.log(`🔍 [ALL] Found ${allPortfolioBlocks.length} portfolio blocks (including nested)`)
 
     // Check if any blocks need external project data (not specific projects with full data)
     const needsAllProjects = allPortfolioBlocks.some(block => {
@@ -160,32 +157,19 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
 
     let allProjects: any[] = []
     if (needsAllProjects) {
-      console.log('📊 Page needs external projects data, fetching...')
       allProjects = await getAllProjects()
-    } else {
-      console.log('📊 Page uses embedded project data, skipping external fetch')
-    }
+    } 
 
     // Recursively process portfolio blocks to resolve their projects
     const processBlocksRecursively = (blocks: any[]): any[] => {
       return blocks.map(block => {
         if (block.name === 'acf/portfolio-block') {
-          console.log(`📊 [ALL] Found portfolio block!`, (block as any).portfolioBlock ? 'Has portfolioBlock data' : 'Missing portfolioBlock data')
-          console.log(`📊 [ALL] Block attributes:`, block.attributes)
           
           if ((block as any).portfolioBlock) {
             const portfolioBlock = (block as any).portfolioBlock
-            console.log(`📊 [ALL] Portfolio config:`, {
-              projectSource: portfolioBlock.projectSource,
-              specificProjectsCount: portfolioBlock.specificProjects?.nodes?.length || 0,
-              displayMode: portfolioBlock.displayMode,
-              blockAlign: block.attributes?.align
-            })
             
             const resolvedProjects = resolvePortfolioProjects(portfolioBlock, allProjects)
-            
-            console.log(`🎯 [ALL] Portfolio block resolved ${resolvedProjects.length} projects (source: ${portfolioBlock.projectSource})`)
-            
+                        
             return {
               ...block,
               resolvedProjects
@@ -206,7 +190,6 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
       })
     }
 
-    console.log(`🔍 [ALL] Processing ${editorBlocks.length} editor blocks recursively...`)
     editorBlocks = processBlocksRecursively(editorBlocks)
 
     const backgroundColour = data.nodeByUri.backgroundColour?.backgroundColour ?? 'white'
