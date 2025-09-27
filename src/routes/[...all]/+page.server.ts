@@ -3,7 +3,7 @@ import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { EditorBlock } from '$lib/graphql/generated'
+import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 import { getAllProjects } from '$lib/utilities/projectsCache'
 import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
@@ -31,33 +31,10 @@ function processBreadcrumbs(breadcrumbs: any[] = []) {
   }))
 }
 
-function normalizeEditorBlock(block: EditorBlock) {
+function normalizeEditorBlock(block: ExtendedEditorBlock): ExtendedEditorBlock {
   // Ensure attributes exists before attempting to access it
   if (!block.attributes) {
     block.attributes = {} // Initialize with an empty object if it doesn't exist
-  }
-
-  if (block.name.startsWith('acf/')) {
-    if (block.name === 'acf/portfolio-block') {
-      console.log(`🔧 [ALL] Normalizing portfolio block - BEFORE:`, {
-        align: block.attributes.align,
-        alignment: block.attributes.alignment,
-        hasAlignment: 'alignment' in block.attributes
-      })
-    }
-    
-    if ('alignment' in block.attributes) {
-      // Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
-      block.attributes.align = block.attributes.align || block.attributes.alignment
-      // Remove the 'alignment' attribute to avoid confusion
-      delete block.attributes.alignment
-    }
-    
-    if (block.name === 'acf/portfolio-block') {
-      console.log(`🔧 [ALL] Normalizing portfolio block - AFTER:`, {
-        align: block.attributes.align
-      })
-    }
   }
 
   // Check if 'style' attribute exists and is a string
@@ -102,12 +79,12 @@ function normalizeEditorBlock(block: EditorBlock) {
   return block
 }
 
-function flatListToHierarchical(data: EditorBlock[] = [], { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {}): EditorBlock[] {
-  const tree: EditorBlock[] = []
-  const childrenOf: Record<string, EditorBlock[]> = {}
+function flatListToHierarchical(data: ExtendedEditorBlock[] = [], { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {}): ExtendedEditorBlock[] {
+  const tree: ExtendedEditorBlock[] = []
+  const childrenOf: Record<string, ExtendedEditorBlock[]> = {}
 
   data.forEach(item => {
-    const newItem: EditorBlock = { ...item }
+    const newItem: ExtendedEditorBlock = { ...item }
     const parentId: string = newItem[parentKey] == null ? '0' : newItem[parentKey]
 
     childrenOf[newItem[idKey]] = childrenOf[newItem[idKey]] || []
@@ -139,7 +116,7 @@ export const load: PageServerLoad = async function load({ params, url }) {
       })
     }
 
-    let editorBlocks: EditorBlock[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks) : []
+    let editorBlocks: ExtendedEditorBlock[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks as ExtendedEditorBlock[]) : []
 
     // Recursively find portfolio blocks
     const findPortfolioBlocks = (blocks: any[]): any[] => {

@@ -3,7 +3,7 @@ import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { EditorBlock } from '$lib/graphql/generated'
+import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 interface HierarchicalOptions {
@@ -44,7 +44,7 @@ function processBreadcrumbs(breadcrumbs: any[] = []) {
 }
 
 
-function normalizeEditorBlock(block: EditorBlock & { attributes?: any }): EditorBlock & { attributes?: any } {
+function normalizeEditorBlock(block: ExtendedEditorBlock): ExtendedEditorBlock {
   // Ensure attributes exists before attempting to access it
   if (!block.attributes) {
     block.attributes = {} // Initialize with an empty object if it doesn't exist
@@ -95,29 +95,29 @@ function normalizeEditorBlock(block: EditorBlock & { attributes?: any }): Editor
   // Normalize child blocks recursively
   if (block.innerBlocks) {
     block.innerBlocks = block.innerBlocks
-      .filter((childBlock): childBlock is EditorBlock => childBlock !== null)
-      .map(childBlock => normalizeEditorBlock(childBlock as EditorBlock & { attributes?: any }))
+      .filter((childBlock): childBlock is ExtendedEditorBlock => childBlock !== null)
+      .map(childBlock => normalizeEditorBlock(childBlock as ExtendedEditorBlock))
   }
 
   // Also handle children property for compatibility
-  if ((block as any).children) {
-    ;(block as any).children = (block as any).children
-      .filter((childBlock: any): childBlock is EditorBlock => childBlock !== null)
-      .map((childBlock: any) => normalizeEditorBlock(childBlock as EditorBlock & { attributes?: any }))
+  if (block.children) {
+    block.children = block.children
+      .filter((childBlock): childBlock is ExtendedEditorBlock => childBlock !== null)
+      .map(childBlock => normalizeEditorBlock(childBlock))
   }
 
   return block
 }
 
 function flatListToHierarchical(
-  data: (EditorBlock & { attributes?: any })[] = [],
+  data: ExtendedEditorBlock[] = [],
   { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
-): (EditorBlock & { attributes?: any })[] {
-  const tree: (EditorBlock & { attributes?: any })[] = []
-  const childrenOf: Record<string, (EditorBlock & { attributes?: any })[]> = {}
+): ExtendedEditorBlock[] {
+  const tree: ExtendedEditorBlock[] = []
+  const childrenOf: Record<string, ExtendedEditorBlock[]> = {}
 
   data.forEach(item => {
-    const newItem: EditorBlock & { attributes?: any } = { ...item }
+    const newItem: ExtendedEditorBlock = { ...item }
     const parentId: string = (newItem as any)[parentKey] == null ? '0' : (newItem as any)[parentKey]
 
     childrenOf[(newItem as any)[idKey]] = childrenOf[(newItem as any)[idKey]] || []
@@ -168,7 +168,7 @@ export const load: PageServerLoad = async function load({ params, url }) {
       })
     }
 
-    let editorBlocks: (EditorBlock & { attributes?: any })[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks) : []
+    let editorBlocks: ExtendedEditorBlock[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks as ExtendedEditorBlock[]) : []
     
     // Set align to 'full' on all top-level blocks
     editorBlocks = editorBlocks.map(block => {
@@ -213,12 +213,12 @@ export const load: PageServerLoad = async function load({ params, url }) {
 
     const services =
       data.nodeByUri?.nhtblServices?.nodes
-        ?.filter(service => service?.parentId !== null && service?.parentId !== undefined)
-        ?.map(service => service?.name)
+        ?.filter((service: any) => service?.parentId !== null && service?.parentId !== undefined)
+        ?.map((service: any) => service?.name)
         ?.filter(Boolean) ?? []
     // Create hierarchical clients structure
     const clients = data.nodeByUri?.nhtblClients?.nodes
-    ?.map(client => client?.name)
+    ?.map((client: any) => client?.name)
       ?? []
 
       const formatYearRange = (startDate: string | null | undefined, endDate: string | null | undefined) => {

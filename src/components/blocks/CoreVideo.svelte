@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { CoreVideo } from '$lib/graphql/generated'
+	import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 	import Video from '$components/atoms/Video.svelte'
 	
 	interface Props {
-		block: CoreVideo
+		block: ExtendedEditorBlock
 	}
 
 	let { block }: Props = $props()

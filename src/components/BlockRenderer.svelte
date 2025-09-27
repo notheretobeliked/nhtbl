@@ -1,8 +1,7 @@
 <script lang="ts">
   import { inview } from 'svelte-inview'
   import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
-  import type { EditorBlock } from '$lib/graphql/generated'
-  import type { WithChildren } from '$lib/types/wp-types'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 
   import CoreParagraph from '$components/blocks/CoreParagraph.svelte'
   import CoreHeading from '$components/blocks/CoreHeading.svelte'
@@ -22,7 +21,7 @@
 
   interface Props {
     forceFull?: boolean
-    block: WithChildren<EditorBlock> & { attributes?: any }
+    block: ExtendedEditorBlock
   }
 
   let { forceFull = false, block }: Props = $props()
@@ -149,7 +148,7 @@
     {/if}
 
     {#if blockName === 'acf/portfolio-block'}
-      <PortfolioBlock {block} />
+      <PortfolioBlock block={block as any} />
     {/if}
 
     {#if blockName === 'acf/galerie'}

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { CoreImage, MediaItem } from '$lib/graphql/generated'
+	import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 	import Image from '$components/atoms/Image.svelte'
 	interface Props {
-		block: CoreImage
+		block: ExtendedEditorBlock
 	}
 
 	let { block }: Props = $props()

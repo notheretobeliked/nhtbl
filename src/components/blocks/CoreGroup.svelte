@@ -1,8 +1,9 @@
 <script lang="ts">
   import BlockRenderer from '$components/BlockRenderer.svelte'
-  export let block: EditorBlock
-  const children = block.children
-  const bgColor = block.attributes.backgroundColor ?? 'white'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+  export let block: ExtendedEditorBlock
+  const children = block.children || []
+  const bgColor = block.attributes?.backgroundColor ?? 'white'
 </script>
 
 <div class="px-2 md:px-0">

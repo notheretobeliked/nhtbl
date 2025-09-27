@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { EditorBlock } from '$lib/graphql/generated'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
   import Emphas from '$components/Emphas.svelte'
 
   import { parseContent } from '$lib/utilities/utilities' // Adjust the path as necessary
   import type { ContentSegment } from '$lib/utilities/utilities' // Adjust the path as necessary
-  export let block: EditorBlock & { attributes?: any }
-  const { content, fontSize, textColor, textAlign, level } = block.attributes
+  export let block: ExtendedEditorBlock
+  const { content, fontSize, textColor, textAlign, level } = block.attributes || {}
 
   let segments: ContentSegment[] = []
   let hasSvg: boolean = false // Variable to track presence of 'svg' type segments

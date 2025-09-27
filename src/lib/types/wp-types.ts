@@ -2,6 +2,71 @@ import type { EditorBlock } from '$lib/graphql/generated'
 
 export type NonEmptyArray<T> = [T, ...T[]]
 
+// Block attributes interface that covers all possible attributes from different block types
+export interface BlockAttributes {
+  // Common attributes
+  align?: string
+  className?: string
+  cssClassName?: string
+  backgroundColor?: string
+  style?: string | any // Can be string or parsed JSON object
+  
+  // Text-related attributes
+  content?: string
+  fontFamily?: string
+  fontSize?: string
+  textColor?: string
+  textAlign?: string
+  level?: number
+  
+  // Layout attributes
+  layout?: string | any // Can be string or parsed JSON object
+  verticalAlignment?: string
+  isStackedOnMobile?: boolean
+  
+  // Image attributes
+  alt?: string
+  aspectRatio?: string
+  borderColor?: string
+  caption?: string
+  sizeSlug?: string
+  src?: string
+  
+  // Video attributes
+  autoplay?: boolean
+  controls?: boolean
+  loop?: boolean
+  muted?: boolean
+  playsInline?: boolean
+  preload?: string
+  
+  // Button attributes
+  gradient?: string
+  metadata?: any
+  rel?: string
+  type?: string
+  linkTarget?: string
+  text?: string
+  url?: string
+  
+  // Spacer attributes
+  height?: string
+  
+  // Service push attributes
+  alignment?: string // Note: some blocks use 'alignment' instead of 'align'
+  
+  // Any other attributes that might be added
+  [key: string]: any
+}
+
+// Extended EditorBlock type that includes attributes and children
+export type ExtendedEditorBlock = EditorBlock & {
+  attributes?: BlockAttributes
+  children?: ExtendedEditorBlock[]
+  // Allow index access for dynamic property access
+  [key: string]: any
+}
+
 // Generic utility type to add children property to any block type
 // This allows using generated types while supporting hierarchical structure
 export type WithChildren<T> = T & {

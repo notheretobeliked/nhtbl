@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { CoreButton } from '$lib/graphql/generated'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
   import Button from '$components/Button.svelte'
 
   // Expect a core/button block
-  export let block: CoreButton
+  export let block: ExtendedEditorBlock
   const getTextClass = (fontSize: string | null) => {
     switch (fontSize) {
       case 'sm':
@@ -36,9 +36,9 @@
 </script>
 
 <Button 
-  textClass={getTextClass(block.attributes.fontSize ?? null)}
-  colourClass={`${getBackgroundClass(block.attributes.backgroundColor ?? null)} ${getBorderClass(block.attributes.borderColor ?? null)}`}
-  textColourClass={getTextColorClass(block.attributes.textColor ?? null)}
-  url={block.attributes.url} 
-  label={block.attributes.text} 
+  textClass={getTextClass(block.attributes?.fontSize ?? null)}
+  colourClass={`${getBackgroundClass(block.attributes?.backgroundColor ?? null)} ${getBorderClass(block.attributes?.borderColor ?? null)}`}
+  textColourClass={getTextColorClass(block.attributes?.textColor ?? null)}
+  url={block.attributes?.url} 
+  label={block.attributes?.text} 
 />

@@ -1,15 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { EditorBlock } from '$lib/graphql/generated'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
   import { parseContent } from '$lib/utilities/utilities' // Adjust the path as necessary
   import type { ContentSegment } from '$lib/utilities/utilities' // Adjust the path as necessary
 
-  export let block: EditorBlock & { attributes?: any }
+  export let block: ExtendedEditorBlock
 
   
 
   import Emphas from '$components/Emphas.svelte'
-  const { content, fontSize, textColor, align, fontFamily } = block.attributes
+  const { content, fontSize, textColor, align, fontFamily } = block.attributes || {}
 
 
 

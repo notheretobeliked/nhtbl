@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { CoreColumns } from '$lib/graphql/generated'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
   import BlockRenderer from '$components/BlockRenderer.svelte'
   interface Props {
-    block: CoreColumns
+    block: ExtendedEditorBlock
   }
 
   let { block }: Props = $props()
