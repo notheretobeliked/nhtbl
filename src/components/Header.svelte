@@ -34,16 +34,16 @@
 <svelte:window bind:scrollY />
 
 <header>
-  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-4">
+  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-1 ml-1">
     {#if !showScrolledVersion}
       <div class="initial" style="transform-origin: left center;" out:scale={{ duration: 400, start: 0.8 }} in:scale={{ duration: 400, delay: 400, start: 0.8 }}>
         <!-- Initial state - logo only -->
-        <a href="/" class="z-30 px-2 font-display text-lg whitespace-nowrap">
+        <a href="/" class="z-30 block mt-1 ml-1 font-display text-lg whitespace-nowrap">
           Not here to be liked
         </a>
       </div>
     {:else}
-      <div class="scrolled" style="transform-origin: left center;" in:scale={{ duration: 400, delay: 400, start: 0.8 }} out:scale={{ duration: 400, start: 0.8 }}>
+      <div class="scrolled ml-1" style="transform-origin: left center;" in:scale={{ duration: 400, delay: 400, start: 0.8 }} out:scale={{ duration: 400, start: 0.8 }}>
         <!-- Breadcrumbs - positioned below the main nav -->
         
           <Breadcrumbs {breadcrumbs} />

@@ -84,3 +84,51 @@ export const findImageSizeData = (property: keyof ImageSize, sizes: ImageSize[],
 export const getSrcSet = (sizes: ImageSize[]): string => {
   return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
 }
+
+/**
+ * Removes backend hostname from URLs to make them relative
+ * @param url - The URL to clean
+ * @param backendOrigin - The backend origin to remove (e.g., "http://nhtbl-backend.test")
+ * @returns Relative URL or original URL if it doesn't start with backend origin
+ */
+export function makeUrlRelative(url: string | null | undefined, backendOrigin: string): string | undefined {
+  if (!url) return undefined
+  
+  // If URL starts with the backend origin, remove it
+  if (url.startsWith(backendOrigin)) {
+    const relativeUrl = url.replace(backendOrigin, '')
+    return relativeUrl || '/'
+  }
+  
+  return url
+}
+
+/**
+ * Recursively cleans navigation URLs in an object structure while preserving media URLs
+ * @param obj - Object that may contain URLs
+ * @param backendOrigin - The backend origin to remove
+ * @param navigationUrlFields - Array of field names that contain navigation URLs (not media)
+ */
+export function cleanNavigationUrls(
+  obj: any, 
+  backendOrigin: string, 
+  navigationUrlFields: string[] = ['url', 'uri', 'href', 'link']
+): any {
+  if (!obj || typeof obj !== 'object') return obj
+  
+  if (Array.isArray(obj)) {
+    return obj.map(item => cleanNavigationUrls(item, backendOrigin, navigationUrlFields))
+  }
+  
+  const cleaned = { ...obj }
+  
+  for (const [key, value] of Object.entries(cleaned)) {
+    if (navigationUrlFields.includes(key) && typeof value === 'string') {
+      cleaned[key] = makeUrlRelative(value, backendOrigin)
+    } else if (typeof value === 'object' && value !== null) {
+      cleaned[key] = cleanNavigationUrls(value, backendOrigin, navigationUrlFields)
+    }
+  }
+  
+  return cleaned
+}

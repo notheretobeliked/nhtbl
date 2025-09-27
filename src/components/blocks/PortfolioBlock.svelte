@@ -85,7 +85,7 @@
       <div class="relative w-full">
         <div class="absolute inset-y-0 z-10 left-0 pl-3 flex items-center pointer-events-none">
           <!-- Search Icon SVG -->
-          <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="white">
+          <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="black">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
@@ -93,7 +93,7 @@
           type="text"
           bind:value={searchTerm}
           placeholder="Search projects by title, client, service, or description..."
-          class="w-full pl-10 pr-12 py-3  bg-white/60 rounded-full backdrop-blur-md border-none focus:outline-none transition-colors text-white placeholder-white/50"
+          class="w-full pl-10 pr-12 py-3  bg-white/60 rounded-full backdrop-blur-md border-none focus:outline-none transition-colors text-black font-medium placeholder-white/50"
         />
         {#if searchTerm}
           <div class="absolute inset-y-0 right-0 flex flex-row items-center">

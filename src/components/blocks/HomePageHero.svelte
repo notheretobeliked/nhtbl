@@ -60,7 +60,7 @@
 </div>
 <div class="h-[3000px] relative">
   <div style={transformString} class="box fixed flex h-screen w-screen items-center justify-center">
-    <div class="relative h-screen w-screen bg-nhtbl-green-base my-[5wv] mx-[5wh] flex justify-center items-center p-4 md:p-8 leading-relaxed text-black">
+    <div class="relative h-screen w-screen bg-white my-[5wv] mx-[5wh] flex justify-center items-center p-4 md:p-8 leading-relaxed text-black">
       <div class="max-w-4xl font-serif text-2xl md:text-4xl lg:text-6xl box-container">
         {#each content as block}
           <BlockRenderer {block} />

@@ -4,6 +4,7 @@ import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+import { makeUrlRelative, cleanNavigationUrls } from '$lib/utilities/utilities'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 interface HierarchicalOptions {
@@ -19,13 +20,13 @@ function processBreadcrumbs(breadcrumbs: any[] = []) {
   }
   
   // Extract the backend domain from GRAPHQL_ENDPOINT
-  // GRAPHQL_ENDPOINT is something like "http://nhtbl-backend.test/wp/graphql"
   const backendUrl = new URL(GRAPHQL_ENDPOINT)
-  const backendOrigin = backendUrl.origin // "http://nhtbl-backend.test"
+  const backendOrigin = backendUrl.origin
   
+  // Clean URLs in breadcrumbs
   const processedBreadcrumbs = breadcrumbs.map(crumb => ({
     ...crumb,
-    url: crumb.url ? crumb.url.replace(backendOrigin, '') || '/' : undefined
+    url: makeUrlRelative(crumb.url, backendOrigin)
   }))
 
   // For portfolio items, prepend "Work" breadcrumb if it doesn't already exist
@@ -273,10 +274,13 @@ export const load: PageServerLoad = async function load({ params, url }) {
       pageType: 'portfolio-item',
       title: data.nodeByUri.title || `Portfolio - ${params.slug}`,
       breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs),
-
     }
 
-    return JSON.parse(JSON.stringify(returnData))
+    // Clean navigation URLs in the response data (preserving media URLs)
+    const backendUrl = new URL(GRAPHQL_ENDPOINT)
+    const cleanedData = cleanNavigationUrls(returnData, backendUrl.origin)
+
+    return JSON.parse(JSON.stringify(cleanedData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {

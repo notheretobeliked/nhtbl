@@ -7,6 +7,7 @@ import type { PageServerLoad } from './$types'
 import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 import { getAllProjects } from '$lib/utilities/projectsCache'
 import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
+import { cleanNavigationUrls } from '$lib/utilities/utilities'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 interface HierarchicalOptions {
@@ -201,7 +202,11 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
       breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs),
     }
     
-    return JSON.parse(JSON.stringify(returnData))
+    // Clean navigation URLs in the response data (preserving media URLs)
+    const backendUrl = new URL(GRAPHQL_ENDPOINT)
+    const cleanedData = cleanNavigationUrls(returnData, backendUrl.origin)
+    
+    return JSON.parse(JSON.stringify(cleanedData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {
