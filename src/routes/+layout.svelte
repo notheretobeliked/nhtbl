@@ -36,5 +36,4 @@
 <Header {menuItems} />
 {/key}
 
-
 <slot />

@@ -1,0 +1,236 @@
+{
+  ".svelte-kit/generated/server/internal.js": {
+    "file": "internal.js",
+    "name": "internal",
+    "src": ".svelte-kit/generated/server/internal.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js"
+    ]
+  },
+  "_BlockRenderer.js": {
+    "file": "chunks/BlockRenderer.js",
+    "name": "BlockRenderer",
+    "imports": [
+      "_ssr.js",
+      "_Button.js",
+      "_Masonry.js",
+      "_index2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/BlockRenderer.BitMxM7X.css"
+    ]
+  },
+  "_Button.js": {
+    "file": "chunks/Button.js",
+    "name": "Button",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "_Masonry.js": {
+    "file": "chunks/Masonry.js",
+    "name": "Masonry",
+    "imports": [
+      "_ssr.js",
+      "_Masonry.svelte_svelte_type_style_lang.js"
+    ]
+  },
+  "_Masonry.svelte_svelte_type_style_lang.js": {
+    "file": "chunks/Masonry.svelte_svelte_type_style_lang.js",
+    "name": "Masonry.svelte_svelte_type_style_lang",
+    "imports": [
+      "_ssr.js",
+      "_client2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/Masonry.C5IyxnA_.css"
+    ]
+  },
+  "_client.js": {
+    "file": "chunks/client.js",
+    "name": "client"
+  },
+  "_client2.js": {
+    "file": "chunks/client2.js",
+    "name": "client",
+    "imports": [
+      "_exports.js"
+    ]
+  },
+  "_exports.js": {
+    "file": "chunks/exports.js",
+    "name": "exports"
+  },
+  "_index.js": {
+    "file": "chunks/index.js",
+    "name": "index"
+  },
+  "_index2.js": {
+    "file": "chunks/index2.js",
+    "name": "index",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "_internal.js": {
+    "file": "chunks/internal.js",
+    "name": "internal",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "_page.js": {
+    "file": "chunks/page.js",
+    "name": "page"
+  },
+  "_projects.js": {
+    "file": "chunks/projects.js",
+    "name": "projects"
+  },
+  "_ssr.js": {
+    "file": "chunks/ssr.js",
+    "name": "ssr"
+  },
+  "_stores.js": {
+    "file": "chunks/stores.js",
+    "name": "stores",
+    "imports": [
+      "_ssr.js",
+      "_client2.js"
+    ]
+  },
+  "node_modules/.pnpm/@sveltejs+kit@2.5.5_@sveltejs+vite-plugin-svelte@3.0.2_svelte@4.2.12_vite@5.2.8/node_modules/@sveltejs/kit/src/runtime/server/index.js": {
+    "file": "index.js",
+    "name": "index",
+    "src": "node_modules/.pnpm/@sveltejs+kit@2.5.5_@sveltejs+vite-plugin-svelte@3.0.2_svelte@4.2.12_vite@5.2.8/node_modules/@sveltejs/kit/src/runtime/server/index.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js",
+      "_index.js",
+      "_exports.js",
+      "_index2.js"
+    ]
+  },
+  "src/routes/+error.svelte": {
+    "file": "entries/pages/_error.svelte.js",
+    "name": "entries/pages/_error.svelte",
+    "src": "src/routes/+error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_stores.js"
+    ]
+  },
+  "src/routes/+layout.server.ts": {
+    "file": "entries/pages/_layout.server.ts.js",
+    "name": "entries/pages/_layout.server.ts",
+    "src": "src/routes/+layout.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_client.js",
+      "_index.js"
+    ]
+  },
+  "src/routes/+layout.svelte": {
+    "file": "entries/pages/_layout.svelte.js",
+    "name": "entries/pages/_layout.svelte",
+    "src": "src/routes/+layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_stores.js",
+      "_Button.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_layout.DADGwJ2G.css"
+    ]
+  },
+  "src/routes/+page.server.ts": {
+    "file": "entries/pages/_page.server.ts.js",
+    "name": "entries/pages/_page.server.ts",
+    "src": "src/routes/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_page.js",
+      "_client.js",
+      "_index.js"
+    ]
+  },
+  "src/routes/+page.svelte": {
+    "file": "entries/pages/_page.svelte.js",
+    "name": "entries/pages/_page.svelte",
+    "src": "src/routes/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_BlockRenderer.js"
+    ]
+  },
+  "src/routes/[...all]/+page.server.ts": {
+    "file": "entries/pages/_...all_/_page.server.ts.js",
+    "name": "entries/pages/_...all_/_page.server.ts",
+    "src": "src/routes/[...all]/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_page.js",
+      "_client.js",
+      "_index.js"
+    ]
+  },
+  "src/routes/[...all]/+page.svelte": {
+    "file": "entries/pages/_...all_/_page.svelte.js",
+    "name": "entries/pages/_...all_/_page.svelte",
+    "src": "src/routes/[...all]/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_BlockRenderer.js"
+    ]
+  },
+  "src/routes/portfolio/+page.server.ts": {
+    "file": "entries/pages/portfolio/_page.server.ts.js",
+    "name": "entries/pages/portfolio/_page.server.ts",
+    "src": "src/routes/portfolio/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_projects.js",
+      "_client.js",
+      "_index.js"
+    ]
+  },
+  "src/routes/portfolio/+page.svelte": {
+    "file": "entries/pages/portfolio/_page.svelte.js",
+    "name": "entries/pages/portfolio/_page.svelte",
+    "src": "src/routes/portfolio/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_stores.js",
+      "_Masonry.js"
+    ]
+  },
+  "src/routes/portfolio/[slug]/+page.server.ts": {
+    "file": "entries/pages/portfolio/_slug_/_page.server.ts.js",
+    "name": "entries/pages/portfolio/_slug_/_page.server.ts",
+    "src": "src/routes/portfolio/[slug]/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_projects.js",
+      "_client.js",
+      "_index.js"
+    ]
+  },
+  "src/routes/portfolio/[slug]/+page.svelte": {
+    "file": "entries/pages/portfolio/_slug_/_page.svelte.js",
+    "name": "entries/pages/portfolio/_slug_/_page.svelte",
+    "src": "src/routes/portfolio/[slug]/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_client2.js",
+      "_stores.js",
+      "_Masonry.svelte_svelte_type_style_lang.js"
+    ]
+  }
+}

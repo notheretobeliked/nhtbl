@@ -1,4 +1,5 @@
 import type { ImageSize } from "$lib/types/wp-types"
+import type { EditorBlock } from "$lib/graphql/generated"
 
 export interface HierarchicalOptions {
   idKey?: string
@@ -15,13 +16,13 @@ export interface ContentSegment {
 
 export function flatListToHierarchical<T extends Record<string, any>>(
   data: T[] = [],
-  { idKey = 'clientId', parentKey = 'parentId', childrenKey = 'children' }: HierarchicalOptions = {},
+  { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
 ): T[] {
   const tree: T[] = []
   const childrenOf: Record<string, T[]> = {}
 
   data.forEach(item => {
-    const newItem: T = { ...item }
+    const newItem: any = { ...item }
     const id: string = newItem[idKey]
     const parentId: string = newItem[parentKey] || '0'
 
@@ -82,4 +83,74 @@ export const findImageSizeData = (property: keyof ImageSize, sizes: ImageSize[],
 
 export const getSrcSet = (sizes: ImageSize[]): string => {
   return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
+}
+
+/**
+ * Removes backend hostname from URLs to make them relative
+ * @param url - The URL to clean
+ * @param backendOrigin - The backend origin to remove (e.g., "http://nhtbl-backend.test")
+ * @returns Relative URL or original URL if it doesn't start with backend origin
+ */
+export function makeUrlRelative(url: string | null | undefined, backendOrigin: string): string | undefined {
+  if (!url) return undefined
+  
+  // Extract hostname from backend origin to match both http and https
+  const backendUrl = new URL(backendOrigin)
+  const backendHostname = backendUrl.hostname
+  
+  try {
+    const urlObj = new URL(url)
+    // If the hostname matches our backend, make it relative
+    if (urlObj.hostname === backendHostname) {
+      const relativeUrl = urlObj.pathname + urlObj.search + urlObj.hash
+      return relativeUrl || '/'
+    }
+  } catch {
+    // If URL parsing fails, fall back to simple string matching
+    if (url.startsWith(backendOrigin)) {
+      const relativeUrl = url.replace(backendOrigin, '')
+      return relativeUrl || '/'
+    }
+  }
+  
+  return url
+}
+
+/**
+ * Recursively cleans navigation URLs in an object structure while preserving media URLs
+ * @param obj - Object that may contain URLs
+ * @param backendOrigin - The backend origin to remove
+ * @param navigationUrlFields - Array of field names that contain navigation URLs (not media)
+ */
+export function cleanNavigationUrls(
+  obj: any, 
+  backendOrigin: string, 
+  navigationUrlFields: string[] = ['url', 'uri', 'href', 'link']
+): any {
+  if (!obj || typeof obj !== 'object') return obj
+  
+  if (Array.isArray(obj)) {
+    return obj.map(item => cleanNavigationUrls(item, backendOrigin, navigationUrlFields))
+  }
+  
+  const cleaned = { ...obj }
+  
+  for (const [key, value] of Object.entries(cleaned)) {
+    if (navigationUrlFields.includes(key) && typeof value === 'string') {
+      cleaned[key] = makeUrlRelative(value, backendOrigin)
+    } else if (typeof value === 'object' && value !== null) {
+      cleaned[key] = cleanNavigationUrls(value, backendOrigin, navigationUrlFields)
+    }
+  }
+  
+  // Special handling for block attributes that might contain URLs
+  if (cleaned.attributes && typeof cleaned.attributes === 'object') {
+    for (const [key, value] of Object.entries(cleaned.attributes)) {
+      if (navigationUrlFields.includes(key) && typeof value === 'string') {
+        cleaned.attributes[key] = makeUrlRelative(value, backendOrigin)
+      }
+    }
+  }
+  
+  return cleaned
 }

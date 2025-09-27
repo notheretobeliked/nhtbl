@@ -10,7 +10,6 @@
   export let block: PortfolioItemNode
   export let isActive: boolean = false
   export let noLink: boolean = false
-  console.log(block)
 
   let isHover: boolean = false
   let showModal: boolean = false
@@ -52,7 +51,7 @@
 </script>
 
 {#if block?.featuredImage?.node?.mediaDetails?.sizes}
-  <a href={block.uri} on:click={openSlideshow} on:keypress={openSlideshow}>
+  <a href={block.uri}>
     <div class="cursor-pointer relative" on:mouseenter={() => (isHover = !isHover)} on:mouseleave={() => (isHover = !isHover)}>
       <Image imageSize="medium" imageObject={block.featuredImage.node} fit="contain" />
       {#if isHover && !noLink}
@@ -70,7 +69,7 @@
 {/if}
 
 {#if isActive}
-  <Modal on:close={() => (isActive = !isActive)}>
+  <Modal onclose={() => (isActive = !isActive)}>
     <PortfolioItemDetails {block} />
   </Modal>
 {/if}

@@ -4,7 +4,7 @@
   export let block: CoreButtonsBlock
   const children = block.children
   const bgColor = block.attributes.backgroundColor ?? 'white'
-  const { justifyContent } = block.attributes.layout
+  const { justifyContent } = block.attributes?.layout ?? 'left'
 
   // Utility to generate CSS classes based on justifyContent value
   function justifyContentClass(justifyContent: 'space-between' | 'left' | 'right' | 'center'): string {

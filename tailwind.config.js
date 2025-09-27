@@ -2,8 +2,6 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   safelist: [
-    'md:grid-cols-2',
-    'md:grid-cols-3',
     'bg-black',
     'bg-nhtbl-purple-light',
     'object-cover',
@@ -16,6 +14,13 @@ export default {
     'stroke-black',
     ...Array.from({ length: 8 }, (_, i) => `pt-${i + 1}`),
     ...Array.from({ length: 8 }, (_, i) => `pb-${i + 1}`),
+    // Grid columns for all breakpoints
+    ...Array.from({ length: 8 }, (_, i) => `grid-cols-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `sm:grid-cols-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `md:grid-cols-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `lg:grid-cols-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `xl:grid-cols-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `2xl:grid-cols-${i + 1}`),
   ],
   theme: {
     fontFamily: {
@@ -37,10 +42,10 @@ export default {
     },
     fontSize: {
       'sm': '.875rem',
-      'base': ['1rem', '1.25'],
-      'lg': ['1.25rem', '1.35'],
-      'xl': ['1.75rem', '1.25'],
-      '2xl': ['2.875rem', '1.2'],
+      'base': ['1rem', '1.4'],
+      'lg': ['1.25rem', '1.45'],
+      'xl': ['1.75rem', '1.40'],
+      '2xl': ['2.875rem', '1.3'],
      },
     screens: {
       'sm': '640px',

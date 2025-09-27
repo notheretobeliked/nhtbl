@@ -89,7 +89,7 @@
 </script>
 
 <h3 class="text-nhtbl-green-base text-center font-display mb-2">{@html block.title}</h3>
-{#if block.imageGallery.imageGallery.nodes.length > 1}
+{#if block.projectData.imageGallery.nodes.length > 1}
   <div class="fixed top-1/2 left-3 invisible md:visible" class:hidden={!showLeftArrow}>
     <button on:click={scrollLeft}>
       <svg width="25" height="40" class="rotate-180" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,7 +114,7 @@
   </div>
 {/if}
 <div class="flex flex-row w-full overflow-x-auto h-[60vh] first-letter:md:h-[80vh] gap-3 md:gap-8" bind:this={scrollContainer}>
-  {#each block.imageGallery.imageGallery.nodes || [] as mediaNode}
+  {#each block.projectData.imageGallery.nodes || [] as mediaNode}
     {#if mediaNode.mediaType === 'image'}
       <img
         srcset={getSrcSet(mediaNode.mediaDetails.sizes)}

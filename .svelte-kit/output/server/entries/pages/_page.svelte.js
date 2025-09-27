@@ -1,4 +1,4 @@
-import { c as create_ssr_component, d as each, v as validate_component } from "../../chunks/index3.js";
+import { c as create_ssr_component, d as each, v as validate_component } from "../../chunks/ssr.js";
 import { B as BlockRenderer } from "../../chunks/BlockRenderer.js";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { data } = $$props;
@@ -7,8 +7,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.data(data);
   return `<main class="main w-full overflow-x-hidden">${each(blocks, (block, index) => {
     return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block }, {}, {})}`;
-  })}
-</main>`;
+  })} </main>`;
 });
 export {
   Page as default

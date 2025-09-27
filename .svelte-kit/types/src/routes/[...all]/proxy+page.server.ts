@@ -1,11 +1,14 @@
 // @ts-nocheck
 export const prerender = true
 import PageContent from '$lib/graphql/query/page.graphql?raw'
-import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { EditorBlock } from '$lib/types/wp-types'
-import type { PageData } from '../$types'
+import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+import { getAllProjects } from '$lib/utilities/projectsCache'
+import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
+import { cleanNavigationUrls } from '$lib/utilities/utilities'
+import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 interface HierarchicalOptions {
   idKey?: string
@@ -13,19 +16,27 @@ interface HierarchicalOptions {
   childrenKey?: string
 }
 
-function normalizeEditorBlock(block: EditorBlock) {
+// Function to process breadcrumbs and make URLs relative
+function processBreadcrumbs(breadcrumbs: any[] = []) {
+  if (!breadcrumbs || !Array.isArray(breadcrumbs)) {
+    return []
+  }
+  
+  // Extract the backend domain from GRAPHQL_ENDPOINT
+  // GRAPHQL_ENDPOINT is something like "http://nhtbl-backend.test/wp/graphql"
+  const backendUrl = new URL(GRAPHQL_ENDPOINT)
+  const backendOrigin = backendUrl.origin // "http://nhtbl-backend.test"
+  
+  return breadcrumbs.map(crumb => ({
+    ...crumb,
+    url: crumb.url ? crumb.url.replace(backendOrigin, '') || '/' : undefined
+  }))
+}
+
+function normalizeEditorBlock(block: ExtendedEditorBlock): ExtendedEditorBlock {
   // Ensure attributes exists before attempting to access it
   if (!block.attributes) {
     block.attributes = {} // Initialize with an empty object if it doesn't exist
-  }
-
-  if (block.name.startsWith('acf/')) {
-    if ('alignment' in block.attributes) {
-      // Prefer 'alignment' over 'align', but don't overwrite if 'align' already exists
-      block.attributes.align = block.attributes.align || block.attributes.alignment
-      // Remove the 'alignment' attribute to avoid confusion
-      delete block.attributes.alignment
-    }
   }
 
   // Check if 'style' attribute exists and is a string
@@ -70,12 +81,12 @@ function normalizeEditorBlock(block: EditorBlock) {
   return block
 }
 
-function flatListToHierarchical(data: EditorBlock[] = [], { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {}): EditorBlock[] {
-  const tree: EditorBlock[] = []
-  const childrenOf: Record<string, EditorBlock[]> = {}
+function flatListToHierarchical(data: ExtendedEditorBlock[] = [], { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {}): ExtendedEditorBlock[] {
+  const tree: ExtendedEditorBlock[] = []
+  const childrenOf: Record<string, ExtendedEditorBlock[]> = {}
 
   data.forEach(item => {
-    const newItem: T = { ...item }
+    const newItem: ExtendedEditorBlock = { ...item }
     const parentId: string = newItem[parentKey] == null ? '0' : newItem[parentKey]
 
     childrenOf[newItem[idKey]] = childrenOf[newItem[idKey]] || []
@@ -94,28 +105,108 @@ function flatListToHierarchical(data: EditorBlock[] = [], { idKey = 'clientId', 
 
 export const load = async function load({ params, url }: Parameters<PageServerLoad>[0]) {
   const uri = `/${params.all || ''}`
-
+  
+  
   try {
-    const response = await graphqlQuery(PageContent, { uri: uri })
-    checkResponse(response)
-    const { data }: { data } = await response.json()
+    const data = await urqlQuery(PageContent, { uri: uri })
 
-    if (data.page === null) {
+    if (data.nodeByUri === null) {
       error(404, {
         message: 'Not found',
       })
     }
 
-    let editorBlocks: EditorBlock[] = data.page.editorBlocks ? flatListToHierarchical(data.page.editorBlocks) : []
+    let editorBlocks: ExtendedEditorBlock[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks as ExtendedEditorBlock[]) : []
 
-    const backgroundColour = data.page.backgroundColour.backgroundColour ?? 'white'
+    // Recursively find portfolio blocks
+    const findPortfolioBlocks = (blocks: any[]): any[] => {
+      const portfolioBlocks: any[] = []
+      
+      const searchBlocks = (blockList: any[]) => {
+        blockList.forEach(block => {
+          if (block.name === 'acf/portfolio-block') {
+            portfolioBlocks.push(block)
+          }
+          if (block.children && Array.isArray(block.children)) {
+            searchBlocks(block.children)
+          }
+          if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+            searchBlocks(block.innerBlocks)
+          }
+        })
+      }
+      
+      searchBlocks(blocks)
+      return portfolioBlocks
+    }
 
-    return {
-      data: data,
+    const allPortfolioBlocks = findPortfolioBlocks(editorBlocks)
+
+    // Check if any blocks need external project data (not specific projects with full data)
+    const needsAllProjects = allPortfolioBlocks.some(block => {
+      if ((block as any).portfolioBlock) {
+        const config = (block as any).portfolioBlock
+        // Only fetch allProjects for 'all' and 'by_service' modes, or 'specific' without full data
+        return config.projectSource === 'all' || 
+               config.projectSource === 'by_service' ||
+               (config.projectSource === 'specific' && 
+                (!config.specificProjects?.nodes?.[0]?.title || 
+                 !config.specificProjects?.nodes?.[0]?.featuredImage))
+      }
+      return false
+    })
+
+    let allProjects: any[] = []
+    if (needsAllProjects) {
+      allProjects = await getAllProjects()
+    } 
+
+    // Recursively process portfolio blocks to resolve their projects
+    const processBlocksRecursively = (blocks: any[]): any[] => {
+      return blocks.map(block => {
+        if (block.name === 'acf/portfolio-block') {
+          
+          if ((block as any).portfolioBlock) {
+            const portfolioBlock = (block as any).portfolioBlock
+            
+            const resolvedProjects = resolvePortfolioProjects(portfolioBlock, allProjects)
+                        
+            return {
+              ...block,
+              resolvedProjects
+            }
+          }
+        }
+        
+        // Process children recursively
+        const processedBlock = { ...block }
+        if (block.children && Array.isArray(block.children)) {
+          processedBlock.children = processBlocksRecursively(block.children)
+        }
+        if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+          processedBlock.innerBlocks = processBlocksRecursively(block.innerBlocks)
+        }
+        
+        return processedBlock
+      })
+    }
+
+    editorBlocks = processBlocksRecursively(editorBlocks)
+
+    const backgroundColour = data.nodeByUri.backgroundColour?.backgroundColour ?? 'white'
+
+    const returnData = {
       uri: uri,
       backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
+      breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs),
     }
+    
+    // Clean navigation URLs in the response data (preserving media URLs)
+    const backendUrl = new URL(GRAPHQL_ENDPOINT)
+    const cleanedData = cleanNavigationUrls(returnData, backendUrl.origin)
+    
+    return JSON.parse(JSON.stringify(cleanedData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {

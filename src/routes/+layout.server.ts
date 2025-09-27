@@ -1,21 +1,16 @@
 import PageMeta from '$lib/graphql/query/menu.graphql?raw'
 import type { LayoutAPIResponse } from '$lib/types/wp-types'
-import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import { urqlQuery } from '$lib/graphql/client'
 import type { PageServerLoad } from './$types'
 import { error } from '@sveltejs/kit'
-import { PUBLIC_SITE_URL } from '$env/static/public'; // Ensure this import is correct
+import { PUBLIC_SITE_URL } from '$env/static/public'
 
-
-
-export const load: PageServerLoad = async function load({ params }) {
-  const uri = `/${params.all || ''}`
+export const load: PageServerLoad = async function load({ url }) {
+  const uri = url.pathname
 
   try {
-    const response = await graphqlQuery(PageMeta, { uri: uri })
-    checkResponse(response)
+    const data: LayoutAPIResponse = await urqlQuery(PageMeta, { uri: uri })
 
-    // Assuming CombinedQueryResponse is correctly typed to reflect your GraphQL query structure
-    const { data }: { data: LayoutAPIResponse } = await response.json()
 
     // Modify menu items to add 'current' key
     if (data.menu && data.menu.menuItems && data.menu.menuItems.nodes) {
@@ -25,19 +20,40 @@ export const load: PageServerLoad = async function load({ params }) {
       }))
     }
 
-    const siteUrl = data.page.seo.opengraphUrl.replace(new URL(data.page.seo.opengraphUrl).origin, PUBLIC_SITE_URL);
-    
+    // Check if page exists and has SEO data
+    if (!data.nodeByUri || !data.nodeByUri.seo) {
+      // Return menu data even if page doesn't exist, use defaults for SEO
+      const fallbackData = {
+        menu: JSON.parse(JSON.stringify(data.menu)), // Deep clone menu to remove any hidden references
+        seo: {
+          title: 'Page Not Found',
+          metaDesc: '',
+          opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
+          opengraphSiteName: 'Not here to be liked',
+          opengraphTitle: 'Page Not Found',
+          twitterTitle: 'Page Not Found',
+          twitterDescription: '',
+          metaKeywords: '',
+          opengraphPublisher: '',
+          twitterImage: null,
+          opengraphImage: null,
+          breadcrumbs: []
+        },
+        uri: uri,
+      }
+      
+      return JSON.parse(JSON.stringify(fallbackData))
+    }
 
+    const siteUrl = data.nodeByUri.seo.opengraphUrl.replace(new URL(data.nodeByUri.seo.opengraphUrl).origin, PUBLIC_SITE_URL);
 
-    // Assuming your GraphQL query correctly fetches the SEO data as per your LayoutAPIResponse type
-    // Now `data` is already of type LayoutAPIResponse, including menu and SEO content
-
-    return {
-      data: data,
+    const returnData = {
       menu: data.menu,
-      seo: { ...data.page.seo, opengraphUrl: siteUrl }, // Update seo with the new siteUrl
+      seo: { ...data.nodeByUri.seo, opengraphUrl: siteUrl },
       uri: uri,
-    } // Directly return the data which now includes menu, SEO, and uri
+    }
+    
+    return JSON.parse(JSON.stringify(returnData))
   } catch (err: unknown) {
     const httpError = err as { status: number; message: string }
     if (httpError.message) {

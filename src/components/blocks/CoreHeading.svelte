@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { EditorBlock } from '$lib/types/wp-types'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
   import Emphas from '$components/Emphas.svelte'
 
   import { parseContent } from '$lib/utilities/utilities' // Adjust the path as necessary
   import type { ContentSegment } from '$lib/utilities/utilities' // Adjust the path as necessary
-  export let block: EditorBlock
-  const { content, fontSize, textColor, textAlign, level } = block.attributes
+  export let block: ExtendedEditorBlock
+  const { content, fontSize, textColor, textAlign, level } = block.attributes || {}
 
   let segments: ContentSegment[] = []
   let hasSvg: boolean = false // Variable to track presence of 'svg' type segments
@@ -70,7 +70,7 @@
   </h1>
 {/if}
 {#if level === 2}
-  <h2 class="{classNames(fontSize, textColor, textAlign)}  font-display {hasSvg && 'ml-6 md:ml-0'}">
+  <h2 class="{classNames(fontSize, textColor, textAlign)}  font-display mb-2 {hasSvg && 'ml-6 md:ml-0'}">
     {#each segments as { type, content, version, key } (key)}
       {#if type === 'svg'}
         <Emphas {content} {version} stroke={textColor || 'black'} />

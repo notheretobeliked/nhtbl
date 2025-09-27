@@ -1,4 +1,4 @@
-query PageMeta($uri: ID!) {
+query PageMeta($uri: String!) {
   menu(id: "primary_navigation", idType: LOCATION) {
     menuItems {
       nodes {
@@ -8,35 +8,68 @@ query PageMeta($uri: ID!) {
       }
     }
   }
-  page(id: $uri, idType: URI) {
-    seo {
-        ...SeoFragment
+  nodeByUri(uri: $uri) {
+    ... on Page {
+      seo {
+        metaDesc
+        metaKeywords
+        opengraphSiteName
+        opengraphTitle
+        opengraphPublisher
+        opengraphUrl
+        title
+        twitterDescription
+        twitterTitle
+        breadcrumbs {
+          text
+          url
+        }
+        twitterImage {
+          altText
+          caption
+          mediaDetails {
+            ...MediaDetailsFragment
+          }
+        }
+        opengraphImage {
+          altText
+          caption
+          mediaDetails {
+            ...MediaDetailsFragment
+          }
+        }
+      }
     }
-  }
-}
-
-fragment SeoFragment on PostTypeSEO {
-  metaDesc
-  metaKeywords
-  opengraphSiteName
-  opengraphTitle
-  opengraphPublisher
-  opengraphUrl
-  title
-  twitterDescription
-  twitterTitle
-  twitterImage {
-    altText
-    caption
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
-  }
-  opengraphImage {
-    altText
-    caption
-    mediaDetails {
-      ...MediaDetailsFragment
+    ... on Nhtbl_project {
+      seo {
+        metaDesc
+        metaKeywords
+        opengraphSiteName
+        opengraphTitle
+        opengraphPublisher
+        opengraphUrl
+        title
+        twitterDescription
+        twitterTitle
+        breadcrumbs {
+          text
+          url
+        }
+        twitterImage {
+          altText
+          caption
+          mediaDetails {
+            ...MediaDetailsFragment
+          }
+        }
+        opengraphImage {
+          altText
+          caption
+          mediaDetails {
+            ...MediaDetailsFragment
+          }
+        }
+      }
     }
   }
 }
@@ -49,4 +82,3 @@ fragment MediaDetailsFragment on MediaDetails {
     height
   }
 }
-

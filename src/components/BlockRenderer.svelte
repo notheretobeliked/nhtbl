@@ -1,24 +1,10 @@
 <script lang="ts">
   import { inview } from 'svelte-inview'
   import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
-
-  export let forceFull:boolean = false
-
-  let isInView: boolean
-  const options: Options = {
-    rootMargin: '-50px',
-    unobserveOnEnter: true,
-  }
-
-  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
-    isInView = detail.inView
-  }
-
-  import type { EditorBlock, ACFHomePageHero, ACFServicePush } from '$lib/types/wp-types'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 
   import CoreParagraph from '$components/blocks/CoreParagraph.svelte'
   import CoreHeading from '$components/blocks/CoreHeading.svelte'
-
   import HomePageHero from '$components/blocks/HomePageHero.svelte'
   import ServicePush from '$components/blocks/ServicePush.svelte'
   import CoreGroup from '$components/blocks/CoreGroup.svelte'
@@ -29,23 +15,33 @@
   import GalerieBlock from './blocks/GalerieBlock.svelte'
   import CoreButtons from './blocks/CoreButtons.svelte'
   import CoreButton from './blocks/CoreButton.svelte'
+  import AcfLinkBlock from './blocks/AcfLinkBlock.svelte'
+  import CoreImage from './blocks/CoreImage.svelte'
+  import CoreVideo from './blocks/CoreVideo.svelte'
 
-  export let block: EditorBlock
-
-  function isACFHomePageHero(block: EditorBlock): block is ACFHomePageHero {
-    return (block as ACFHomePageHero).homePageHero !== undefined
+  interface Props {
+    forceFull?: boolean
+    block: ExtendedEditorBlock
   }
 
-  function isACFServicePush(block: EditorBlock): block is ACFServicePush {
-    return (block as ACFServicePush).servicePush !== undefined
+  let { forceFull = false, block }: Props = $props()
+
+  let isInView = $state(false)
+
+  const options: Options = {
+    rootMargin: '-50px',
+    unobserveOnEnter: true,
   }
 
-  let align = block.attributes.align || 'none'
-  if (forceFull) align = 'full'
-  const bgColor = block.attributes.backgroundColor ?? 'white'
+  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
+    isInView = detail.inView
+  }
+
+  const align = $derived(forceFull ? 'full' : block.attributes?.align || 'none')
+  const bgColor = $derived(block.attributes?.backgroundColor ?? 'none')
 
   // Adjusted function to work directly with the style object
-  function mapSpacingToTailwind(styleObj): string {
+  function mapSpacingToTailwind(styleObj: any): string {
     let classes = ''
     const topPadding = styleObj?.spacing?.padding?.top?.replace('spacing|', '')
     const bottomPadding = styleObj?.spacing?.padding?.bottom?.replace('spacing|', '')
@@ -64,9 +60,9 @@
   }
 
   // Use the style object directly if it exists
-  const spacingClasses = block.attributes.style ? mapSpacingToTailwind(block.attributes.style) : ''
+  const spacingClasses = block.attributes?.style ? mapSpacingToTailwind(block.attributes.style) : ''
 
-  const classNames = align => {
+  const classNames = (align: string | null | undefined): string => {
     let baseClasses = ''
     switch (align) {
       case 'full':
@@ -87,56 +83,80 @@
     }
     return `${baseClasses} ${spacingClasses}` // Combine base classes with spacing classes
   }
+
+  // Type-safe block name checking
+  const blockName = block.name || ''
+
+  // Helper functions to check block types based on properties that exist in those specific ACF blocks
+  function hasHomePageHero(block: any): boolean {
+    return 'homePageHero' in block && block.homePageHero !== null && block.homePageHero !== undefined
+  }
+
+  function hasServicePush(block: any): boolean {
+    return 'servicePush' in block && block.servicePush !== null && block.servicePush !== undefined
+  }
 </script>
 
 <div class="{classNames(align)} bg-{bgColor} !px-0" use:inview={options} on:inview_change={handleChange}>
-  <div class="transition-all duration-[800ms] ease-in-out {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
-    {#if isACFHomePageHero(block)}
+  <div class="transition-all duration-[800ms] ease-in-out h-full {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
+    {#if hasHomePageHero(block)}
       <HomePageHero {block} />
     {/if}
 
-    {#if isACFServicePush(block)}
+    {#if hasServicePush(block)}
       <ServicePush {block} />
     {/if}
 
-    {#if block.name === 'core/group'}
+    {#if blockName === 'core/group'}
       <CoreGroup {block} />
     {/if}
 
-    {#if block.name === 'core/buttons'}
+    {#if blockName === 'core/buttons'}
       <CoreButtons {block} />
     {/if}
 
-    {#if block.name === 'core/button'}
+    {#if blockName === 'core/button'}
       <CoreButton {block} />
     {/if}
 
-    {#if block.name === 'core/columns'}
+    {#if blockName === 'core/columns'}
       <CoreColumns {block} />
     {/if}
 
-    {#if block.name === 'core/column'}
+    {#if blockName === 'core/column'}
       <CoreColumn {block} />
     {/if}
 
-    {#if block.name === 'core/paragraph'}
+    {#if blockName === 'core/paragraph'}
       <CoreParagraph {block} />
     {/if}
 
-    {#if block.name === 'core/heading'}
+    {#if blockName === 'core/heading'}
       <CoreHeading {block} />
     {/if}
 
-    {#if block.name === 'core/spacer'}
+    {#if blockName === 'core/spacer'}
       <CoreSpacer {block} />
     {/if}
 
-    {#if block.name === 'acf/portfolio-block'}
-      <PortfolioBlock {block} />
+    {#if blockName === 'core/image'}
+      <CoreImage {block} />
     {/if}
 
-    {#if block.name === 'acf/galerie'}
+    {#if blockName === 'core/video'}
+      <CoreVideo {block} />
+    {/if}
+
+    {#if blockName === 'acf/portfolio-block'}
+      <PortfolioBlock block={block as any} />
+    {/if}
+
+    {#if blockName === 'acf/galerie'}
       <GalerieBlock {block} />
+    {/if}
+
+    {#if blockName === 'acf/link-block'}
+      <AcfLinkBlock {block} />
     {/if}
   </div>
 </div>

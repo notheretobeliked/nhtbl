@@ -1,34 +1,27 @@
 query Projects {
   nhtblProjects(first: 100, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
     nodes {
-      imageGallery {
-        imageGallery {
-          nodes {
-            mediaType
-            mimeType
-            mediaItemUrl
-            altText
-            mediaDetails {
-              sizes {
-                sourceUrl
-                width
-                height
-                name
-              }
-            }
-          }
-        }
+      projectData {
+        startDate
+        endDate
       }
-      content(format: RENDERED)
+      excerpt
       slug
       uri
       nhtblClients {
         nodes {
           name
           slug
+          parentId
         }
       }
-
+      nhtblServices {
+        nodes {
+          name
+          slug
+          parentId
+        }
+      }
       title(format: RENDERED)
       featuredImage {
         node {
