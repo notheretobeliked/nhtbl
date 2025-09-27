@@ -94,10 +94,23 @@ export const getSrcSet = (sizes: ImageSize[]): string => {
 export function makeUrlRelative(url: string | null | undefined, backendOrigin: string): string | undefined {
   if (!url) return undefined
   
-  // If URL starts with the backend origin, remove it
-  if (url.startsWith(backendOrigin)) {
-    const relativeUrl = url.replace(backendOrigin, '')
-    return relativeUrl || '/'
+  // Extract hostname from backend origin to match both http and https
+  const backendUrl = new URL(backendOrigin)
+  const backendHostname = backendUrl.hostname
+  
+  try {
+    const urlObj = new URL(url)
+    // If the hostname matches our backend, make it relative
+    if (urlObj.hostname === backendHostname) {
+      const relativeUrl = urlObj.pathname + urlObj.search + urlObj.hash
+      return relativeUrl || '/'
+    }
+  } catch {
+    // If URL parsing fails, fall back to simple string matching
+    if (url.startsWith(backendOrigin)) {
+      const relativeUrl = url.replace(backendOrigin, '')
+      return relativeUrl || '/'
+    }
   }
   
   return url
@@ -127,6 +140,15 @@ export function cleanNavigationUrls(
       cleaned[key] = makeUrlRelative(value, backendOrigin)
     } else if (typeof value === 'object' && value !== null) {
       cleaned[key] = cleanNavigationUrls(value, backendOrigin, navigationUrlFields)
+    }
+  }
+  
+  // Special handling for block attributes that might contain URLs
+  if (cleaned.attributes && typeof cleaned.attributes === 'object') {
+    for (const [key, value] of Object.entries(cleaned.attributes)) {
+      if (navigationUrlFields.includes(key) && typeof value === 'string') {
+        cleaned.attributes[key] = makeUrlRelative(value, backendOrigin)
+      }
     }
   }
   

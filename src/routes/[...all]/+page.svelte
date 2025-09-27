@@ -10,6 +10,8 @@
     backgroundColour = backgroundColour ?? 'white'
   }
 
+  console.log(data)
+
 </script>
 
 <div class="py-40 min-h-screen bg-{backgroundColour}">
