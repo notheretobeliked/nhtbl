@@ -1,30 +1,55 @@
 <script lang="ts">
   import { page } from '$app/stores'
   import type { MenuItem } from '$lib/types/wp-types'
-  import Button from '$components/Button.svelte'
+  import Button from '$components/atoms/Button.svelte'
+  import Breadcrumbs from '$components/Breadcrumbs.svelte'
+  import { scale } from 'svelte/transition'
 
   interface Props {
     menuItems: MenuItem[]
   }
 
-  let { menuItems: rawMenuItems }: Props = $props();
+  let { menuItems: rawMenuItems }: Props = $props()
 
-  let open = $state(false);
+  let open = $state(false)
+  let scrollY = $state(0)
 
-  const currentPagePath = $derived($page.url.pathname);
-  const menuItems = $derived(rawMenuItems.map(item => ({
-    ...item,
-    current: currentPagePath === item.uri,
-  })));
+  const currentPagePath = $derived($page.url.pathname)
+  const breadcrumbs = $derived($page.data?.breadcrumbs || [])
+  const showScrolledVersion = $derived(scrollY > 50)
+
+  const menuItems = $derived(
+    rawMenuItems.map(item => ({
+      ...item,
+      // Check if current path matches exactly OR starts with the menu item path (for nested pages)
+      current: currentPagePath === item.uri || (item.uri !== '/' && currentPagePath.startsWith(item.uri)),
+    })),
+  )
 
   const toggleMenu = () => {
     open = !open
   }
 </script>
 
+<svelte:window bind:scrollY />
+
 <header>
-  <nav class="fixed z-30 w-full flex px-4 pt-4 justify-between items-center h-12 md:h-24">
-    <a href="/" class="z-30"><img src="/Nhtbl-logo.webp" class="z-50 h-12 w-12 md:h-20 md:w-20" width="89" height="89" alt="A happy face drawn by a child" /></a>
+  <nav class="h-12 fixed inset-x-4 top-4 bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-4">
+    {#if !showScrolledVersion}
+      <div class="initial" style="transform-origin: left center;" out:scale={{ duration: 400, start: 0.8 }} in:scale={{ duration: 400, delay: 400, start: 0.8 }}>
+        <!-- Initial state - logo only -->
+        <a href="/" class="z-30 px-2 font-display text-lg whitespace-nowrap">
+          Not here to be liked
+        </a>
+      </div>
+    {:else}
+      <div class="scrolled" style="transform-origin: left center;" in:scale={{ duration: 400, delay: 400, start: 0.8 }} out:scale={{ duration: 400, start: 0.8 }}>
+        <!-- Breadcrumbs - positioned below the main nav -->
+        
+          <Breadcrumbs {breadcrumbs} />
+        
+      </div>
+    {/if}
     <div class="block md:hidden z-50 hamburger" onclick={toggleMenu}>
       {#if !open}
         <svg width="48" height="46" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,13 +90,13 @@
     <ul
       role="navigation"
       aria-label="Main"
-      class="fixed w-full items-center md:static md:content-center md:flex-wrap h-screen md:h-24 inset-0 z-10 bg-nhtbl-green-base md:bg-transparent justify-center md:flex flex-row gap-6 md:justify-end {open
+      class="fixed w-full items-center md:static md:content-center md:flex-wrap h-screen md:h-0 md:px-4 inset-0 z-10 bg-nhtbl-green-base md:bg-transparent justify-center md:flex flex-row gap-6 md:justify-end {open
         ? 'flex flex-col'
         : 'hidden'}"
     >
       {#each menuItems as menuItem}
         <li>
-          <Button active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" />
+          <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" />
         </li>
       {/each}
     </ul>

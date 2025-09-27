@@ -1,28 +1,26 @@
 <script lang="ts">
   import type { EditorBlock } from '$lib/graphql/generated'
-  import BlockRenderer from '$components/BlockRenderer.svelte';
+  import BlockRenderer from '$components/BlockRenderer.svelte'
   import type { PageData } from './$types'
   export let data: PageData
-  let editorBlocks:EditorBlock[], backgroundColour:string, uri:string
-
+  let editorBlocks: EditorBlock[], backgroundColour: string, uri: string
+  console.log(data)
 
   $: {
-    ({editorBlocks, backgroundColour, uri } = data)
-    backgroundColour = backgroundColour ?? "white"
+    ;({ editorBlocks, backgroundColour, uri } = data)
+    backgroundColour = backgroundColour ?? 'white'
   }
 
   console.log(data)
-
-
-
 </script>
-<div class="py-24 min-h-screen bg-{backgroundColour}">
+
+<div class="py-40 min-h-screen bg-{backgroundColour}">
   {#each editorBlocks as block, index (block.clientId)}
-  <BlockRenderer block={block} />
+    
+      <BlockRenderer {block} />
+    
   {/each}
 </div>
 
-
 <style>
-
 </style>

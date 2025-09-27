@@ -102,6 +102,10 @@ fragment SeoFragment on PostTypeSEO {
   title
   twitterDescription
   twitterTitle
+  breadcrumbs {
+    text
+    url
+  }
   twitterImage {
     altText
     mediaDetails {

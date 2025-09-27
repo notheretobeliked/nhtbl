@@ -7,11 +7,29 @@ import type { PageServerLoad } from './$types'
 import type { EditorBlock } from '$lib/graphql/generated'
 import { getAllProjects } from '$lib/utilities/projectsCache'
 import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
+import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 interface HierarchicalOptions {
   idKey?: string
   parentKey?: string
   childrenKey?: string
+}
+
+// Function to process breadcrumbs and make URLs relative
+function processBreadcrumbs(breadcrumbs: any[] = []) {
+  if (!breadcrumbs || !Array.isArray(breadcrumbs)) {
+    return []
+  }
+  
+  // Extract the backend domain from GRAPHQL_ENDPOINT
+  // GRAPHQL_ENDPOINT is something like "http://nhtbl-backend.test/wp/graphql"
+  const backendUrl = new URL(GRAPHQL_ENDPOINT)
+  const backendOrigin = backendUrl.origin // "http://nhtbl-backend.test"
+  
+  return breadcrumbs.map(crumb => ({
+    ...crumb,
+    url: crumb.url ? crumb.url.replace(backendOrigin, '') || '/' : undefined
+  }))
 }
 
 function normalizeEditorBlock(block: EditorBlock) {
@@ -220,6 +238,7 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
       uri: uri,
       backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
+      breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs),
     }
     
     return JSON.parse(JSON.stringify(returnData))

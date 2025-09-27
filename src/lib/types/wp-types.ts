@@ -42,6 +42,12 @@ export interface SEO {
   twitterTitle: string
   twitterImage: ImageObject | null
   opengraphImage: ImageObject | null
+  breadcrumbs?: BreadcrumbItem[]
+}
+
+export interface BreadcrumbItem {
+  text: string
+  url?: string
 }
 
 export interface HomePageContentResponse {

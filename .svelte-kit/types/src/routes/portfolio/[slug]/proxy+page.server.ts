@@ -5,12 +5,45 @@ import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { EditorBlock } from '$lib/graphql/generated'
+import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 interface HierarchicalOptions {
   idKey?: string
   parentKey?: string
   childrenKey?: string
 }
+
+// Function to process breadcrumbs and make URLs relative
+function processBreadcrumbs(breadcrumbs: any[] = []) {
+  if (!breadcrumbs || !Array.isArray(breadcrumbs)) {
+    return []
+  }
+  
+  // Extract the backend domain from GRAPHQL_ENDPOINT
+  // GRAPHQL_ENDPOINT is something like "http://nhtbl-backend.test/wp/graphql"
+  const backendUrl = new URL(GRAPHQL_ENDPOINT)
+  const backendOrigin = backendUrl.origin // "http://nhtbl-backend.test"
+  
+  const processedBreadcrumbs = breadcrumbs.map(crumb => ({
+    ...crumb,
+    url: crumb.url ? crumb.url.replace(backendOrigin, '') || '/' : undefined
+  }))
+
+  // For portfolio items, prepend "Work" breadcrumb if it doesn't already exist
+  const hasWorkBreadcrumb = processedBreadcrumbs.some(crumb => 
+    crumb.url === '/portfolio' || crumb.text?.toLowerCase().includes('work')
+  )
+  
+  if (!hasWorkBreadcrumb) {
+    processedBreadcrumbs.splice(1, 0, {
+      text: 'Work',
+      url: '/portfolio'
+    })
+  }
+  
+  return processedBreadcrumbs
+}
+
 
 function normalizeEditorBlock(block: EditorBlock & { attributes?: any }): EditorBlock & { attributes?: any } {
   // Ensure attributes exists before attempting to access it
@@ -240,6 +273,8 @@ export const load = async function load({ params, url }: Parameters<PageServerLo
       // Portfolio item specific meta
       pageType: 'portfolio-item',
       title: data.nodeByUri.title || `Portfolio - ${params.slug}`,
+      breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs),
+
     }
 
     return JSON.parse(JSON.stringify(returnData))

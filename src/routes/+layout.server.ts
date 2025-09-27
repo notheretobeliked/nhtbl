@@ -36,7 +36,8 @@ export const load: PageServerLoad = async function load({ url }) {
           metaKeywords: '',
           opengraphPublisher: '',
           twitterImage: null,
-          opengraphImage: null
+          opengraphImage: null,
+          breadcrumbs: []
         },
         uri: uri,
       }

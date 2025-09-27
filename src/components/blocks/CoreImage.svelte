@@ -7,7 +7,6 @@
 
 	let { block }: Props = $props()
 
-	$inspect(block)
 
 	const imageObject = {
 		altText: block.attributes?.alt ? block.attributes.alt : '',

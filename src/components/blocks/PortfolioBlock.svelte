@@ -13,16 +13,7 @@
 
   let { block }: Props = $props()
 
-  $inspect(block)
 
-  // Debug logging
-  console.log('🎨 PortfolioBlock received:', {
-    hasResolvedProjects: !!block.resolvedProjects,
-    resolvedProjectsCount: block.resolvedProjects?.length || 0,
-    hasPortfolioBlock: !!block.portfolioBlock,
-    projectSource: block.portfolioBlock?.projectSource,
-    specificProjectsCount: block.portfolioBlock?.specificProjects?.nodes?.length || 0,
-  })
 
   const projects = $derived(block.resolvedProjects ?? [])
   const config = $derived(block.portfolioBlock)
@@ -30,13 +21,7 @@
   const enableSearch = $derived(config?.enableSearch ?? false)
   const alignmentClass = $derived(block.attributes?.align === 'full' ? 'alignfull' : 'alignwide')
 
-  // More debug logging
-  console.log('🎨 PortfolioBlock derived values:', {
-    projectsCount: projects.length,
-    displayMode,
-    enableSearch,
-  })
-
+ 
   // Search functionality (only if enabled)
   let searchTerm = $state('')
   let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list'>(displayMode)
@@ -98,9 +83,9 @@
     <div class="flex items-center gap-4 justify-between mb-6">
       <!-- Search Box -->
       <div class="relative w-full">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <div class="absolute inset-y-0 z-10 left-0 pl-3 flex items-center pointer-events-none">
           <!-- Search Icon SVG -->
-          <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="black">
+          <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="white">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
@@ -108,7 +93,7 @@
           type="text"
           bind:value={searchTerm}
           placeholder="Search projects by title, client, service, or description..."
-          class="w-full pl-10 pr-12 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:border-white focus:outline-none transition-colors text-black placeholder-gray-400"
+          class="w-full pl-10 pr-12 py-3  bg-white/60 rounded-full backdrop-blur-md border-none focus:outline-none transition-colors text-white placeholder-white/50"
         />
         {#if searchTerm}
           <div class="absolute inset-y-0 right-0 flex flex-row items-center">
@@ -127,7 +112,7 @@
       <div class="flex gap-2">
         <button
           onclick={() => (viewMode = 'list')}
-          class="p-3 rounded-lg border transition-colors {viewMode === 'list'
+          class="p-3 rounded-full border transition-colors {viewMode === 'list'
             ? 'bg-white text-black border-white'
             : 'bg-transparent text-white border-gray-600 hover:border-white'}"
           aria-label="List view"
@@ -139,7 +124,7 @@
         </button>
         <button
           onclick={() => (viewMode = 'masonry')}
-          class="p-3 rounded-lg border transition-colors {viewMode === 'masonry'
+          class="p-3 rounded-full border transition-colors {viewMode === 'masonry'
             ? 'bg-white text-black border-white'
             : 'bg-transparent text-white border-gray-600 hover:border-white'}"
           aria-label="Masonry view"
