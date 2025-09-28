@@ -5,14 +5,16 @@ export const nodes = [
 	() => import('./nodes/1'),
 	() => import('./nodes/2'),
 	() => import('./nodes/3'),
-	() => import('./nodes/4')
+	() => import('./nodes/4'),
+	() => import('./nodes/5')
 ];
 
 export const server_loads = [0];
 
 export const dictionary = {
 		"/": [~2],
-		"/portfolio/[slug]": [~4],
+		"/octopus-walkthrough": [4],
+		"/portfolio/[slug]": [~5],
 		"/[...all]": [~3]
 	};
 
