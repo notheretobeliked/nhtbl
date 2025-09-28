@@ -4,6 +4,9 @@
 		"src/routes/+layout.server.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/octopus-walkthrough": [
+		"src/routes/+layout.server.ts"
+	],
 	"/portfolio/[slug]": [
 		"src/routes/portfolio/[slug]/+page.server.ts",
 		"src/routes/+layout.server.ts"

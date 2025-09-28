@@ -125,11 +125,13 @@ declare module '$env/static/private' {
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const npm_package_scripts_storybook: string;
 	export const npm_package_devDependencies__graphql_codegen_typescript: string;
+	export const npm_package_dependencies_hls_js: string;
 	export const npm_package_devDependencies_graphql: string;
 	export const HOMEBREW_PREFIX: string;
 	export const npm_package_devDependencies__storybook_svelte: string;
 	export const npm_package_devDependencies_ts_node: string;
 	export const npm_package_peerDependencies__types_node: string;
+	export const npm_package_dependencies_vidstack: string;
 	export const LESS: string;
 	export const LOGNAME: string;
 	export const npm_package_scripts_format: string;
@@ -278,11 +280,13 @@ declare module '$env/dynamic/private' {
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		npm_package_scripts_storybook: string;
 		npm_package_devDependencies__graphql_codegen_typescript: string;
+		npm_package_dependencies_hls_js: string;
 		npm_package_devDependencies_graphql: string;
 		HOMEBREW_PREFIX: string;
 		npm_package_devDependencies__storybook_svelte: string;
 		npm_package_devDependencies_ts_node: string;
 		npm_package_peerDependencies__types_node: string;
+		npm_package_dependencies_vidstack: string;
 		LESS: string;
 		LOGNAME: string;
 		npm_package_scripts_format: string;
