@@ -7,6 +7,12 @@
 	"/octopus-walkthrough": [
 		"src/routes/+layout.server.ts"
 	],
+	"/plas/event": [
+		"src/routes/plas/event/+server.js"
+	],
+	"/plas/script.js": [
+		"src/routes/plas/script.js/+server.js"
+	],
 	"/portfolio/[slug]": [
 		"src/routes/portfolio/[slug]/+page.server.ts",
 		"src/routes/+layout.server.ts"

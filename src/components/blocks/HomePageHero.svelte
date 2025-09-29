@@ -37,6 +37,14 @@
       stopped = true
     } else stopped = false
 
+
+    // Hide SVG when scrolled past the hero section (when stopped becomes true)
+    if (stopped) {
+      isMounted = false
+    } else if (!stopped && !isMounted) {
+      isMounted = true
+    }
+
     if (!stopped) {
       transformString = `transform: scale(${percentage}%)`
     } else transformString = `transform: scale(35%); position:absolute; top:${topStart}px`
