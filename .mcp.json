@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "svelte": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@sveltejs/mcp"
+      ],
+      "env": {}
+    }
+  }
+}
