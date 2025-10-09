@@ -127,12 +127,18 @@
   }
 
   .portfolio-section {
-    min-height: 100vh;
+    max-height: 100vh;
     width: 100%;
     position: sticky;
     top: var(--portfolio-sticky-top, 0px);
     background: inherit;
     will-change: transform;
+  }
+
+  :global(.portfolio-section img ) {
+    @apply max-h-screen object-contain;
+    
+    ;
   }
 
 
