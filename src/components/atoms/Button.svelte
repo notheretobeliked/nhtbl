@@ -33,7 +33,7 @@
     type = 'button',
   }: Props = $props()
 
-  function handleClick(event: MouseEvent) {
+  const handleClick = (event: MouseEvent) => {
     if (url === '#') {
       event.preventDefault()
     }

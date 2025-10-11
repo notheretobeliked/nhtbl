@@ -1,7 +1,7 @@
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 import { error } from '@sveltejs/kit'
 
-export function checkResponse(response: Response) {
+export const checkResponse = (response: Response) => {
   const { headers, ok } = response
   if (!ok) {
     error(502, 'Bad Gateway');
@@ -12,7 +12,7 @@ export function checkResponse(response: Response) {
   }
 }
 
-export async function graphqlQuery(query: string, variables: Record<string, any> = {}) {
+export const graphqlQuery = async (query: string, variables: Record<string, any> = {}) => {
   return fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {

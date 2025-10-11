@@ -1,11 +1,6 @@
 import type { ImageSize } from "$lib/types/wp-types"
 import type { EditorBlock } from "$lib/graphql/generated"
-
-export interface HierarchicalOptions {
-  idKey?: string
-  parentKey?: string
-  childrenKey?: string
-}
+import type { HierarchicalOptions } from "./wordpress-content"
 
 export interface ContentSegment {
   type: 'text' | 'svg'
@@ -14,10 +9,10 @@ export interface ContentSegment {
   key: string // Unique key for each segment
 }
 
-export function flatListToHierarchical<T extends Record<string, any>>(
+export const flatListToHierarchical = <T extends Record<string, any>>(
   data: T[] = [],
   { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
-): T[] {
+): T[] => {
   const tree: T[] = []
   const childrenOf: Record<string, T[]> = {}
 
@@ -40,7 +35,7 @@ export function flatListToHierarchical<T extends Record<string, any>>(
   return tree
 }
 
-export function parseContent(htmlContent: string): ContentSegment[] {
+export const parseContent = (htmlContent: string): ContentSegment[] => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(htmlContent, 'text/html')
   const segments: ContentSegment[] = []
@@ -91,7 +86,7 @@ export const getSrcSet = (sizes: ImageSize[]): string => {
  * @param backendOrigin - The backend origin to remove (e.g., "http://nhtbl-backend.test")
  * @returns Relative URL or original URL if it doesn't start with backend origin
  */
-export function makeUrlRelative(url: string | null | undefined, backendOrigin: string): string | undefined {
+export const makeUrlRelative = (url: string | null | undefined, backendOrigin: string): string | undefined => {
   if (!url) return undefined
   
   // Extract hostname from backend origin to match both http and https
@@ -122,11 +117,11 @@ export function makeUrlRelative(url: string | null | undefined, backendOrigin: s
  * @param backendOrigin - The backend origin to remove
  * @param navigationUrlFields - Array of field names that contain navigation URLs (not media)
  */
-export function cleanNavigationUrls(
+export const cleanNavigationUrls = (
   obj: any, 
   backendOrigin: string, 
   navigationUrlFields: string[] = ['url', 'uri', 'href', 'link']
-): any {
+): any => {
   if (!obj || typeof obj !== 'object') return obj
   
   if (Array.isArray(obj)) {

@@ -7,104 +7,17 @@ import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 import { getAllProjects } from '$lib/utilities/projectsCache'
 import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
 import { cleanNavigationUrls } from '$lib/utilities/utilities'
+import { normalizeEditorBlock, flatListToHierarchical, processBreadcrumbs } from '$lib/utilities/wordpress-content'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
-interface HierarchicalOptions {
-  idKey?: string
-  parentKey?: string
-  childrenKey?: string
-}
 
-// Function to process breadcrumbs and make URLs relative
-function processBreadcrumbs(breadcrumbs: any[] = []) {
-  if (!breadcrumbs || !Array.isArray(breadcrumbs)) {
-    return []
-  }
-  
-  // Extract the backend domain from GRAPHQL_ENDPOINT
-  // GRAPHQL_ENDPOINT is something like "http://nhtbl-backend.test/wp/graphql"
-  const backendUrl = new URL(GRAPHQL_ENDPOINT)
-  const backendOrigin = backendUrl.origin // "http://nhtbl-backend.test"
-  
-  return breadcrumbs.map(crumb => ({
-    ...crumb,
-    url: crumb.url ? crumb.url.replace(backendOrigin, '') || '/' : undefined
-  }))
-}
 
-function normalizeEditorBlock(block: ExtendedEditorBlock): ExtendedEditorBlock {
-  // Ensure attributes exists before attempting to access it
-  if (!block.attributes) {
-    block.attributes = {} // Initialize with an empty object if it doesn't exist
-  }
-
-  // Check if 'style' attribute exists and is a string
-  // Check if 'style' attribute exists and is a string
-  if (typeof block.attributes.style === 'string') {
-    try {
-      // Parse the 'style' string as JSON
-      block.attributes.style = JSON.parse(block.attributes.style.replace(/var:preset\|/g, ''))
-
-      // Check and transform the color within 'elements.link' after parsing
-      if (
-        block.attributes.style.elements &&
-        block.attributes.style.elements.link &&
-        block.attributes.style.elements.link.color &&
-        block.attributes.style.elements.link.color.text
-      ) {
-        // Extracting color value after '|'
-        const colorValue = block.attributes.style.elements.link.color.text.split('|')[1]
-        // Assigning the extracted color value to a new property
-        block.attributes.style.textColor = colorValue
-      }
-    } catch (error) {
-      console.error('Error parsing style attribute:', error)
-      block.attributes.style = null // Example error handling
-    }
-  }
-
-  if (typeof block.attributes.layout === 'string') {
-    try {
-      block.attributes.layout = JSON.parse(block.attributes.layout)
-    } catch (error) {
-      console.error('Error parsing layout attribute:', error)
-      block.attributes.layout = null // Or handle the error as needed
-    }
-  }
-
-  // Normalize child blocks recursively
-  if (block.children) {
-    block.children = block.children.map(normalizeEditorBlock)
-  }
-
-  return block
-}
-
-function flatListToHierarchical(data: ExtendedEditorBlock[] = [], { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {}): ExtendedEditorBlock[] {
-  const tree: ExtendedEditorBlock[] = []
-  const childrenOf: Record<string, ExtendedEditorBlock[]> = {}
-
-  data.forEach(item => {
-    const newItem: ExtendedEditorBlock = { ...item }
-    const parentId: string = newItem[parentKey] == null ? '0' : newItem[parentKey]
-
-    childrenOf[newItem[idKey]] = childrenOf[newItem[idKey]] || []
-    newItem[childrenKey] = childrenOf[newItem[idKey]]
-
-    if (parentId !== '0') {
-      childrenOf[parentId] = childrenOf[parentId] || []
-      childrenOf[parentId].push(newItem)
-    } else {
-      tree.push(newItem)
-    }
-  })
-
-  return tree.map(normalizeEditorBlock) // Normalize each root level block
-}
 
 export const load: PageServerLoad = async function load({ params, url }) {
   const uri = `/${params.all || ''}`
-  
+  	// Handle authentication for previews
+	let authResult: { authenticated: boolean; token?: string } = { authenticated: false }
+
   
   try {
     const data = await urqlQuery(PageContent, { uri: uri })
@@ -198,7 +111,7 @@ export const load: PageServerLoad = async function load({ params, url }) {
       uri: uri,
       backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
-      breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs),
+      breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs, new URL(GRAPHQL_ENDPOINT).origin),
     }
     
     // Clean navigation URLs in the response data (preserving media URLs)

@@ -23,17 +23,21 @@
 </script>
 
 {#key $page.url.pathname}
+{#if !$page.url.pathname.startsWith('/preview')}
   <OpenGraph {image} {metadescription} {pageTitle} {siteTitle} {siteUrl} />
   <Twitter 
     {image} 
     {metadescription} 
     {pageTitle} 
     {siteUrl} />
+{/if}
 {/key}
 
 
 {#key $page.url.pathname}
+{#if !$page.url.pathname.startsWith('/preview')}
 <Header {menuItems} />
+{/if}
 {/key}
 
 <slot />

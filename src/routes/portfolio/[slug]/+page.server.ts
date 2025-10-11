@@ -5,13 +5,9 @@ import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 import { makeUrlRelative, cleanNavigationUrls } from '$lib/utilities/utilities'
+import { normalizeEditorBlock, flatListToHierarchical, processBreadcrumbs, createCategoryHierarchy } from '$lib/utilities/wordpress-content'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
-interface HierarchicalOptions {
-  idKey?: string
-  parentKey?: string
-  childrenKey?: string
-}
 
 // Function to process breadcrumbs and make URLs relative
 function processBreadcrumbs(breadcrumbs: any[] = []) {

@@ -1,11 +1,11 @@
 // src/stores/animationQueueStore.ts
 import { writable } from 'svelte/store'
 
-function createAnimationQueue() {
+const createAnimationQueue = () => {
   let queue: (() => Promise<void>)[] = []
   let isRunning = false
 
-  async function run() {
+  const run = async () => {
     if (isRunning || queue.length === 0) return
     isRunning = true
     while (queue.length > 0) {
@@ -17,7 +17,7 @@ function createAnimationQueue() {
     isRunning = false
 }
 
-  function add(animation: () => Promise<void>) {
+  const add = (animation: () => Promise<void>) => {
     queue.push(animation)
     run()
   }

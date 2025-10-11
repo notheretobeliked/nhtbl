@@ -6,10 +6,10 @@ type PortfolioConfig = AcfPortfolioBlock['portfolioBlock']
 /**
  * Resolve projects based on portfolio block configuration
  */
-export function resolvePortfolioProjects(
+export const resolvePortfolioProjects = (
   config: PortfolioConfig,
   allProjects: ProjectNode[]
-): ProjectNode[] {
+): ProjectNode[] => {
   if (!config) {
     return []
   }
@@ -92,7 +92,7 @@ export function resolvePortfolioProjects(
 /**
  * Apply sorting to projects
  */
-function applySorting(projects: ProjectNode[], sortOrder: string): ProjectNode[] {
+const applySorting = (projects: ProjectNode[], sortOrder: string): ProjectNode[] => {
   const sorted = [...projects]
 
   switch (sortOrder) {
@@ -125,7 +125,7 @@ function applySorting(projects: ProjectNode[], sortOrder: string): ProjectNode[]
 /**
  * Get display mode from configuration
  */
-export function getDisplayMode(config: PortfolioConfig): 'horizontal_scroll' | 'masonry' | 'list' {
+export const getDisplayMode = (config: PortfolioConfig): 'horizontal_scroll' | 'masonry' | 'list' => {
   const mode = config.displayMode?.[0]
   
   if (mode === 'horizontal_scroll' || mode === 'masonry' || mode === 'list') {

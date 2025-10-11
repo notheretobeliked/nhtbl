@@ -13,7 +13,7 @@ const CACHE_DURATION = dev ? 0 : 1000 * 60 * 30 // 30 minutes in prod, no cache 
  * In development: always fetches fresh data
  * In production: caches for 30 minutes
  */
-export async function getAllProjects(): Promise<NonNullable<ProjectsQuery['nhtblProjects']>['nodes']> {
+export const getAllProjects = async (): Promise<NonNullable<ProjectsQuery['nhtblProjects']>['nodes']> => {
   const now = Date.now()
   
   // Check if cache is valid (not in dev and cache exists and not expired)
@@ -45,7 +45,7 @@ export async function getAllProjects(): Promise<NonNullable<ProjectsQuery['nhtbl
 /**
  * Clear the cache (useful for testing or manual refresh)
  */
-export function clearProjectsCache(): void {
+export const clearProjectsCache = (): void => {
   projectsCache = null
   cacheTimestamp = 0
   console.log('🗑️ Projects cache cleared')
