@@ -131,7 +131,7 @@
       >
         <Image {imageObject} imageSize="medium" fit="contain" />
         {#if isHover}
-          <div class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex flex-col justify-center content-center items-center">
+          <div class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex flex-col justify-center content-center items-center z-10">
             <p class="text-black text-base lg:text-lg font-display text-center w-full">{project.title}</p>
             {#if clientNames}
               <p class="text-black text-sm mt-2 font-sans text-center w-full">
