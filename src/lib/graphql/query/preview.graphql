@@ -1,0 +1,459 @@
+query PreviewContent($id: ID!) {
+  # Try as page first with preview support
+  page(id: $id, idType: DATABASE_ID, asPreview: true) {
+    __typename
+    id
+    databaseId
+    title
+    status
+    modified
+    backgroundColour {
+      backgroundColour
+    }
+    editorBlocks {
+      name
+      parentClientId
+      clientId
+      ...CoreParagraphFragment
+      ...CoreHeadingFragment
+      ...AcfHomePageHeroFragment
+      ...AcfServicePushFragment
+      ...CoreColumnsFragment
+      ...AcfGalerieFragment
+      ...AcfPortfolioBlockFragment
+      ...CoreGroupFragment
+      ...CoreButtonFragment
+      ...CoreButtonsFragment
+      ...CoreSpacerFragment
+      ...PortfolioBlockDetailsFragment
+      ...AcfLinkBlockFragment
+      ...CoreImageFragment
+      ...CoreVideoFragment
+      ...CoreColumnFragment
+    }
+  }
+  
+  # Also try as custom post type with preview support
+  nhtblProject(id: $id, idType: DATABASE_ID, asPreview: true) {
+    __typename
+    id
+    databaseId
+    title
+    status
+    modified
+    excerpt
+    nhtblClients {
+      nodes {
+        name
+        id
+        parentId
+        slug
+      }
+    }
+    nhtblServices {
+      nodes {
+        id
+        name
+        slug
+        parentId
+      }
+    }
+    projectData {
+      startDate
+      endDate
+      imageGallery {
+        nodes {
+          altText
+          mediaDetails {
+            ...MediaDetailsFragment
+          }
+        }
+      }
+    }
+    editorBlocks {
+      name
+      parentClientId
+      clientId
+      ...CoreParagraphFragment
+      ...CoreHeadingFragment
+      ...AcfHomePageHeroFragment
+      ...AcfServicePushFragment
+      ...CoreColumnsFragment
+      ...AcfGalerieFragment
+      ...AcfPortfolioBlockFragment
+      ...CoreGroupFragment
+      ...CoreButtonFragment
+      ...CoreButtonsFragment
+      ...CoreSpacerFragment
+      ...PortfolioBlockDetailsFragment
+      ...AcfLinkBlockFragment
+      ...CoreImageFragment
+      ...CoreVideoFragment
+      ...CoreColumnFragment
+    }
+  }
+  
+  # Fallback: try as regular post with preview support
+  post(id: $id, idType: DATABASE_ID, asPreview: true) {
+    __typename
+    id
+    databaseId
+    title
+    status
+    modified
+    excerpt
+    editorBlocks {
+      name
+      parentClientId
+      clientId
+      ...CoreParagraphFragment
+      ...CoreHeadingFragment
+      ...AcfHomePageHeroFragment
+      ...AcfServicePushFragment
+      ...CoreColumnsFragment
+      ...AcfGalerieFragment
+      ...AcfPortfolioBlockFragment
+      ...CoreGroupFragment
+      ...CoreButtonFragment
+      ...CoreButtonsFragment
+      ...CoreSpacerFragment
+      ...PortfolioBlockDetailsFragment
+      ...AcfLinkBlockFragment
+      ...CoreImageFragment
+      ...CoreVideoFragment
+      ...CoreColumnFragment
+    }
+  }
+}
+
+
+fragment CoreVideoFragment on CoreVideo {
+  attributes {
+    autoplay
+    align
+    caption
+    controls
+    loop
+    muted
+    playsInline
+    preload
+    src
+    style
+  }
+}
+
+fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
+  name
+  attributes {
+    align
+  }
+  portfolioBlock {
+    specificProjects {
+      nodes {
+        slug
+        ... on Nhtbl_project {
+          title(format: RENDERED)
+          excerpt(format:RENDERED)
+          projectData {
+            startDate
+            endDate
+          }
+          nhtblClients {
+            nodes {
+              name
+              slug
+            }
+          }
+          nhtblServices {
+            nodes {
+              name
+              slug
+            }
+          }
+          
+          featuredImage {
+            node {
+              altText
+              mediaDetails {
+                sizes {
+                  height
+                  width
+                  name
+                  sourceUrl
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment MediaDetailsFragment on MediaDetails {
+  sizes {
+    name
+    sourceUrl
+    width
+    height
+  }
+}
+
+fragment CoreGroupFragment on CoreGroup {
+  attributes {
+    backgroundColor
+    align
+    style
+  }
+}
+
+fragment CoreImageFragment on CoreImage {
+  attributes {
+    alt
+    align
+    aspectRatio
+    borderColor
+    caption
+    cssClassName
+    sizeSlug
+    style
+    src
+  }
+  mediaDetails {
+    ...MediaDetailsFragment
+  }
+}
+
+fragment CoreButtonFragment on CoreButton {
+  attributes {
+    className
+    gradient
+    metadata
+    rel
+    type
+    backgroundColor
+    borderColor
+    textAlign
+    textColor
+    style
+    fontSize
+    linkTarget
+    text
+    url
+  }
+  innerBlocks {
+    apiVersion
+    blockEditorCategoryName
+    clientId
+    name
+    parentClientId
+    renderedHtml
+  }
+}
+
+fragment AcfLinkBlockFragment on AcfLinkBlock {
+  innerBlocks {
+    name
+    parentClientId
+    clientId
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+    ...AcfHomePageHeroFragment
+    ...AcfServicePushFragment
+    ...CoreColumnsFragment
+    ...AcfGalerieFragment
+    ...AcfPortfolioBlockFragment
+    ...CoreGroupFragment
+    ...CoreButtonFragment
+    ...CoreButtonsFragment
+    ...CoreSpacerFragment
+    ...PortfolioBlockDetailsFragment
+    ...CoreImageFragment
+  }
+  attributes {
+    align
+    backgroundColor
+  }
+  linkBlock {
+    internalLink {
+      nodes {
+        slug
+        uri
+      }
+    }
+    externalLink {
+      url
+      title
+      target
+    }
+  }
+}
+
+fragment CoreColumnsFragment on CoreColumns {
+  attributes {
+    layout
+    className
+    verticalAlignment
+    style
+    align
+    isStackedOnMobile
+  }
+}
+
+fragment CoreColumnFragment on CoreColumn {
+  attributes {
+    layout
+    className
+    verticalAlignment
+    style
+  }
+}
+
+fragment AcfGalerieFragment on AcfGalerie {
+  attributes {
+    align
+  }
+  galerie {
+    galerie {
+      nodes {
+        altText
+        mediaType
+        mimeType
+        mediaItemUrl
+        caption(format: RENDERED)
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+      }
+    }
+  }
+}
+
+fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
+  attributes {
+    alignment: align
+  }
+  portfolioBlock {
+    displayMode
+    enableSearch
+    projectSource
+    projectsPerPage
+    selectedService {
+      nodes {
+        slug
+        name
+      }
+    }
+    sortOrder
+    specificProjects {
+      nodes {
+        slug
+        ... on Nhtbl_project {
+          id
+          uri
+          nhtblClients {
+            nodes {
+              name
+              slug
+            }
+          }
+          nhtblServices {
+            nodes {
+              name
+              slug
+              parentId
+              id
+            }
+          }
+          projectData {
+            startDate
+            endDate
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment CoreParagraphFragment on CoreParagraph {
+  attributes {
+    content
+    fontFamily
+    fontSize
+    textColor
+    align
+  }
+}
+
+fragment AcfHomePageHeroFragment on AcfHomePageHero {
+  attributes {
+    backgroundColor
+    align
+  }
+  homePageHero {
+    images(first: 100) {
+      nodes {
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+        altText
+        mediaType
+        mimeType
+        mediaItemUrl
+      }
+    }
+  }
+}
+
+fragment CoreHeadingFragment on CoreHeading {
+  attributes {
+    content
+    fontFamily
+    fontSize
+    textColor
+    textAlign
+    level
+    align
+  }
+}
+
+fragment CoreSpacerFragment on CoreSpacer {
+  attributes {
+    height
+    style
+  }
+}
+
+fragment CoreButtonsFragment on CoreButtons {
+  attributes {
+    align
+    layout
+  }
+}
+
+fragment AcfServicePushFragment on AcfServicePush {
+  attributes {
+    align
+    backgroundColor
+  }
+  servicePush {
+    service {
+      nodes {
+        slug
+        ... on Page {
+          id
+          title
+          uri
+          featuredImage {
+            node {
+              altText
+              mediaDetails {
+                ...MediaDetailsFragment
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
