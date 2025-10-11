@@ -8,8 +8,43 @@ import { error, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 import { cleanNavigationUrls } from '$lib/utilities/utilities'
-import { normalizeEditorBlock, flatListToHierarchical, processBreadcrumbs } from '$lib/utilities/wordpress-content'
+import { normalizeEditorBlock, flatListToHierarchical, processBreadcrumbs, createCategoryHierarchy } from '$lib/utilities/wordpress-content'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
+
+// Portfolio-specific helper functions
+const formatYearRange = (startDate: string | null | undefined, endDate: string | null | undefined): string => {
+  // If both dates are empty, return empty string
+  if (!startDate && !endDate) {
+    return ''
+  }
+
+  // If start date is empty but end date exists, return just end year
+  if (!startDate && endDate) {
+    const endYear = new Date(endDate).getFullYear()
+    return endYear.toString()
+  }
+
+  // If end date is empty but start date exists, return just start year
+  if (startDate && !endDate) {
+    const startYear = new Date(startDate).getFullYear()
+    return startYear.toString()
+  }
+
+  // Both dates exist
+  if (startDate && endDate) {
+    const startYear = new Date(startDate).getFullYear()
+    const endYear = new Date(endDate).getFullYear()
+
+    // If same year, return just that year
+    if (startYear === endYear) {
+      return startYear.toString()
+    } else {
+      return `${startYear}–${endYear}`
+    }
+  }
+
+  return ''
+}
 
 
 export const load: PageServerLoad = async function load({ url }) {
@@ -20,9 +55,11 @@ export const load: PageServerLoad = async function load({ url }) {
   // Extract preview parameters
   const previewId = url.searchParams.get('p') || url.searchParams.get('page_id') || url.searchParams.get('preview_id')
   const previewToken = url.searchParams.get('token')
+  const postType = url.searchParams.get('post_type')
   const isPreview = !!(previewId || url.searchParams.has('preview'))
+  const isProjectPreview = postType === 'project'
   
-  console.log('Extracted params:', { previewId, previewToken, isPreview })
+  console.log('Extracted params:', { previewId, previewToken, postType, isPreview, isProjectPreview })
 
   // Handle missing token for preview
   if (isPreview && !previewToken) {
@@ -107,8 +144,11 @@ export const load: PageServerLoad = async function load({ url }) {
       keys: Object.keys(data)
     })
 
-    // Extract the node from preview queries (page, nhtblProject, or post)
-    const node = data.page || data.nhtblProject || data.post
+    // Extract the node from preview queries
+    // For projects, prioritize nhtblProject which has the full project data
+    const node = isProjectPreview && data.nhtblProject 
+      ? data.nhtblProject 
+      : (data.page || data.nhtblProject || data.post)
     
     console.log('🎯 Selected node:', node ? { 
       type: node.__typename, 
@@ -135,21 +175,94 @@ export const load: PageServerLoad = async function load({ url }) {
       ? flatListToHierarchical(node.editorBlocks as ExtendedEditorBlock[])
       : []
     
+    // Apply portfolio-specific block modifications if this is a project
+    const isPortfolioProject = isProjectPreview
+    if (isPortfolioProject) {
+      console.log('🎨 Applying portfolio project styling...')
+      editorBlocks = editorBlocks.map(block => {
+        const updatedBlock = {
+          ...block,
+          attributes: {
+            ...block.attributes,
+            align: 'full'
+          }
+        }
+        
+        // If this is a core/columns block, set background color to black
+        if (block.name === 'core/columns') {
+          updatedBlock.attributes = {
+            ...updatedBlock.attributes,
+            backgroundColor: 'black'
+          }
+        }
+        
+        return updatedBlock
+      })
+    }
+    
     console.log('📊 Processed blocks count:', editorBlocks.length)
 
-    // Prepare return data
-    const returnData = {
+    // Prepare base return data
+    let returnData: any = {
       uri: `preview-${previewId}`,
-      backgroundColour: node.backgroundColour?.backgroundColour ?? 'white',
+      backgroundColour: node.backgroundColour?.backgroundColour ?? (isPortfolioProject ? 'black' : 'white'),
       editorBlocks,
       breadcrumbs: [], // No SEO data in preview mode
       isPreview: true,
       authenticated: !!previewToken,
+      title: node.title || 'Preview',
       previewData: {
         status: node.status || 'unknown',
         lastModified: node.modified,
         canEdit: canUserPreview({ authenticated: !!previewToken, token: previewToken })
       }
+    }
+
+    // Add portfolio-specific data if this is a project
+    if (isPortfolioProject) {
+      console.log('📁 Adding portfolio project data...')
+      console.log('🔍 Node data:', {
+        excerpt: (node as any).excerpt,
+        nhtblServices: (node as any).nhtblServices,
+        nhtblClients: (node as any).nhtblClients,
+        projectData: (node as any).projectData
+      })
+      
+      // Extract services (only child services, not parents)
+      const services = (node as any).nhtblServices?.nodes
+        ?.filter((service: any) => service?.parentId !== null && service?.parentId !== undefined)
+        ?.map((service: any) => service?.name)
+        ?.filter(Boolean) ?? []
+      
+      // Extract clients
+      const clients = (node as any).nhtblClients?.nodes
+        ?.map((client: any) => client?.name)
+        ?.filter(Boolean) ?? []
+      
+      // Format year display
+      const yearDisplay = formatYearRange(
+        (node as any).projectData?.startDate, 
+        (node as any).projectData?.endDate
+      )
+      
+      console.log('📊 Extracted data:', { services, clients, yearDisplay, excerpt: (node as any).excerpt })
+
+      // Add portfolio-specific fields
+      returnData = {
+        ...returnData,
+        pageType: 'portfolio-item',
+        yearDisplay,
+        excerpt: (node as any).excerpt ?? '',
+        services,
+        clients,
+        portfolioData: {
+          // Add any additional portfolio-specific data here
+          isPreview: true
+        }
+      }
+    } else {
+      // Ensure non-portfolio projects have the correct pageType
+      returnData.pageType = 'page'
     }
     
     console.log('🧹 Cleaning navigation URLs...')
