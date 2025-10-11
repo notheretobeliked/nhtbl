@@ -6,7 +6,8 @@ export const nodes = [
 	() => import('./nodes/2'),
 	() => import('./nodes/3'),
 	() => import('./nodes/4'),
-	() => import('./nodes/5')
+	() => import('./nodes/5'),
+	() => import('./nodes/6')
 ];
 
 export const server_loads = [0];
@@ -15,6 +16,7 @@ export const dictionary = {
 		"/": [~2],
 		"/octopus-walkthrough": [4],
 		"/portfolio/[slug]": [~5],
+		"/preview": [~6],
 		"/[...all]": [~3]
 	};
 

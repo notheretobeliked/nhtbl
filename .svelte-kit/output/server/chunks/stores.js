@@ -1,5 +1,20 @@
-import { g as getContext } from "./ssr.js";
-import "./client2.js";
+import { n as noop, m as getContext } from "./index2.js";
+import "@sveltejs/kit/internal";
+import "./exports.js";
+import "./utils.js";
+const is_legacy = noop.toString().includes("$$") || /function \w+\(\) \{\}/.test(noop.toString());
+if (is_legacy) {
+  ({
+    data: {},
+    form: null,
+    error: null,
+    params: {},
+    route: { id: null },
+    state: {},
+    status: -1,
+    url: new URL("https://example.com")
+  });
+}
 const getStores = () => {
   const stores = getContext("__svelte__");
   return {

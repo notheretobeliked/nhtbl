@@ -17,6 +17,10 @@
 		"src/routes/portfolio/[slug]/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/preview": [
+		"src/routes/preview/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
 	"/[...all]": [
 		"src/routes/[...all]/+page.server.ts",
 		"src/routes/+layout.server.ts"

@@ -6,22 +6,31 @@ export const nodes = [
 	() => import('./nodes/2'),
 	() => import('./nodes/3'),
 	() => import('./nodes/4'),
-	() => import('./nodes/5')
+	() => import('./nodes/5'),
+	() => import('./nodes/6')
 ];
 
 export const server_loads = [0];
 
 export const dictionary = {
 		"/": [~2],
-		"/portfolio": [~4],
+		"/octopus-walkthrough": [4],
 		"/portfolio/[slug]": [~5],
+		"/preview": [~6],
 		"/[...all]": [~3]
 	};
 
 export const hooks = {
 	handleError: (({ error }) => { console.error(error) }),
-
-	reroute: (() => {})
+	
+	reroute: (() => {}),
+	transport: {}
 };
 
-export { default as root } from '../root.svelte';
+export const decoders = Object.fromEntries(Object.entries(hooks.transport).map(([k, v]) => [k, v.decode]));
+
+export const hash = false;
+
+export const decode = (type, value) => decoders[type](value);
+
+export { default as root } from '../root.js';

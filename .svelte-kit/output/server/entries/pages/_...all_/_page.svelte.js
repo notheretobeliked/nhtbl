@@ -1,20 +1,22 @@
-import { c as create_ssr_component, e as escape, d as each, v as validate_component } from "../../../chunks/ssr.js";
+import { k as ensure_array_like, d as attr_class, b as bind_props, i as stringify } from "../../../chunks/index2.js";
 import { B as BlockRenderer } from "../../../chunks/BlockRenderer.js";
-const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { data } = $$props;
+function _page($$payload, $$props) {
+  let data = $$props["data"];
   let editorBlocks, backgroundColour, uri;
-  if ($$props.data === void 0 && $$bindings.data && data !== void 0)
-    $$bindings.data(data);
+  console.log(data);
   {
-    {
-      ({ editorBlocks, backgroundColour, uri } = data);
-      backgroundColour = backgroundColour ?? "white";
-    }
+    ({ editorBlocks, backgroundColour, uri } = data);
+    backgroundColour = backgroundColour ?? "white";
   }
-  return `<div class="${"py-24 min-h-screen bg-" + escape(backgroundColour, true)}">${each(editorBlocks, (block, index) => {
-    return `${validate_component(BlockRenderer, "BlockRenderer").$$render($$result, { block }, {}, {})}`;
-  })} </div>`;
-});
+  const each_array = ensure_array_like(editorBlocks);
+  $$payload.out.push(`<div${attr_class(`py-40 min-h-screen bg-${stringify(backgroundColour)}`)}><!--[-->`);
+  for (let index = 0, $$length = each_array.length; index < $$length; index++) {
+    let block = each_array[index];
+    BlockRenderer($$payload, { block });
+  }
+  $$payload.out.push(`<!--]--></div>`);
+  bind_props($$props, { data });
+}
 export {
-  Page as default
+  _page as default
 };

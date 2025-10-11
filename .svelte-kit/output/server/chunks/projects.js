@@ -1,4 +1,0 @@
-const Projects = "query Projects {\n  nhtblProjects(first: 100, where: { orderby: { field: MENU_ORDER, order: ASC } }) {\n    nodes {\n      projectData {\n        imageGallery {\n          nodes {\n            mediaType\n            mimeType\n            mediaItemUrl\n            altText\n            mediaDetails {\n              sizes {\n                sourceUrl\n                width\n                height\n                name\n              }\n            }\n          }\n        }\n      }\n      content(format: RENDERED)\n      slug\n      uri\n      nhtblClients {\n        nodes {\n          name\n          slug\n        }\n      }\n\n      title(format: RENDERED)\n      featuredImage {\n        node {\n          altText\n          mediaDetails {\n            sizes {\n              height\n              width\n              name\n              sourceUrl\n            }\n          }\n        }\n      }\n    }\n  }\n}\n";
-export {
-  Projects as P
-};
