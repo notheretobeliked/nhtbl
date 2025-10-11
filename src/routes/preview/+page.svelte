@@ -24,21 +24,6 @@
 	const services = $derived(data.services || [])
 	const yearDisplay = $derived(data.yearDisplay || '')
 
-	// Debug portfolio data
-	$effect(() => {
-		if (isPortfolioProject) {
-			console.log('🎨 Portfolio data received:', {
-				title,
-				excerpt,
-				clients,
-				services,
-				yearDisplay,
-				pageType: data.pageType,
-				rawData: data
-			})
-		}
-	})
-
 	// Portfolio-specific onMount logic (only runs for portfolio projects)
 	onMount(() => {
 		if (!isPortfolioProject) return
@@ -77,7 +62,7 @@
 		window.addEventListener('resize', updateCSSVariables)
 		
 		// Update when images load
-		const images = document.querySelectorAll('.portfolio-section img')
+		const images = document.querySelectorAll('.portfolio-section img') as NodeListOf<HTMLImageElement>
 		images.forEach(img => {
 			if (img.complete) {
 				updateCSSVariables()

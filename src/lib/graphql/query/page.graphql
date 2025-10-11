@@ -5,7 +5,7 @@ query PageContent($uri: String!) {
       backgroundColour {
         backgroundColour
       }
-      
+
       editorBlocks {
         name
         parentClientId
@@ -28,7 +28,7 @@ query PageContent($uri: String!) {
         ...CoreColumnFragment
       }
       seo {
-        ...SeoFragment
+        ...SEOFragment
       }
     }
     ... on Nhtbl_project {
@@ -43,8 +43,7 @@ query PageContent($uri: String!) {
           slug
         }
       }
-      nhtblServices
-       {
+      nhtblServices {
         nodes {
           id
           name
@@ -58,6 +57,9 @@ query PageContent($uri: String!) {
         imageGallery {
           nodes {
             altText
+            colorPalette
+            dominantColor
+            secondaryColor
             mediaDetails {
               ...MediaDetailsFragment
             }
@@ -86,37 +88,18 @@ query PageContent($uri: String!) {
         ...CoreColumnFragment
       }
       seo {
-        ...SeoFragment
+        ...SEOFragment
       }
     }
   }
 }
 
-fragment SeoFragment on PostTypeSEO {
-  metaDesc
-  metaKeywords
-  opengraphSiteName
-  opengraphTitle
-  opengraphPublisher
-  opengraphUrl
-  title
-  twitterDescription
-  twitterTitle
-  breadcrumbs {
-    text
-    url
-  }
-  twitterImage {
-    altText
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
-  }
-  opengraphImage {
-    altText
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
+fragment MediaDetailsFragment on MediaDetails {
+  sizes {
+    name
+    sourceUrl
+    width
+    height
   }
 }
 
@@ -132,63 +115,6 @@ fragment CoreVideoFragment on CoreVideo {
     preload
     src
     style
-  }
-}
-
-fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
-  name
-  attributes {
-    align
-  }
-  portfolioBlock {
-    specificProjects {
-      nodes {
-        slug
-        ... on Nhtbl_project {
-          title(format: RENDERED)
-          excerpt(format:RENDERED)
-          projectData {
-            startDate
-            endDate
-          }
-          nhtblClients {
-            nodes {
-              name
-              slug
-            }
-          }
-          nhtblServices {
-            nodes {
-              name
-              slug
-            }
-          }
-          
-          featuredImage {
-            node {
-              altText
-              mediaDetails {
-                sizes {
-                  height
-                  width
-                  name
-                  sourceUrl
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-fragment MediaDetailsFragment on MediaDetails {
-  sizes {
-    name
-    sourceUrl
-    width
-    height
   }
 }
 
@@ -212,6 +138,10 @@ fragment CoreImageFragment on CoreImage {
     style
     src
   }
+  altText
+  colorPalette
+  dominantColor
+  secondaryColor
   mediaDetails {
     ...MediaDetailsFragment
   }
@@ -244,44 +174,6 @@ fragment CoreButtonFragment on CoreButton {
   }
 }
 
-fragment AcfLinkBlockFragment on AcfLinkBlock {
-  innerBlocks {
-    name
-    parentClientId
-    clientId
-    ...CoreParagraphFragment
-    ...CoreHeadingFragment
-    ...AcfHomePageHeroFragment
-    ...AcfServicePushFragment
-    ...CoreColumnsFragment
-    ...AcfGalerieFragment
-    ...AcfPortfolioBlockFragment
-    ...CoreGroupFragment
-    ...CoreButtonFragment
-    ...CoreButtonsFragment
-    ...CoreSpacerFragment
-    ...PortfolioBlockDetailsFragment
-    ...CoreImageFragment
-  }
-  attributes {
-    align
-    backgroundColor
-  }
-  linkBlock {
-    internalLink {
-      nodes {
-        slug
-        uri
-      }
-    }
-    externalLink {
-      url
-      title
-      target
-    }
-  }
-}
-
 fragment CoreColumnsFragment on CoreColumns {
   attributes {
     layout
@@ -302,6 +194,95 @@ fragment CoreColumnFragment on CoreColumn {
   }
 }
 
+fragment CoreParagraphFragment on CoreParagraph {
+  attributes {
+    content
+    fontFamily
+    fontSize
+    textColor
+    align
+  }
+}
+
+fragment CoreHeadingFragment on CoreHeading {
+  attributes {
+    content
+    fontFamily
+    fontSize
+    textColor
+    textAlign
+    level
+    align
+  }
+}
+
+fragment CoreSpacerFragment on CoreSpacer {
+  attributes {
+    height
+    style
+  }
+}
+
+fragment CoreButtonsFragment on CoreButtons {
+  attributes {
+    align
+    layout
+  }
+}
+
+fragment AcfHomePageHeroFragment on AcfHomePageHero {
+  attributes {
+    backgroundColor
+    align
+  }
+  homePageHero {
+    images(first: 100) {
+      nodes {
+        altText
+        colorPalette
+        dominantColor
+        secondaryColor
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+        mediaType
+        mimeType
+        mediaItemUrl
+      }
+    }
+  }
+}
+
+fragment AcfServicePushFragment on AcfServicePush {
+  attributes {
+    align
+    backgroundColor
+  }
+  servicePush {
+    service {
+      nodes {
+        slug
+        ... on Page {
+          id
+          title
+          uri
+          featuredImage {
+            node {
+              altText
+              colorPalette
+              dominantColor
+              secondaryColor
+              mediaDetails {
+                ...MediaDetailsFragment
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 fragment AcfGalerieFragment on AcfGalerie {
   attributes {
     align
@@ -309,11 +290,14 @@ fragment AcfGalerieFragment on AcfGalerie {
   galerie {
     galerie {
       nodes {
-        altText
         mediaType
         mimeType
         mediaItemUrl
         caption(format: RENDERED)
+        altText
+        colorPalette
+        dominantColor
+        secondaryColor
         mediaDetails {
           ...MediaDetailsFragment
         }
@@ -368,78 +352,41 @@ fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
   }
 }
 
-fragment CoreParagraphFragment on CoreParagraph {
-  attributes {
-    content
-    fontFamily
-    fontSize
-    textColor
-    align
-  }
-}
-
-fragment AcfHomePageHeroFragment on AcfHomePageHero {
-  attributes {
-    backgroundColor
-    align
-  }
-  homePageHero {
-    images(first: 100) {
-      nodes {
-        mediaDetails {
-          ...MediaDetailsFragment
-        }
-        altText
-        mediaType
-        mimeType
-        mediaItemUrl
-      }
-    }
-  }
-}
-
-fragment CoreHeadingFragment on CoreHeading {
-  attributes {
-    content
-    fontFamily
-    fontSize
-    textColor
-    textAlign
-    level
-    align
-  }
-}
-
-fragment CoreSpacerFragment on CoreSpacer {
-  attributes {
-    height
-    style
-  }
-}
-
-fragment CoreButtonsFragment on CoreButtons {
+fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
+  name
   attributes {
     align
-    layout
   }
-}
-
-fragment AcfServicePushFragment on AcfServicePush {
-  attributes {
-    align
-    backgroundColor
-  }
-  servicePush {
-    service {
+  portfolioBlock {
+    specificProjects {
       nodes {
         slug
-        ... on Page {
-          id
-          title
-          uri
+        ... on Nhtbl_project {
+          title(format: RENDERED)
+          excerpt(format: RENDERED)
+          projectData {
+            startDate
+            endDate
+          }
+          nhtblClients {
+            nodes {
+              name
+              slug
+            }
+          }
+          nhtblServices {
+            nodes {
+              name
+              slug
+            }
+          }
+
           featuredImage {
             node {
               altText
+              colorPalette
+              dominantColor
+              secondaryColor
               mediaDetails {
                 ...MediaDetailsFragment
               }
@@ -447,6 +394,74 @@ fragment AcfServicePushFragment on AcfServicePush {
           }
         }
       }
+    }
+  }
+}
+
+fragment AcfLinkBlockFragment on AcfLinkBlock {
+  innerBlocks {
+    name
+    parentClientId
+    clientId
+    ...CoreParagraphFragment
+    ...CoreHeadingFragment
+    ...AcfHomePageHeroFragment
+    ...AcfServicePushFragment
+    ...CoreColumnsFragment
+    ...AcfGalerieFragment
+    ...AcfPortfolioBlockFragment
+    ...CoreGroupFragment
+    ...CoreButtonFragment
+    ...CoreButtonsFragment
+    ...CoreSpacerFragment
+    ...PortfolioBlockDetailsFragment
+    ...CoreImageFragment
+  }
+  attributes {
+    align
+    backgroundColor
+  }
+  linkBlock {
+    internalLink {
+      nodes {
+        slug
+        uri
+      }
+    }
+    externalLink {
+      url
+      title
+      target
+    }
+  }
+}
+
+fragment SEOFragment on PostTypeSEO {
+  metaDesc
+  metaKeywords
+  opengraphSiteName
+  opengraphTitle
+  opengraphPublisher
+  opengraphUrl
+  title
+  twitterDescription
+  twitterTitle
+  breadcrumbs {
+    text
+    url
+  }
+  twitterImage {
+    altText
+    caption
+    mediaDetails {
+      ...MediaDetailsFragment
+    }
+  }
+  opengraphImage {
+    altText
+    caption
+    mediaDetails {
+      ...MediaDetailsFragment
     }
   }
 }

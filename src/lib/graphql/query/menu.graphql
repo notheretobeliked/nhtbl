@@ -11,65 +11,43 @@ query PageMeta($uri: String!) {
   nodeByUri(uri: $uri) {
     ... on Page {
       seo {
-        metaDesc
-        metaKeywords
-        opengraphSiteName
-        opengraphTitle
-        opengraphPublisher
-        opengraphUrl
-        title
-        twitterDescription
-        twitterTitle
-        breadcrumbs {
-          text
-          url
-        }
-        twitterImage {
-          altText
-          caption
-          mediaDetails {
-            ...MediaDetailsFragment
-          }
-        }
-        opengraphImage {
-          altText
-          caption
-          mediaDetails {
-            ...MediaDetailsFragment
-          }
-        }
+        ...SEOFragment
       }
     }
     ... on Nhtbl_project {
       seo {
-        metaDesc
-        metaKeywords
-        opengraphSiteName
-        opengraphTitle
-        opengraphPublisher
-        opengraphUrl
-        title
-        twitterDescription
-        twitterTitle
-        breadcrumbs {
-          text
-          url
-        }
-        twitterImage {
-          altText
-          caption
-          mediaDetails {
-            ...MediaDetailsFragment
-          }
-        }
-        opengraphImage {
-          altText
-          caption
-          mediaDetails {
-            ...MediaDetailsFragment
-          }
-        }
+        ...SEOFragment
       }
+    }
+  }
+}
+
+fragment SEOFragment on PostTypeSEO {
+  metaDesc
+  metaKeywords
+  opengraphSiteName
+  opengraphTitle
+  opengraphPublisher
+  opengraphUrl
+  title
+  twitterDescription
+  twitterTitle
+  breadcrumbs {
+    text
+    url
+  }
+  twitterImage {
+    altText
+    caption
+    mediaDetails {
+      ...MediaDetailsFragment
+    }
+  }
+  opengraphImage {
+    altText
+    caption
+    mediaDetails {
+      ...MediaDetailsFragment
     }
   }
 }

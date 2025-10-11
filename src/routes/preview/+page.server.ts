@@ -48,9 +48,6 @@ const formatYearRange = (startDate: string | null | undefined, endDate: string |
 
 
 export const load: PageServerLoad = async function load({ url }) {
-  console.log('🔍 PREVIEW ROUTE DEBUG:')
-  console.log('Full URL:', url.href)
-  console.log('Search params:', Object.fromEntries(url.searchParams.entries()))
   
   // Extract preview parameters
   const previewId = url.searchParams.get('p') || url.searchParams.get('page_id') || url.searchParams.get('preview_id')
@@ -59,11 +56,9 @@ export const load: PageServerLoad = async function load({ url }) {
   const isPreview = !!(previewId || url.searchParams.has('preview'))
   const isProjectPreview = postType === 'project'
   
-  console.log('Extracted params:', { previewId, previewToken, postType, isPreview, isProjectPreview })
 
   // Handle missing token for preview
   if (isPreview && !previewToken) {
-    console.log('❌ Missing token, redirecting to WordPress login')
     const returnUrl = encodeURIComponent(url.href)
     const loginUrl = `${WORDPRESS_URL}/wp/wp-login.php?redirect_to=${returnUrl}`
     throw redirect(302, loginUrl)
@@ -72,7 +67,6 @@ export const load: PageServerLoad = async function load({ url }) {
   // Validate token first if provided
   if (isPreview && previewToken) {
     try {
-      console.log('🔍 Validating preview token...')
       const tokenValidation = await fetch(`${WORDPRESS_URL}wp-json/sveltekit/v1/validate-token`, {
         method: 'POST',
         headers: {
@@ -83,7 +77,6 @@ export const load: PageServerLoad = async function load({ url }) {
 
       if (!tokenValidation.ok) {
         const errorData = await tokenValidation.json()
-        console.log('❌ Token validation failed:', errorData)
         
         if (errorData.code === 'invalid_token') {
           throw error(401, 'Preview token has expired or is invalid. Please log into WordPress and generate a new preview link.')
@@ -97,7 +90,6 @@ export const load: PageServerLoad = async function load({ url }) {
       }
 
       const validationResult = await tokenValidation.json()
-      console.log('✅ Token validation successful:', validationResult)
     } catch (err: any) {
       // If it's already an error we threw, re-throw it
       if (err.status) {
@@ -105,7 +97,6 @@ export const load: PageServerLoad = async function load({ url }) {
       }
       
       // Handle network errors
-      console.error('❌ Token validation network error:', err)
       throw error(500, 'Unable to validate preview token. Please check your connection and try again.')
     }
   }
@@ -125,24 +116,14 @@ export const load: PageServerLoad = async function load({ url }) {
         queryOptions.token = previewToken
       }
       
-      console.log('🔍 GraphQL Variables:', variables)
-      console.log('🔍 Query Options:', queryOptions)
     } else {
       // Regular mode: should not happen in preview route, but fallback
-      console.log('❌ Missing preview parameters')
       error(400, 'Preview route requires preview parameters')
     }
 
-    console.log('📡 Making GraphQL query...')
     // Use the dedicated preview query
     const data = await urqlQuery(PreviewContent, variables, queryOptions)
     
-    console.log('✅ GraphQL Response received:', {
-      hasPage: !!data.page,
-      hasNhtblProject: !!data.nhtblProject,
-      hasPost: !!data.post,
-      keys: Object.keys(data)
-    })
 
     // Extract the node from preview queries
     // For projects, prioritize nhtblProject which has the full project data
@@ -150,26 +131,16 @@ export const load: PageServerLoad = async function load({ url }) {
       ? data.nhtblProject 
       : (data.page || data.nhtblProject || data.post)
     
-    console.log('🎯 Selected node:', node ? { 
-      type: node.__typename, 
-      id: node.id, 
-      title: node.title, 
-      status: node.status 
-    } : 'NO NODE FOUND')
     
     if (!node) {
-      console.log('❌ No node found in GraphQL response')
       throw error(404, `Content not found for preview ID: ${previewId}. The content may have been deleted or you may not have permission to view it.`)
     }
 
     // Validate preview status
-    console.log('🔍 Node status validation:', node.status)
     if (node.status && !['publish', 'draft', 'private', 'pending', 'inherit'].includes(node.status)) {
-      console.log('❌ Invalid status for preview:', node.status)
       throw error(403, `Preview not available for content with status "${node.status}". Only draft, private, pending, and published content can be previewed.`)
     }
 
-    console.log('🔄 Processing editor blocks...')
     // Process editor blocks
     let editorBlocks: ExtendedEditorBlock[] = node.editorBlocks 
       ? flatListToHierarchical(node.editorBlocks as ExtendedEditorBlock[])
@@ -178,7 +149,6 @@ export const load: PageServerLoad = async function load({ url }) {
     // Apply portfolio-specific block modifications if this is a project
     const isPortfolioProject = isProjectPreview
     if (isPortfolioProject) {
-      console.log('🎨 Applying portfolio project styling...')
       editorBlocks = editorBlocks.map(block => {
         const updatedBlock = {
           ...block,
@@ -200,7 +170,6 @@ export const load: PageServerLoad = async function load({ url }) {
       })
     }
     
-    console.log('📊 Processed blocks count:', editorBlocks.length)
 
     // Prepare base return data
     let returnData: any = {
@@ -220,13 +189,6 @@ export const load: PageServerLoad = async function load({ url }) {
 
     // Add portfolio-specific data if this is a project
     if (isPortfolioProject) {
-      console.log('📁 Adding portfolio project data...')
-      console.log('🔍 Node data:', {
-        excerpt: (node as any).excerpt,
-        nhtblServices: (node as any).nhtblServices,
-        nhtblClients: (node as any).nhtblClients,
-        projectData: (node as any).projectData
-      })
       
       // Extract services (only child services, not parents)
       const services = (node as any).nhtblServices?.nodes
@@ -245,7 +207,6 @@ export const load: PageServerLoad = async function load({ url }) {
         (node as any).projectData?.endDate
       )
       
-      console.log('📊 Extracted data:', { services, clients, yearDisplay, excerpt: (node as any).excerpt })
 
       // Add portfolio-specific fields
       returnData = {
@@ -265,44 +226,30 @@ export const load: PageServerLoad = async function load({ url }) {
       returnData.pageType = 'page'
     }
     
-    console.log('🧹 Cleaning navigation URLs...')
     // Clean navigation URLs
     const backendUrl = new URL(GRAPHQL_ENDPOINT)
     const cleanedData = cleanNavigationUrls(returnData, backendUrl.origin)
     
-    console.log('✅ Preview data prepared successfully')
     return JSON.parse(JSON.stringify(cleanedData))
   } catch (err: unknown) {
-    console.error('❌ PREVIEW ERROR:', err)
-    console.error('Error type:', typeof err)
-    console.error('Error constructor:', err?.constructor?.name)
-    
-    if (err instanceof Error) {
-      console.error('Error message:', err.message)
-      console.error('Error stack:', err.stack)
-    }
     
     // Handle SvelteKit errors (already have proper status and message)
     const httpError = err as { status?: number; message?: string }
     if (httpError.status && httpError.message) {
-      console.error('🔥 Re-throwing HTTP error:', httpError.status, httpError.message)
       throw err
     }
     
     // Handle GraphQL errors
     if (err instanceof Error && err.message.includes('GraphQL Error')) {
-      console.error('🔥 GraphQL error detected')
       throw error(500, 'Failed to load preview content from WordPress. Please check if the content exists and try again.')
     }
     
     // Handle network errors
     if (err instanceof Error && (err.message.includes('fetch') || err.message.includes('network'))) {
-      console.error('🔥 Network error detected')
       throw error(503, 'Unable to connect to WordPress. Please check your connection and try again.')
     }
     
     // Generic fallback
-    console.error('🔥 Throwing generic error:', err)
     throw error(500, 'An unexpected error occurred while loading the preview. Please try again or contact support.')
   }
 }

@@ -3,16 +3,24 @@
   import { quintOut } from 'svelte/easing'
   import { onMount } from 'svelte'
   import PortfolioItemDetails from '$components/PortfolioItemDetails.svelte'
-  import Image from '$components/Image.svelte'
+  import Image from '$components/atoms/Image.svelte'
   import Modal from '$components/Modal.svelte'
   import type { PortfolioItemNode, ImageSize } from '$lib/types/wp-types.ts'
 
-  export let block: PortfolioItemNode
-  export let isActive: boolean = false
-  export let noLink: boolean = false
+  interface Props {
+    block: PortfolioItemNode
+    isActive?: boolean
+    noLink?: boolean
+  }
 
-  let isHover: boolean = false
-  let showModal: boolean = false
+  let { 
+    block, 
+    isActive = $bindable(false), 
+    noLink = false 
+  }: Props = $props()
+
+  let isHover = $state(false)
+  let showModal = $state(false)
   let videos: HTMLVideoElement[] = []
 
   const openSlideshow = (event): void => {
@@ -52,7 +60,7 @@
 
 {#if block?.featuredImage?.node?.mediaDetails?.sizes}
   <a href={block.uri}>
-    <div class="cursor-pointer relative" on:mouseenter={() => (isHover = !isHover)} on:mouseleave={() => (isHover = !isHover)}>
+    <div class="cursor-pointer relative" onmouseenter={() => (isHover = !isHover)} onmouseleave={() => (isHover = !isHover)}>
       <Image imageSize="medium" imageObject={block.featuredImage.node} fit="contain" />
       {#if isHover && !noLink}
         <div transition:scale={{ duration: 300, opacity: 0.5, easing: quintOut }} class="bg-nhtbl-green-base p-3 bg-opacity-90 absolute inset-0 flex flex-col justify-center content-center items-center">

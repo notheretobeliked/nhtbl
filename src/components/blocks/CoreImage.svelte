@@ -8,8 +8,12 @@
 	let { block }: Props = $props()
 
 
+	// CoreImage blocks now include color data from WordPress
 	const imageObject = {
-		altText: block.attributes?.alt ? block.attributes.alt : '',
+		altText: (block as any).altText || block.attributes?.alt || '',
+		colorPalette: (block as any).colorPalette || null,
+		dominantColor: (block as any).dominantColor || null,
+		secondaryColor: (block as any).secondaryColor || null,
 		mediaDetails: {
 			sizes: block.mediaDetails?.sizes ?? []
 		},

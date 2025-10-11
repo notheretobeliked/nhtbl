@@ -15,7 +15,6 @@ import { GRAPHQL_ENDPOINT } from '$env/static/private'
 export const load: PageServerLoad = async function load({ params, url }) {
   const uri = '/'
   
-  console.log('🚀 [HOME] Server load called for URI:', uri)
   
   try {
     const data = await urqlQuery(PageContent, { uri: uri })

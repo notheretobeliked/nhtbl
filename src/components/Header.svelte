@@ -3,6 +3,7 @@
   import type { MenuItem } from '$lib/types/wp-types'
   import Button from '$components/atoms/Button.svelte'
   import Breadcrumbs from '$components/Breadcrumbs.svelte'
+  import EnergyUsageWidget from '$components/EnergyUsageWidget.svelte'
   import { scale } from 'svelte/transition'
 
   interface Props {
@@ -34,7 +35,7 @@
 <svelte:window bind:scrollY />
 
 <header>
-  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-1 ml-1">
+  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 border-black border bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-1 ml-1">
     {#if !showScrolledVersion}
       <div class="initial" style="transform-origin: left center;" out:scale={{ duration: 400, start: 0.8 }} in:scale={{ duration: 400, delay: 400, start: 0.8 }}>
         <!-- Initial state - logo only -->
@@ -87,13 +88,36 @@
         </svg>
       {/if}
     </div>
+    <div class="hidden md:flex items-center gap-4">
+      
+      <ul
+        role="navigation"
+        aria-label="Main"
+        class="flex flex-row gap-6 items-center"
+      >
+        {#each menuItems as menuItem}
+          <li>
+            <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" />
+          </li>
+        {/each}
+      </ul>
+      <EnergyUsageWidget compact={true} />
+
+    </div>
+
+    <!-- Mobile Menu -->
     <ul
       role="navigation"
       aria-label="Main"
-      class="fixed w-full items-center md:static md:content-center md:flex-wrap h-screen md:h-0 md:px-4 -top-3 left-0  z-30 bg-white/95 md:bg-transparent backdrop-blur-md justify-center md:flex flex-row gap-6 md:justify-end {open
-        ? 'flex flex-col'
+      class="fixed w-full items-center md:hidden h-screen -top-3 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 {open
+        ? 'flex'
         : 'hidden'}"
     >
+      <!-- Energy Usage Widget - mobile full size -->
+      <li class="mt-20">
+        <EnergyUsageWidget compact={false} />
+      </li>
+      
       {#each menuItems as menuItem}
         <li>
           <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" onclick={() => open = false} />

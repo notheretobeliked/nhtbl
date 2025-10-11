@@ -4,7 +4,7 @@
   export let block: any
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import Button from '$components/Button.svelte'
-  import Image from '$components/Image.svelte'
+  import Image from '$components/atoms/Image.svelte'
   const colour = block.attributes.backgroundColor ?? 'transparent'
 </script>
 

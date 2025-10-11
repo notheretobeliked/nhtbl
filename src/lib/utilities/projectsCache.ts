@@ -18,24 +18,19 @@ export const getAllProjects = async (): Promise<NonNullable<ProjectsQuery['nhtbl
   
   // Check if cache is valid (not in dev and cache exists and not expired)
   if (!dev && projectsCache && (now - cacheTimestamp) < CACHE_DURATION) {
-    console.log('🎯 Using cached projects data')
     return projectsCache
   }
   
-  console.log(dev ? '🔧 Dev mode: fetching fresh projects data' : '🔄 Cache expired: fetching fresh projects data')
   
   try {
     const data = await urqlQuery(Projects)
     projectsCache = data.nhtblProjects?.nodes || []
     cacheTimestamp = now
     
-    console.log(`📦 Cached ${projectsCache.length} projects`)
     return projectsCache
   } catch (error) {
-    console.error('❌ Failed to fetch projects:', error)
     // Return cached data if available, otherwise throw
     if (projectsCache) {
-      console.log('⚠️ Using stale cache due to fetch error')
       return projectsCache
     }
     throw error
@@ -48,5 +43,4 @@ export const getAllProjects = async (): Promise<NonNullable<ProjectsQuery['nhtbl
 export const clearProjectsCache = (): void => {
   projectsCache = null
   cacheTimestamp = 0
-  console.log('🗑️ Projects cache cleared')
 }

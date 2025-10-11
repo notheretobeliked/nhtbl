@@ -29,18 +29,15 @@ export const resolvePortfolioProjects = (
           specificNodes[0]?.featuredImage
         
         if (hasFullData) {
-          console.log('📊 Using full data from specificProjects')
           resolvedProjects = specificNodes as ProjectNode[]
         } else if (allProjects?.length) {
           // Fallback to matching by slug from allProjects
-          console.log('📊 Matching specificProjects by slug against allProjects')
           resolvedProjects = specificNodes
             .map(specificProject => 
               allProjects.find(project => project.slug === specificProject.slug)
             )
             .filter((project): project is ProjectNode => project !== undefined)
         } else {
-          console.warn('⚠️ No allProjects data available for matching')
           resolvedProjects = []
         }
       }
@@ -48,7 +45,6 @@ export const resolvePortfolioProjects = (
 
     case 'all':
       if (!allProjects?.length) {
-        console.warn('⚠️ No allProjects data available for "all" mode')
         return []
       }
       resolvedProjects = [...allProjects]
@@ -56,7 +52,6 @@ export const resolvePortfolioProjects = (
 
     case 'by_service':
       if (!allProjects?.length) {
-        console.warn('⚠️ No allProjects data available for "by_service" mode')
         return []
       }
       if (config.selectedService?.nodes) {
@@ -71,7 +66,6 @@ export const resolvePortfolioProjects = (
       break
 
     default:
-      console.warn(`Unknown project source: ${config.projectSource}`)
       resolvedProjects = []
   }
 
@@ -85,7 +79,6 @@ export const resolvePortfolioProjects = (
     resolvedProjects = resolvedProjects.slice(0, config.projectsPerPage)
   }
 
-  console.log(`✅ Resolved ${resolvedProjects.length} projects for source: ${config.projectSource}`)
   return resolvedProjects
 }
 
@@ -117,7 +110,6 @@ const applySorting = (projects: ProjectNode[], sortOrder: string): ProjectNode[]
       return sorted.sort((a, b) => (b.title || '').localeCompare(a.title || ''))
 
     default:
-      console.warn(`Unknown sort order: ${sortOrder}`)
       return sorted
   }
 }

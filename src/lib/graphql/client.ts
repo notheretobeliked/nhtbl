@@ -18,9 +18,6 @@ export async function urqlQuery<T = any, V = Record<string, any>>(
     context?: Record<string, any>
   }
 ): Promise<T> {
-  console.log('🔍 URQL Query Debug:')
-  console.log('Variables:', variables)
-  console.log('Has token:', !!options?.token)
   
   // Create context with auth headers if token is provided
   const context = {
@@ -36,26 +33,17 @@ export async function urqlQuery<T = any, V = Record<string, any>>(
     }
   }
 
-  console.log('Context headers:', context.fetchOptions?.headers)
 
   const result = await client.query(query, variables || {}, { 
     ...context 
   }).toPromise()
   
-  console.log('URQL Result:', {
-    hasError: !!result.error,
-    hasData: !!result.data,
-    errorMessage: result.error?.message,
-    dataKeys: result.data ? Object.keys(result.data) : []
-  })
   
   if (result.error) {
-    console.error('GraphQL Error details:', result.error)
     throw new Error(`GraphQL Error: ${result.error.message}`)
   }
   
   if (!result.data) {
-    console.error('No data in GraphQL response')
     throw new Error('No data received from GraphQL query')
   }
   

@@ -26,16 +26,23 @@ query Projects {
       featuredImage {
         node {
           altText
+          colorPalette
+          dominantColor
+          secondaryColor
           mediaDetails {
-            sizes {
-              height
-              width
-              name
-              sourceUrl
-            }
+            ...MediaDetailsFragment
           }
         }
       }
     }
+  }
+}
+
+fragment MediaDetailsFragment on MediaDetails {
+  sizes {
+    name
+    sourceUrl
+    width
+    height
   }
 }

@@ -130,7 +130,7 @@ export interface MenuItem {
 }
 
 // Image and media types that might not be fully covered by generated types
-export type ImageSizeName = 'medium' | 'large' | 'thumbnail' | 'medium_large' | '1536x1536' | '2048x2048'
+export type ImageSizeName = 'thumbnail' | 'small' | 'medium' | 'medium_large' | 'large' | 'x_large'
 
 export type ImageSize = {
   name: ImageSizeName

@@ -26,6 +26,9 @@
   // Transform the featured image to match MediaItem interface
   const imageObject: MediaItem = {
     altText: project.featuredImage?.node?.altText ?? '',
+    colorPalette: project.featuredImage?.node?.colorPalette ?? null,
+    dominantColor: project.featuredImage?.node?.dominantColor ?? null,
+    secondaryColor: project.featuredImage?.node?.secondaryColor ?? null,
     mediaDetails: {
       sizes:
         project.featuredImage?.node?.mediaDetails?.sizes?.map(size => ({
@@ -171,7 +174,7 @@
     <a class={displayMode === 'block' ? 'contents' : 'grid grid-cols-[1fr_4fr] gap-4'} href={project.uri}>
       <!-- Image -->
       <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-full' : 'w-20 lg:w-56'}">
-        <Image {imageObject} imageSize="large" fit="cover" extraClasses="w-full" />
+        <Image {imageObject} imageSize={displayMode === 'block' ? 'large' : 'small'} fit="cover" extraClasses="w-full" />
       </div>
       <div class={displayMode === 'block' ? 'contents' : 'flex flex-col'}>
         <!-- Heading (level 3) -->

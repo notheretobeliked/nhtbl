@@ -75,7 +75,6 @@ function normalizeEditorBlock(block: ExtendedEditorBlock): ExtendedEditorBlock {
         block.attributes.style.textColor = colorValue
       }
     } catch (error) {
-      console.error('Error parsing style attribute:', error)
       block.attributes.style = null // Example error handling
     }
   }
@@ -84,7 +83,6 @@ function normalizeEditorBlock(block: ExtendedEditorBlock): ExtendedEditorBlock {
     try {
       block.attributes.layout = JSON.parse(block.attributes.layout)
     } catch (error) {
-      console.error('Error parsing layout attribute:', error)
       block.attributes.layout = null // Or handle the error as needed
     }
   }

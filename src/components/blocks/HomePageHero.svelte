@@ -6,7 +6,7 @@
   const content = block.children
   
   import BlockRenderer from '$components/BlockRenderer.svelte'
-  import Image from '$components/Image.svelte'
+  import Image from '$components/atoms/Image.svelte'
   import { draw } from 'svelte/transition'
   import { quintOut } from 'svelte/easing'
 

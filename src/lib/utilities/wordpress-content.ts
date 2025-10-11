@@ -33,7 +33,6 @@ export function normalizeEditorBlock(block: any): any {
         block.attributes.style.textColor = colorValue
       }
     } catch (error) {
-      console.error('Error parsing style attribute:', error)
       block.attributes.style = null
     }
   }
@@ -43,7 +42,6 @@ export function normalizeEditorBlock(block: any): any {
     try {
       block.attributes.layout = JSON.parse(block.attributes.layout)
     } catch (error) {
-      console.error('Error parsing layout attribute:', error)
       block.attributes.layout = null
     }
   }

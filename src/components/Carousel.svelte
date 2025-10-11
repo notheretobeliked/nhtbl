@@ -4,7 +4,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { fade } from 'svelte/transition';
   import { writable } from 'svelte/store'
-  import Image from './Image.svelte'
+  import Image from '$components/atoms/Image.svelte'
 
   export let images: ImageObject[] // Use appropriate type based on your TypeScript definitions
   export let autoplay: boolean = false
