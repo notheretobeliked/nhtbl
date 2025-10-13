@@ -4,7 +4,7 @@
   import Button from '$components/atoms/Button.svelte'
   import Breadcrumbs from '$components/Breadcrumbs.svelte'
   import EnergyUsageWidget from '$components/EnergyUsageWidget.svelte'
-  import { scale } from 'svelte/transition'
+  import { scale, slide, fly } from 'svelte/transition'
 
   interface Props {
     menuItems: MenuItem[]
@@ -35,7 +35,7 @@
 <svelte:window bind:scrollY />
 
 <header>
-  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 border-black border bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-1 ml-1">
+  <nav class="h-12 fixed inset-x-2 md:inset-x-4 top-4 border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 flex justify-between items-center px-1 ml-1">
     {#if !showScrolledVersion}
       <div class="initial" style="transform-origin: left center;" out:scale={{ duration: 400, start: 0.8 }} in:scale={{ duration: 400, delay: 400, start: 0.8 }}>
         <!-- Initial state - logo only -->
@@ -51,9 +51,9 @@
         
       </div>
     {/if}
-    <div class="block md:hidden z-50 hamburger" onclick={toggleMenu}>
+    <button type="button" class="block md:hidden z-50 hamburger bg-transparent border-none cursor-pointer p-0" onclick={toggleMenu} aria-label="Toggle menu" aria-expanded={open}>
       {#if !open}
-        <svg width="48" height="46" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="36" height="34" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M3.03 10.1801C9.68 10.3801 16.34 10.6201 22.99 10.6301C29.64 10.6401 36.29 10.4201 42.93 10.2301C44.86 10.1801 44.86 7.17006 42.93 7.23006C36.29 7.42006 29.65 7.65006 23 7.63006C16.34 7.62006 9.68999 7.38006 3.03 7.18006C1.1 7.13006 1.11 10.1301 3.03 10.1801Z"
             fill="#010101"
@@ -69,7 +69,7 @@
         </svg>
       {:else}
         <!-- Closed menu SVG -->
-        <svg width="48" height="46" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="36" height="34" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_1583_784)">
             <path
               d="M2.94999 44.6399C16.65 31.0399 29.95 17.0399 42.83 2.65995C44.11 1.22995 42 -0.900052 40.71 0.539948C27.83 14.9199 14.53 28.9199 0.829994 42.5199C-0.540006 43.8799 1.57999 45.9999 2.94999 44.6399Z"
@@ -87,7 +87,7 @@
           </defs>
         </svg>
       {/if}
-    </div>
+    </button>
     <div class="hidden md:flex items-center gap-4">
       
       <ul
@@ -106,23 +106,48 @@
     </div>
 
     <!-- Mobile Menu -->
-    <ul
-      role="navigation"
-      aria-label="Main"
-      class="fixed w-full items-center md:hidden h-screen -top-3 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 {open
-        ? 'flex'
-        : 'hidden'}"
-    >
-      <!-- Energy Usage Widget - mobile full size -->
-      <li class="mt-20">
-        <EnergyUsageWidget compact={false} />
-      </li>
-      
-      {#each menuItems as menuItem}
-        <li>
-          <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" onclick={() => open = false} />
+    {#if open}
+      <ul
+        role="navigation"
+        aria-label="Main"
+        class="fixed w-full items-center md:hidden h-screen -top-3 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 flex"
+        transition:slide={{ duration: 400, axis: 'y' }}
+      >      
+        {#each menuItems as menuItem, i}
+          <li
+            class="menu-item"
+            style="animation-delay: {100 + i * 50}ms;"
+          >
+            <Button type="nav" active={menuItem.current} label={menuItem.label} url={menuItem.uri} font="sans" onclick={() => open = false} />
+          </li>
+        {/each}
+        <!-- Energy Usage Widget - mobile full size -->
+        <li 
+          class="menu-item mt-20"
+          style="animation-delay: {200 + menuItems.length * 50}ms;"
+        >
+          <EnergyUsageWidget compact={false} />
         </li>
-      {/each}
-    </ul>
+
+      </ul>
+    {/if}
   </nav>
 </header>
+
+<style>
+  @keyframes menuItemFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .menu-item {
+    opacity: 0;
+    animation: menuItemFadeIn 300ms ease-out forwards;
+  }
+</style>
