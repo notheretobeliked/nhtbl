@@ -5,11 +5,15 @@
 
   import { parseContent } from '$lib/utilities/utilities' // Adjust the path as necessary
   import type { ContentSegment } from '$lib/utilities/utilities' // Adjust the path as necessary
-  export let block: ExtendedEditorBlock
+  interface Props {
+    block: ExtendedEditorBlock
+  }
+
+  let { block }: Props = $props()
   const { content, fontSize, textColor, textAlign, level } = block.attributes || {}
 
-  let segments: ContentSegment[] = []
-  let hasSvg: boolean = false // Variable to track presence of 'svg' type segments
+  let segments = $state<ContentSegment[]>([])
+  let hasSvg = $state(false) // Variable to track presence of 'svg' type segments
 
   onMount(() => {
     segments = parseContent(content!)

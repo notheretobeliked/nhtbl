@@ -1,7 +1,11 @@
 <script lang="ts">
-	export let isPreview: boolean = false
-	export let lastModified: string | null = null
-	export let canEdit: boolean = false
+	interface Props {
+		isPreview?: boolean
+		lastModified?: string | null
+		canEdit?: boolean
+	}
+
+	let { isPreview = false, lastModified = null, canEdit = false }: Props = $props()
 
 	// Format the timestamp nicely
 	function formatTimestamp(timestamp: string | null): string {

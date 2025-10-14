@@ -3,11 +3,15 @@
   import { onMount } from 'svelte';
   import type { PortfolioItemNode, ImageSize } from '$lib/types/wp-types.ts';
 
-  export let block: PortfolioItemNode;
+  interface Props {
+    block: PortfolioItemNode
+  }
+
+  let { block }: Props = $props()
   let videos: HTMLVideoElement[] = [];
   let scrollContainer: HTMLDivElement;
-  let showLeftArrow = false;
-  let showRightArrow = false;
+  let showLeftArrow = $state(false);
+  let showRightArrow = $state(false);
 
   const openSlideshow = (event): void => {
     event.preventDefault();

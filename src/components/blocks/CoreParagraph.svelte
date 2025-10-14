@@ -4,16 +4,16 @@
   import { parseContent } from '$lib/utilities/utilities' // Adjust the path as necessary
   import type { ContentSegment } from '$lib/utilities/utilities' // Adjust the path as necessary
 
-  export let block: ExtendedEditorBlock
+  interface Props {
+    block: ExtendedEditorBlock
+  }
 
+  let { block }: Props = $props()
   
-
   import Emphas from '$components/Emphas.svelte'
   const { content, fontSize, textColor, align, fontFamily } = block.attributes || {}
 
-
-
-  let segments: ContentSegment[] = [] // Initialize segments as empty
+  let segments = $state<ContentSegment[]>([]) // Initialize segments as empty
 
   // Moved parseContent inside onMount to ensure it's run client-side
   onMount(() => {

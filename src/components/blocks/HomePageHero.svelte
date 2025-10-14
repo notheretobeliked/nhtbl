@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   // TODO: Migrate to generated AcfHomePageHero type when image types are aligned
-  export let block: any
+  interface Props {
+    block: any
+  }
+
+  let { block }: Props = $props()
   const images = block.homePageHero.images.nodes
   const content = block.children
   
@@ -10,18 +14,18 @@
   import { draw } from 'svelte/transition'
   import { quintOut } from 'svelte/easing'
 
-  let y: number
-  let percentage: number = 100
-  let stopAnimationPoint: number
-  let pageHeight: number = 3000
-  let stopHeight: number = 3000
-  let stopped: boolean = false
-  let topStart: number = 0
+  let y = $state<number>(0)
+  let percentage = $state(100)
+  let stopAnimationPoint = $state<number>(0)
+  let pageHeight = $state(3000)
+  let stopHeight = $state(3000)
+  let stopped = $state(false)
+  let topStart = $state(0)
 
-  let transformString: string
+  let transformString = $state<string>('')
 
   let bgdiv: HTMLDivElement
-  let isMounted: boolean = false
+  let isMounted = $state(false)
 
   onMount(() => {
     pageHeight = 3000 + window.innerHeight
@@ -31,7 +35,7 @@
     isMounted = true
   })
 
-  $: {
+  $effect(() => {
     percentage = 100 - (y / pageHeight) * 100
     if (y > stopHeight) {
       stopped = true
@@ -48,7 +52,7 @@
     if (!stopped) {
       transformString = `transform: scale(${percentage}%)`
     } else transformString = `transform: scale(35%); position:absolute; top:${topStart}px`
-  }
+  })
 </script>
 
 <svelte:window bind:scrollY={y} />

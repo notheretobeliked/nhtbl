@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { ServiceNode } from '$lib/types/wp-types'
   // TODO: Migrate to generated AcfServicePush type when ServiceNode type is aligned
-  export let block: any
+  interface Props {
+    block: any
+  }
+
+  let { block }: Props = $props()
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import Button from '$components/Button.svelte'
   import Image from '$components/atoms/Image.svelte'

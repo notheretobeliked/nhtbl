@@ -1,7 +1,12 @@
 <script lang="ts">
   import BlockRenderer from '$components/BlockRenderer.svelte'
   import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-  export let block: ExtendedEditorBlock
+  
+  interface Props {
+    block: ExtendedEditorBlock
+  }
+
+  let { block }: Props = $props()
   const children = block.children || []
   const bgColor = block.attributes?.backgroundColor ?? 'white'
 </script>

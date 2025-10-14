@@ -3,7 +3,11 @@
   import Button from '$components/Button.svelte'
 
   // Expect a core/button block
-  export let block: ExtendedEditorBlock
+  interface Props {
+    block: ExtendedEditorBlock
+  }
+
+  let { block }: Props = $props()
   const getTextClass = (fontSize: string | null) => {
     switch (fontSize) {
       case 'sm':

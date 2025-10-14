@@ -2,12 +2,16 @@
   import type { ImageObject } from '$lib/types/wp-types'
 
   // Mark image and squareImage as optional using ? after the type
-  export let image: ImageObject | undefined | null
-  export let metadescription: string
-  export let ogLanguage: string = 'en_UK'
-  export let pageTitle: string
-  export let siteTitle: string = 'Not here to be liked'
-  export let siteUrl: string
+  interface Props {
+    image?: ImageObject | undefined | null
+    metadescription: string
+    ogLanguage?: string
+    pageTitle: string
+    siteTitle?: string
+    siteUrl: string
+  }
+
+  let { image, metadescription, ogLanguage = 'en_UK', pageTitle, siteTitle = 'Not here to be liked', siteUrl }: Props = $props()
 
   // Helper function to select an image size, defaults to 'large' or the first available size
   function selectImageSize(sizes, preferredSize = 'large') {
@@ -15,7 +19,7 @@
   }
 
   // Use optional chaining (?) and nullish coalescing (??) operators to safely access properties
-  $: imageUrl = image ? selectImageSize(image.mediaDetails.sizes ?? []).sourceUrl ?? undefined : undefined
+  const imageUrl = $derived(image ? selectImageSize(image.mediaDetails.sizes ?? []).sourceUrl ?? undefined : undefined)
 </script>
 
 <svelte:head>

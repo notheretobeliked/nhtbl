@@ -5,13 +5,17 @@
   import { draw } from 'svelte/transition'
   import { quintOut } from 'svelte/easing'
 
-  export let version: 'line' | 'bubble' = 'bubble'
-  export let content: string = ''
-  export let stroke: string = 'black'
+  interface Props {
+    version?: 'line' | 'bubble'
+    content?: string
+    stroke?: string
+  }
+
+  let { version = 'bubble', content = '', stroke = 'black' }: Props = $props()
 
   if (stroke === null) stroke = 'black'
 
-  let isInView: boolean = false
+  let isInView = $state(false)
   const options = {
     rootMargin: '40px',
     unobserveOnEnter: true,
