@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: ['./src/**/*.{html,js,svelte,ts}', './.storybook/**/*.{js,ts,svelte}'],
   safelist: [
     'bg-black',
     'bg-nhtbl-purple-light',
