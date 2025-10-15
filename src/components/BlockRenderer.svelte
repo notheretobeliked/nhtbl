@@ -18,6 +18,7 @@
   import AcfLinkBlock from './blocks/AcfLinkBlock.svelte'
   import CoreImage from './blocks/CoreImage.svelte'
   import CoreVideo from './blocks/CoreVideo.svelte'
+  import AcfSurveyBlock from './blocks/AcfSurveyBlock.svelte'
 
   interface Props {
     forceFull?: boolean
@@ -157,6 +158,10 @@
 
     {#if blockName === 'acf/link-block'}
       <AcfLinkBlock {block} />
+    {/if}
+
+    {#if blockName === 'acf/survey-block'}
+      <AcfSurveyBlock {block} />
     {/if}
   </div>
 </div>

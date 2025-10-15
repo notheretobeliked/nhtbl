@@ -2,6 +2,7 @@ query PageContent($uri: String!) {
   nodeByUri(uri: $uri) {
     ... on Page {
       id
+      databaseId
       backgroundColour {
         backgroundColour
       }
@@ -33,6 +34,7 @@ query PageContent($uri: String!) {
     }
     ... on Nhtbl_project {
       id
+      databaseId
       excerpt
       title
       nhtblClients {

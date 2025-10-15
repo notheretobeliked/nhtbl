@@ -15,12 +15,15 @@ import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 export const load: PageServerLoad = async function load({ params, url }) {
   const uri = `/${params.all || ''}`
+  console.log('🔍 Loading page:', uri)
   	// Handle authentication for previews
 	let authResult: { authenticated: boolean; token?: string } = { authenticated: false }
 
   
   try {
+    console.log('📡 Querying GraphQL for:', uri)
     const data = await urqlQuery(PageContent, { uri: uri })
+    console.log('✅ GraphQL response received, nodeByUri exists:', !!data.nodeByUri)
 
     if (data.nodeByUri === null) {
       error(404, {
@@ -53,6 +56,26 @@ export const load: PageServerLoad = async function load({ params, url }) {
     }
 
     const allPortfolioBlocks = findPortfolioBlocks(editorBlocks)
+    
+    // Check if page contains any survey blocks
+    const hasSurvey = ((blocks: any[]): boolean => {
+      const searchForSurveys = (blockList: any[]): boolean => {
+        for (const block of blockList) {
+          if (block.name === 'acf/survey-block') {
+            return true
+          }
+          if (block.children && Array.isArray(block.children)) {
+            if (searchForSurveys(block.children)) return true
+          }
+          if (block.innerBlocks && Array.isArray(block.innerBlocks)) {
+            if (searchForSurveys(block.innerBlocks)) return true
+          }
+        }
+        return false
+      }
+      return searchForSurveys(blocks)
+    })(editorBlocks)
+    
 
     // Check if any blocks need external project data (not specific projects with full data)
     const needsAllProjects = allPortfolioBlocks.some(block => {
@@ -109,8 +132,10 @@ export const load: PageServerLoad = async function load({ params, url }) {
 
     const returnData = {
       uri: uri,
+      id: data.nodeByUri.databaseId,
       backgroundColour: backgroundColour,
       editorBlocks: editorBlocks,
+      hasSurvey: hasSurvey,
       breadcrumbs: processBreadcrumbs(data.nodeByUri?.seo?.breadcrumbs, new URL(GRAPHQL_ENDPOINT).origin),
     }
     
