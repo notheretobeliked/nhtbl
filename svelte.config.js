@@ -12,6 +12,9 @@ const config = {
 			$components: "src/components",
 			$types: "src/types",
 		  },
+		prerender: {
+			entries: ['/octopus']
+		}
 	},
 	preprocess: vitePreprocess()
 };
