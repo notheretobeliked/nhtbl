@@ -160,7 +160,7 @@
     const defaultLikertLabels: Record<string, string> = {
       'strongly-disagree': 'Strongly Disagree',
       'disagree': 'Disagree',
-      'neutral': 'Neutral',
+      'neither-agree-nor-disagree': 'Neither Agree nor Disagree',
       'agree': 'Agree',
       'strongly-agree': 'Strongly Agree'
     }
@@ -179,7 +179,7 @@
           response.answerKey = userAnswer
           
           // Check if this is a Likert scale with default options
-          if (question.questionType[0] === 'likert_scale' && question.UseDefaultLikertOptions === 1) {
+          if (question.questionType[0] === 'likert_scale' && (question.useDefaultLikertOptions === true || question.useDefaultLikertOptions === 1)) {
             response.answerText = defaultLikertLabels[userAnswer] || userAnswer
           } else {
             // Find the option label for answerText

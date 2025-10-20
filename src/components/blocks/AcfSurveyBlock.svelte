@@ -12,15 +12,15 @@
   const defaultLikertOptions = [
     { optionValue: 'strongly-disagree', optionLabel: 'Strongly Disagree' },
     { optionValue: 'disagree', optionLabel: 'Disagree' },
-    { optionValue: 'neutral', optionLabel: 'Neutral' },
+    { optionValue: 'neither-agree-nor-disagree', optionLabel: 'Neither Agree nor Disagree' },
     { optionValue: 'agree', optionLabel: 'Agree' },
     { optionValue: 'strongly-agree', optionLabel: 'Strongly Agree' }
   ]
 
   // Extract questions from the survey block and populate default Likert options if needed
-  const questions = (block.surveyBlock?.questions || []).map(question => {
-    // If this is a Likert scale with UseDefaultLikertOptions, ensure options are populated
-    if (question.questionType[0] === 'likert_scale' && question.UseDefaultLikertOptions === 1) {
+  const questions = (block.surveyBlock?.questions || []).map((question: any) => {
+    // If this is a Likert scale with useDefaultLikertOptions, ensure options are populated
+    if (question.questionType[0] === 'likert_scale' && (question.useDefaultLikertOptions === true || question.useDefaultLikertOptions === 1)) {
       return {
         ...question,
         options: defaultLikertOptions
@@ -33,7 +33,7 @@
   let formData = $state<Record<string, any>>({})
 
   // Initialize form data for all questions
-  questions.forEach(question => {
+  questions.forEach((question: any) => {
     if (question.questionType[0] === 'checkbox') {
       formData[question.questionKey] = []
     } else {
@@ -86,7 +86,7 @@
   // Get validation status for all questions
   const validationStatus = $derived(() => {
     const status: Record<string, boolean> = {}
-    questions.forEach(question => {
+    questions.forEach((question: any) => {
       status[question.questionKey] = isQuestionValid(question)
     })
     return status
@@ -94,7 +94,7 @@
 
   // Check if all required questions are answered
   const isAllValid = $derived(() => {
-    return questions.every(question => isQuestionValid(question))
+    return questions.every((question: any) => isQuestionValid(question))
   })
 
   // Get survey container registration function from context
