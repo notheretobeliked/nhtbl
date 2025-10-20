@@ -13,7 +13,7 @@ const config = {
 			$types: "src/types",
 		  },
 		prerender: {
-			entries: ['/octopus']
+			entries: ['/', '/octopus']
 		}
 	},
 	preprocess: vitePreprocess()
