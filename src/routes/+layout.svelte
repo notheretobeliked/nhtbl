@@ -6,7 +6,7 @@
   import OpenGraph from '$components/SEO/OpenGraph.svelte'
   import Header from '$components/Header.svelte'
   export let data: PageData
-  let { seo, menu, uri } = data
+  let { seo, menu, uri, hideNavigation } = data
 
   const menuItems = menu.menuItems.nodes
   const image = seo.opengraphImage
@@ -19,7 +19,9 @@
   menuItems
   uri
   seo
+  hideNavigation
 }
+
 </script>
 
 {#key $page.url.pathname}
@@ -35,7 +37,7 @@
 
 
 {#key $page.url.pathname}
-{#if !$page.url.pathname.startsWith('/preview')}
+{#if !$page.url.pathname.startsWith('/preview') && !hideNavigation}
 <Header {menuItems} />
 {/if}
 {/key}

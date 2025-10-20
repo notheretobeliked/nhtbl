@@ -9,10 +9,12 @@
   let { block }: Props = $props()
   const children = block.children || []
   const bgColor = block.attributes?.backgroundColor ?? 'white'
+
+  $inspect(block)
 </script>
 
 <div class="px-2 md:px-0">
-  <div class="m-auto {bgColor === 'black' && '!text-white'}">
+  <div class="core-group m-auto {bgColor === 'black' && '!text-white'}">
     {#each children as block, index}
       <BlockRenderer {block}  />
     {/each}

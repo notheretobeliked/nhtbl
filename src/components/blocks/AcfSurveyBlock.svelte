@@ -8,8 +8,26 @@
 
   let { block }: Props = $props()
 
-  // Extract questions from the survey block
-  const questions = block.surveyBlock?.questions || []
+  // Default Likert scale options
+  const defaultLikertOptions = [
+    { optionValue: 'strongly-disagree', optionLabel: 'Strongly Disagree' },
+    { optionValue: 'disagree', optionLabel: 'Disagree' },
+    { optionValue: 'neutral', optionLabel: 'Neutral' },
+    { optionValue: 'agree', optionLabel: 'Agree' },
+    { optionValue: 'strongly-agree', optionLabel: 'Strongly Agree' }
+  ]
+
+  // Extract questions from the survey block and populate default Likert options if needed
+  const questions = (block.surveyBlock?.questions || []).map(question => {
+    // If this is a Likert scale with UseDefaultLikertOptions, ensure options are populated
+    if (question.questionType[0] === 'likert_scale' && question.UseDefaultLikertOptions === 1) {
+      return {
+        ...question,
+        options: defaultLikertOptions
+      }
+    }
+    return question
+  })
 
   // Initialize form data with reactive state
   let formData = $state<Record<string, any>>({})
@@ -82,26 +100,41 @@
   // Get survey container registration function from context
   const registerSurveyBlock = getContext<((blockId: string, formData: Record<string, any>, validationStatus: Record<string, boolean>, isAllValid: boolean) => void) | null>('registerSurveyBlock')
   
+  // Get question numbers getter from context
+  const getQuestionNumbers = getContext<(() => Record<string, number>) | null>('getQuestionNumbers')
+  
   // Register this block with the container and update when data changes
   $effect(() => {
     if (registerSurveyBlock && block.clientId) {
-      registerSurveyBlock(block.clientId, formData, validationStatus, isAllValid)
+      registerSurveyBlock(block.clientId, formData, validationStatus(), isAllValid())
     }
   })
+
+  // Get question number for a specific question key
+  function getQuestionNumber(questionKey: string): number | null {
+    if (getQuestionNumbers) {
+      const numbers = getQuestionNumbers()
+      return numbers[questionKey] || null
+    }
+    return null
+  }
 
   // Expose validation status to parent (for backwards compatibility)
   export { validationStatus, isAllValid }
 </script>
 
-<div class="survey-block space-y-6 p-6 bg-white rounded-lg border border-black/10">
+<div class="survey-block">
   {#each questions as question}
-    <div class="question-container space-y-3">
+    <div class="question-container mb-8">
       <!-- Question Text -->
       <div class="question-header">
-        <label for={question.questionKey} class="block text-lg font-medium text-black">
+        <label for={question.questionKey} class="block text-lg font-sans text-black mb-3">
+          {#if getQuestionNumber(question.questionKey)}
+            <span class="font-medium text-black mr-2">{getQuestionNumber(question.questionKey)}.</span>
+          {/if}
           {question.questionText}
           {#if question.required}
-            <span class="text-red-500 ml-1">*</span>
+            <span class="text-nhtbl-base ml-1">*</span>
           {/if}
         </label>
       </div>
@@ -114,7 +147,7 @@
             id={question.questionKey}
             bind:value={formData[question.questionKey]}
             class="w-full px-3 py-2 border border-black/20 rounded-md focus:outline-none focus:ring-2 focus:ring-nhtbl-green-base focus:border-transparent"
-            class:border-nhtbl-purple-base={question.required && !validationStatus[question.questionKey]}
+            class:border-nhtbl-purple-base={question.required && !validationStatus()[question.questionKey]}
             placeholder="Enter your answer..."
           />
 
@@ -124,7 +157,7 @@
             bind:value={formData[question.questionKey]}
             rows="4"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhtbl-green-base focus:border-transparent resize-vertical"
-            class:border-red-500={question.required && !validationStatus[question.questionKey]}
+            class:border-red-500={question.required && !validationStatus()[question.questionKey]}
             placeholder="Enter your detailed answer..."
           ></textarea>
 
@@ -134,14 +167,14 @@
             id={question.questionKey}
             bind:value={formData[question.questionKey]}
             class="w-full px-3 py-2 border border-black/20 rounded-md focus:outline-none focus:ring-2 focus:ring-nhtbl-green-base focus:border-transparent"
-            class:border-nhtbl-purple-base={question.required && !validationStatus[question.questionKey]}
+            class:border-nhtbl-purple-base={question.required && !validationStatus()[question.questionKey]}
             placeholder="Enter a number..."
           />
 
         {:else if question.questionType[0] === 'multiple_choice'}
           <div class="space-y-2">
             {#each question.options as option}
-              <label class="flex items-center space-x-2 cursor-pointer">
+              <label class="font-sans flex items-center space-x-2 cursor-pointer">
                 <input
                   type="radio"
                   name={question.questionKey}
@@ -155,7 +188,7 @@
 
             {#if question.allowOther}
               <div class="space-y-2">
-                <label class="flex items-center space-x-2 cursor-pointer">
+                <label class="font-sans flex items-center space-x-2 cursor-pointer">
                   <input
                     type="radio"
                     name={question.questionKey}
@@ -181,7 +214,7 @@
         {:else if question.questionType[0] === 'checkbox'}
           <div class="space-y-2">
             {#each question.options as option}
-              <label class="flex items-center space-x-2 cursor-pointer">
+              <label class="font-sans flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
                   value={option.optionValue}
@@ -195,7 +228,7 @@
 
             {#if question.allowOther}
               <div class="space-y-2">
-                <label class="flex items-center space-x-2 cursor-pointer">
+                <label class="font-sans flex items-center space-x-2 cursor-pointer">
                   <input
                     type="checkbox"
                     value="other"
@@ -226,7 +259,7 @@
           <div class="space-y-3">
             <div class="grid grid-cols-5 gap-2 text-center">
               {#each question.options as option, index}
-                <label class="flex flex-col items-center space-y-1 cursor-pointer">
+                <label class="font-sans flex flex-col items-center space-y-1 cursor-pointer">
                   <input
                     type="radio"
                     name={question.questionKey}
@@ -244,22 +277,13 @@
         {/if}
 
         <!-- Validation Error Message -->
-        {#if question.required && !validationStatus[question.questionKey]}
-          <p class="text-sm text-nhtbl-purple-base mt-1">This field is required.</p>
+        {#if question.required && !validationStatus()[question.questionKey]}
+          <p class="text-sm text-nhtbl-purple-base mt-1">* This question requires an answer</p>
         {/if}
       </div>
     </div>
   {/each}
 
-  <!-- Debug info (remove in production) -->
-  {#if import.meta.env.DEV}
-    <details class="mt-6 p-4 bg-black/5 rounded border border-black/10">
-      <summary class="cursor-pointer text-sm font-medium">Debug: Form Data</summary>
-      <pre class="mt-2 text-xs overflow-auto">{JSON.stringify(formData, null, 2)}</pre>
-      <pre class="mt-2 text-xs overflow-auto">Valid: {JSON.stringify(validationStatus, null, 2)}</pre>
-      <pre class="mt-2 text-xs overflow-auto">All Valid: {isAllValid}</pre>
-    </details>
-  {/if}
 </div>
 
 <style>

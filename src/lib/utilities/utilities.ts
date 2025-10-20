@@ -43,10 +43,8 @@ export const parseContent = (htmlContent: string): ContentSegment[] => {
 
   doc.body.childNodes.forEach(node => {
     let type: 'text' | 'svg' = 'text'
-    let content = node.textContent || ''
+    let content = ''
     let version: 'line' | 'bubble' = 'bubble'
-    // Increment index for each segment to ensure uniqueness
-    const key = `${type}-${content.substring(0, 10)}-${index++}`
 
     if (node.nodeName === 'SPAN' && node.nodeType === Node.ELEMENT_NODE) {
       const element = node as HTMLElement
@@ -60,8 +58,17 @@ export const parseContent = (htmlContent: string): ContentSegment[] => {
     } else if (node.nodeName === 'STRONG') {
       type = 'svg'
       version = 'bubble'
-    } // Add more conditions as needed
-
+      content = (node as HTMLElement).innerHTML // Preserve content inside strong tags
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      // For other element nodes (including <a>, <em>, etc.), preserve the HTML
+      content = (node as HTMLElement).outerHTML
+    } else {
+      // For text nodes, use textContent
+      content = node.textContent || ''
+    }
+    
+    // Increment index for each segment to ensure uniqueness
+    const key = `${type}-${content.substring(0, 10)}-${index++}`
     segments.push({ type, content, version, key })
   })
 

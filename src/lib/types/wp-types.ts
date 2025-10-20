@@ -85,6 +85,9 @@ export interface LayoutAPIResponse {
   menu: Menu
   nodeByUri: {
     seo: SEO
+    backgroundColour?: {
+      hideNavigation?: boolean
+    }
   }
   uri: string
 }

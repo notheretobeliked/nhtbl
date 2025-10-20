@@ -10,6 +10,9 @@ query PageMeta($uri: String!) {
   }
   nodeByUri(uri: $uri) {
     ... on Page {
+      backgroundColour {
+        hideNavigation
+      }
       seo {
         ...SEOFragment
       }

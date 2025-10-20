@@ -14,6 +14,8 @@ export default {
     'stroke-black',
     ...Array.from({ length: 8 }, (_, i) => `pt-${i + 1}`),
     ...Array.from({ length: 8 }, (_, i) => `pb-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `pl-${i + 1}`),
+    ...Array.from({ length: 8 }, (_, i) => `pr-${i + 1}`),
     // Grid columns for all breakpoints
     ...Array.from({ length: 8 }, (_, i) => `grid-cols-${i + 1}`),
     ...Array.from({ length: 8 }, (_, i) => `sm:grid-cols-${i + 1}`),

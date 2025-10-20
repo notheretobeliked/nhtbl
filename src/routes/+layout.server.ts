@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types'
 import { error } from '@sveltejs/kit'
 import { PUBLIC_SITE_URL } from '$env/static/public'
 
-export const load: PageServerLoad = async function load({ url }) {
+export const load: PageServerLoad = async ({ url }) => {
   const uri = url.pathname
 
   try {
@@ -40,6 +40,7 @@ export const load: PageServerLoad = async function load({ url }) {
           breadcrumbs: []
         },
         uri: uri,
+        hideNavigation: false,
       }
       
       return JSON.parse(JSON.stringify(fallbackData))
@@ -51,6 +52,7 @@ export const load: PageServerLoad = async function load({ url }) {
       menu: data.menu,
       seo: { ...data.nodeByUri.seo, opengraphUrl: siteUrl },
       uri: uri,
+      hideNavigation: data.nodeByUri.backgroundColour?.hideNavigation ?? false,
     }
     
     return JSON.parse(JSON.stringify(returnData))

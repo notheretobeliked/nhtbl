@@ -44,17 +44,57 @@
   // Adjusted function to work directly with the style object
   function mapSpacingToTailwind(styleObj: any): string {
     let classes = ''
+    
+    // Handle padding
     const topPadding = styleObj?.spacing?.padding?.top?.replace('spacing|', '')
     const bottomPadding = styleObj?.spacing?.padding?.bottom?.replace('spacing|', '')
+    const leftPadding = styleObj?.spacing?.padding?.left?.replace('spacing|', '')
+    const rightPadding = styleObj?.spacing?.padding?.right?.replace('spacing|', '')
 
     if (topPadding) {
-      const topValue = parseInt(topPadding, 10) / 10 // Convert "20" to 2, "30" to 3, etc.
-      classes += ` pt-${topValue}` // Append the Tailwind class for top padding
+      const topValue = parseInt(topPadding, 10) / 10
+      classes += ` pt-${topValue}`
     }
 
     if (bottomPadding) {
-      const bottomValue = parseInt(bottomPadding, 10) / 10 // Similar conversion for bottom
-      classes += ` pb-${bottomValue}` // Append the Tailwind class for bottom padding
+      const bottomValue = parseInt(bottomPadding, 10) / 10
+      classes += ` pb-${bottomValue}`
+    }
+
+    if (leftPadding) {
+      const leftValue = parseInt(leftPadding, 10) / 10
+      classes += ` pl-${leftValue}`
+    }
+
+    if (rightPadding) {
+      const rightValue = parseInt(rightPadding, 10) / 10
+      classes += ` pr-${rightValue}`
+    }
+
+    // Handle margin
+    const topMargin = styleObj?.spacing?.margin?.top?.replace('spacing|', '')
+    const bottomMargin = styleObj?.spacing?.margin?.bottom?.replace('spacing|', '')
+    const leftMargin = styleObj?.spacing?.margin?.left?.replace('spacing|', '')
+    const rightMargin = styleObj?.spacing?.margin?.right?.replace('spacing|', '')
+
+    if (topMargin) {
+      const topValue = parseInt(topMargin, 10) / 10
+      classes += ` mt-${topValue}`
+    }
+
+    if (bottomMargin) {
+      const bottomValue = parseInt(bottomMargin, 10) / 10
+      classes += ` mb-${bottomValue}`
+    }
+
+    if (leftMargin) {
+      const leftValue = parseInt(leftMargin, 10) / 10
+      classes += ` ml-${leftValue}`
+    }
+
+    if (rightMargin) {
+      const rightValue = parseInt(rightMargin, 10) / 10
+      classes += ` mr-${rightValue}`
     }
 
     return classes.trim()
@@ -62,6 +102,12 @@
 
   // Use the style object directly if it exists
   const spacingClasses = block.attributes?.style ? mapSpacingToTailwind(block.attributes.style) : ''
+
+  // Check if there's horizontal padding defined in style
+  const hasHorizontalPadding = $derived(() => {
+    const style = block.attributes?.style
+    return !!(style?.spacing?.padding?.left || style?.spacing?.padding?.right)
+  })
 
   const classNames = (align: string | null | undefined): string => {
     let baseClasses = ''
@@ -98,7 +144,7 @@
   }
 </script>
 
-<div class="{classNames(align)} bg-{bgColor} !px-0" use:inview={options} on:inview_change={handleChange}>
+<div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} on:inview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius}>
   <div class="transition-all duration-[800ms] ease-in-out h-full {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
     {#if hasHomePageHero(block)}
       <HomePageHero {block} />

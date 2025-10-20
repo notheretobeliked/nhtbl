@@ -5,6 +5,7 @@ query PageContent($uri: String!) {
       databaseId
       backgroundColour {
         backgroundColour
+        hideNavigation
       }
       editorBlocks {
         name
@@ -110,6 +111,7 @@ fragment AcfSurveyBlockFragment on AcfSurveyBlock {
     questions {
       required
       allowOther
+      useDefaultLikertOptions
       options {
         optionLabel
         optionValue
