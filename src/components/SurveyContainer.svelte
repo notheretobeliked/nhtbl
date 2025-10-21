@@ -6,9 +6,10 @@
   interface Props {
     blocks: ExtendedEditorBlock[]
     pageId: string | number
+    children?: import('svelte').Snippet
   }
 
-  let { blocks, pageId }: Props = $props()
+  let { blocks, pageId, children }: Props = $props()
 
 
   // Find all survey blocks in the provided blocks
@@ -274,7 +275,7 @@
 
 
 {#if surveyBlocks().length > 0}
-  <div class="survey-container {submissionStatus !== 'success' ? 'pb-32' : ''}">
+  <div class="survey-container {submissionStatus !== 'success' ? 'pb-32' : ''} px-4 md:mx-0">
     {#if submissionStatus === 'success'}
       <!-- Success message - hide questions -->
       <div class="max-w-2xl mx-auto mt-16 text-center">
@@ -291,7 +292,7 @@
       </div>
     {:else}
       <!-- Page content (including survey blocks) will be rendered here -->
-      <slot />
+      {@render children?.()}
       
       <!-- Error message section -->
       {#if submissionStatus === 'error'}
@@ -316,7 +317,7 @@
     {#if submissionStatus !== 'success'}
       <div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black/10 shadow-lg z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div class="flex items-center justify-between gap-4 mb-3">
+          <div class="flex flex-col items-center justify-between gap-4 mb-3">
             <!-- Progress info -->
             <div class="flex-1">
               <div class="flex items-center justify-between mb-2">
@@ -338,7 +339,7 @@
               
               <!-- Validation info -->
               {#if !canSubmit()}
-                <p class="text-xs text-black/50 mt-1">
+                <p class="text-xs text-black/50 mt-1 hidden md:flex">
                   Please complete all required fields before submitting.
                 </p>
               {/if}
@@ -375,6 +376,6 @@
 {:else}
   <!-- No survey blocks found, render content normally -->
   <div class="no-survey-content">
-    <slot />
+    {@render children?.()}
   </div>
 {/if}

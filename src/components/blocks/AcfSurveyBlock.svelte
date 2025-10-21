@@ -125,7 +125,7 @@
 
 <div class="survey-block">
   {#each questions as question}
-    <div class="question-container mb-8">
+    <div class="question-container mb-4 border-b border-b-black/50 pb-4">
       <!-- Question Text -->
       <div class="question-header">
         <label for={question.questionKey} class="block text-lg font-sans text-black mb-3">
