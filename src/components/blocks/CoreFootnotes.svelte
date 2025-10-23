@@ -17,7 +17,7 @@
 	}
 
 	.footnotes :global(li) {
-=		padding-left: -1rem;
+		padding-left: -1rem;
 		text-indent: 1rem;
 		overflow-wrap: break-word;
 		word-wrap: break-word;
