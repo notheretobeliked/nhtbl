@@ -9,10 +9,6 @@
   }
 
   let { image, isOpen, onclose }: Props = $props()
-  
-  $effect(() => {
-    console.log('Modal props changed:', { isOpen, hasImage: !!image })
-  })
 
   const handleBackdropClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {

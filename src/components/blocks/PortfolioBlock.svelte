@@ -27,6 +27,8 @@
  
   // Search functionality (only if enabled)
   let searchTerm = $state('')
+  let debouncedSearchTerm = $state('')
+  let searchTimeout: NodeJS.Timeout | null = null
   let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list' | 'images'>(displayMode)
   
   // Image gallery functionality
@@ -44,6 +46,23 @@
       searchTerm = serviceName
     }
   }
+
+  // Debounce search term updates  
+  $effect(() => {
+    if (searchTimeout) {
+      clearTimeout(searchTimeout)
+    }
+    
+    // If search term is empty, update debounced term immediately
+    if (!searchTerm.trim()) {
+      debouncedSearchTerm = ''
+      return
+    }
+    
+    searchTimeout = setTimeout(() => {
+      debouncedSearchTerm = searchTerm
+    }, 300) // 300ms debounce
+  })
 
   // Load images when switching to gallery view
   const loadProjectImages = async () => {
@@ -71,10 +90,8 @@
 
   // Handle image click
   const handleImageClick = (image: ProcessedImage) => {
-    console.log('Image clicked:', image.projectTitle)
     selectedImage = image
     isModalOpen = true
-    console.log('Modal state:', { isModalOpen, selectedImage: !!selectedImage })
   }
 
   // Handle modal close
@@ -83,18 +100,27 @@
     selectedImage = null
   }
 
+  // Store the initial randomized order
+  let randomizedImages = $state<ProcessedImage[]>([])
+  
+  // Update randomized images when allImages changes (only on initial load)
+  $effect(() => {
+    if (allImages.length > 0 && randomizedImages.length === 0) {
+      randomizedImages = randomizeImages(allImages)
+    }
+  })
+
   // Reactive state for displayed images based on search and filters
   const displayedImages = $derived.by(() => {
     if (!projectImagesData || viewMode !== 'images') return []
     
-    // Filter images first if search is active
-    let filtered = allImages
-    if (enableSearch && searchTerm.trim()) {
-      filtered = filterImagesByProject(allImages, searchTerm, projectImagesData)
+    // If search is active, filter from all images (no randomization to avoid sluggishness)
+    if (enableSearch && debouncedSearchTerm.trim()) {
+      return filterImagesByProject(allImages, debouncedSearchTerm, projectImagesData)
     }
     
-    // Always randomize the images to ensure no consecutive images from same project
-    return randomizeImages(filtered)
+    // If no search, use the pre-randomized images
+    return randomizedImages
   })
 
   // Load images when switching to gallery view
@@ -169,13 +195,13 @@
         {#if searchTerm}
           <div class="absolute inset-y-0 right-0 flex flex-row items-center">
             <p class="text-black/30 pr-3 text-sm">
-              {#if viewMode === 'images'}
+              {#if viewMode === 'images' && debouncedSearchTerm}
                 {displayedImages.length} image{displayedImages.length !== 1 ? 's' : ''} found
-              {:else}
+              {:else if viewMode !== 'images'}
                 {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''} found
               {/if}
             </p>
-            <button onclick={() => (searchTerm = '')} class="pr-3 flex items-center text-gray-400 hover:text-white transition-colors" aria-label="Clear search">
+            <button onclick={() => { searchTerm = ''; debouncedSearchTerm = '' }} class="pr-3 flex items-center text-gray-400 hover:text-white transition-colors" aria-label="Clear search">
               <!-- X Icon SVG -->
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="black">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
