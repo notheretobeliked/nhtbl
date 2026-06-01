@@ -137,6 +137,14 @@
 	@apply max-w-[1320px] mx-auto;
 }
 
+/* Bare prose elements (paragraphs, headings, lists, quotes) render without a
+   wrapper, so as flex children the rule above's mx-auto would collapse them to
+   content width and centre them. Give them full width. Figures/images and
+   wrapper divs are intentionally excluded — they keep their own width. */
+.page-main > :is(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote) {
+	@apply w-full;
+}
+
 /* Layout utilities — wide blocks carry `.alignwide`; this is their cap. */
 .alignwide {
 	@apply max-w-screen-xl mx-auto;
