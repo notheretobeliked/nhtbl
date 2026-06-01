@@ -158,6 +158,14 @@
 	@apply mb-0;
 }
 
+/* Mirror WP's is-layout-constrained behaviour for groups with the "Inner
+   blocks use content width" toggle (CoreGroup adds .section-group-constrained).
+   Children are capped to the site content width; alignfull/alignwide opt out.
+   !important because the wrapper also sets a max-width via utilities. */
+.section-group-constrained > *:not(.alignfull):not(.alignwide) {
+	@apply !w-full !max-w-[1320px] !mx-auto;
+}
+
 /* Block-reveal animation */
 .block-reveal {
 	opacity: 0;

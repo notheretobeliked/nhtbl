@@ -204,6 +204,14 @@ fragment CommonBlockFields on EditorBlock {
 			backgroundColor
 			align
 			style
+			layout
+			sectionBehavior
+			sectionMinHeight
+			sectionContentAlign
+			sectionReveal
+			sectionRevealDirection
+			sectionRevealStagger
+			sectionParallax
 		}
 	}
 	... on CoreButton {
