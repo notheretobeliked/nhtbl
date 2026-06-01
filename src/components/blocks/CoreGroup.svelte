@@ -23,9 +23,16 @@
 		if (!raw) return ''
 		try {
 			const style = typeof raw === 'string' ? JSON.parse(raw) : raw
-			const gap = style?.spacing?.blockGap
+			const bg = style?.spacing?.blockGap
+			if (!bg) return ''
+			// Newer Gutenberg saves blockGap as an object { top, left };
+			// older versions save a single preset string.
+			const gap =
+				typeof bg === 'object'
+					? ((bg as Record<string, unknown>).top ?? (bg as Record<string, unknown>).left)
+					: bg
 			if (!gap) return ''
-			const tw = presetToSpacing(gap)
+			const tw = presetToSpacing(String(gap))
 			return tw ? `gap-${tw}` : ''
 		} catch {
 			return ''
