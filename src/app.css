@@ -129,9 +129,10 @@
 	@apply h-full p-0;
 }
 
-/* Layout utilities */
+/* Layout utilities — keep in sync with BlockRenderer's wide alignment
+   (`alignwide w-full max-w-screen-xl mx-auto`). */
 .alignwide {
-	@apply max-w-[1100px] mx-auto;
+	@apply max-w-screen-xl mx-auto;
 }
 
 /* Structural block spacing — divs get mb-8, prose elements render bare */
