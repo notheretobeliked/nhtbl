@@ -93,6 +93,10 @@ fragment CommonBlockFields on EditorBlock {
 			caption
 			aspectRatio
 			scale
+			width
+			height
+			href
+			linkTarget
 			className
 			align
 		}

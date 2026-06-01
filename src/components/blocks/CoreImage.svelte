@@ -13,7 +13,13 @@
 	let attrs = $derived(block.attributes as CoreImageAttributes | undefined)
 	let bc = $derived(extractBlockClasses(block.attributes as Record<string, unknown>))
 
-	let sizes = $derived((block.mediaDetails?.sizes ?? []) as Array<{ sourceUrl?: string; width?: string }>)
+	let sizes = $derived(
+		(block.mediaDetails?.sizes ?? []) as Array<{
+			sourceUrl?: string
+			width?: string
+			height?: string
+		}>
+	)
 	let src = $derived(attrs?.url ?? '')
 	let alt = $derived(attrs?.alt ?? '')
 	let caption = $derived(attrs?.caption)
@@ -22,6 +28,20 @@
 	let scale = $derived(attrs?.scale)
 	let customWidth = $derived(attrs?.width)
 	let customHeight = $derived(attrs?.height)
+	let href = $derived(attrs?.href)
+	let linkTarget = $derived(attrs?.linkTarget)
+
+	// Resolve intrinsic width/height from mediaDetails when not set by the editor,
+	// so the browser can reserve space and avoid layout shift (CLS). If only one
+	// editor dimension is set, use 'auto' for the other so it's derived from the
+	// aspect ratio.
+	let matchedSize = $derived(sizes.find((s) => s?.sourceUrl === src))
+	let intrinsicWidth = $derived(
+		customWidth || (customHeight ? 'auto' : matchedSize?.width) || undefined
+	)
+	let intrinsicHeight = $derived(
+		customHeight || (customWidth ? 'auto' : matchedSize?.height) || undefined
+	)
 
 	// Only use srcset if the full-size src is represented in the sizes array.
 	// Otherwise the browser picks a small thumbnail instead of the full original.
@@ -92,15 +112,33 @@
 		class="{alignClass} {isFullWidth ? 'w-full' : ''} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
 		use:blockReveal={animation}
 	>
-		<img
-			{src}
-			{alt}
-			srcset={srcSet || undefined}
-			sizes={srcSet ? '100vw' : undefined}
-			class={imgClass}
-			style={imgStyle || undefined}
-			loading="lazy"
-		/>
+		{#if href}
+			<a {href} target={linkTarget || undefined} class="border-0 no-underline">
+				<img
+					{src}
+					{alt}
+					srcset={srcSet || undefined}
+					sizes={srcSet ? '100vw' : undefined}
+					width={intrinsicWidth || undefined}
+					height={intrinsicHeight || undefined}
+					class={imgClass}
+					style={imgStyle || undefined}
+					loading="lazy"
+				/>
+			</a>
+		{:else}
+			<img
+				{src}
+				{alt}
+				srcset={srcSet || undefined}
+				sizes={srcSet ? '100vw' : undefined}
+				width={intrinsicWidth || undefined}
+				height={intrinsicHeight || undefined}
+				class={imgClass}
+				style={imgStyle || undefined}
+				loading="lazy"
+			/>
+		{/if}
 		{#if caption}
 			<figcaption class="font-sans text-sm mt-2 text-center">{@html caption}</figcaption>
 		{/if}
