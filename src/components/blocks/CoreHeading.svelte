@@ -17,6 +17,26 @@
 	let content = $derived(attrs?.content ?? '')
 	let level = $derived(attrs?.level ?? 2)
 	let customClassName = $derived(attrs?.className ?? '')
+	// cssClassName is the rendered class string from wp-graphql-content-blocks;
+	// it carries `has-text-align-*` even when textAlign isn't serialised.
+	let cssClassName = $derived(attrs?.cssClassName ?? '')
+
+	// Map WordPress has-text-align-* classes to Tailwind
+	let textAlignClass = $derived(
+		cssClassName.includes('has-text-align-center') || customClassName.includes('has-text-align-center')
+			? 'text-center'
+			: cssClassName.includes('has-text-align-right') || customClassName.includes('has-text-align-right')
+				? 'text-right'
+				: cssClassName.includes('has-text-align-left') || customClassName.includes('has-text-align-left')
+					? 'text-left'
+					: ''
+	)
+
+	// Remove WordPress alignment classes since we're converting them
+	let filteredClassName = $derived(
+		customClassName.replace(/has-text-align-(center|right|left)/g, '').trim()
+	)
+
 	let attrClasses = $derived(
 		classNames(
 			attrs?.fontSize,
@@ -27,7 +47,7 @@
 	)
 
 	let allClasses = $derived(
-		`${attrClasses} ${customClassName} ${bc.spacingClasses} ${bc.bgClasses} ${bc.textColorClasses} ${bc.alignClasses}`
+		`${attrClasses} ${textAlignClass} ${filteredClassName} ${bc.spacingClasses} ${bc.bgClasses} ${bc.textColorClasses} ${bc.alignClasses}`
 	)
 </script>
 

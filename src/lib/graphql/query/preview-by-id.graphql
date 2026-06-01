@@ -113,6 +113,7 @@ fragment CommonBlockFields on EditorBlock {
 			textColor
 			align
 			className
+			cssClassName
 		}
 	}
 	... on CoreFootnotes {
@@ -150,6 +151,7 @@ fragment CommonBlockFields on EditorBlock {
 		attributes {
 			content
 			className
+			cssClassName
 			fontFamily
 			fontSize
 			textColor

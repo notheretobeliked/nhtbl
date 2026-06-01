@@ -16,14 +16,17 @@
 
 	let content = $derived(attrs?.content ?? '')
 	let className = $derived(attrs?.className ?? '')
+	// cssClassName is the rendered class string from wp-graphql-content-blocks;
+	// it carries `has-text-align-*` even when align/className are null.
+	let cssClassName = $derived(attrs?.cssClassName ?? '')
 
 	// Map WordPress has-text-align-* classes to Tailwind
 	let textAlignClass = $derived(
-		className.includes('has-text-align-center')
+		cssClassName.includes('has-text-align-center') || className.includes('has-text-align-center')
 			? 'text-center'
-			: className.includes('has-text-align-right')
+			: cssClassName.includes('has-text-align-right') || className.includes('has-text-align-right')
 				? 'text-right'
-				: className.includes('has-text-align-left')
+				: cssClassName.includes('has-text-align-left') || className.includes('has-text-align-left')
 					? 'text-left'
 					: ''
 	)
@@ -39,7 +42,7 @@
 		classNames(
 			attrs?.fontSize,
 			attrs?.textColor,
-			null,
+			attrs?.align,
 			attrs?.fontFamily
 		)
 	)
