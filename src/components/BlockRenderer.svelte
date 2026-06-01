@@ -107,15 +107,15 @@
 
 	let blockClass = $derived(block.name?.toLowerCase().replace('/', '-') ?? '')
 
+	// Content width and centering are owned by the `.page-main` parent rule in
+	// app.css (it caps non-align children at the content width). Wrappers only
+	// declare which alignment bucket they belong to via alignfull/alignwide.
 	let alignClasses = $derived.by(() => {
 		switch (align) {
 			case 'full':
 				return 'alignfull w-full max-w-full'
 			case 'wide':
-				return 'alignwide w-full max-w-screen-xl mx-auto'
-			case 'none':
-			case 'center':
-				return 'w-full max-w-[1320px] mx-auto'
+				return 'alignwide w-full'
 			default:
 				return 'w-full'
 		}

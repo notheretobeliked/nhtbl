@@ -129,8 +129,15 @@
 	@apply h-full p-0;
 }
 
-/* Layout utilities — keep in sync with BlockRenderer's wide alignment
-   (`alignwide w-full max-w-screen-xl mx-auto`). */
+/* Content width is owned here, on the page container, rather than per block.
+   Every top-level block (wrapper divs and bare prose alike) is capped at the
+   content width and centered, unless it opts into a wider/full bucket via
+   alignwide/alignfull. This keeps wrapped and unwrapped blocks consistent. */
+.page-main > *:not(.alignfull):not(.alignwide) {
+	@apply max-w-[1320px] mx-auto;
+}
+
+/* Layout utilities — wide blocks carry `.alignwide`; this is their cap. */
 .alignwide {
 	@apply max-w-screen-xl mx-auto;
 }

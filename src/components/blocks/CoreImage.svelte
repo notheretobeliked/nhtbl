@@ -82,34 +82,46 @@
 		return parts.join(';')
 	})
 
+	// The figure declares its alignment bucket; the `.page-main` parent rule
+	// caps non-align figures at the content width and centers them. Wide/full
+	// carry the matching class so the parent rule lets them break out.
 	let alignClass = $derived(
 		align === 'wide'
-			? 'alignwide'
+			? 'alignwide w-full'
 			: align === 'full'
-				? 'w-screen relative left-1/2 -translate-x-1/2'
-				: align === 'center'
-					? 'w-fit mx-auto'
-					: align === 'left'
-						? 'self-start'
-						: align === 'right'
-							? 'self-end'
-							: ''
+				? 'alignfull w-full max-w-full'
+				: 'w-full'
 	)
 
 	let isFullWidth = $derived(align === 'full' || align === 'wide')
 
+	// Image alignment happens within the (content-width) figure. With a custom
+	// width the margin controls placement; center/left/right map to mx-auto /
+	// left / right. Without a custom width a centered image still uses mx-auto.
+	let imgAlignClass = $derived.by(() => {
+		if (!customWidth) return align === 'center' ? 'block mx-auto' : ''
+		if (align === 'center') return 'block mx-auto'
+		if (align === 'right') return 'block ml-auto mr-0'
+		return 'block ml-0 mr-auto'
+	})
+
 	let imgClass = $derived(
-		customWidth || customHeight
-			? 'h-auto max-w-full'
-			: isFullWidth
-				? 'w-full h-auto'
-				: 'max-w-full h-auto'
+		[
+			customWidth || customHeight
+				? 'h-auto max-w-full'
+				: isFullWidth || aspectRatio
+					? 'w-full h-auto'
+					: 'max-w-full h-auto',
+			imgAlignClass
+		]
+			.filter(Boolean)
+			.join(' ')
 	)
 </script>
 
 {#if src}
 	<figure
-		class="{alignClass} {isFullWidth ? 'w-full' : ''} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
+		class="{alignClass} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
 		use:blockReveal={animation}
 	>
 		{#if href}
