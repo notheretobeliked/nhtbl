@@ -151,6 +151,20 @@ fragment CommonBlockFields on EditorBlock {
 			textColor
 		}
 	}
+	... on CoreAccordionPanel {
+		attributes {
+			openByDefault
+		}
+	}
+	... on CoreAccordionHeading {
+		attributes {
+			fontSize
+			fontFamily
+			showIcon
+			style
+			title
+		}
+	}
 	... on CoreHeading {
 		attributes {
 			content
