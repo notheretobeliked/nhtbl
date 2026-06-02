@@ -9,8 +9,7 @@
   let { block }: Props = $props()
   const children = block.children || []
   const bgColor = block.attributes?.backgroundColor ?? 'white'
-  let link = block.linkBlock?.internalLink?.nodes[0].uri
-  if (!link) link = block.linkBlock?.externalLink?.url
+  const link = block.linkBlock?.internalLink?.nodes?.[0]?.uri ?? block.linkBlock?.externalLink?.url
   
 </script>
 

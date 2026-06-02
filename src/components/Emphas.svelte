@@ -40,7 +40,7 @@
 {#if version === 'bubble'}
   <span class="relative inline-block">
     {content}
-    <div class="absolute -inset-10" use:inview={options} on:inview_change={handleChange}>
+    <div class="absolute -inset-10" use:inview={options} oninview_change={handleChange}>
       <svg width="421" height="169" viewBox="-10 -10 441 189" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" preserveAspectRatio="none">
         {#if isInView}
           <path
@@ -59,7 +59,7 @@
 {#if version === 'line'}
   <span class="relative inline-block">
     <strong>{content}</strong>
-    <div class="absolute left-0 right-0 -bottom-1" use:inview={options} on:inview_change={handleChange}>
+    <div class="absolute left-0 right-0 -bottom-1" use:inview={options} oninview_change={handleChange}>
       <svg width="373" height="9" viewBox="0 0 373 9" fill="none" class="w-full h-full" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         {#if isInView}
           <path

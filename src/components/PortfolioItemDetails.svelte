@@ -95,7 +95,7 @@
 <h3 class="text-nhtbl-green-base text-center font-display mb-2">{@html block.title}</h3>
 {#if block.projectData.imageGallery.nodes.length > 1}
   <div class="fixed top-1/2 left-3 invisible md:visible" class:hidden={!showLeftArrow}>
-    <button on:click={scrollLeft}>
+    <button onclick={scrollLeft}>
       <svg width="25" height="40" class="rotate-180" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M0.300049 0.400024C8.04005 6.23002 15.7901 12.06 23.5301 17.89C16.3801 25.39 8.91005 32.58 1.15005 39.44C1.67005 39.13 2.19005 38.82 2.71005 38.51"
@@ -106,7 +106,7 @@
     </button>
   </div>
   <div class="fixed top-1/2 right-3 invisible md:visible" class:hidden={!showRightArrow}>
-    <button on:click={scrollRight}>
+    <button onclick={scrollRight}>
       <svg width="25" height="40" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M0.300049 0.400024C8.04005 6.23002 15.7901 12.06 23.5301 17.89C16.3801 25.39 8.91005 32.58 1.15005 39.44C1.67005 39.13 2.19005 38.82 2.71005 38.51"

@@ -35,6 +35,39 @@ export const flatListToHierarchical = <T extends Record<string, any>>(
   return tree
 }
 
+/**
+ * Stamp `attributes.fill = true` on every core/image contained in a CoreGroup
+ * "stretch" section (min-height screen/half + content alignment "stretch"), so
+ * the image fills the section (100% w/h, object-fit: cover). Mutates and returns
+ * the same (already-cloned) hierarchical block list.
+ */
+export const markStretchFill = <T extends Record<string, any>>(blocks: T[] = []): T[] => {
+  const isStretchSection = (b: any): boolean =>
+    b?.name === 'core/group' &&
+    (b.attributes?.minHeight === 'screen' || b.attributes?.minHeight === 'half') &&
+    b.attributes?.contentAlign === 'stretch'
+
+  const markImages = (b: any): void => {
+    if (b?.name === 'core/image') {
+      b.attributes = { ...(b.attributes ?? {}), fill: true }
+    }
+    ;(b?.children ?? []).forEach(markImages)
+  }
+
+  const walk = (list: any[] = []): void => {
+    list.forEach((b) => {
+      if (isStretchSection(b)) {
+        ;(b.children ?? []).forEach(markImages)
+      } else {
+        walk(b.children ?? [])
+      }
+    })
+  }
+
+  walk(blocks)
+  return blocks
+}
+
 export const parseContent = (htmlContent: string): ContentSegment[] => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(htmlContent, 'text/html')

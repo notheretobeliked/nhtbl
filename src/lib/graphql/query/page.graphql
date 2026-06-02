@@ -28,6 +28,7 @@ query PageContent($uri: String!) {
         ...CoreVideoFragment
         ...CoreColumnFragment
         ...AcfSurveyBlockFragment
+        ...AcfImageGalleryFragment
       }
       seo {
         ...SEOFragment
@@ -89,6 +90,7 @@ query PageContent($uri: String!) {
         ...CoreImageFragment
         ...CoreVideoFragment
         ...CoreColumnFragment
+        ...AcfImageGalleryFragment
       }
       seo {
         ...SEOFragment
@@ -143,6 +145,14 @@ fragment CoreGroupFragment on CoreGroup {
     backgroundColor
     align
     style
+    layout
+    behavior
+    minHeight
+    contentAlign
+    reveal
+    revealDirection
+    revealStagger
+    parallax
   }
 }
 
@@ -176,7 +186,6 @@ fragment CoreButtonFragment on CoreButton {
     type
     backgroundColor
     borderColor
-    textAlign
     textColor
     style
     fontSize
@@ -230,7 +239,6 @@ fragment CoreHeadingFragment on CoreHeading {
     fontFamily
     fontSize
     textColor
-    textAlign
     level
     align
   }
@@ -481,6 +489,31 @@ fragment SEOFragment on PostTypeSEO {
     caption
     mediaDetails {
       ...MediaDetailsFragment
+    }
+  }
+}
+
+fragment AcfImageGalleryFragment on AcfImageGallery {
+  attributes {
+    align
+    backgroundColor
+    style
+    className
+  }
+  imageGallery {
+    intervalMs
+    aspectRatio
+    caption
+    fullWidth
+    fullHeight
+    images {
+      nodes {
+        altText
+        mediaType
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+      }
     }
   }
 }

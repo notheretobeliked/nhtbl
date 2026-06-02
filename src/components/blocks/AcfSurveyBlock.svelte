@@ -194,7 +194,7 @@
                     name={question.questionKey}
                     value="other"
                     bind:group={formData[question.questionKey]}
-                    on:change={() => handleOtherOptionChange(question.questionKey, 'multiple_choice')}
+                    onchange={() => handleOtherOptionChange(question.questionKey, 'multiple_choice')}
                     class="text-nhtbl-green-base focus:ring-nhtbl-green-base"
                   />
                   <span class="text-black/80">Other:</span>
@@ -219,7 +219,7 @@
                   type="checkbox"
                   value={option.optionValue}
                   checked={formData[question.questionKey]?.includes(option.optionValue)}
-                  on:change={(e) => handleCheckboxChange(question.questionKey, option.optionValue, e.currentTarget.checked)}
+                  onchange={(e) => handleCheckboxChange(question.questionKey, option.optionValue, e.currentTarget.checked)}
                   class="text-nhtbl-green-base focus:ring-nhtbl-green-base rounded"
                 />
                 <span class="text-black/80">{option.optionLabel}</span>
@@ -233,7 +233,7 @@
                     type="checkbox"
                     value="other"
                     checked={formData[question.questionKey]?.includes('other')}
-                    on:change={(e) => {
+                    onchange={(e) => {
                       handleCheckboxChange(question.questionKey, 'other', e.currentTarget.checked)
                       if (e.currentTarget.checked) {
                         handleOtherOptionChange(question.questionKey, 'checkbox')

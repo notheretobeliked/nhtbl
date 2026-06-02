@@ -1,11 +1,16 @@
 <script lang="ts">
   import type { ExtendedEditorBlock } from '$lib/types/wp-types'
   import BlockRenderer from '$components/BlockRenderer.svelte'
+  import { getContext } from 'svelte'
   interface Props {
     block: ExtendedEditorBlock
   }
 
   let { block }: Props = $props()
+
+  // Provided by an ancestor CoreGroup in a min-height "stretch" section so the
+  // columns fill the section height. Undefined when not inside such a section.
+  const fillCtx = getContext<{ value: boolean }>('fill-height')
 
   const isStackedOnMobile: boolean = block.attributes?.isStackedOnMobile ?? false
 
@@ -23,7 +28,8 @@
 
   // Get CSS classes for responsive behavior
   function getCssClasses(): string {
-    const baseClasses = `${block.attributes?.className || ''} corecolumns grid`
+    const fillClass = fillCtx?.value ? 'h-full' : ''
+    const baseClasses = `${block.attributes?.className || ''} corecolumns grid ${fillClass}`
     return baseClasses.trim()
   }
 </script>

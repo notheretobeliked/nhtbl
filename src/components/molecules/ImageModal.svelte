@@ -26,12 +26,16 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if isOpen && image}
-  <div 
+  <!-- Backdrop closes on click; keyboard close is handled globally via the
+       svelte:window Escape handler above. -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <div
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
     onclick={handleBackdropClick}
     role="dialog"
     aria-modal="true"
     aria-labelledby="image-modal-title"
+    tabindex="-1"
   >
     <div class="relative max-w-4xl max-h-full w-full bg-white rounded-lg overflow-hidden shadow-2xl">
       <!-- Close button -->

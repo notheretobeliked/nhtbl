@@ -7,8 +7,8 @@ import { canUserPreview } from '$lib/utilities/wordpress-auth'
 import { error, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-import { cleanNavigationUrls } from '$lib/utilities/utilities'
-import { normalizeEditorBlock, flatListToHierarchical, processBreadcrumbs, createCategoryHierarchy } from '$lib/utilities/wordpress-content'
+import { cleanNavigationUrls, markStretchFill } from '$lib/utilities/utilities'
+import { flatListToHierarchical } from '$lib/utilities/wordpress-content'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 // Portfolio-specific helper functions
@@ -64,42 +64,10 @@ export const load: PageServerLoad = async function load({ url }) {
     throw redirect(302, loginUrl)
   }
 
-  // Validate token first if provided
-  if (isPreview && previewToken) {
-    try {
-      const tokenValidation = await fetch(`${WORDPRESS_URL}wp-json/sveltekit/v1/validate-token`, {
-        method: 'POST',
-        headers: {
-          'X-Preview-Token': previewToken,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      if (!tokenValidation.ok) {
-        const errorData = await tokenValidation.json()
-        
-        if (errorData.code === 'invalid_token') {
-          throw error(401, 'Preview token has expired or is invalid. Please log into WordPress and generate a new preview link.')
-        } else if (errorData.code === 'no_token') {
-          throw error(401, 'No preview token provided. Please use a valid preview link from WordPress.')
-        } else if (errorData.code === 'invalid_user') {
-          throw error(401, 'Preview token user no longer exists. Please log into WordPress and generate a new preview link.')
-        } else {
-          throw error(401, 'Authentication failed. Please log into WordPress and generate a new preview link.')
-        }
-      }
-
-      const validationResult = await tokenValidation.json()
-    } catch (err: any) {
-      // If it's already an error we threw, re-throw it
-      if (err.status) {
-        throw err
-      }
-      
-      // Handle network errors
-      throw error(500, 'Unable to validate preview token. Please check your connection and try again.')
-    }
-  }
+  // No separate REST validate-token round-trip (the previous source of preview
+  // breakage). The GraphQL query below authenticates via the X-Preview-Token
+  // header that urqlQuery sends when a token is passed — same as the template.
+  // An invalid token simply returns no draft content, handled as a 404 below.
 
   try {
     let variables: any
@@ -141,34 +109,15 @@ export const load: PageServerLoad = async function load({ url }) {
       throw error(403, `Preview not available for content with status "${node.status}". Only draft, private, pending, and published content can be previewed.`)
     }
 
-    // Process editor blocks
-    let editorBlocks: ExtendedEditorBlock[] = node.editorBlocks 
-      ? flatListToHierarchical(node.editorBlocks as ExtendedEditorBlock[])
+    // Process editor blocks — match the portfolio page exactly: build the
+    // hierarchy, mark stretch-section images to fill, and drop the editor-only
+    // excerpt block. No forced alignment or column background.
+    const editorBlocks: ExtendedEditorBlock[] = (node.editorBlocks
+      ? markStretchFill(flatListToHierarchical(node.editorBlocks as ExtendedEditorBlock[]))
       : []
-    
-    // Apply portfolio-specific block modifications if this is a project
+    ).filter((b: any) => b.name !== 'core/post-excerpt')
+
     const isPortfolioProject = isProjectPreview
-    if (isPortfolioProject) {
-      editorBlocks = editorBlocks.map(block => {
-        const updatedBlock = {
-          ...block,
-          attributes: {
-            ...block.attributes,
-            align: 'full'
-          }
-        }
-        
-        // If this is a core/columns block, set background color to black
-        if (block.name === 'core/columns') {
-          updatedBlock.attributes = {
-            ...updatedBlock.attributes,
-            backgroundColor: 'black'
-          }
-        }
-        
-        return updatedBlock
-      })
-    }
     
 
     // Prepare base return data
@@ -183,7 +132,7 @@ export const load: PageServerLoad = async function load({ url }) {
       previewData: {
         status: node.status || 'unknown',
         lastModified: node.modified,
-        canEdit: canUserPreview({ authenticated: !!previewToken, token: previewToken })
+        canEdit: canUserPreview({ authenticated: !!previewToken, token: previewToken ?? undefined })
       }
     }
 
@@ -232,13 +181,15 @@ export const load: PageServerLoad = async function load({ url }) {
     
     return JSON.parse(JSON.stringify(cleanedData))
   } catch (err: unknown) {
-    
+    // Log the real error server-side so preview failures are diagnosable.
+    console.error('[preview] load failed:', err)
+
     // Handle SvelteKit errors (already have proper status and message)
     const httpError = err as { status?: number; message?: string }
     if (httpError.status && httpError.message) {
       throw err
     }
-    
+
     // Handle GraphQL errors
     if (err instanceof Error && err.message.includes('GraphQL Error')) {
       throw error(500, 'Failed to load preview content from WordPress. Please check if the content exists and try again.')

@@ -1,4 +1,4 @@
-export const prerender = true
+export const prerender = false // TEMP (staging test): set back to `true` to restore prerendering
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'

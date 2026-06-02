@@ -37,10 +37,13 @@ export default {
       'nhtbl-green': {
         base: '#E0FF00'
       },  
+      'nhtbl-grey': {
+        base: '#D9D9D9'
+      },  
       'nhtbl-purple': {
         base: '#D59CE5',
         light: '#E4D5E8',
-      },  
+      },
     },
     fontSize: {
       'sm': '.875rem',

@@ -1,11 +1,11 @@
-export const prerender = true
+export const prerender = false // TEMP (staging test): set back to `true` to restore prerendering
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { urqlQuery } from '$lib/graphql/client'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-import { makeUrlRelative, cleanNavigationUrls } from '$lib/utilities/utilities'
-import { normalizeEditorBlock, flatListToHierarchical, processBreadcrumbs, createCategoryHierarchy } from '$lib/utilities/wordpress-content'
+import { makeUrlRelative, cleanNavigationUrls, markStretchFill } from '$lib/utilities/utilities'
+import type { HierarchicalOptions } from '$lib/utilities/wordpress-content'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
 
 
@@ -163,30 +163,10 @@ export const load: PageServerLoad = async function load({ params, url }) {
       })
     }
 
-    let editorBlocks: ExtendedEditorBlock[] = data.nodeByUri.editorBlocks ? flatListToHierarchical(data.nodeByUri.editorBlocks as ExtendedEditorBlock[]) : []
-    
-    // Set align to 'full' on all top-level blocks
-    editorBlocks = editorBlocks.map(block => {
-      const updatedBlock = {
-        ...block,
-        attributes: {
-          ...block.attributes,
-          align: 'full'
-        }
-      }
-      
-
-      
-      // If this is a core/columns block, set background color to black
-      if (block.name === 'core/columns') {
-        updatedBlock.attributes = {
-          ...updatedBlock.attributes,
-          backgroundColor: 'black'
-        }
-      }
-      
-      return updatedBlock
-    })
+    const editorBlocks: ExtendedEditorBlock[] = (data.nodeByUri.editorBlocks
+      ? markStretchFill(flatListToHierarchical(data.nodeByUri.editorBlocks as ExtendedEditorBlock[]))
+      : []
+    ).filter((b) => b.name !== 'core/post-excerpt')
 
     const backgroundColour = data.nodeByUri.backgroundColour?.backgroundColour ?? 'black'
 

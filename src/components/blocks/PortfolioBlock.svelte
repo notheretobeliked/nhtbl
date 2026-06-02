@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onMount, untrack } from 'svelte'
   import FeaturedProject from '$components/molecules/FeaturedProject.svelte'
   import Image from '$components/atoms/Image.svelte'
   import ImageModal from '$components/molecules/ImageModal.svelte'
@@ -29,7 +29,11 @@
   let searchTerm = $state('')
   let debouncedSearchTerm = $state('')
   let searchTimeout: NodeJS.Timeout | null = null
-  let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list' | 'images'>(displayMode)
+  // Seed the view mode from the configured display mode once; the user can
+  // change it afterwards via the toggles, so we only want the initial value.
+  let viewMode = $state<'horizontal_scroll' | 'masonry' | 'list' | 'images'>(
+    untrack(() => displayMode)
+  )
   
   // Image gallery functionality
   let projectImagesData = $state<NonNullable<ProjectImagesQuery['nhtblProjects']>['nodes'] | null>(null)

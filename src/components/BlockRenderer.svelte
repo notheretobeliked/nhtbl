@@ -19,6 +19,7 @@
   import CoreImage from './blocks/CoreImage.svelte'
   import CoreVideo from './blocks/CoreVideo.svelte'
   import AcfSurveyBlock from './blocks/AcfSurveyBlock.svelte'
+  import AcfImageGallery from './blocks/AcfImageGallery.svelte'
 
   interface Props {
     forceFull?: boolean
@@ -144,8 +145,8 @@
   }
 </script>
 
-<div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} on:inview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius}>
-  <div class="transition-all duration-[800ms] ease-in-out h-full {isInView ? 'transform-none opacity-1' : ' translate-y-2 opacity-0.2'}" data-inview={isInView}>
+<div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius}>
+  <div class="{hasHomePageHero(block) ? '' : 'block-anim'} h-full" data-inview={isInView}>
     {#if hasHomePageHero(block)}
       <HomePageHero {block} />
     {/if}
@@ -209,5 +210,35 @@
     {#if blockName === 'acf/survey-block'}
       <AcfSurveyBlock {block} />
     {/if}
+
+    {#if blockName === 'acf/image-gallery'}
+      <AcfImageGallery {block} />
+    {/if}
   </div>
 </div>
+
+<style>
+  /* Per-block reveal: a quick fade running alongside a slower slide-up.
+     Driven by the data-inview attribute set from svelte-inview above. */
+  .block-anim {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    will-change: opacity, transform;
+    transition:
+      opacity 320ms ease-out,
+      transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .block-anim[data-inview='true'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .block-anim {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
