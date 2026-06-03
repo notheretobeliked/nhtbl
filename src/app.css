@@ -10,7 +10,7 @@
 }
 
 .alignwide {
-    @apply max-w-[1100px] mx-auto;
+    @apply max-w-[1200px] mx-auto;
 }
 
 /* core/group section extensions ------------------------------------------ */
