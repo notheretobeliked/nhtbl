@@ -1,10 +1,13 @@
-import { Client, cacheExchange, fetchExchange } from '@urql/core'
+import { Client, fetchExchange } from '@urql/core'
 import { GRAPHQL_ENDPOINT } from '$env/static/private'
-import { dev } from '$app/environment'
 
 export const client = new Client({
   url: GRAPHQL_ENDPOINT,
-  exchanges: dev ? [fetchExchange] : [cacheExchange, fetchExchange], // No cache in dev, cache in prod
+  // No document cache (cacheExchange): with SSR every request must reflect the
+  // latest WordPress content. cacheExchange persisted responses in the server's
+  // memory and served them stale. fetchExchange-only = fresh fetch every time;
+  // cache: 'no-cache' below also bypasses the HTTP cache.
+  exchanges: [fetchExchange],
   fetchOptions: {
     cache: 'no-cache'
   }

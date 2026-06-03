@@ -41,6 +41,11 @@
 
   const align = $derived(forceFull ? 'full' : block.attributes?.align || 'none')
   const bgColor = $derived(block.attributes?.backgroundColor ?? 'none')
+  // Custom (hex) colours picked in the editor land in style.color.* rather than
+  // the backgroundColor/textColor preset slugs. Applied as inline styles below;
+  // for preset colours these are undefined so the bg-{slug} class wins.
+  const customBg = $derived(block.attributes?.style?.color?.background)
+  const customText = $derived(block.attributes?.style?.color?.text)
 
   // Adjusted function to work directly with the style object
   function mapSpacingToTailwind(styleObj: any): string {
@@ -145,7 +150,7 @@
   }
 </script>
 
-<div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius}>
+<div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius} style:background-color={customBg} style:color={customText}>
   <div class="{hasHomePageHero(block) ? '' : 'block-anim'} h-full" data-inview={isInView}>
     {#if hasHomePageHero(block)}
       <HomePageHero {block} />
