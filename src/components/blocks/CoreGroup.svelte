@@ -56,13 +56,11 @@
 
   let hasMinHeight = $derived(minHeight === 'screen' || minHeight === 'half')
 
-  // Auto-stretch when the only child is a Columns block (common 2-col layout
-  // that should fill the section). With multiple direct children, fall back to
-  // contentAlign so authors can rely on `center` for vertically centred stacks.
-  let onlyChildIsColumns = $derived(
-    children.length === 1 && (children[0] as { name?: string })?.name === 'core/columns'
-  )
-  let useFillLayout = $derived(hasMinHeight && (contentAlign === 'stretch' || onlyChildIsColumns))
+  // Fill the section (children stretch to its height) only when the author asks
+  // for it via content alignment "stretch". Other alignments (center/top/bottom)
+  // position the content within the section — even when the child is a Columns
+  // block — so `center` actually centres it.
+  let useFillLayout = $derived(hasMinHeight && contentAlign === 'stretch')
 
   // Cascade fill-height to descendants (CoreColumns / CoreColumn) without
   // touching BlockRenderer. setContext must run at init, so pass a $state

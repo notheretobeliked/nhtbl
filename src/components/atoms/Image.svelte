@@ -29,6 +29,20 @@
 	let containerElement: HTMLDivElement
 	let containerWidth = $state(0)
 
+	// The container background colour is a lazy-load placeholder; once the real
+	// image has painted we clear it so a transparent image doesn't keep a colour
+	// behind it. (In "no image" energy mode the colour stands in for the image,
+	// so it's kept — see placeholderBg below.)
+	let imageElement: HTMLImageElement | undefined = $state()
+	let loaded = $state(false)
+
+	// Cached images can already be complete before the load handler attaches.
+	$effect(() => {
+		if (imageElement?.complete && imageElement.naturalWidth > 0) {
+			loaded = true
+		}
+	})
+
 	// Measure container width with multiple attempts
 	onMount(() => {
 		const measureContainer = () => {
@@ -186,6 +200,14 @@
 		return dominant || secondary || 'transparent'
 	})
 
+	// What the container actually paints: the placeholder colour while loading,
+	// then transparent once the image is in. In "no image" mode the colour
+	// stands in for the image, so keep it.
+	const placeholderBg = $derived(() => {
+		if (energyUsage.isNone) return backgroundColor()
+		return loaded ? 'transparent' : backgroundColor()
+	})
+
 	function determineSizes(sizeName: ImageSizeName): string {
 		switch (sizeName) {
 			case 'thumbnail':
@@ -212,7 +234,7 @@
 
 
 </script>
-<div bind:this={containerElement} class="image-container relative w-full max-w-none flex justify-center overflow-hidden {aspect === 'square' ? 'aspect-square' : `h-full aspect-${aspect}`}" style="--bg-color: {backgroundColor()}">
+<div bind:this={containerElement} class="image-container relative w-full max-w-none flex justify-center overflow-hidden {aspect === 'square' ? 'aspect-square' : `h-full aspect-${aspect}`}" style="--bg-color: {placeholderBg()}">
   {#if energyUsage.isNone}
     <!-- No image mode: transparent image with background color -->
     <img
@@ -242,6 +264,8 @@
         fit === 'fill' ? 'object-fill' : 
         'object-none'
       } ${shadow ? 'drop-shadow-lg' : ''} ${extraClasses}`}
+      bind:this={imageElement}
+      onload={() => (loaded = true)}
       src={currentSrc()}
       alt={altText}
       width={width()}
