@@ -223,12 +223,15 @@
   .block-anim {
     opacity: 0;
     transform: translateY(0.5rem);
-    will-change: opacity, transform;
     transition:
       opacity 320ms ease-out,
       transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Once revealed, transform: none so the element stops being a containing
+     block for position:fixed descendants (e.g. the image lightbox, which must
+     be relative to the viewport, not this block). No will-change either — it
+     would keep the containing block alive even at transform: none. */
   .block-anim[data-inview='true'] {
     opacity: 1;
     transform: none;

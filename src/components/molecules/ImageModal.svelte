@@ -62,22 +62,18 @@
 
       <!-- Image details -->
       <div class="p-6">
-        <h3 id="image-modal-title" class="text-lg font-semibold mb-2">
-          {image.altText || 'Image'}
-        </h3>
-
-        <div class="flex items-center justify-between">
+        <div class="flex text-black items-center justify-between">
           <div>
-            <p class="text-sm text-gray-500">From project:</p>
+            <p class="text-sm">From project:</p>
             <p class="font-medium">{image.projectTitle}</p>
           </div>
           
           <a 
             href={image.projectUri}
-            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            class="inline-flex items-center px-4 py-2 rounded-lg transition-colors"
           >
             View Project
-            <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="black">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
