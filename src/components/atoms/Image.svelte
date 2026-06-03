@@ -183,7 +183,7 @@
 		if (energyUsage.isNone) {
 			return dominant || secondary || 'transparent'
 		}
-		return dominant || secondary || '#f3e5f5'
+		return dominant || secondary || 'transparent'
 	})
 
 	function determineSizes(sizeName: ImageSizeName): string {
