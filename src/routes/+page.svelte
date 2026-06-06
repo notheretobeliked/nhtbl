@@ -11,7 +11,10 @@
   }
 </script>
 
-<div class="main w-full overflow-x-hidden">
+<!-- overflow-x-clip (not -hidden) hides horizontal overflow without creating a
+     scroll container, which would otherwise break position:sticky descendants
+     such as the HomePageHero's pinned scroll region. -->
+<div class="main w-full overflow-x-clip">
   {#each editorBlocks as block, index (block.clientId)}
     <BlockRenderer block={block} />
   {/each}

@@ -71,6 +71,13 @@
     fillCtx.value = useFillLayout
   })
 
+  // When a reveal is active, tell descendant BlockRenderers (the heading /
+  // paragraph children) to drop their own .block-anim fade so RevealText is the
+  // sole animator — otherwise each child independently fades itself in and
+  // fights the group's staggered, directional reveal. Always set it (true or
+  // false) so a nested non-reveal group resets it for its own children.
+  setContext('reveal-active', reveal !== 'none')
+
   let sectionClasses = $derived(
     minHeight === 'screen' ? 'min-h-[100svh]' : minHeight === 'half' ? 'min-h-[50svh]' : ''
   )

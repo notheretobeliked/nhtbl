@@ -11,7 +11,12 @@
   let { block }: Props = $props()
   
   import Emphas from '$components/Emphas.svelte'
-  const { content, fontSize, textColor, align, fontFamily } = block.attributes || {}
+  const attrs = (block.attributes || {}) as Record<string, any>
+  const { content, fontSize, textColor, fontFamily } = attrs
+  // v2 serialises text alignment as a `has-text-align-*` class (cssClassName);
+  // fall back to the `align` attribute for older content.
+  const align =
+    /has-text-align-(center|right|left)/.exec(attrs.cssClassName ?? '')?.[1] ?? attrs.align ?? null
 
   let segments = $state<ContentSegment[]>([]) // Initialize segments as empty
 
@@ -19,11 +24,11 @@
   onMount(() => {
     segments = parseContent(content)
   })
-  const classNames = (fontSize: string, textColor: string, align: string, fontFamily: string) => {
-    let textClasses: string,
-      alignClasses: string,
-      colorClasses: string = ''
-    
+  const classNames = (fontSize: string | null, textColor: string | null, align: string | null, fontFamily: string | null) => {
+    let textClasses = 'text-sm md:text-base',
+      alignClasses = 'text-left',
+      colorClasses = ''
+
     // Handle custom font family
     let fontClass = ''
     if (fontFamily) {
@@ -69,13 +74,11 @@
       case 'center':
         alignClasses = 'text-center'
         break
-      case 'left':
-        alignClasses = 'text-left'
-        break
       case 'right':
         alignClasses = 'text-right'
         break
-      case null:
+      case 'left':
+      default:
         alignClasses = 'text-left'
         break
     }

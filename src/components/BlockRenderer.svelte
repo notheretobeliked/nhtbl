@@ -1,5 +1,6 @@
 <script lang="ts">
   import { inview } from 'svelte-inview'
+  import { getContext } from 'svelte'
   import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
   import type { ExtendedEditorBlock } from '$lib/types/wp-types'
 
@@ -20,6 +21,8 @@
   import CoreVideo from './blocks/CoreVideo.svelte'
   import AcfSurveyBlock from './blocks/AcfSurveyBlock.svelte'
   import AcfImageGallery from './blocks/AcfImageGallery.svelte'
+  import AcfSlideshow from './blocks/AcfSlideshow.svelte'
+  import SubpageNavigation from './blocks/SubpageNavigation.svelte'
 
   interface Props {
     forceFull?: boolean
@@ -29,6 +32,11 @@
   let { forceFull = false, block }: Props = $props()
 
   let isInView = $state(false)
+
+  // Set by a CoreGroup ancestor whose text-reveal is active. When true this
+  // block's own .block-anim fade is dropped so the group's RevealText is the
+  // sole animator (otherwise the two reveals fight each other).
+  const revealActive = getContext<boolean>('reveal-active') ?? false
 
   const options: Options = {
     rootMargin: '-50px',
@@ -151,7 +159,7 @@
 </script>
 
 <div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius} style:background-color={customBg} style:color={customText}>
-  <div class="{hasHomePageHero(block) ? '' : 'block-anim'} h-full" data-inview={isInView}>
+  <div class="{hasHomePageHero(block) || revealActive ? '' : 'block-anim'} h-full" data-inview={isInView}>
     {#if hasHomePageHero(block)}
       <HomePageHero {block} />
     {/if}
@@ -218,6 +226,14 @@
 
     {#if blockName === 'acf/image-gallery'}
       <AcfImageGallery {block} />
+    {/if}
+
+    {#if blockName === 'acf/slideshow'}
+      <AcfSlideshow {block} />
+    {/if}
+
+    {#if blockName === 'acf/subpage-navigation'}
+      <SubpageNavigation {block} />
     {/if}
   </div>
 </div>

@@ -10,7 +10,11 @@
   }
 
   let { block }: Props = $props()
-  const { content, fontSize, textColor, textAlign, level } = block.attributes || {}
+  const attrs = (block.attributes || {}) as Record<string, any>
+  const { content, fontSize, textColor, level } = attrs
+  // wp-graphql-content-blocks v2 doesn't expose a `textAlign` attribute; the
+  // editor serialises text alignment as a `has-text-align-*` class instead.
+  const textAlign = /has-text-align-(center|right|left)/.exec(attrs.cssClassName ?? '')?.[1] ?? null
 
   let segments = $state<ContentSegment[]>([])
   let hasSvg = $state(false) // Variable to track presence of 'svg' type segments
@@ -20,10 +24,10 @@
     hasSvg = segments.some(segment => segment.type === 'svg' && segment.version === 'bubble')
   })
 
-  const classNames = (fontSize: string, textColor: string, textAlign: string) => {
-    let textClasses: string,
-      alignClasses: string,
-      colorClasses: string = ''
+  const classNames = (fontSize: string | null, textColor: string | null, textAlign: string | null) => {
+    let textClasses = 'text-sm md:text-base',
+      alignClasses = 'text-left',
+      colorClasses = ''
     switch (fontSize) {
       case 'base':
         textClasses = 'text-sm md:text-base'
@@ -37,21 +41,16 @@
       case '2xl':
         textClasses = 'text-xl md:text-2xl'
         break
-      case null:
-        textClasses = 'text-sm md:text-base'
-        break
     }
     switch (textAlign) {
       case 'center':
         alignClasses = 'text-center'
         break
-      case 'left':
-        alignClasses = 'text-left'
-        break
       case 'right':
         alignClasses = 'text-right'
         break
-      case null:
+      case 'left':
+      default:
         alignClasses = 'text-left'
         break
     }

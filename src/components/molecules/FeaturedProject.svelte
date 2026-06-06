@@ -16,10 +16,19 @@
     project: ProjectData
     displayMode?: 'block' | 'grid' | 'masonryBlock'
     enableSearch?: boolean
+    showTags?: boolean
+    selectedServices?: string[]
     onServiceClick?: (serviceName: string) => void
   }
 
-  let { project, displayMode = 'block', enableSearch = false, onServiceClick }: Props = $props()
+  let {
+    project,
+    displayMode = 'block',
+    enableSearch = false,
+    showTags = true,
+    selectedServices = [],
+    onServiceClick
+  }: Props = $props()
 
   let isHover: boolean = $state(false)
 
@@ -88,7 +97,9 @@
   }
 
   const yearDisplay = formatYearRange(project.projectData?.startDate, project.projectData?.endDate)
-  
+  // Plain year (no parentheses) for the columnar grid/list row.
+  const yearPlain = yearDisplay.replace(/[()]/g, '').trim()
+
 
   // Create heading block object for CoreHeading
   const headingBlock = {
@@ -143,12 +154,14 @@
                 
               </p>
             {/if}
-            {#if serviceNames.length > 0}
+            {#if showTags && serviceNames.length > 0}
               <div class="services flex flex-row gap-1 mt-2 flex-wrap justify-center">
                 {#each serviceNames as serviceName}
-                  {#if enableSearch && onServiceClick}
+                  {#if onServiceClick}
                     <button 
-                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap text-black hover:bg-black hover:text-white transition-colors cursor-pointer"
+                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                        ? 'bg-black text-white'
+                        : 'text-black hover:bg-black hover:text-white'}"
                       onclick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
@@ -168,9 +181,54 @@
       </div>
     </a>
   </article>
+{:else if displayMode === 'grid'}
+  <!-- Grid Mode: a columnar list row — year · client · title · description · services -->
+  <article class="featured-project group hover:bg-[var(--pf-fg)] transition-all rounded-lg hover:!text-[var(--pf-bg)]">
+    <a class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-start gap-4 px-3 py-2 text-sm" href={project.uri}>
+      <!-- Year -->
+      <span class="font-display whitespace-nowrap">{yearPlain}</span>
+
+      <!-- Client -->
+      <span>{clientNames}</span>
+
+      <!-- Title -->
+      <span class="font-display">{project.title}</span>
+
+      <!-- Description -->
+      <div class="text-[var(--pf-muted)] group-hover:text-[var(--pf-bg)] line-clamp-3 [&_p]:m-0">
+        {@html project.excerpt ?? ''}
+      </div>
+
+      <!-- Services -->
+      {#if showTags && serviceNames.length > 0}
+        <div class="services flex flex-row gap-1 flex-wrap">
+          {#each serviceNames as serviceName}
+            {#if onServiceClick}
+              <button
+                class="group-hover:border-[var(--pf-bg)] font-sans text-xs rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                  ? 'bg-[var(--pf-fg)] text-[var(--pf-bg)]'
+                  : 'hover:bg-black/20'}"
+                onclick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onServiceClick?.(serviceName)
+                }}
+              >
+                {serviceName}
+              </button>
+            {:else}
+              <div class="group-hover:border-[var(--pf-bg)] font-sans text-xs rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap">{serviceName}</div>
+            {/if}
+          {/each}
+        </div>
+      {:else}
+        <span></span>
+      {/if}
+    </a>
+  </article>
 {:else}
-  <!-- Block and Grid Modes -->
-  <article class="featured-project p-2 group hover:bg-white transition-all rounded-lg hover:!text-black">
+  <!-- Block Mode -->
+  <article class="featured-project p-2 group hover:bg-[var(--pf-fg)] transition-all rounded-lg hover:!text-[var(--pf-bg)]">
     <a class={displayMode === 'block' ? 'contents' : 'grid grid-cols-[1fr_4fr] gap-4'} href={project.uri}>
       <!-- Image -->
       <div class="mb-4 aspect-[4/3] {displayMode === 'block' ? 'w-full' : 'w-20 lg:w-56'}">
@@ -187,18 +245,20 @@
 
         <!-- Clients -->
         {#if clientNames}
-          <p class="text-sm text-gray-600">
+          <p class="text-sm text-[var(--pf-muted)]">
             With/for: {clientNames} {yearDisplay ? ` ${yearDisplay}` :  ''}
           </p>
         {/if}
 
         <!-- Services -->
-        {#if serviceNames.length > 0}
+        {#if showTags && serviceNames.length > 0}
           <div class="services flex flex-row gap-2 mt-4 flex-wrap">
             {#each serviceNames as serviceName}
-              {#if enableSearch && onServiceClick}
+              {#if onServiceClick}
                 <button 
-                  class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap hover:bg-black/20 transition-colors cursor-pointer"
+                  class="group-hover:border-[var(--pf-bg)] font-sans text-sm rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                    ? 'bg-[var(--pf-fg)] text-[var(--pf-bg)]'
+                    : 'hover:bg-black/20'}"
                   onclick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -208,7 +268,7 @@
                   {serviceName}
                 </button>
               {:else}
-                <div class="group-hover:border-black font-sans text-sm rounded-full border border-white px-2 py-0 whitespace-nowrap">{serviceName}</div>
+                <div class="group-hover:border-[var(--pf-bg)] font-sans text-sm rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap">{serviceName}</div>
               {/if}
             {/each}
           </div>

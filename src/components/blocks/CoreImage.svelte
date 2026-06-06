@@ -54,7 +54,7 @@
 
 </script>
 
-<figure class={fill ? 'h-full w-full' : 'mb-4 w-full'}>
+<figure class={fill ? 'h-full w-full' : 'mb-0 w-full'}>
 	<Image {imageObject} imageSize="large" extraClasses={fill ? 'h-full w-full' : aspectRatioClass} fit="cover" />
 	{#if block.attributes?.caption && !fill}
 		<figcaption class="font-inter mt-2 text-center text-sm">{block.attributes.caption}</figcaption>

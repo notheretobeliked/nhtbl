@@ -3,7 +3,10 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}', './.storybook/**/*.{js,ts,svelte}'],
   safelist: [
     'bg-black',
+    'bg-nhtbl-grey-base',
     'bg-nhtbl-purple-light',
+    'bg-nhtbl-purple-base',
+    'bg-nhtbl-green-base',
     'object-cover',
     'object-fit',
     'object-fill',
@@ -27,7 +30,7 @@ export default {
   theme: {
     fontFamily: {
       'sans': ['Inter Tight'],
-      'display': ['Avara'],
+      'display': ['Space Grotesk'],
     },
     colors: {
       transparent: 'transparent',

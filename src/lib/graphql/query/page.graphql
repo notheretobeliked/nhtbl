@@ -29,6 +29,9 @@ query PageContent($uri: String!) {
         ...CoreColumnFragment
         ...AcfSurveyBlockFragment
         ...AcfImageGalleryFragment
+        ...AcfSlideshowFragment
+        ...AcfSlideFragment
+        ...AcfSubpageNavigationFragment
       }
       seo {
         ...SEOFragment
@@ -91,6 +94,9 @@ query PageContent($uri: String!) {
         ...CoreVideoFragment
         ...CoreColumnFragment
         ...AcfImageGalleryFragment
+        ...AcfSlideshowFragment
+        ...AcfSlideFragment
+        ...AcfSubpageNavigationFragment
       }
       seo {
         ...SEOFragment
@@ -230,6 +236,7 @@ fragment CoreParagraphFragment on CoreParagraph {
     fontSize
     textColor
     align
+    cssClassName
   }
 }
 
@@ -241,6 +248,7 @@ fragment CoreHeadingFragment on CoreHeading {
     textColor
     level
     align
+    cssClassName
   }
 }
 
@@ -337,10 +345,14 @@ fragment AcfGalerieFragment on AcfGalerie {
 fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
   attributes {
     alignment: align
+    backgroundColor
+    textColor
+    style
   }
   portfolioBlock {
     displayMode
     enableSearch
+    showTags
     projectSource
     projectsPerPage
     selectedService {
@@ -515,5 +527,50 @@ fragment AcfImageGalleryFragment on AcfImageGallery {
         }
       }
     }
+  }
+}
+
+fragment AcfSlideshowFragment on AcfSlideshow {
+  attributes {
+    align
+    backgroundColor
+    style
+    className
+  }
+  slideshow {
+    autoplay
+    intervalMs
+    aspectRatio
+    showNavigation
+  }
+}
+
+fragment AcfSlideFragment on AcfSlide {
+  slide {
+    caption
+    image {
+      node {
+        altText
+        colorPalette
+        dominantColor
+        secondaryColor
+        mediaType
+        mimeType
+        mediaDetails {
+          ...MediaDetailsFragment
+        }
+      }
+    }
+  }
+}
+fragment AcfSubpageNavigationFragment on AcfSubpageNavigation {
+  attributes {
+    align
+  }
+  navItems {
+    databaseId
+    title
+    uri
+    isCurrent
   }
 }

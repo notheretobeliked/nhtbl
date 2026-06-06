@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { inview } from 'svelte-inview'
-  import type { Options, ObserverEventDetails } from 'svelte-inview'
+  import { onMount } from 'svelte'
   import type { Snippet } from 'svelte'
 
   interface Props {
@@ -19,78 +18,177 @@
     stagger = 60
   }: Props = $props()
 
-  let root = $state<HTMLDivElement>()
-  let revealed = $state(false)
+  let root: HTMLDivElement | undefined = $state()
 
-  const options: Options = {
-    rootMargin: '-10% 0px -10% 0px',
-    // once-on-enter: reveal once and stop observing. scroll-locked: keep
-    // observing so it re-hides when scrolled out and replays on re-entry.
-    unobserveOnEnter: trigger === 'once-on-enter'
-  }
+  const SKIP_SELECTORS = 'button, .wp-block-button__link, [data-reveal-skip], a.wp-element-button'
 
-  function handleChange({ detail }: CustomEvent<ObserverEventDetails>) {
-    if (trigger === 'once-on-enter') {
-      if (detail.inView) revealed = true
-    } else {
-      revealed = detail.inView
-    }
-  }
-
-  // Stagger each direct child by assigning an incremental transition-delay.
-  // Children are the BlockRenderer wrappers of the group's blocks.
-  $effect(() => {
-    if (!root) return
-    const kids = Array.from(root.children) as HTMLElement[]
-    kids.forEach((kid, i) => {
-      kid.style.transitionDelay = `${i * stagger}ms`
+  // Wrap every word in the subtree in a <span data-reveal-word style="--i:n">
+  // so it can be revealed individually. Whitespace is preserved as plain text
+  // nodes; buttons/links and already-split spans are skipped.
+  function splitTextNodes(el: HTMLElement): number {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT
+        const parent = node.parentElement
+        if (!parent) return NodeFilter.FILTER_REJECT
+        if (parent.closest(SKIP_SELECTORS)) return NodeFilter.FILTER_REJECT
+        if ((parent as HTMLElement).dataset?.revealWord !== undefined) return NodeFilter.FILTER_REJECT
+        return NodeFilter.FILTER_ACCEPT
+      }
     })
+
+    const textNodes: Text[] = []
+    let node: Node | null
+    while ((node = walker.nextNode())) textNodes.push(node as Text)
+
+    let counter = 0
+    for (const tn of textNodes) {
+      const text = tn.textContent ?? ''
+      const tokens = text.split(/(\s+)/) // keep whitespace as separate tokens
+      const frag = document.createDocumentFragment()
+      for (const token of tokens) {
+        if (!token) continue
+        if (/^\s+$/.test(token)) {
+          frag.appendChild(document.createTextNode(token))
+        } else {
+          const span = document.createElement('span')
+          span.dataset.revealWord = ''
+          span.style.setProperty('--i', String(counter++))
+          span.textContent = token
+          frag.appendChild(span)
+        }
+      }
+      tn.replaceWith(frag)
+    }
+
+    return counter
+  }
+
+  onMount(() => {
+    if (!root) return
+    if (typeof window === 'undefined') return
+
+    const wordCount = splitTextNodes(root)
+    if (wordCount === 0) return
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      root.classList.add('reveal-shown')
+      root
+        .querySelectorAll<HTMLSpanElement>('[data-reveal-word]')
+        .forEach((w) => w.classList.add('reveal-word-visible'))
+      return
+    }
+
+    if (trigger === 'once-on-enter') {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            root!.classList.add('reveal-shown')
+            observer.disconnect()
+          }
+        },
+        { threshold: 0.2 }
+      )
+      observer.observe(root)
+      return () => observer.disconnect()
+    }
+
+    // scroll-locked: reveal words progressively as the element scrolls up.
+    const words = Array.from(root.querySelectorAll<HTMLSpanElement>('[data-reveal-word]'))
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      if (!root) return
+      const rect = root.getBoundingClientRect()
+      const vh = window.innerHeight
+      // 0 when the top of the element enters the viewport from below
+      // (rect.top = vh). 1 well before it exits the top — multiplier 0.4 so the
+      // reveal completes around the upper third rather than the centre. ceil()
+      // so the last word isn't stranded when scroll stops a hair short of 1.
+      const range = (rect.height + vh) * 0.4
+      const traversed = vh - rect.top
+      const progress = Math.max(0, Math.min(1, traversed / range))
+      const visibleCount = Math.ceil(progress * words.length)
+      for (let i = 0; i < words.length; i++) {
+        if (i < visibleCount) words[i].classList.add('reveal-word-visible')
+        else words[i].classList.remove('reveal-word-visible')
+      }
+    }
+
+    const schedule = () => {
+      if (frame) return
+      frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (frame) cancelAnimationFrame(frame)
+    }
   })
 </script>
 
 <div
   bind:this={root}
   class="reveal-text {className}"
-  class:revealed
+  data-reveal-trigger={trigger}
   data-reveal-direction={direction}
-  use:inview={options}
-  oninview_change={handleChange}
+  style:--reveal-stagger="{stagger}ms"
 >
   {@render children?.()}
 </div>
 
 <style>
-  /* Hidden initial state on each direct child; revealed by the `.revealed`
-     class once the section scrolls into view (toggled by svelte-inview). */
-  .reveal-text > :global(*) {
+  :global(.reveal-text [data-reveal-word]) {
+    display: inline-block;
     opacity: 0;
-    will-change: opacity, transform;
-    /* Quick fade running alongside a slower slide so children pop in on
-       opacity while still gliding into position. */
+    transform: translateY(0.5em);
     transition:
-      opacity 320ms ease-out,
+      opacity 600ms cubic-bezier(0.4, 0, 0.2, 1),
       transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .reveal-text[data-reveal-direction='up'] > :global(*) {
-    transform: translateY(1.5rem);
+
+  /* once-on-enter: stagger via per-word transition-delay; visibility toggled
+     when the wrapper gains .reveal-shown */
+  :global(.reveal-text[data-reveal-trigger='once-on-enter'] [data-reveal-word]) {
+    transition-delay: calc(var(--i, 0) * var(--reveal-stagger, 60ms));
   }
-  .reveal-text[data-reveal-direction='from-left'] > :global(*) {
-    transform: translateX(-1.5rem);
-  }
-  .reveal-text[data-reveal-direction='fade-only'] > :global(*) {
-    transform: none;
+  :global(.reveal-text[data-reveal-trigger='once-on-enter'].reveal-shown [data-reveal-word]) {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .reveal-text.revealed > :global(*) {
+  /* scroll-locked: per-word visibility toggled by JS as scroll advances */
+  :global(.reveal-text[data-reveal-trigger='scroll-locked'] [data-reveal-word].reveal-word-visible) {
     opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* direction: from-left */
+  :global(.reveal-text[data-reveal-direction='from-left'] [data-reveal-word]) {
+    transform: translateX(-0.75em);
+  }
+  :global(
+      .reveal-text[data-reveal-direction='from-left'][data-reveal-trigger='once-on-enter'].reveal-shown [data-reveal-word],
+      .reveal-text[data-reveal-direction='from-left'][data-reveal-trigger='scroll-locked'] [data-reveal-word].reveal-word-visible
+    ) {
+    transform: translateX(0);
+  }
+
+  /* direction: fade-only */
+  :global(.reveal-text[data-reveal-direction='fade-only'] [data-reveal-word]) {
     transform: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal-text > :global(*) {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
+    :global(.reveal-text [data-reveal-word]) {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
   }
 </style>
