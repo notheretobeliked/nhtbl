@@ -542,9 +542,9 @@
           <span class="text-[0.65rem]">{sortKey === col.key ? (sortDir === 'asc' ? '↑' : '↓') : '↕'}</span>
         </button>
       {/each}
-      <span class="text-[var(--pf-muted)]">Title</span>
-      <span class="text-[var(--pf-muted)]">Description</span>
-      <span class="text-[var(--pf-muted)]">Services</span>
+      <span class="text-[var(--pf-fg)]">Title</span>
+      <span class="text-[var(--pf-fg)]">Description</span>
+      <span class="text-[var(--pf-fg)]">Services</span>
     </div>
 
     <div class="space-y-5">
@@ -555,7 +555,7 @@
 
     {#if sortedProjects.length === 0}
       <div class="text-center py-12">
-        <p class="text-[var(--pf-muted)]">No projects found.</p>
+        <p class="text-[var(--pf-fg)]">No projects found.</p>
       </div>
     {/if}
   </div>
@@ -564,7 +564,7 @@
   <div class="portfolio-images my-16 full-width-breakout">
     {#if isLoadingImages}
       <div class="text-center py-12 {alignmentClass}">
-        <p class="text-[var(--pf-muted)]">Loading images...</p>
+        <p class="text-[var(--pf-fg)]">Loading images...</p>
       </div>
     {:else if displayedImages.length > 0}
       <Masonry items={displayedImages} {minColWidth} {maxColWidth} {gap} idKey="id" animate let:item={image}>
@@ -590,14 +590,14 @@
               </svg>
             </div>
           </div>
-          <p class="text-xs text-[var(--pf-muted)] mt-1">
+          <p class="text-xs text-[var(--pf-fg)] mt-1">
             From: <a href={image.projectUri} class="underline hover:text-[var(--pf-fg)]" onclick={(e) => e.stopPropagation()}>{image.projectTitle}</a>
           </p>
         </div>
       </Masonry>
     {:else}
       <div class="text-center py-12 {alignmentClass}">
-        <p class="text-[var(--pf-muted)]">No images found.</p>
+        <p class="text-[var(--pf-fg)]">No images found.</p>
       </div>
     {/if}
   </div>
