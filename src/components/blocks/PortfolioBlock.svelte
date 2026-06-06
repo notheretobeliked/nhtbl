@@ -535,16 +535,16 @@
     <div class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-center gap-4 px-3 py-2 mb-2 border-b border-[var(--pf-border)] text-xs uppercase tracking-wide">
       {#each [{ key: 'year', label: 'Year' }, { key: 'client', label: 'Client' }] as col}
         <button
-          class="flex items-center gap-1 text-left transition-colors {sortKey === col.key ? 'text-[var(--pf-fg)]' : 'text-[var(--pf)] hover:text-[var(--pf-fg)]'}"
+          class="flex items-center gap-1 text-left"
           onclick={() => toggleSort(col.key as SortKey)}
         >
           {col.label}
           <span class="text-[0.65rem]">{sortKey === col.key ? (sortDir === 'asc' ? '↑' : '↓') : '↕'}</span>
         </button>
       {/each}
-      <span class="text-[var(--pf-fg)]">Title</span>
-      <span class="text-[var(--pf-fg)]">Description</span>
-      <span class="text-[var(--pf-fg)]">Services</span>
+      <span>Title</span>
+      <span>Description</span>
+      <span>Services</span>
     </div>
 
     <div class="space-y-5">
@@ -555,7 +555,7 @@
 
     {#if sortedProjects.length === 0}
       <div class="text-center py-12">
-        <p class="text-[var(--pf-fg)]">No projects found.</p>
+        <p>No projects found.</p>
       </div>
     {/if}
   </div>
@@ -564,7 +564,7 @@
   <div class="portfolio-images my-16 full-width-breakout">
     {#if isLoadingImages}
       <div class="text-center py-12 {alignmentClass}">
-        <p class="text-[var(--pf-fg)]">Loading images...</p>
+        <p>Loading images...</p>
       </div>
     {:else if displayedImages.length > 0}
       <Masonry items={displayedImages} {minColWidth} {maxColWidth} {gap} idKey="id" animate let:item={image}>
@@ -590,14 +590,14 @@
               </svg>
             </div>
           </div>
-          <p class="text-xs text-[var(--pf-fg)] mt-1">
-            From: <a href={image.projectUri} class="underline hover:text-[var(--pf-fg)]" onclick={(e) => e.stopPropagation()}>{image.projectTitle}</a>
+          <p class="text-xs mt-1">
+            From: <a href={image.projectUri} class="underline hover:opacity-70" onclick={(e) => e.stopPropagation()}>{image.projectTitle}</a>
           </p>
         </div>
       </Masonry>
     {:else}
       <div class="text-center py-12 {alignmentClass}">
-        <p class="text-[var(--pf-fg)]">No images found.</p>
+        <p>No images found.</p>
       </div>
     {/if}
   </div>

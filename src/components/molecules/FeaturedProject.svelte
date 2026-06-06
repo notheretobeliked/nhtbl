@@ -198,7 +198,7 @@
       <span class="font-display">{project.title}</span>
 
       <!-- Description -->
-      <div class="text-[var(--pf-fg)] group-hover:text-[var(--pf-bg)] line-clamp-3 [&_p]:m-0">
+      <div class="group-hover:text-[var(--pf-bg)] line-clamp-3 [&_p]:m-0">
         {@html project.excerpt ?? ''}
       </div>
 
@@ -248,7 +248,7 @@
 
         <!-- Clients -->
         {#if clientNames}
-          <p class="text-sm text-[var(--pf-fg)]">
+          <p class="text-sm">
             With/for: {clientNames} {yearDisplay ? ` ${yearDisplay}` :  ''}
           </p>
         {/if}
