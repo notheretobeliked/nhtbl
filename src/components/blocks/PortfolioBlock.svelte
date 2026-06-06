@@ -418,7 +418,7 @@
           </button>
           {#if selectedServices.length}
             <button
-              class="text-[var(--pf-muted)] hover:text-[var(--pf-fg)] transition-colors"
+              class=""
               onclick={() => (selectedServices = [])}
               aria-label="Clear service filters"
             >
@@ -524,7 +524,7 @@
       </Masonry>
     {:else}
       <div class="text-center py-12 {alignmentClass}">
-        <p class="text-[var(--pf-muted)]">No projects found.</p>
+        <p class="">No projects found.</p>
       </div>
     {/if}
   </div>
@@ -535,7 +535,7 @@
     <div class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-center gap-4 px-3 py-2 mb-2 border-b border-[var(--pf-border)] text-xs uppercase tracking-wide">
       {#each [{ key: 'year', label: 'Year' }, { key: 'client', label: 'Client' }] as col}
         <button
-          class="flex items-center gap-1 text-left transition-colors {sortKey === col.key ? 'text-[var(--pf-fg)]' : 'text-[var(--pf-muted)] hover:text-[var(--pf-fg)]'}"
+          class="flex items-center gap-1 text-left transition-colors {sortKey === col.key ? 'text-[var(--pf-fg)]' : 'text-[var(--pf)] hover:text-[var(--pf-fg)]'}"
           onclick={() => toggleSort(col.key as SortKey)}
         >
           {col.label}
