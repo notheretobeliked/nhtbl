@@ -33,7 +33,7 @@
   let isHover: boolean = $state(false)
 
   // Transform the featured image to match MediaItem interface
-  const imageObject: MediaItem = {
+  const imageObject: MediaItem = $derived({
     altText: project.featuredImage?.node?.altText ?? '',
     colorPalette: project.featuredImage?.node?.colorPalette ?? null,
     dominantColor: project.featuredImage?.node?.dominantColor ?? null,
@@ -58,7 +58,7 @@
     isPostsPage: false,
     slug: project.slug ?? '',
     uri: project.slug ?? '',
-  }
+  })
 
   // Format year display
   const formatYearRange = (startDate: string | null | undefined, endDate: string | null | undefined) => {
@@ -96,13 +96,14 @@
     return ''
   }
 
-  const yearDisplay = formatYearRange(project.projectData?.startDate, project.projectData?.endDate)
+  const yearDisplay = $derived(
+    formatYearRange(project.projectData?.startDate, project.projectData?.endDate)
+  )
   // Plain year (no parentheses) for the columnar grid/list row.
-  const yearPlain = yearDisplay.replace(/[()]/g, '').trim()
-
+  const yearPlain = $derived(yearDisplay.replace(/[()]/g, '').trim())
 
   // Create heading block object for CoreHeading
-  const headingBlock = {
+  const headingBlock = $derived({
     attributes: {
       content: project.title,
       fontSize: 'lg',
@@ -112,21 +113,23 @@
     isDynamic: false,
     name: 'core/heading',
     type: 'core/heading',
-  }
+  })
 
   // Get client names concatenated
-  const clientNames =
+  const clientNames = $derived(
     project.nhtblClients?.nodes
       ?.map(client => client?.name)
       .filter(Boolean)
       .join(', ') ?? ''
+  )
 
   // Get service names - only second level (children with parentId)
-  const serviceNames =
+  const serviceNames = $derived(
     project.nhtblServices?.nodes
       ?.filter(service => service?.parentId !== null && service?.parentId !== undefined)
       ?.map(service => service?.name)
       ?.filter(Boolean) ?? []
+  )
 </script>
 
 {#if displayMode === 'masonryBlock'}
