@@ -1,4 +1,7 @@
+/* All @import rules must come first — a remote @import placed after other rules
+   (e.g. @font-face) is invalid and silently ignored by the browser. */
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 
 @font-face {
   font-family: 'Avara';
@@ -17,5 +20,3 @@
   font-style: italic;
   font-display: swap;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
