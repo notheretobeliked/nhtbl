@@ -17,6 +17,7 @@
     selfAlign?: string // New prop to control self-alignment in flex containers
     disabled?: boolean
     type?: 'button' | 'submit' | 'reset' | 'nav'
+    onclick?: (event: MouseEvent) => void
   }
 
   let {
@@ -31,6 +32,7 @@
     selfAlign = '', // Default to empty string
     disabled = false,
     type = 'button',
+    onclick,
   }: Props = $props()
 
   const handleClick = (event: MouseEvent) => {
@@ -38,6 +40,7 @@
       event.preventDefault()
     }
     dispatch('click', event)
+    onclick?.(event)
   }
 
   const baseClasses = `${colourClass} uppercase font-semibold text-center rounded-lg border-black transition-all duration-500 hover:bg-yellow hover:text-black hover:border-black py-2 px-4 border ${textClass} ${textColourClass} cursor-pointer ${fullWidth ? 'w-full block text-center' : 'inline-block w-fit'} ${shrink ? 'flex-shrink-0 flex-grow-0' : ''} ${selfAlign}`
