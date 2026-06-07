@@ -18,7 +18,7 @@
 {#if isOrdered}
   <ol
     class="list-decimal list-outside pl-6 mb-2"
-    type={attrs.type || undefined}
+    type={attrs.listType || undefined}
     start={attrs.start || undefined}
     reversed={attrs.reversed || undefined}
   >

@@ -552,7 +552,7 @@ fragment CoreListFragment on CoreList {
     ordered
     reversed
     start
-    type
+    listType: type
     textColor
     className
   }
