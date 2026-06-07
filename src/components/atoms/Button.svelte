@@ -52,7 +52,7 @@
     {label}
   </a>
   {:else if type ==="nav"}
-  <a href={url} onclick={handleClick} class="font-sans text-xl lg:text-lg {active ? 'border-nhtbl-green-base' : 'border-b-transparent hover:border-b-nhtbl-purple-base' } border-b-4 pb-1" role="button">
+  <a href={url} onclick={handleClick} class="font-sans text-xl md:text-lg {active ? 'border-nhtbl-green-base' : 'border-b-transparent hover:border-b-nhtbl-purple-base' } border-b-4 pb-1" role="button">
     {label}
   </a>
 {/if}

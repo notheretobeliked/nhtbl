@@ -1,29 +1,35 @@
 <script lang="ts">
-	import type { CoreList, EditorBlock } from '$lib/graphql/generated'
-	import BlockRenderer from '$components/BlockRenderer.svelte'
-	interface Props {
-		block: CoreList & {
-			children: EditorBlock[]
-		}
-	}
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+  import CoreListItem from './CoreListItem.svelte'
 
-	let { block }: Props = $props()
+  interface Props {
+    block: ExtendedEditorBlock
+  }
 
-	const isOrdered = block.attributes?.ordered
+  let { block }: Props = $props()
+  let attrs = $derived((block.attributes ?? {}) as Record<string, any>)
+  let isOrdered = $derived(Boolean(attrs.ordered))
 
-	const children = block.children
+  // Render the list items directly (not through BlockRenderer): BlockRenderer
+  // wraps every block in <div>s, which is invalid markup inside <ul>/<ol>.
+  let items = $derived((block.children ?? []).filter((c: any) => c?.name === 'core/list-item'))
 </script>
 
 {#if isOrdered}
-	<ol class="mb-4 list-decimal list-inside">
-		{#each children as block, index}
-			<BlockRenderer {block} />
-		{/each}
-	</ol>
+  <ol
+    class="list-decimal list-outside pl-6 mb-2"
+    type={attrs.type || undefined}
+    start={attrs.start || undefined}
+    reversed={attrs.reversed || undefined}
+  >
+    {#each items as item}
+      <CoreListItem block={item} />
+    {/each}
+  </ol>
 {:else}
-	<ul class="mb-4 list-disc list-inside">
-		{#each children as block, index}
-			<BlockRenderer {block} />
-		{/each}
-	</ul>
+  <ul class="list-disc list-outside pl-6 mb-2">
+    {#each items as item}
+      <CoreListItem block={item} />
+    {/each}
+  </ul>
 {/if}

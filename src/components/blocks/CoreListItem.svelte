@@ -1,31 +1,22 @@
 <script lang="ts">
-	import type { CoreListItem } from '$lib/graphql/generated'
-	import { classNames } from '$lib/utilities/utilities'
+  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+  import CoreList from './CoreList.svelte'
 
-	interface Props {
-		block: CoreListItem
-	}
+  interface Props {
+    block: ExtendedEditorBlock
+  }
 
-	let { block }: Props = $props()
+  let { block }: Props = $props()
+  let attrs = $derived((block.attributes ?? {}) as Record<string, any>)
+  let content = $derived((attrs.content ?? '') as string)
 
-	const {
-		content = '',
-		fontSize = 'base',
-		textColor = 'black',
-		fontFamily = null
-	} = block.attributes ?? {}
+  // A list item can contain a nested list (core/list child).
+  let nestedLists = $derived((block.children ?? []).filter((c: any) => c?.name === 'core/list'))
 </script>
 
-<!-- Use the class directive in Svelte to dynamically set classes -->
-{#if content}
-	<li
-		class="{classNames(
-			fontSize || 'base',
-			textColor || 'black',
-            'none',
-			fontFamily || 'inter'
-		)} mb-4 mx-2 lg:mx-0"
-	>
-		{@html content}
-    </li>
-{/if}
+<li class="mb-1">
+  {@html content}
+  {#each nestedLists as list}
+    <CoreList block={list} />
+  {/each}
+</li>

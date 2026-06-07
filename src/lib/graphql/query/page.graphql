@@ -22,6 +22,8 @@ query PageContent($uri: String!) {
         ...CoreButtonFragment
         ...CoreButtonsFragment
         ...CoreSpacerFragment
+        ...CoreListFragment
+        ...CoreListItemFragment
         ...PortfolioBlockDetailsFragment
         ...AcfLinkBlockFragment
         ...CoreImageFragment
@@ -88,6 +90,8 @@ query PageContent($uri: String!) {
         ...CoreButtonFragment
         ...CoreButtonsFragment
         ...CoreSpacerFragment
+        ...CoreListFragment
+        ...CoreListItemFragment
         ...PortfolioBlockDetailsFragment
         ...AcfLinkBlockFragment
         ...CoreImageFragment
@@ -453,6 +457,8 @@ fragment AcfLinkBlockFragment on AcfLinkBlock {
     ...CoreButtonFragment
     ...CoreButtonsFragment
     ...CoreSpacerFragment
+    ...CoreListFragment
+    ...CoreListItemFragment
     ...PortfolioBlockDetailsFragment
     ...CoreImageFragment
   }
@@ -572,5 +578,25 @@ fragment AcfSubpageNavigationFragment on AcfSubpageNavigation {
     title
     uri
     isCurrent
+  }
+}
+
+fragment CoreListFragment on CoreList {
+  attributes {
+    ordered
+    reversed
+    start
+    type
+    textColor
+    className
+  }
+}
+
+fragment CoreListItemFragment on CoreListItem {
+  attributes {
+    content
+    fontSize
+    fontFamily
+    textColor
   }
 }

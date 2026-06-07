@@ -23,6 +23,7 @@
   import AcfImageGallery from './blocks/AcfImageGallery.svelte'
   import AcfSlideshow from './blocks/AcfSlideshow.svelte'
   import SubpageNavigation from './blocks/SubpageNavigation.svelte'
+  import CoreList from './blocks/CoreList.svelte'
 
   interface Props {
     forceFull?: boolean
@@ -198,6 +199,10 @@
 
     {#if blockName === 'core/spacer'}
       <CoreSpacer {block} />
+    {/if}
+
+    {#if blockName === 'core/list'}
+      <CoreList {block} />
     {/if}
 
     {#if blockName === 'core/image'}
