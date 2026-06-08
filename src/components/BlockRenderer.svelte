@@ -35,6 +35,10 @@
 	import CoreQueryPaginationPrevious from './blocks/CoreQueryPaginationPrevious.svelte'
 	import CoreQueryPaginationNumbers from './blocks/CoreQueryPaginationNumbers.svelte'
 	import CoreQueryPaginationNext from './blocks/CoreQueryPaginationNext.svelte'
+	// nhtbl ACF blocks
+	import HomePageHero from './blocks/HomePageHero.svelte'
+	import AcfSlideshow from './blocks/AcfSlideshow.svelte'
+	import AcfSlide from './blocks/AcfSlide.svelte'
 
 	// Component map keyed by block type (matches GraphQL `type` field)
 	const blockComponents: Record<string, Component<{ block: EditorBlock; animation?: { delay?: string } }>> = {
@@ -67,7 +71,11 @@
 		CoreQueryPaginationPrevious,
 		CoreQuote,
 		CoreSpacer,
-		CoreVideo
+		CoreVideo,
+		// nhtbl ACF blocks (keyed by GraphQL __typename)
+		AcfHomePageHero: HomePageHero,
+		AcfSlideshow,
+		AcfSlide
 	}
 
 	// Block types that are layout containers — they skip their own animation
