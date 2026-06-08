@@ -40,6 +40,11 @@
 	import AcfSlideshow from './blocks/AcfSlideshow.svelte'
 	import AcfSlide from './blocks/AcfSlide.svelte'
 	import PortfolioBlock from './blocks/PortfolioBlock.svelte'
+	import AcfImageGallery from './blocks/AcfImageGallery.svelte'
+	import SubpageNavigation from './blocks/SubpageNavigation.svelte'
+	import AcfLinkBlock from './blocks/AcfLinkBlock.svelte'
+	import ServicePush from './blocks/ServicePush.svelte'
+	import GalerieBlock from './blocks/GalerieBlock.svelte'
 
 	// Component map keyed by block type (matches GraphQL `type` field)
 	const blockComponents: Record<string, Component<{ block: EditorBlock; animation?: { delay?: string } }>> = {
@@ -77,7 +82,12 @@
 		AcfHomePageHero: HomePageHero,
 		AcfSlideshow,
 		AcfSlide,
-		AcfPortfolioBlock: PortfolioBlock
+		AcfPortfolioBlock: PortfolioBlock,
+		AcfImageGallery,
+		AcfSubpageNavigation: SubpageNavigation,
+		AcfLinkBlock,
+		AcfServicePush: ServicePush,
+		AcfGalerie: GalerieBlock
 	}
 
 	// Block types that are layout containers — they skip their own animation
