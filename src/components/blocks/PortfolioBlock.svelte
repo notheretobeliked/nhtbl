@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, untrack } from 'svelte'
+  import { page } from '$app/stores'
   import FeaturedProject from '$components/molecules/FeaturedProject.svelte'
   import Image from '$components/atoms/Image.svelte'
   import ImageModal from '$components/molecules/ImageModal.svelte'
@@ -51,10 +52,20 @@
     if (typeof slug === 'string' && PALETTE[slug]) return PALETTE[slug]
     return fallback
   }
+  // When the block itself has no colour set, fall back to the page's configured
+  // background (and a contrasting text colour) so the controls match the page
+  // instead of the dark-section defaults.
+  const pageBgSlug = $derived.by(() => {
+    const raw = ($page.data as any)?.backgroundColour
+    return (Array.isArray(raw) ? raw[0] : raw) ?? 'white'
+  })
+  const pageBgHex = $derived(PALETTE[pageBgSlug] ?? '#FFFFFF')
+  const pageFgHex = $derived(pageBgSlug === 'black' ? '#FFFFFF' : '#000000')
+
   const themeVars = $derived.by(() => {
     const style = parseStyle((block.attributes as any)?.style)
-    const fg = resolveColor((block.attributes as any)?.textColor, style?.color?.text, '#FFFFFF')
-    const bg = resolveColor((block.attributes as any)?.backgroundColor, style?.color?.background, '#000000')
+    const fg = resolveColor((block.attributes as any)?.textColor, style?.color?.text, pageFgHex)
+    const bg = resolveColor((block.attributes as any)?.backgroundColor, style?.color?.background, pageBgHex)
     return (
       `--pf-fg:${fg};` +
       `--pf-bg:${bg};` +

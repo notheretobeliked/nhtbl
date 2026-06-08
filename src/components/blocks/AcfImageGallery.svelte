@@ -91,7 +91,7 @@
 	<figure class="acf-image-gallery {fullWidth ? 'w-full' : 'w-auto'} {fullHeight ? 'h-full' : ''}">
 		<div
 			class="relative {fullHeight ? 'h-full' : ''} overflow-hidden"
-			style:aspect-ratio={fullHeight ? undefined : (aspectCss ?? '3 / 2')}
+			style:aspect-ratio={aspectCss ?? '3 / 2'}
 		>
 			{#each images as image, i (i)}
 				{#if i === activeIndex || i === previousIndex}

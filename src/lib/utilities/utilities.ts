@@ -116,6 +116,25 @@ export const findImageSizeData = (property: keyof ImageSize, sizes: ImageSize[],
   return ''
 }
 
+/**
+ * Like findImageSizeData, but when the requested size doesn't exist (common for
+ * small originals that never generate a `large`/`x_large`), falls back to the
+ * largest available size. Used for width/height attributes and high-res
+ * sources, where an empty value would leave the <img> with no intrinsic aspect
+ * ratio (and therefore 0 height when sized with h-auto).
+ */
+export const findImageSizeDataOrLargest = (property: keyof ImageSize, sizes: ImageSize[], name: string): string => {
+  const exact = findImageSizeData(property, sizes, name)
+  if (exact) return exact
+  const largest = [...sizes]
+    .filter(size => Number(size.width) > 0)
+    .sort((a, b) => Number(b.width) - Number(a.width))[0]
+  if (largest && property in largest) {
+    return String(largest[property])
+  }
+  return ''
+}
+
 export const getSrcSet = (sizes: ImageSize[]): string => {
   return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
 }

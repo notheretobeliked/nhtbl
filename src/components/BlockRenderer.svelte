@@ -50,6 +50,10 @@
 
   const align = $derived(forceFull ? 'full' : block.attributes?.align || 'none')
   const bgColor = $derived(block.attributes?.backgroundColor ?? 'none')
+  // Preset text colour (slug, e.g. "white"). Applied as a text-{slug} class so
+  // descendants inherit it — without this a group's textColor is dropped and
+  // text falls back to black.
+  const textColor = $derived(block.attributes?.textColor)
   // Custom (hex) colours picked in the editor land in style.color.* rather than
   // the backgroundColor/textColor preset slugs. Applied as inline styles below;
   // for preset colours these are undefined so the bg-{slug} class wins.
@@ -159,7 +163,7 @@
   }
 </script>
 
-<div class="{classNames(align)} bg-{bgColor} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius} style:background-color={customBg} style:color={customText}>
+<div class="{classNames(align)} bg-{bgColor} {textColor ? `text-${textColor}` : ''} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius} style:background-color={customBg} style:color={customText}>
   <div class="{hasHomePageHero(block) || revealActive ? '' : 'block-anim'} h-full" data-inview={isInView}>
     {#if hasHomePageHero(block)}
       <HomePageHero {block} />

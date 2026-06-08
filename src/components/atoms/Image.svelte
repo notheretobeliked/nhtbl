@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MediaItem, MediaSize } from '$lib/graphql/generated'
 	import type { ImageSize } from '$lib/types/wp-types'
-	import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
+	import { findImageSizeData, findImageSizeDataOrLargest, getSrcSet } from '$lib/utilities/utilities'
 	import { energyUsage } from '$lib/stores/energyUsage.svelte.js'
 	import { onMount } from 'svelte'
 	
@@ -14,6 +14,14 @@
 		extraClasses?: string;
 		shadow?: boolean;
 		aspect?: 'square' | 'video' | 'auto'
+		/**
+		 * Size the container to the image's natural height instead of forcing
+		 * `h-full`. Used for in-flow images (e.g. CoreImage with aspect "auto",
+		 * not filling a stretch section) where a percentage-height chain would
+		 * otherwise collapse to 0. The <img> must also be sized with h-auto
+		 * (callers pass `!h-auto` via extraClasses).
+		 */
+		naturalFlow?: boolean
 	}
 
 	let {
@@ -23,7 +31,8 @@
 		fit = 'none',
 		extraClasses = '',
 		shadow = false,
-		aspect = 'auto'
+		aspect = 'auto',
+		naturalFlow = false
 	}: Props = $props();
 
 	let containerElement: HTMLDivElement
@@ -126,10 +135,12 @@
 		return energyUsage.isNone ? null : optimalSize
 	})
 
-	// Current src based on energy mode (for hydrated state) or thumbnail (for SSR)
+	// Current src based on energy mode (for hydrated state) or thumbnail (for SSR).
+	// Fall back to the largest available size so small originals (no large/x_large)
+	// never end up with an empty src — which renders as a broken/blank image.
 	const currentSrc = $derived(() => {
 		const size = (energyUsage as any).isHydrated ? optimalImageSize() : initialImageSize()
-		return size ? findImageSizeData('sourceUrl', sizes(), size) : null
+		return size ? findImageSizeDataOrLargest('sourceUrl', sizes(), size) : null
 	})
 
 	// Current srcset based on energy mode (for hydrated state) or low quality (for SSR)
@@ -151,7 +162,7 @@
 
 	// Data attributes for SEO - all available sizes
 	const dataSrcHigh = $derived(() => {
-		return findImageSizeData('sourceUrl', sizes(), 'large')
+		return findImageSizeDataOrLargest('sourceUrl', sizes(), 'large')
 	})
 
 	const dataSrcsetHigh = $derived(() => {
@@ -167,13 +178,14 @@
 	})
 	
 	const width = $derived(() => {
-		// Always use 'large' size for width/height attributes to reserve proper layout space
-		return findImageSizeData('width', sizes(), 'large')
+		// Prefer 'large' to reserve proper layout space, but fall back to the
+		// largest available size — small originals never generate a 'large', and
+		// an empty width/height leaves the <img> with no intrinsic aspect ratio.
+		return findImageSizeDataOrLargest('width', sizes(), 'large')
 	})
-	
+
 	const height = $derived(() => {
-		// Always use 'large' size for width/height attributes to reserve proper layout space
-		return findImageSizeData('height', sizes(), 'large')
+		return findImageSizeDataOrLargest('height', sizes(), 'large')
 	})
 
 	const altText = imageObject.altText ?? ''
@@ -234,15 +246,15 @@
 
 
 </script>
-<div bind:this={containerElement} class="image-container relative w-full max-w-none flex justify-center overflow-hidden {aspect === 'square' ? 'aspect-square' : `h-full aspect-${aspect}`}" style="--bg-color: {placeholderBg()}">
+<div bind:this={containerElement} class="image-container relative w-full max-w-none flex justify-center overflow-hidden {naturalFlow ? '' : aspect === 'square' ? 'aspect-square' : `h-full aspect-${aspect}`}" style="--bg-color: {placeholderBg()}">
   {#if energyUsage.isNone}
     <!-- No image mode: transparent image with background color -->
     <img
       loading={lazy ? 'lazy' : 'eager'}
-      class={`${fit === 'contain' ? 'w-auto' : 'w-full'} h-full ${
-        fit === 'cover' ? 'object-cover' : 
-        fit === 'contain' ? 'object-contain' : 
-        fit === 'fill' ? 'object-fill' : 
+      class={`${fit === 'contain' ? 'w-auto' : 'w-full'} ${naturalFlow ? 'h-auto' : 'h-full'} ${
+        fit === 'cover' ? 'object-cover' :
+        fit === 'contain' ? 'object-contain' :
+        fit === 'fill' ? 'object-fill' :
         'object-none'
       } ${shadow ? 'drop-shadow-lg' : ''} ${extraClasses}`}
       src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='{width()}' height='{height()}'%3E%3C/svg%3E"
@@ -258,10 +270,10 @@
     <!-- Normal image rendering for low/high energy modes -->
     <img
       loading={lazy ? 'lazy' : 'eager'}
-      class={`${fit === 'contain' ? 'w-full' : 'w-full'} h-full ${
-        fit === 'cover' ? 'object-cover' : 
-        fit === 'contain' ? 'object-contain' : 
-        fit === 'fill' ? 'object-fill' : 
+      class={`${fit === 'contain' ? 'w-full' : 'w-full'} ${naturalFlow ? 'h-auto' : 'h-full'} ${
+        fit === 'cover' ? 'object-cover' :
+        fit === 'contain' ? 'object-contain' :
+        fit === 'fill' ? 'object-fill' :
         'object-none'
       } ${shadow ? 'drop-shadow-lg' : ''} ${extraClasses}`}
       bind:this={imageElement}

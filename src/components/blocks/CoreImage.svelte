@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+	import type { MediaItem } from '$lib/graphql/generated'
 	import Image from '$components/atoms/Image.svelte'
 	interface Props {
 		block: ExtendedEditorBlock
@@ -55,7 +56,17 @@
 </script>
 
 <figure class={fill ? 'h-full w-full' : 'mb-0 w-full'}>
-	<Image {imageObject} imageSize="large" extraClasses={fill ? 'h-full w-full' : aspectRatioClass} fit="cover" />
+	<Image
+		{imageObject}
+		imageSize="large"
+		naturalFlow={!fill && aspectRatio === 'auto'}
+		extraClasses={fill
+			? 'h-full w-full'
+			: aspectRatio === 'auto'
+				? 'w-full'
+				: aspectRatioClass}
+		fit="cover"
+	/>
 	{#if block.attributes?.caption && !fill}
 		<figcaption class="font-inter mt-2 text-center text-sm">{block.attributes.caption}</figcaption>
 	{/if}

@@ -82,7 +82,10 @@
         alignClasses = 'text-left'
         break
     }
-    colorClasses = `text-${textColor}`
+    // No textColor → emit nothing so the paragraph inherits the colour set on an
+    // ancestor (e.g. a core/group's textColor). `text-${null}` would otherwise
+    // produce an invalid `text-null` class and the text falls back to black.
+    colorClasses = textColor ? `text-${textColor}` : ''
     if (textColor === 'nhtbl-green-base') colorClasses = `${colorClasses} group-hover:text-black transition-color`
 
     return `${textClasses} ${alignClasses} ${colorClasses}` // Combine base classes with spacing classes

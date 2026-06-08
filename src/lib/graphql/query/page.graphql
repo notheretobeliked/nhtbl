@@ -153,6 +153,7 @@ fragment CoreVideoFragment on CoreVideo {
 fragment CoreGroupFragment on CoreGroup {
   attributes {
     backgroundColor
+    textColor
     align
     style
     layout
