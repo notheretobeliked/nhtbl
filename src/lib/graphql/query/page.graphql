@@ -2,26 +2,49 @@ query PageContent($uri: String = "") {
 	nodeByUri(uri: $uri) {
 		... on Page {
 			id
+			databaseId
 			title
 			date
+			backgroundColour {
+				backgroundColour
+				hideNavigation
+			}
 			editorBlocks {
 				...CommonBlockFields
 			}
 		}
-		... on Post {
+		... on Nhtbl_project {
 			id
+			databaseId
 			title
-			date
-			featuredImage {
-				node {
-					altText
-					mediaDetails {
-						sizes {
-							name
-							mimeType
-							height
-							width
-							sourceUrl
+			excerpt
+			nhtblClients {
+				nodes {
+					name
+					id
+					parentId
+					slug
+				}
+			}
+			nhtblServices {
+				nodes {
+					id
+					name
+					slug
+					parentId
+				}
+			}
+			projectData {
+				startDate
+				endDate
+				imageGallery {
+					nodes {
+						altText
+						colorPalette
+						dominantColor
+						secondaryColor
+						mediaDetails {
+							...MediaDetailsFragment
 						}
 					}
 				}
@@ -77,6 +100,10 @@ fragment CommonBlockFields on EditorBlock {
 		}
 	}
 	... on CoreImage {
+		altText
+		colorPalette
+		dominantColor
+		secondaryColor
 		mediaDetails {
 			sizes(exclude: [MEDIUM_LARGE, MEDIUM]) {
 				sourceUrl
@@ -200,13 +227,13 @@ fragment CommonBlockFields on EditorBlock {
 			align
 			style
 			layout
-			sectionBehavior
-			sectionMinHeight
-			sectionContentAlign
-			sectionReveal
-			sectionRevealDirection
-			sectionRevealStagger
-			sectionParallax
+			behavior
+			minHeight
+			contentAlign
+			reveal
+			revealDirection
+			revealStagger
+			parallax
 		}
 	}
 	... on CoreButton {
@@ -267,6 +294,252 @@ fragment CommonBlockFields on EditorBlock {
 		resolvedPosts {
 			...ResolvedPostFields
 		}
+	}
+	... on AcfHomePageHero {
+		attributes {
+			backgroundColor
+			align
+		}
+		homePageHero {
+			images(first: 100) {
+				nodes {
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaType
+					mimeType
+					mediaItemUrl
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfServicePush {
+		attributes {
+			align
+			backgroundColor
+		}
+		servicePush {
+			service {
+				nodes {
+					slug
+					... on Page {
+						id
+						title
+						uri
+						featuredImage {
+							node {
+								altText
+								colorPalette
+								dominantColor
+								secondaryColor
+								mediaDetails {
+									...MediaDetailsFragment
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	... on AcfGalerie {
+		attributes {
+			align
+		}
+		galerie {
+			galerie {
+				nodes {
+					mediaType
+					mimeType
+					mediaItemUrl
+					caption(format: RENDERED)
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfPortfolioBlock {
+		attributes {
+			align
+			backgroundColor
+			textColor
+			style
+		}
+		portfolioBlock {
+			displayMode
+			enableSearch
+			showTags
+			projectSource
+			projectsPerPage
+			sortOrder
+			selectedService {
+				nodes {
+					slug
+					name
+				}
+			}
+			specificProjects {
+				nodes {
+					slug
+					... on Nhtbl_project {
+						id
+						uri
+						title(format: RENDERED)
+						excerpt(format: RENDERED)
+						nhtblClients {
+							nodes {
+								name
+								slug
+							}
+						}
+						nhtblServices {
+							nodes {
+								name
+								slug
+								parentId
+								id
+							}
+						}
+						projectData {
+							startDate
+							endDate
+						}
+						featuredImage {
+							node {
+								altText
+								colorPalette
+								dominantColor
+								secondaryColor
+								mediaDetails {
+									...MediaDetailsFragment
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	... on AcfLinkBlock {
+		attributes {
+			align
+			backgroundColor
+		}
+		linkBlock {
+			internalLink {
+				nodes {
+					slug
+					uri
+				}
+			}
+			externalLink {
+				url
+				title
+				target
+			}
+		}
+	}
+	... on AcfSurveyBlock {
+		surveyBlock {
+			questions {
+				required
+				allowOther
+				useDefaultLikertOptions
+				options {
+					optionLabel
+					optionValue
+				}
+				questionKey
+				questionText
+				questionType
+			}
+		}
+	}
+	... on AcfImageGallery {
+		attributes {
+			align
+			backgroundColor
+			style
+			className
+		}
+		imageGallery {
+			intervalMs
+			aspectRatio
+			caption
+			fullWidth
+			fullHeight
+			images {
+				nodes {
+					altText
+					mediaType
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfSlideshow {
+		attributes {
+			align
+			backgroundColor
+			style
+			className
+		}
+		slideshow {
+			autoplay
+			intervalMs
+			aspectRatio
+			showNavigation
+		}
+	}
+	... on AcfSlide {
+		slide {
+			caption
+			image {
+				node {
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaType
+					mimeType
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfSubpageNavigation {
+		attributes {
+			align
+		}
+		navItems {
+			databaseId
+			title
+			uri
+			isCurrent
+		}
+	}
+}
+
+fragment MediaDetailsFragment on MediaDetails {
+	sizes {
+		name
+		sourceUrl
+		width
+		height
 	}
 }
 

@@ -1,0 +1,38 @@
+query ProjectImages {
+  nhtblProjects(first: 100) {
+    nodes {
+      slug
+      title
+      uri
+      nhtblClients {
+        nodes {
+          name
+          slug
+        }
+      }
+      nhtblServices {
+        nodes {
+          name
+          slug
+        }
+      }
+      editorBlocks {
+        name
+        ...on CoreImage {
+          colorPalette
+          dominantColor
+          secondaryColor
+          altText
+          mediaDetails {
+            sizes {
+              name
+              sourceUrl
+              width
+              height
+            }
+          }
+        }
+      }
+    }
+  }
+}

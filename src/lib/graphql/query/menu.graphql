@@ -12,13 +12,17 @@ query PageMeta($uri: String!) {
 			}
 		}
 	}
-	page:nodeByUri(uri: $uri) {
+	page: nodeByUri(uri: $uri) {
 		... on Page {
+			backgroundColour {
+				backgroundColour
+				hideNavigation
+			}
 			seo {
 				...SeoFragment
 			}
-		},
-		... on Post {
+		}
+		... on Nhtbl_project {
 			seo {
 				...SeoFragment
 			}
@@ -36,6 +40,10 @@ fragment SeoFragment on PostTypeSEO {
 	title
 	twitterDescription
 	twitterTitle
+	breadcrumbs {
+		text
+		url
+	}
 	twitterImage {
 		altText
 		caption
