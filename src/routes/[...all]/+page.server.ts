@@ -6,6 +6,44 @@ import { error, isHttpError } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { EditorBlock } from '$lib/types/wp-types'
 import { flatListToHierarchical, normalizeAssetUrlsInObject } from '$lib/server/utilities'
+import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
+import { getAllProjects } from '$lib/utilities/projectsCache'
+
+/**
+ * Resolve acf/portfolio-block project lists server-side, attaching the result as
+ * `resolvedProjects` on each portfolio block (read by PortfolioBlock.svelte).
+ * Only fetches the full project list when a block needs more than the specific
+ * projects already embedded in its GraphQL response.
+ */
+async function resolvePortfolioBlocks(blocks: EditorBlock[]): Promise<EditorBlock[]> {
+	const portfolioBlocks: any[] = []
+	const collect = (list: EditorBlock[]) => {
+		for (const b of list) {
+			if (b.name === 'acf/portfolio-block') portfolioBlocks.push(b)
+			if ((b as any).children) collect((b as any).children)
+		}
+	}
+	collect(blocks)
+	if (!portfolioBlocks.length) return blocks
+
+	const needsAll = portfolioBlocks.some((b) => {
+		const c = b.portfolioBlock
+		return (
+			c?.projectSource === 'all' ||
+			c?.projectSource === 'by_service' ||
+			(c?.projectSource === 'specific' &&
+				(!c?.specificProjects?.nodes?.[0]?.title || !c?.specificProjects?.nodes?.[0]?.featuredImage))
+		)
+	})
+	const allProjects = needsAll ? await getAllProjects() : []
+
+	for (const b of portfolioBlocks) {
+		if (b.portfolioBlock) {
+			;(b as any).resolvedProjects = resolvePortfolioProjects(b.portfolioBlock, allProjects as any)
+		}
+	}
+	return blocks
+}
 
 export const load: PageServerLoad = async function load({ params, url, fetch }) {
 	const uri = `/${params.all || ''}`.replace(/\/+/g, '/') // Normalize multiple slashes
@@ -64,6 +102,9 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 		if (postContext.postDate || postContext.postFeaturedImage) {
 			attachPostContext(editorBlocks)
 		}
+
+		// Resolve acf/portfolio-block project lists server-side.
+		editorBlocks = await resolvePortfolioBlocks(editorBlocks)
 
 		return {
 			data: pageData.data,
