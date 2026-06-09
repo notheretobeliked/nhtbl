@@ -106,10 +106,21 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 		// Resolve acf/portfolio-block project lists server-side.
 		editorBlocks = await resolvePortfolioBlocks(editorBlocks)
 
+		// A page with a survey block is wrapped in <SurveyContainer> client-side.
+		const hasSurvey = (function check(list: EditorBlock[]): boolean {
+			return list.some(
+				(b) =>
+					b.name === 'acf/survey-block' ||
+					(!!(b as any).children?.length && check((b as any).children))
+			)
+		})(editorBlocks)
+
 		return {
 			data: pageData.data,
 			uri: uri,
-			editorBlocks: editorBlocks
+			editorBlocks: editorBlocks,
+			hasSurvey,
+			id: (node as { databaseId?: number }).databaseId
 		}
 	} catch (err: unknown) {
 		console.error('Server Error:', err)
