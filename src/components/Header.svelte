@@ -97,10 +97,9 @@
 		<a
 			href={item.uri ?? '/'}
 			{onclick}
-			class="font-sans text-xl md:text-lg border-b-4 pb-1 {item.current
+			class="font-sans text-xl md:text-lg border-b-4 {item.current
 				? 'border-nhtbl-green-base'
 				: 'border-b-transparent hover:border-b-nhtbl-purple-base'}"
-			role="button"
 		>
 			{item.label}
 		</a>
@@ -130,7 +129,7 @@
 				{@render hamburgerButton('pr-2')}
 
 				<div class="hidden md:flex items-center gap-4">
-					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center">
+					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center list-none">
 						{#each menuItems as menuItem}
 							<li>{@render navLink(menuItem)}</li>
 						{/each}
@@ -156,7 +155,7 @@
 		<ul
 			role="navigation"
 			aria-label="Main"
-			class="fixed w-full items-center md:hidden h-screen top-0 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 flex"
+			class="fixed w-full items-center md:hidden h-screen top-0 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 flex list-none"
 			transition:slide={{ duration: 400, axis: 'y' }}
 		>
 			{#each menuItems as menuItem, i}
