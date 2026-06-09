@@ -129,7 +129,7 @@
 				{@render hamburgerButton('pr-2')}
 
 				<div class="hidden md:flex items-center gap-4">
-					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center list-none">
+					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center list-none m-0 p-0">
 						{#each menuItems as menuItem}
 							<li>{@render navLink(menuItem)}</li>
 						{/each}
@@ -155,7 +155,7 @@
 		<ul
 			role="navigation"
 			aria-label="Main"
-			class="fixed w-full items-center md:hidden h-screen top-0 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 flex list-none"
+			class="fixed w-full items-center md:hidden h-screen top-0 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 flex list-none m-0 p-0"
 			transition:slide={{ duration: 400, axis: 'y' }}
 		>
 			{#each menuItems as menuItem, i}
