@@ -1,5 +1,6 @@
 query PageContent($uri: String = "") {
 	nodeByUri(uri: $uri) {
+		__typename
 		... on Page {
 			id
 			databaseId

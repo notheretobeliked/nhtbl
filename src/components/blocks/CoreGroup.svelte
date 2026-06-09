@@ -63,35 +63,35 @@
 
 	// Section behaviour / reveal / parallax extensions
 	let sectionBehavior = $derived(
-		((attrs as Record<string, unknown>)?.sectionBehavior as string) ?? 'normal'
+		((attrs as Record<string, unknown>)?.behavior as string) ?? 'normal'
 	)
 	let sectionMinHeight = $derived(
-		((attrs as Record<string, unknown>)?.sectionMinHeight as string) ?? 'auto'
+		((attrs as Record<string, unknown>)?.minHeight as string) ?? 'auto'
 	)
 	let sectionContentAlign = $derived(
-		((attrs as Record<string, unknown>)?.sectionContentAlign as
+		((attrs as Record<string, unknown>)?.contentAlign as
 			| 'top'
 			| 'center'
 			| 'bottom'
 			| 'stretch') ?? 'center'
 	)
 	let sectionReveal = $derived(
-		((attrs as Record<string, unknown>)?.sectionReveal as
+		((attrs as Record<string, unknown>)?.reveal as
 			| 'none'
 			| 'scroll-locked'
 			| 'once-on-enter') ?? 'none'
 	)
 	let sectionRevealDirection = $derived(
-		((attrs as Record<string, unknown>)?.sectionRevealDirection as
+		((attrs as Record<string, unknown>)?.revealDirection as
 			| 'up'
 			| 'from-left'
 			| 'fade-only') ?? 'up'
 	)
 	let sectionRevealStagger = $derived(
-		Number((attrs as Record<string, unknown>)?.sectionRevealStagger ?? 60)
+		Number((attrs as Record<string, unknown>)?.revealStagger ?? 60)
 	)
 	let sectionParallax = $derived(
-		((attrs as Record<string, unknown>)?.sectionParallax as boolean) === true
+		((attrs as Record<string, unknown>)?.parallax as boolean) === true
 	)
 
 	let hasMinHeight = $derived(sectionMinHeight === 'screen' || sectionMinHeight === 'half')

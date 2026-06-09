@@ -45,6 +45,16 @@ async function resolvePortfolioBlocks(blocks: EditorBlock[]): Promise<EditorBloc
 	return blocks
 }
 
+/** Format a project's start/end dates as a compact year range, e.g. "(2023–24)". */
+function formatYearRange(start?: string | null, end?: string | null): string {
+	if (!start && !end) return ''
+	if (!start && end) return `(${new Date(end).getFullYear()})`
+	if (start && !end) return `(${new Date(start).getFullYear()} –)`
+	const s = new Date(start!).getFullYear()
+	const e = new Date(end!).getFullYear()
+	return s === e ? `(${s})` : `(${s}–${String(e).slice(-2)})`
+}
+
 export const load: PageServerLoad = async function load({ params, url, fetch }) {
 	const uri = `/${params.all || ''}`.replace(/\/+/g, '/') // Normalize multiple slashes
 
@@ -115,12 +125,40 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 			)
 		})(editorBlocks)
 
+		// Portfolio items reuse this loader + blocks; only the presentation differs
+		// (see +page.svelte). Compute the title-card extras and drop the excerpt
+		// block (it's shown in the card instead).
+		const isPortfolio = (node as any).__typename === 'Nhtbl_project'
+		let portfolio: Record<string, unknown> | undefined
+		if (isPortfolio) {
+			const services = ((node as any).nhtblServices?.nodes ?? [])
+				.filter((s: any) => s?.parentId !== null && s?.parentId !== undefined)
+				.map((s: any) => s?.name)
+				.filter(Boolean)
+			const clients = ((node as any).nhtblClients?.nodes ?? [])
+				.map((c: any) => c?.name)
+				.filter(Boolean)
+			portfolio = {
+				title: (node as any).title ?? '',
+				excerpt: (node as any).excerpt ?? '',
+				clients,
+				services,
+				yearDisplay: formatYearRange(
+					(node as any).projectData?.startDate,
+					(node as any).projectData?.endDate
+				)
+			}
+			editorBlocks = editorBlocks.filter((b) => b.name !== 'core/post-excerpt')
+		}
+
 		return {
 			data: pageData.data,
 			uri: uri,
 			editorBlocks: editorBlocks,
 			hasSurvey,
-			id: (node as { databaseId?: number }).databaseId
+			id: (node as { databaseId?: number }).databaseId,
+			pageType: isPortfolio ? 'portfolio' : 'page',
+			portfolio
 		}
 	} catch (err: unknown) {
 		console.error('Server Error:', err)
