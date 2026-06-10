@@ -1,4 +1,4 @@
-import { WORDPRESS_URL, CDN_URL } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import type { EditorBlock } from '$lib/types/wp-types'
 
 export interface HierarchicalOptions {
@@ -51,7 +51,7 @@ export function flatListToHierarchical(
  * Returns a relative path if the URL matches the WordPress URL
  */
 export function normalizeUrl(url: string): string {
-	const wordpressUrl = WORDPRESS_URL || ''
+	const wordpressUrl = env.WORDPRESS_URL || ''
 	if (!wordpressUrl) return url
 
 	// Generate variations of the WordPress URL
@@ -79,7 +79,9 @@ export function normalizeUrl(url: string): string {
  * Only applies if CDN_URL environment variable is set
  */
 export function normalizeAssetUrl(url: string): string {
-	const cdnUrl = CDN_URL
+	// Read at runtime so a missing CDN_URL doesn't break the build; falsy
+	// (undefined or empty) means no CDN is configured.
+	const cdnUrl = env.CDN_URL
 	if (!cdnUrl) return url // No CDN configured, return original URL
 
 	const assetExtensions = [
@@ -99,7 +101,7 @@ export function normalizeAssetUrl(url: string): string {
 
 	if (!hasAssetExtension) return url
 
-	const wordpressUrl = WORDPRESS_URL || ''
+	const wordpressUrl = env.WORDPRESS_URL || ''
 	if (!wordpressUrl) return url
 
 	// Generate variations of the WordPress URL

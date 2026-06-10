@@ -10,7 +10,8 @@ export default defineConfig({
 		alias: {
 			'$lib': path.resolve('./src/lib'),
 			'$components': path.resolve('./src/components'),
-			'$env/static/private': path.resolve('./src/lib/__mocks__/env.ts')
+			'$env/static/private': path.resolve('./src/lib/__mocks__/env.ts'),
+			'$env/dynamic/private': path.resolve('./src/lib/__mocks__/env.ts')
 		}
 	}
 })
