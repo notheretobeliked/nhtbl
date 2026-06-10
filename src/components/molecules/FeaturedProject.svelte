@@ -151,7 +151,7 @@
                 
               </p>
             {/if}
-            {#if showTags && serviceNames.length > 0}
+            <!-- {#if showTags && serviceNames.length > 0}
               <div class="services flex flex-row gap-1 mt-2 flex-wrap justify-center">
                 {#each serviceNames as serviceName}
                   {#if onServiceClick}
@@ -172,7 +172,7 @@
                   {/if}
                 {/each}
               </div>
-            {/if}
+            {/if} -->
           </div>
         {/if}
       </div>
