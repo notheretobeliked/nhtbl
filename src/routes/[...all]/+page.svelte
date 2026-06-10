@@ -1,36 +1,21 @@
 <script lang="ts">
-  import type { EditorBlock } from '$lib/graphql/generated'
-  import BlockRenderer from '$components/BlockRenderer.svelte'
-  import SurveyContainer from '$components/SurveyContainer.svelte'
-  import type { PageData } from './$types'
-  export let data: PageData
-  $: editorBlocks = data.editorBlocks
-  $: backgroundColour = data.backgroundColour
-  $: uri = data.uri
-  $: id = data.id
-  $: hasSurvey = data.hasSurvey
-  $: finalBackgroundColour = (Array.isArray(backgroundColour) ? backgroundColour[0] : backgroundColour) ?? 'white'
+	import PageBody from '$components/PageBody.svelte'
+	import type { PageData } from './$types'
+
+	interface Props {
+		data: PageData
+	}
+
+	let { data }: Props = $props()
+	let isHomePage = $derived(data.uri === '/')
 </script>
 
-{#if hasSurvey}
-  <SurveyContainer blocks={editorBlocks} pageId={id}>
-    <div class="py-40 min-h-screen bg-{backgroundColour}">
-      {#each editorBlocks as block, index (block.clientId)}
-        
-          <BlockRenderer {block} />
-        
-      {/each}
-    </div>
-  </SurveyContainer>
-{:else}
-  <div class="py-40 min-h-screen bg-{backgroundColour}">
-    {#each editorBlocks as block, index (block.clientId)}
-      
-        <BlockRenderer {block} />
-      
-    {/each}
-  </div>
-{/if}
-
-<style>
-</style>
+<PageBody
+	editorBlocks={data.editorBlocks ?? []}
+	pageType={(data as any).pageType}
+	portfolio={(data as any).portfolio ?? {}}
+	backgroundColour={(data as any).backgroundColour ?? 'white'}
+	hasSurvey={(data as any).hasSurvey === true}
+	pageId={(data as any).id}
+	{isHomePage}
+/>

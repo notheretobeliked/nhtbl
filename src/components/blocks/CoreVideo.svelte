@@ -1,61 +1,77 @@
 <script lang="ts">
-	import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-	import Video from '$components/atoms/Video.svelte'
-	
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreVideoAttributes } from '$lib/graphql/generated'
+	import { getContext } from 'svelte'
+
 	interface Props {
-		block: ExtendedEditorBlock
+		block: EditorBlock
 	}
 
 	let { block }: Props = $props()
+	let attrs = $derived(block.attributes as CoreVideoAttributes | undefined)
 
-	// Extract video attributes with defaults
-	const src = block.attributes?.src || ''
-	const autoplay = block.attributes?.autoplay || false
-	const controls = block.attributes?.controls !== false // Default to true unless explicitly false
-	const loop = block.attributes?.loop || false
-	const muted = block.attributes?.muted || false
-	const playsInline = block.attributes?.playsInline || false
-	const preload = block.attributes?.preload || 'metadata'
-	const caption = block.attributes?.caption || ''
-	const align = block.attributes?.align || null
+	// Ancestor CoreGroup with content-align "stretch": cover-fill the section height.
+	const fillCtx = getContext<{ value: boolean } | undefined>('section-stretch-children')
+	let fillHeight = $derived(fillCtx?.value === true)
 
-	// Handle alignment classes
-	const alignmentClass = $derived.by(() => {
-		switch (align) {
-			case 'left':
-				return 'text-left'
-			case 'center':
-				return 'text-center mx-auto'
-			case 'right':
-				return 'text-right ml-auto'
-			case 'wide':
-				return 'w-full max-w-screen-lg mx-auto'
-			case 'full':
-				return 'w-full'
-			default:
-				return ''
-		}
+	// Extract video attributes with safe defaults using $derived
+	let src = $derived(attrs?.src || '')
+	let poster = $derived(attrs?.poster || '')
+	let autoplay = $derived(attrs?.autoplay || false)
+	let muted = $derived(attrs?.muted || false)
+	let controls = $derived(attrs?.controls !== false)
+	let loop = $derived(attrs?.loop || false)
+	let caption = $derived(attrs?.caption || '')
+	let customClasses = $derived(attrs?.className || '')
+	let align = $derived(attrs?.align)
+
+	let alignClass = $derived(
+		align === 'wide'
+			? 'alignwide'
+			: align === 'full'
+				? 'w-screen relative left-1/2 -translate-x-1/2'
+				: align === 'center'
+					? 'self-center'
+					: align === 'left'
+						? 'self-start'
+						: align === 'right'
+							? 'self-end'
+							: ''
+	)
+
+	// Make sure preload is a valid value
+	let preload = $derived.by(() => {
+		const rawPreload = attrs?.preload || 'metadata'
+		return ['auto', 'metadata', 'none'].includes(rawPreload)
+			? (rawPreload as 'auto' | 'metadata' | 'none')
+			: 'metadata'
 	})
 </script>
 
-<figure class="mb-4 w-full {alignmentClass}">
+<figure class={`w-full ${fillHeight ? 'h-full' : ''} ${alignClass} ${customClasses}`}>
 	{#if src}
-		<Video 
+		<video
 			{src}
-			{autoplay}
-			{controls}
-			{loop}
-			{muted}
-			{playsInline}
+			{poster}
 			{preload}
-			fit="cover"
-		/>
+			{controls}
+			{autoplay}
+			{muted}
+			{loop}
+			class={fillHeight ? 'w-full h-full object-cover' : 'w-full h-auto'}
+			playsinline
+		>
+			Your browser does not support the video tag.
+		</video>
 	{:else}
-		<div class="bg-gray-200 flex items-center justify-center h-64 text-gray-500">
-			No video source provided
+		<div class="bg-gray-200 p-4 text-center text-gray-500">
+			Video source not available
 		</div>
 	{/if}
+
 	{#if caption}
-		<figcaption class="font-inter mt-2 text-center text-sm">{caption}</figcaption>
+		<figcaption class="font-sans mt-2 text-center text-sm">
+			{@html caption}
+		</figcaption>
 	{/if}
 </figure>

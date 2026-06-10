@@ -1,277 +1,220 @@
 <script lang="ts">
-  import { inview } from 'svelte-inview'
-  import { getContext } from 'svelte'
-  import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview'
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+	import type { Component } from 'svelte'
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import { extractBlockClasses } from '$lib/utilities/block-attributes'
+	import { blockReveal } from '$lib/actions/block-reveal'
 
-  import CoreParagraph from '$components/blocks/CoreParagraph.svelte'
-  import CoreHeading from '$components/blocks/CoreHeading.svelte'
-  import HomePageHero from '$components/blocks/HomePageHero.svelte'
-  import ServicePush from '$components/blocks/ServicePush.svelte'
-  import CoreGroup from '$components/blocks/CoreGroup.svelte'
-  import CoreColumns from '$components/blocks/CoreColumns.svelte'
-  import CoreColumn from '$components/blocks/CoreColumn.svelte'
-  import CoreSpacer from './blocks/CoreSpacer.svelte'
-  import PortfolioBlock from './blocks/PortfolioBlock.svelte'
-  import GalerieBlock from './blocks/GalerieBlock.svelte'
-  import CoreButtons from './blocks/CoreButtons.svelte'
-  import CoreButton from './blocks/CoreButton.svelte'
-  import AcfLinkBlock from './blocks/AcfLinkBlock.svelte'
-  import CoreImage from './blocks/CoreImage.svelte'
-  import CoreVideo from './blocks/CoreVideo.svelte'
-  import AcfSurveyBlock from './blocks/AcfSurveyBlock.svelte'
-  import AcfImageGallery from './blocks/AcfImageGallery.svelte'
-  import AcfSlideshow from './blocks/AcfSlideshow.svelte'
-  import SubpageNavigation from './blocks/SubpageNavigation.svelte'
-  import CoreList from './blocks/CoreList.svelte'
+	// Block component imports
+	import CoreButton from './blocks/CoreButton.svelte'
+	import CoreButtons from './blocks/CoreButtons.svelte'
+	import CoreColumn from './blocks/CoreColumn.svelte'
+	import CoreColumns from './blocks/CoreColumns.svelte'
+	import CoreCover from './blocks/CoreCover.svelte'
+	import CoreEmbed from './blocks/CoreEmbed.svelte'
+	import CoreFootnotes from './blocks/CoreFootnotes.svelte'
+	import CoreGroup from './blocks/CoreGroup.svelte'
+	import CoreHeading from './blocks/CoreHeading.svelte'
+	import CoreHtml from './blocks/CoreHtml.svelte'
+	import CoreImage from './blocks/CoreImage.svelte'
+	import CoreList from './blocks/CoreList.svelte'
+	import CoreListItem from './blocks/CoreListItem.svelte'
+	import CoreLatestPosts from './blocks/CoreLatestPosts.svelte'
+	import CoreParagraph from './blocks/CoreParagraph.svelte'
+	import CoreQuote from './blocks/CoreQuote.svelte'
+	import CoreSpacer from './blocks/CoreSpacer.svelte'
+	import CoreVideo from './blocks/CoreVideo.svelte'
+	import CoreAccordion from './blocks/CoreAccordion.svelte'
+	import CoreAccordionItem from './blocks/CoreAccordionItem.svelte'
+	import CoreQuery from './blocks/CoreQuery.svelte'
+	import CorePostTemplate from './blocks/CorePostTemplate.svelte'
+	import CorePostTitle from './blocks/CorePostTitle.svelte'
+	import CorePostDate from './blocks/CorePostDate.svelte'
+	import CorePostFeaturedImage from './blocks/CorePostFeaturedImage.svelte'
+	import CoreQueryNoResults from './blocks/CoreQueryNoResults.svelte'
+	import CoreQueryPagination from './blocks/CoreQueryPagination.svelte'
+	import CoreQueryPaginationPrevious from './blocks/CoreQueryPaginationPrevious.svelte'
+	import CoreQueryPaginationNumbers from './blocks/CoreQueryPaginationNumbers.svelte'
+	import CoreQueryPaginationNext from './blocks/CoreQueryPaginationNext.svelte'
+	// nhtbl ACF blocks
+	import HomePageHero from './blocks/HomePageHero.svelte'
+	import AcfSlideshow from './blocks/AcfSlideshow.svelte'
+	import AcfSlide from './blocks/AcfSlide.svelte'
+	import PortfolioBlock from './blocks/PortfolioBlock.svelte'
+	import AcfImageGallery from './blocks/AcfImageGallery.svelte'
+	import SubpageNavigation from './blocks/SubpageNavigation.svelte'
+	import AcfLinkBlock from './blocks/AcfLinkBlock.svelte'
+	import ServicePush from './blocks/ServicePush.svelte'
+	import GalerieBlock from './blocks/GalerieBlock.svelte'
+	import AcfSurveyBlock from './blocks/AcfSurveyBlock.svelte'
 
-  interface Props {
-    forceFull?: boolean
-    block: ExtendedEditorBlock
-  }
+	// Component map keyed by block type (matches GraphQL `type` field)
+	const blockComponents: Record<string, Component<{ block: EditorBlock; animation?: { delay?: string } }>> = {
+		CoreAccordion,
+		CoreAccordionItem,
+		CoreButton,
+		CoreButtons,
+		CoreColumn,
+		CoreColumns,
+		CoreCover,
+		CoreEmbed,
+		CoreFootnotes,
+		CoreGroup,
+		CoreHeading,
+		CoreHtml,
+		CoreImage,
+		CoreLatestPosts,
+		CoreList,
+		CoreListItem,
+		CoreParagraph,
+		CorePostDate,
+		CorePostFeaturedImage,
+		CorePostTemplate,
+		CorePostTitle,
+		CoreQuery,
+		CoreQueryNoResults,
+		CoreQueryPagination,
+		CoreQueryPaginationNext,
+		CoreQueryPaginationNumbers,
+		CoreQueryPaginationPrevious,
+		CoreQuote,
+		CoreSpacer,
+		CoreVideo,
+		// nhtbl ACF blocks (keyed by GraphQL __typename)
+		AcfHomePageHero: HomePageHero,
+		AcfSlideshow,
+		AcfSlide,
+		AcfPortfolioBlock: PortfolioBlock as any,
+		AcfImageGallery,
+		AcfSubpageNavigation: SubpageNavigation,
+		AcfLinkBlock,
+		AcfServicePush: ServicePush,
+		AcfGalerie: GalerieBlock,
+		AcfSurveyBlock
+	}
 
-  let { forceFull = false, block }: Props = $props()
+	// Block types that are layout containers — they skip their own animation
+	// and instead their children animate in with stagger.
+	const containerTypes = new Set(['CoreColumns', 'CoreGroup'])
 
-  let isInView = $state(false)
+	// Prose blocks render bare (no wrapper div) so they get natural spacing
+	const proseTypes = new Set([
+		'CoreParagraph',
+		'CoreHeading',
+		'CoreImage',
+		'CoreList',
+		'CoreListItem',
+		'CoreQuote'
+	])
 
-  // Set by a CoreGroup ancestor whose text-reveal is active. When true this
-  // block's own .block-anim fade is dropped so the group's RevealText is the
-  // sole animator (otherwise the two reveals fight each other).
-  const revealActive = getContext<boolean>('reveal-active') ?? false
+	interface Props {
+		forceFull?: boolean
+		forceFullHeight?: boolean
+		block: EditorBlock
+		staggerIndex?: number
+	}
 
-  const options: Options = {
-    rootMargin: '-50px',
-    unobserveOnEnter: true,
-  }
+	let { forceFull = false, forceFullHeight = false, block, staggerIndex }: Props = $props()
 
-  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
-    isInView = detail.inView
-  }
+	// Derived values for reactivity
+	let blockType = $derived(block.type ?? '')
+	let component = $derived(blockComponents[blockType])
+	let isProse = $derived(proseTypes.has(blockType))
+	let align = $derived(
+		forceFull || block.name === 'core/column' ? 'full' : (block.attributes?.align ?? 'none')
+	)
+	let verticalAlignment = $derived(block.attributes?.verticalAlignment ?? null)
 
-  const align = $derived(forceFull ? 'full' : block.attributes?.align || 'none')
-  const bgColor = $derived(block.attributes?.backgroundColor ?? 'none')
-  // Preset text colour (slug, e.g. "white"). Applied as a text-{slug} class so
-  // descendants inherit it — without this a group's textColor is dropped and
-  // text falls back to black.
-  const textColor = $derived(block.attributes?.textColor)
-  // Custom (hex) colours picked in the editor land in style.color.* rather than
-  // the backgroundColor/textColor preset slugs. Applied as inline styles below;
-  // for preset colours these are undefined so the bg-{slug} class wins.
-  const customBg = $derived(block.attributes?.style?.color?.background)
-  const customText = $derived(block.attributes?.style?.color?.text)
+	// Use shared utility for block classes
+	let blockClasses = $derived(extractBlockClasses(block.attributes as Record<string, unknown>))
 
-  // Adjusted function to work directly with the style object
-  function mapSpacingToTailwind(styleObj: any): string {
-    let classes = ''
-    
-    // Handle padding
-    const topPadding = styleObj?.spacing?.padding?.top?.replace('spacing|', '')
-    const bottomPadding = styleObj?.spacing?.padding?.bottom?.replace('spacing|', '')
-    const leftPadding = styleObj?.spacing?.padding?.left?.replace('spacing|', '')
-    const rightPadding = styleObj?.spacing?.padding?.right?.replace('spacing|', '')
+	let blockClass = $derived(block.name?.toLowerCase().replace('/', '-') ?? '')
 
-    if (topPadding) {
-      const topValue = parseInt(topPadding, 10) / 10
-      classes += ` pt-${topValue}`
-    }
+	// Content width and centering are owned by the `.page-main` parent rule in
+	// app.css (it caps non-align children at the content width). Wrappers only
+	// declare which alignment bucket they belong to via alignfull/alignwide.
+	let alignClasses = $derived.by(() => {
+		switch (align) {
+			case 'full':
+				return 'alignfull w-full max-w-full'
+			case 'wide':
+				return 'alignwide w-full'
+			default:
+				return 'w-full'
+		}
+	})
 
-    if (bottomPadding) {
-      const bottomValue = parseInt(bottomPadding, 10) / 10
-      classes += ` pb-${bottomValue}`
-    }
+	let verticalAlignClasses = $derived.by(() => {
+		switch (verticalAlignment) {
+			case 'stretch':
+				return 'flex items-stretch'
+			case 'center':
+				return 'flex items-center'
+			case 'bottom':
+				return 'flex items-end'
+			case 'top':
+				return 'flex items-start'
+			default:
+				return ''
+		}
+	})
 
-    if (leftPadding) {
-      const leftValue = parseInt(leftPadding, 10) / 10
-      classes += ` pl-${leftValue}`
-    }
+	// Scroll-triggered fade-in animation
+	let isTopLevel = $derived(!block.parentClientId)
+	let isContainer = $derived(containerTypes.has(blockType))
+	let shouldAnimate = $derived(
+		(isTopLevel && !isContainer) || staggerIndex !== undefined
+	)
+	let staggerDelay = $derived(
+		staggerIndex !== undefined ? `${staggerIndex * 0.15}s` : '0s'
+	)
 
-    if (rightPadding) {
-      const rightValue = parseInt(rightPadding, 10) / 10
-      classes += ` pr-${rightValue}`
-    }
+	// Animation prop passed to prose components
+	let animation = $derived(shouldAnimate ? { delay: staggerDelay } : undefined)
 
-    // Handle margin
-    const topMargin = styleObj?.spacing?.margin?.top?.replace('spacing|', '')
-    const bottomMargin = styleObj?.spacing?.margin?.bottom?.replace('spacing|', '')
-    const leftMargin = styleObj?.spacing?.margin?.left?.replace('spacing|', '')
-    const rightMargin = styleObj?.spacing?.margin?.right?.replace('spacing|', '')
+	// For structural blocks, manage animation on the wrapper div
+	let visible = $state(true) // start visible for SSR
+	let el: HTMLDivElement
 
-    if (topMargin) {
-      const topValue = parseInt(topMargin, 10) / 10
-      classes += ` mt-${topValue}`
-    }
+	$effect(() => {
+		if (isProse || !shouldAnimate || !el) return
+		if (typeof window === 'undefined') return
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    if (bottomMargin) {
-      const bottomValue = parseInt(bottomMargin, 10) / 10
-      classes += ` mb-${bottomValue}`
-    }
+		const rect = el.getBoundingClientRect()
+		if (rect.top < window.innerHeight) return
 
-    if (leftMargin) {
-      const leftValue = parseInt(leftMargin, 10) / 10
-      classes += ` ml-${leftValue}`
-    }
-
-    if (rightMargin) {
-      const rightValue = parseInt(rightMargin, 10) / 10
-      classes += ` mr-${rightValue}`
-    }
-
-    return classes.trim()
-  }
-
-  // Use the style object directly if it exists
-  const spacingClasses = block.attributes?.style ? mapSpacingToTailwind(block.attributes.style) : ''
-
-  // Check if there's horizontal padding defined in style
-  const hasHorizontalPadding = $derived(() => {
-    const style = block.attributes?.style
-    return !!(style?.spacing?.padding?.left || style?.spacing?.padding?.right)
-  })
-
-  const classNames = (align: string | null | undefined): string => {
-    let baseClasses = ''
-    switch (align) {
-      case 'full':
-        baseClasses = 'w-full max-w-full'
-        break
-      case 'wide':
-        baseClasses = 'w-full max-w-[1200px] mx-auto'
-        break
-      case 'none':
-        baseClasses = 'w-full max-w-[852px] mx-auto'
-        break
-      case 'center':
-        baseClasses = 'w-full max-w-[852px] mx-auto'
-        break
-      case null:
-        baseClasses = 'w-full'
-        break
-    }
-    return `${baseClasses} ${spacingClasses}` // Combine base classes with spacing classes
-  }
-
-  // Type-safe block name checking
-  const blockName = block.name || ''
-
-  // Helper functions to check block types based on properties that exist in those specific ACF blocks
-  function hasHomePageHero(block: any): boolean {
-    return 'homePageHero' in block && block.homePageHero !== null && block.homePageHero !== undefined
-  }
-
-  function hasServicePush(block: any): boolean {
-    return 'servicePush' in block && block.servicePush !== null && block.servicePush !== undefined
-  }
+		visible = false
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					visible = true
+					observer.disconnect()
+				}
+			},
+			{ threshold: 0.1 }
+		)
+		observer.observe(el)
+		return () => observer.disconnect()
+	})
 </script>
 
-<div class="{classNames(align)} bg-{bgColor} {textColor ? `text-${textColor}` : ''} {!hasHorizontalPadding() ? '!px-0' : ''}" use:inview={options} oninview_change={handleChange} style:border-radius={block.attributes?.style?.border?.radius} style:background-color={customBg} style:color={customText}>
-  <div class="{hasHomePageHero(block) || revealActive ? '' : 'block-anim'} h-full" data-inview={isInView}>
-    {#if hasHomePageHero(block)}
-      <HomePageHero {block} />
-    {/if}
-
-    {#if hasServicePush(block)}
-      <ServicePush {block} />
-    {/if}
-
-    {#if blockName === 'core/group'}
-      <CoreGroup {block} />
-    {/if}
-
-    {#if blockName === 'core/buttons'}
-      <CoreButtons {block} />
-    {/if}
-
-    {#if blockName === 'core/button'}
-      <CoreButton {block} />
-    {/if}
-
-    {#if blockName === 'core/columns'}
-      <CoreColumns {block} />
-    {/if}
-
-    {#if blockName === 'core/column'}
-      <CoreColumn {block} />
-    {/if}
-
-    {#if blockName === 'core/paragraph'}
-      <CoreParagraph {block} />
-    {/if}
-
-    {#if blockName === 'core/heading'}
-      <CoreHeading {block} />
-    {/if}
-
-    {#if blockName === 'core/spacer'}
-      <CoreSpacer {block} />
-    {/if}
-
-    {#if blockName === 'core/list'}
-      <CoreList {block} />
-    {/if}
-
-    {#if blockName === 'core/image'}
-      <CoreImage {block} />
-    {/if}
-
-    {#if blockName === 'core/video'}
-      <CoreVideo {block} />
-    {/if}
-
-    {#if blockName === 'acf/portfolio-block'}
-      <PortfolioBlock block={block as any} />
-    {/if}
-
-    {#if blockName === 'acf/galerie'}
-      <GalerieBlock {block} />
-    {/if}
-
-    {#if blockName === 'acf/link-block'}
-      <AcfLinkBlock {block} />
-    {/if}
-
-    {#if blockName === 'acf/survey-block'}
-      <AcfSurveyBlock {block} />
-    {/if}
-
-    {#if blockName === 'acf/image-gallery'}
-      <AcfImageGallery {block} />
-    {/if}
-
-    {#if blockName === 'acf/slideshow'}
-      <AcfSlideshow {block} />
-    {/if}
-
-    {#if blockName === 'acf/subpage-navigation'}
-      <SubpageNavigation {block} />
-    {/if}
-  </div>
-</div>
-
-<style>
-  /* Per-block reveal: a quick fade running alongside a slower slide-up.
-     Driven by the data-inview attribute set from svelte-inview above. */
-  .block-anim {
-    opacity: 0;
-    transform: translateY(0.5rem);
-    transition:
-      opacity 320ms ease-out,
-      transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Once revealed, transform: none so the element stops being a containing
-     block for position:fixed descendants (e.g. the image lightbox, which must
-     be relative to the viewport, not this block). No will-change either — it
-     would keep the containing block alive even at transform: none. */
-  .block-anim[data-inview='true'] {
-    opacity: 1;
-    transform: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .block-anim {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-  }
-</style>
+{#if isProse && component}
+	{@const Component = component}
+	<Component {block} {animation} />
+{:else}
+	<div
+		class="{blockClass} {verticalAlignClasses} {alignClasses} {blockClasses.spacingClasses} {blockClasses.bgClasses} {blockClasses.textColorClasses} {blockClasses.className} {forceFullHeight ? 'h-full' : ''}"
+		class:block-reveal={shouldAnimate}
+		class:block-visible={visible}
+		style:transition-delay={shouldAnimate && staggerIndex !== undefined ? staggerDelay : undefined}
+		style:border-radius={blockClasses.borderRadius}
+		style:background-color={blockClasses.customBg}
+		style:color={blockClasses.customText}
+		bind:this={el}
+	>
+		{#if component}
+			{@const Component = component}
+			<Component {block} />
+		{/if}
+	</div>
+{/if}

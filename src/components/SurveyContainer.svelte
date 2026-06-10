@@ -1,10 +1,10 @@
 <script lang="ts">
   import { browser } from '$app/environment'
   import { setContext } from 'svelte'
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+  import type { EditorBlock } from '$lib/types/wp-types'
 
   interface Props {
-    blocks: ExtendedEditorBlock[]
+    blocks: EditorBlock[]
     pageId: string | number
     children?: import('svelte').Snippet
   }
@@ -14,8 +14,8 @@
 
   // Find all survey blocks in the provided blocks
   let surveyBlocks = $derived(() => {
-    const findSurveyBlocks = (blockList: ExtendedEditorBlock[]): ExtendedEditorBlock[] => {
-      let surveys: ExtendedEditorBlock[] = []
+    const findSurveyBlocks = (blockList: EditorBlock[]): EditorBlock[] => {
+      let surveys: EditorBlock[] = []
       
       for (const block of blockList) {
         if (block.name === 'acf/survey-block') {
@@ -24,7 +24,7 @@
         
         // Recursively check inner blocks
         if (block.innerBlocks && block.innerBlocks.length > 0) {
-          surveys = [...surveys, ...findSurveyBlocks(block.innerBlocks.filter((b): b is ExtendedEditorBlock => b !== null))]
+          surveys = [...surveys, ...findSurveyBlocks(block.innerBlocks.filter((b): b is EditorBlock => b !== null))]
         }
       }
       
@@ -62,8 +62,8 @@
     const questions: any[] = []
     
     surveyBlocks().forEach(block => {
-      if (block.surveyBlock?.questions) {
-        questions.push(...block.surveyBlock.questions)
+      if ((block as any).surveyBlock?.questions) {
+        questions.push(...(block as any).surveyBlock.questions)
       }
     })
     

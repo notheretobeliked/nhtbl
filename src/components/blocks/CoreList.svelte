@@ -1,35 +1,41 @@
 <script lang="ts">
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-  import CoreListItem from './CoreListItem.svelte'
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreListAttributes } from '$lib/graphql/generated'
+	import { extractBlockClasses } from '$lib/utilities/block-attributes'
+	import { blockReveal } from '$lib/actions/block-reveal'
+	import BlockRenderer from '$components/BlockRenderer.svelte'
 
-  interface Props {
-    block: ExtendedEditorBlock
-  }
+	interface Props {
+		block: EditorBlock
+		animation?: { delay?: string }
+	}
 
-  let { block }: Props = $props()
-  let attrs = $derived((block.attributes ?? {}) as Record<string, any>)
-  let isOrdered = $derived(Boolean(attrs.ordered))
+	let { block, animation }: Props = $props()
+	let attrs = $derived(block.attributes as CoreListAttributes | undefined)
+	let bc = $derived(extractBlockClasses(block.attributes as Record<string, unknown>))
 
-  // Render the list items directly (not through BlockRenderer): BlockRenderer
-  // wraps every block in <div>s, which is invalid markup inside <ul>/<ol>.
-  let items = $derived((block.children ?? []).filter((c: any) => c?.name === 'core/list-item'))
+	let isOrdered = $derived(attrs?.ordered)
+	let children = $derived(block.children || [])
 </script>
 
 {#if isOrdered}
-  <ol
-    class="list-decimal list-outside pl-6 mb-2"
-    type={attrs.listType || undefined}
-    start={attrs.start || undefined}
-    reversed={attrs.reversed || undefined}
-  >
-    {#each items as item}
-      <CoreListItem block={item} />
-    {/each}
-  </ol>
+	<ol
+		class="list-decimal list-outside {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} {bc.className}"
+		style:border-radius={bc.borderRadius}
+		use:blockReveal={animation}
+	>
+		{#each children as childBlock}
+			<BlockRenderer block={childBlock} />
+		{/each}
+	</ol>
 {:else}
-  <ul class="list-disc list-outside pl-6 mb-2">
-    {#each items as item}
-      <CoreListItem block={item} />
-    {/each}
-  </ul>
+	<ul
+		class="list-disc list-outside {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} {bc.className}"
+		style:border-radius={bc.borderRadius}
+		use:blockReveal={animation}
+	>
+		{#each children as childBlock}
+			<BlockRenderer block={childBlock} />
+		{/each}
+	</ul>
 {/if}

@@ -1,65 +1,71 @@
 query PageMeta($uri: String!) {
-  menu(id: "primary_navigation", idType: LOCATION) {
-    menuItems {
-      nodes {
-        label
-        order
-        uri
-      }
-    }
-  }
-  nodeByUri(uri: $uri) {
-    ... on Page {
-      backgroundColour {
-        hideNavigation
-      }
-      seo {
-        ...SEOFragment
-      }
-    }
-    ... on Nhtbl_project {
-      seo {
-        ...SEOFragment
-      }
-    }
-  }
+	menus(where: { location: PRIMARY_NAVIGATION }, first: 1) {
+		nodes {
+			name
+			locations
+			menuItems {
+				nodes {
+					label
+					order
+					uri
+				}
+			}
+		}
+	}
+	page: nodeByUri(uri: $uri) {
+		... on Page {
+			backgroundColour {
+				backgroundColour
+				hideNavigation
+			}
+			seo {
+				...SeoFragment
+			}
+		}
+		... on Nhtbl_project {
+			seo {
+				...SeoFragment
+			}
+		}
+	}
 }
 
-fragment SEOFragment on PostTypeSEO {
-  metaDesc
-  metaKeywords
-  opengraphSiteName
-  opengraphTitle
-  opengraphPublisher
-  opengraphUrl
-  title
-  twitterDescription
-  twitterTitle
-  breadcrumbs {
-    text
-    url
-  }
-  twitterImage {
-    altText
-    caption
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
-  }
-  opengraphImage {
-    altText
-    caption
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
-  }
-}
-
-fragment MediaDetailsFragment on MediaDetails {
-  sizes {
-    name
-    sourceUrl
-    width
-    height
-  }
+fragment SeoFragment on PostTypeSEO {
+	metaDesc
+	metaKeywords
+	opengraphSiteName
+	opengraphTitle
+	opengraphPublisher
+	opengraphUrl
+	title
+	twitterDescription
+	twitterTitle
+	breadcrumbs {
+		text
+		url
+	}
+	twitterImage {
+		altText
+		caption
+		mediaDetails {
+			sizes {
+				name
+				sourceUrl
+				width
+				height
+			}
+		}
+	}
+	opengraphImage {
+		altText
+		caption
+		mediaDetails {
+			sizes {
+				name
+				sourceUrl
+				width
+				height
+			}
+		}
+	}
 }

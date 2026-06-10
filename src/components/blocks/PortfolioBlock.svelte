@@ -588,10 +588,10 @@
         >
           <div class="relative overflow-hidden rounded-lg">
             <Image 
-              imageObject={image} 
+              imageObject={image as any} 
               imageSize="medium" 
               fit="cover" 
-              aspect="auto"
+
               lazy={true}
             />
             <!-- Hover overlay -->
@@ -623,6 +623,9 @@
 />
 
 <style>
+  /* Tailwind 4: scoped component styles need a reference to the theme to use @apply. */
+  @reference "../../app.css";
+
   .cards-container {
     scrollbar-width: thin;
     scrollbar-color: #ccc transparent;

@@ -1,33 +1,192 @@
-@import 'fonts.css';
+/* All @import rules must come first. */
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.text-2xl,
-.text-3xl {
-    @apply font-display;
+@font-face {
+	font-family: 'Avara';
+	src: url('/fonts/Avara-Bold.woff2') format('woff2'), url('/fonts/Avara-Bold.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Avara';
+	src: url('/fonts/Avara-BoldItalic.woff2') format('woff2'),
+		url('/fonts/Avara-BoldItalic.woff') format('woff');
+	font-weight: 500;
+	font-style: italic;
+	font-display: swap;
 }
 
+/* Safelist dynamic classes built at runtime by BlockRenderer / block components. */
+@source inline("bg-black bg-white bg-nhtbl-grey-base bg-nhtbl-green-base bg-nhtbl-purple-base bg-nhtbl-purple-light text-black text-white text-nhtbl-grey-base text-nhtbl-green-base text-nhtbl-purple-base text-nhtbl-purple-light stroke-black stroke-nhtbl-green-base border-black border-white border-nhtbl-green-base border-nhtbl-grey-base border-nhtbl-purple-base border-nhtbl-purple-light object-cover object-contain object-fill object-none text-xl pt-1 pt-2 pt-3 pt-4 pt-5 pt-6 pt-7 pt-8 pr-1 pr-2 pr-3 pr-4 pr-5 pr-6 pr-7 pr-8 pb-1 pb-2 pb-3 pb-4 pb-5 pb-6 pb-7 pb-8 pl-1 pl-2 pl-3 pl-4 pl-5 pl-6 pl-7 pl-8 mt-1 mt-2 mt-3 mt-4 mt-5 mt-6 mt-7 mt-8 mb-0 mb-1 mb-2 mb-3 mb-4 mb-5 mb-6 mb-7 mb-8 gap-1 gap-2 gap-3 gap-4 gap-5 gap-6 gap-7 gap-8 grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-5 grid-cols-6 grid-cols-7 grid-cols-8 sm:grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 sm:grid-cols-4 sm:grid-cols-5 sm:grid-cols-6 sm:grid-cols-7 sm:grid-cols-8 md:grid-cols-1 md:grid-cols-2 md:grid-cols-3 md:grid-cols-4 md:grid-cols-5 md:grid-cols-6 md:grid-cols-7 md:grid-cols-8 lg:grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 lg:grid-cols-4 lg:grid-cols-5 lg:grid-cols-6 lg:grid-cols-7 lg:grid-cols-8 xl:grid-cols-1 xl:grid-cols-2 xl:grid-cols-3 xl:grid-cols-4 xl:grid-cols-5 xl:grid-cols-6 xl:grid-cols-7 xl:grid-cols-8");
+
+@theme {
+	--font-sans: 'Inter Tight', sans-serif;
+	--font-display: 'Space Grotesk', sans-serif;
+	--default-font-family: 'Inter Tight', sans-serif;
+
+	/* Reset default palette and define the nhtbl brand colours. */
+	--color-*: initial;
+	--color-transparent: transparent;
+	--color-current: currentColor;
+	--color-black: #000000;
+	--color-white: #ffffff;
+	--color-nhtbl-green-base: #e0ff00;
+	--color-nhtbl-grey-base: #d9d9d9;
+	--color-nhtbl-purple-base: #d59ce5;
+	--color-nhtbl-purple-light: #e4d5e8;
+
+	/* Font sizes with line heights (nhtbl scale). */
+	--text-sm: 0.875rem;
+	--text-base: 1rem;
+	--text-base--line-height: 1.4;
+	--text-lg: 1.25rem;
+	--text-lg--line-height: 1.45;
+	--text-xl: 1.75rem;
+	--text-xl--line-height: 1.4;
+	--text-2xl: 2.875rem;
+	--text-2xl--line-height: 1.3;
+
+	--tw-leading: 1.4;
+
+	/* Breakpoints */
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
+	--breakpoint-2xl: 1536px;
+
+	/* Custom spacing scale */
+	--spacing-1: 0.25rem;
+	--spacing-2: 0.5rem;
+	--spacing-3: 0.7rem;
+	--spacing-4: 1rem;
+	--spacing-5: 1.5rem;
+	--spacing-6: 2.25rem;
+	--spacing-7: 3.5rem;
+	--spacing-8: 5rem;
+}
+
+@layer base {
+	/* Typography defaults — applied unless overridden by utility classes (e.g.
+	   CoreHeading/CoreParagraph apply their own font-size classes). Headings use
+	   the display face (Space Grotesk). */
+	p {
+		@apply font-sans text-base mb-3;
+	}
+
+	h1 {
+		@apply font-display text-2xl mb-4;
+	}
+	h2 {
+		@apply font-display text-xl mb-2;
+	}
+	h3 {
+		@apply font-display text-lg mb-3;
+	}
+	h4 {
+		@apply font-display text-base mb-2;
+	}
+	h5,
+	h6 {
+		@apply font-display text-sm mb-2;
+	}
+
+	ul,
+	ol {
+		@apply font-sans text-base mb-3 pl-6;
+	}
+	ul {
+		@apply list-disc;
+	}
+	ol {
+		@apply list-decimal;
+	}
+	li {
+		@apply mb-1;
+	}
+
+	blockquote {
+		@apply my-4;
+	}
+
+	/* nhtbl renders <strong> at normal weight by design. */
+	strong {
+		@apply font-normal;
+	}
+}
+
+/* Content width is owned here, on the page container, rather than per block.
+   Every top-level block (wrapper divs and bare prose alike) is capped at the
+   content width and centred, unless it opts into a wider/full bucket via
+   alignwide/alignfull. */
+.page-main > *:not(.alignfull):not(.alignwide) {
+	@apply max-w-[856px] mx-auto;
+}
+
+/* Bare prose elements render without a wrapper, so as flex children the rule
+   above's mx-auto would collapse them to content width and centre them. Give
+   them full width. */
+.page-main > :is(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote) {
+	@apply w-full;
+}
+
+/* Wide blocks carry `.alignwide`; this is their cap. */
 .alignwide {
-    @apply max-w-[1200px] mx-auto;
+	@apply max-w-[1300px] mx-auto;
 }
 
-/* core/group section extensions ------------------------------------------ */
+/* nhtbl renders structural blocks (groups/sections) flush — no inter-block
+   gap. Prose elements keep their own margins (set in @layer base). */
 
-/* Sticky-stack: a group with behavior:stick pins to the top of the viewport so
-   later sections scroll over it. Applied to the OUTER block wrapper (a direct
-   child of .portfolio-content) — the group's own div is only as tall as its
-   content and can't stick. All sibling wrappers are positioned so they paint in
-   DOM order (later sections cover the pinned one); the marked one is sticky. */
+/* Mirror WP's is-layout-constrained for groups with "Inner blocks use content
+   width" (CoreGroup adds .section-group-constrained). */
+.section-group-constrained > *:not(.alignfull):not(.alignwide) {
+	@apply !w-full !max-w-[856px] !mx-auto;
+}
+
+/* core/group section "behaviour: stick" — a group pins to the top of the
+   viewport so later sections scroll over it. Applied to the OUTER block wrapper
+   (a direct child of .portfolio-content); the group's own div is only as tall
+   as its content and can't stick. */
 .portfolio-content > * {
-    position: relative;
+	position: relative;
 }
 .portfolio-content > *:has([data-section-behavior='stick']) {
-    position: sticky;
-    top: 0;
+	position: sticky;
+	top: 0;
 }
 
-strong {
-    @apply font-normal;
+/* Block-reveal animation */
+.block-reveal {
+	opacity: 0;
+	transform: translateY(12px);
+	transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.block-reveal.block-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+	.block-reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+/* Footnotes */
+.footnotes {
+	@apply border-t border-black mt-9 py-3;
+}
+.footnotes ol {
+	@apply list-none pl-0;
+}
+.footnotes li {
+	@apply text-sm;
+}
+.footnotes li::before {
+	content: counter(list-item) '— ';
 }

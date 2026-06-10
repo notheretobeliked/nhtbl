@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Image from '$components/atoms/Image.svelte'
   import type { ProcessedImage } from '$lib/utilities/imageExtractor'
+  import type { ImageSize } from '$lib/types/wp-types'
+  import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
 
   interface Props {
     image: ProcessedImage | null
@@ -9,6 +10,16 @@
   }
 
   let { image, isOpen, onclose }: Props = $props()
+
+  // Normalise the ProcessedImage sizes for findImageSizeData / getSrcSet.
+  let sizes = $derived<ImageSize[]>(
+    (image?.mediaDetails?.sizes ?? []).map((s: any) => ({
+      name: s?.name ?? '',
+      sourceUrl: s?.sourceUrl ?? '',
+      width: parseInt(String(s?.width ?? '0')),
+      height: parseInt(String(s?.height ?? '0'))
+    }))
+  )
 
   const handleBackdropClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -21,6 +32,18 @@
       onclose()
     }
   }
+
+  // Render the overlay at <body> so position:fixed is relative to the viewport.
+  // BlockRenderer's .block-reveal wrapper keeps a transform, which would
+  // otherwise become the containing block and push the modal down the page.
+  function portal(node: HTMLElement) {
+    document.body.appendChild(node)
+    return {
+      destroy() {
+        node.remove()
+      }
+    }
+  }
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -30,6 +53,7 @@
        svelte:window Escape handler above. -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div
+    use:portal
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
     onclick={handleBackdropClick}
     role="dialog"
@@ -49,14 +73,14 @@
         </svg>
       </button>
 
-      <!-- Image -->
-      <div class="aspect-video bg-gray-100">
-        <Image 
-          imageObject={image} 
-          imageSize="large" 
-          fit="contain" 
-          lazy={false}
-          extraClasses="w-full h-full object-contain"
+      <!-- Image at its natural aspect ratio, capped to the viewport. -->
+      <div class="flex items-center justify-center bg-gray-100">
+        <img
+          src={findImageSizeData('sourceUrl', sizes, 'large')}
+          srcset={getSrcSet(sizes)}
+          sizes="(max-width: 896px) 100vw, 896px"
+          alt={image.altText ?? ''}
+          class="max-h-[80vh] max-w-full w-auto h-auto object-contain"
         />
       </div>
 

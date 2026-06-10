@@ -1,30 +1,17 @@
 <script lang="ts">
-	import type { CoreFootnotes } from '$lib/graphql/generated'
+	import type { EditorBlock } from '$lib/types/wp-types'
+
 	interface Props {
-		block: CoreFootnotes;
+		block: EditorBlock
 	}
 
-	let { block }: Props = $props();
+	let { block }: Props = $props()
+
+	let renderedHtml = $derived(block.renderedHtml ?? '')
 </script>
 
-{#if block.renderedHtml}<div class="footnotes border-t border-black mt-9 py-3">
-		{@html block.renderedHtml}
-	</div>{/if}
-
-<style lang="postcss">
-	.footnotes :global(ol) {
-		list-style: none;
-	}
-
-	.footnotes :global(li) {
-		padding-left: -1rem;
-		text-indent: 1rem;
-		overflow-wrap: break-word;
-		word-wrap: break-word;
-		hyphens: auto;
-	}
-
-	.footnotes :global(li::before) {
-		content: counter(list-item) '— ';
-	}
-</style>
+{#if renderedHtml}
+	<div class="footnotes">
+		{@html renderedHtml}
+	</div>
+{/if}

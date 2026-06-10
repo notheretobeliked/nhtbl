@@ -1,9 +1,9 @@
 <script lang="ts">
   import { getContext, onMount } from 'svelte'
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
+  import type { EditorBlock } from '$lib/types/wp-types'
 
   interface Props {
-    block: ExtendedEditorBlock
+    block: EditorBlock
   }
 
   let { block }: Props = $props()
@@ -18,7 +18,7 @@
   ]
 
   // Extract questions from the survey block and populate default Likert options if needed
-  const questions = (block.surveyBlock?.questions || []).map((question: any) => {
+  const questions = ((block as any).surveyBlock?.questions || []).map((question: any) => {
     // If this is a Likert scale with useDefaultLikertOptions, ensure options are populated
     if (question.questionType[0] === 'likert_scale' && (question.useDefaultLikertOptions === true || question.useDefaultLikertOptions === 1)) {
       return {
@@ -289,12 +289,12 @@
 <style>
   /* Custom styling for form elements */
   .survey-block input[type="radio"]:checked {
-    background-color: theme('colors.nhtbl-green.base');
-    border-color: theme('colors.nhtbl-green.base');
+    background-color: var(--color-nhtbl-green-base);
+    border-color: var(--color-nhtbl-green-base);
   }
 
   .survey-block input[type="checkbox"]:checked {
-    background-color: theme('colors.nhtbl-green.base');
-    border-color: theme('colors.nhtbl-green.base');
+    background-color: var(--color-nhtbl-green-base);
+    border-color: var(--color-nhtbl-green-base);
   }
 </style>

@@ -1,66 +1,180 @@
 import PageMeta from '$lib/graphql/query/menu.graphql?raw'
-import type { LayoutAPIResponse } from '$lib/types/wp-types'
-import { urqlQuery } from '$lib/graphql/client'
-import type { PageServerLoad } from './$types'
-import { error } from '@sveltejs/kit'
+import type { PageMetaQuery } from '$lib/graphql/generated'
+import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import type { LayoutServerLoad } from './$types'
+import { error, isHttpError } from '@sveltejs/kit'
 import { PUBLIC_SITE_URL } from '$env/static/public'
 
-export const load: PageServerLoad = async ({ url }) => {
-  const uri = url.pathname
+interface MenuItemWithCurrent {
+	label?: string | null
+	order?: number | null
+	uri?: string | null
+	current?: boolean
+}
 
-  try {
-    const data: LayoutAPIResponse = await urqlQuery(PageMeta, { uri: uri })
+interface NormalizedMenu {
+	menuItems?: {
+		nodes: MenuItemWithCurrent[]
+	} | null
+}
 
+const emptyMenu: NormalizedMenu = {
+	menuItems: {
+		nodes: []
+	}
+}
 
-    // Modify menu items to add 'current' key
-    if (data.menu && data.menu.menuItems && data.menu.menuItems.nodes) {
-      data.menu.menuItems.nodes = data.menu.menuItems.nodes.map(node => ({
-        ...node,
-        current: node.uri === uri,
-      }))
-    }
+interface LoadReturn {
+	data: PageMetaQuery
+	menu: NormalizedMenu
+	seo: Record<string, unknown>
+	uri: string
+	breadcrumbs?: Array<{ text: string; url: string }>
+}
 
-    // Check if page exists and has SEO data
-    if (!data.nodeByUri || !data.nodeByUri.seo) {
-      // Return menu data even if page doesn't exist, use defaults for SEO
-      const fallbackData = {
-        menu: JSON.parse(JSON.stringify(data.menu)), // Deep clone menu to remove any hidden references
-        seo: {
-          title: 'Page Not Found',
-          metaDesc: '',
-          opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
-          opengraphSiteName: 'Not here to be liked',
-          opengraphTitle: 'Page Not Found',
-          twitterTitle: 'Page Not Found',
-          twitterDescription: '',
-          metaKeywords: '',
-          opengraphPublisher: '',
-          twitterImage: null,
-          opengraphImage: null,
-          breadcrumbs: []
-        },
-        uri: uri,
-        hideNavigation: false,
-      }
-      
-      return JSON.parse(JSON.stringify(fallbackData))
-    }
+/** Routes that should not trigger a GraphQL query */
+const systemRoutes = [
+	'/apple-touch-icon',
+	'/apple-touch-icon-precomposed',
+	'/.well-known',
+	'/favicon',
+	'/robots.txt',
+	'/sitemap.xml',
+	'/sitemap',
+]
 
-    const siteUrl = data.nodeByUri.seo.opengraphUrl.replace(new URL(data.nodeByUri.seo.opengraphUrl).origin, PUBLIC_SITE_URL);
+/** Normalize a path by stripping trailing slash (except root) */
+function normalizePath(path: string): string {
+	if (path === '/') return path
+	return path.endsWith('/') ? path.slice(0, -1) : path
+}
 
-    const returnData = {
-      menu: data.menu,
-      seo: { ...data.nodeByUri.seo, opengraphUrl: siteUrl },
-      uri: uri,
-      hideNavigation: data.nodeByUri.backgroundColour?.hideNavigation ?? false,
-    }
-    
-    return JSON.parse(JSON.stringify(returnData))
-  } catch (err: unknown) {
-    const httpError = err as { status: number; message: string }
-    if (httpError.message) {
-      error(httpError.status ?? 500, httpError.message)
-    }
-    error(500, err as string)
-  }
+export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
+	let uri = url.pathname
+	if (uri === '') {
+		uri = '/'
+	}
+
+	// Skip GraphQL queries for system routes and static assets
+	const isSystemRoute = systemRoutes.some(route => uri.startsWith(route))
+	if (isSystemRoute) {
+		return {
+			data: { menus: null, page: null } as unknown as PageMetaQuery,
+			menu: emptyMenu,
+			seo: {
+				title: '',
+				metaDesc: '',
+				opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
+				opengraphImage: null
+			},
+			uri
+		} satisfies LoadReturn
+	}
+
+	try {
+		const response = await graphqlQuery(PageMeta, { uri })
+		checkResponse(response)
+
+		const json = await response.json()
+
+		// Handle case where GraphQL returns errors or no data
+		if (!json || !json.data) {
+			console.error('GraphQL response missing data:', json)
+			return {
+				data: { menus: null, page: null } as unknown as PageMetaQuery,
+				menu: emptyMenu,
+				seo: {
+					title: 'Website',
+					metaDesc: '',
+					opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
+					opengraphImage: null
+				},
+				uri
+			} satisfies LoadReturn
+		}
+
+		const data: PageMetaQuery = json.data
+
+		// Extract menu from menus array (query by location returns array)
+		const firstMenu = data.menus?.nodes?.[0]
+		let menu = firstMenu ?? emptyMenu
+
+		// Modify menu items to add 'current' key (with trailing slash normalization)
+		if (menu.menuItems?.nodes) {
+			menu = {
+				...menu,
+				menuItems: {
+					...menu.menuItems,
+					nodes: menu.menuItems.nodes.map((node) => ({
+						...node,
+						current: normalizePath(node?.uri ?? '') === normalizePath(uri)
+					}))
+				}
+			}
+		}
+
+		if (!firstMenu) {
+			console.warn('No menu found in WordPress. Using empty menu fallback. Create a menu in WordPress under Appearance > Menus.')
+		}
+
+		// Handle SEO data — nodeByUri returns a union; Page and Post have seo
+		type SeoNode = { seo?: Record<string, unknown> | null }
+		const pageNode = data.page as (SeoNode & Record<string, unknown>) | null | undefined
+		let seoData: Record<string, unknown> = pageNode?.seo ?? {}
+		const ogUrl = typeof seoData.opengraphUrl === 'string' ? seoData.opengraphUrl : undefined
+		if (ogUrl) {
+			const siteUrl = ogUrl.replace(new URL(ogUrl).origin, PUBLIC_SITE_URL)
+			seoData = { ...seoData, opengraphUrl: siteUrl }
+		} else {
+			// Provide fallback SEO data
+			seoData = {
+				title: '',
+				metaDesc: '',
+				opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
+				opengraphImage: null
+			}
+		}
+
+		// Surface Yoast breadcrumbs with relative URLs (the Header shows them once
+		// scrolled). Yoast returns absolute backend/prod URLs — reduce to the path.
+		const rawCrumbs = ((pageNode?.seo as { breadcrumbs?: Array<{ text?: string; url?: string }> })
+			?.breadcrumbs ?? []) as Array<{ text?: string; url?: string }>
+		const breadcrumbs = rawCrumbs.map((c) => {
+			let url = c.url ?? ''
+			try {
+				url = new URL(url).pathname
+			} catch {
+				/* leave as-is if not a parseable URL */
+			}
+			return { text: c.text ?? '', url }
+		})
+
+		// Portfolio items read as Home > Work > Project; Yoast omits the Work level.
+		if (uri.startsWith('/portfolio/') && !breadcrumbs.some((c) => c.url === '/portfolio')) {
+			breadcrumbs.splice(1, 0, { text: 'Work', url: '/portfolio' })
+		}
+
+		return {
+			data,
+			menu,
+			seo: seoData,
+			uri,
+			breadcrumbs
+		} satisfies LoadReturn
+	} catch (err: unknown) {
+		// Let SvelteKit HttpErrors propagate (e.g. 404 from +page.server.ts)
+		if (isHttpError(err)) {
+			throw err
+		}
+
+		// Check if it's a response error from the GraphQL query
+		if (err instanceof Response) {
+			error(err.status, await err.text())
+		}
+
+		// Fallback for unknown errors
+		const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred'
+		console.error('Unhandled error in layout:', errorMessage)
+		error(500, errorMessage)
+	}
 }

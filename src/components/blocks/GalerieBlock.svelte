@@ -1,14 +1,13 @@
 <script lang="ts">
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-  import Carousel from '$components/Carousel.svelte';
-  
-  interface Props {
-    block: ExtendedEditorBlock
-  }
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import Carousel from '$components/Carousel.svelte'
 
-  let { block }: Props = $props()
-  const images = block.galerie.galerie.nodes
+	interface Props {
+		block: EditorBlock
+	}
+
+	let { block }: Props = $props()
+	const images = $derived((block as any).galerie?.galerie?.nodes ?? [])
 </script>
 
 <Carousel autoplay={true} images={images} />
-

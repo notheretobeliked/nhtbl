@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { ExtendedEditorBlock, ImageSize } from '$lib/types/wp-types'
+	import type { EditorBlock } from '$lib/types/wp-types'
 	import { fade } from 'svelte/transition'
 	import { cubicInOut } from 'svelte/easing'
-	import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
+	import Image from '$components/atoms/Image.svelte'
 
 	interface Props {
-		block: ExtendedEditorBlock
+		block: EditorBlock
 	}
 
 	let { block }: Props = $props()
@@ -48,22 +48,9 @@
 		return () => clearInterval(id)
 	})
 
-	function sizesOf(image: any): ImageSize[] {
-		return (image?.mediaDetails?.sizes ?? [])
-			.filter((s: any) => s && typeof s.name === 'string')
-			.map((s: any) => ({
-				sourceUrl: s.sourceUrl ?? '',
-				width: parseInt(s.width ?? '0'),
-				height: parseInt(s.height ?? '0'),
-				name: s.name ?? ''
-			}))
-	}
-
 	// Stable box: every image is absolutely positioned and crossfades over a
 	// container with a FIXED height. The height comes from an explicit aspect
-	// ratio, or — for 'auto' — from the first image's intrinsic ratio. Reserving
-	// the height up front means no layout shift / scroll jump when the image
-	// swaps, and a clean crossfade (both layers share the same box).
+	// ratio, or — for 'auto' — from the first image's intrinsic ratio.
 	function aspectOf(image: any): string | null {
 		for (const s of image?.mediaDetails?.sizes ?? []) {
 			const w = parseInt(s?.width ?? '0')
@@ -95,17 +82,13 @@
 		>
 			{#each images as image, i (i)}
 				{#if i === activeIndex || i === previousIndex}
-					{@const sizes = sizesOf(image)}
-					<img
-						src={findImageSizeData('sourceUrl', sizes, 'large')}
-						srcset={getSrcSet(sizes)}
-						sizes="100vw"
-						alt={image?.altText ?? ''}
-						loading="lazy"
-						class="absolute inset-0 h-full w-full object-cover"
+					<div
+						class="absolute inset-0 h-full w-full"
 						style:z-index={i === activeIndex ? 1 : 0}
 						in:fade={{ duration: 800, easing: cubicInOut }}
-					/>
+					>
+						<Image imageObject={image} imageSize="large" fit="cover" />
+					</div>
 				{/if}
 			{/each}
 		</div>

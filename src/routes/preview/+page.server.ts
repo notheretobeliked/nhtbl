@@ -1,206 +1,152 @@
 import { WORDPRESS_URL } from '$env/static/private'
+import PreviewById from '$lib/graphql/query/preview-by-id.graphql?raw'
+import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import { error, isHttpError, redirect } from '@sveltejs/kit'
+import type { PageServerLoad } from './$types'
+import type { EditorBlock } from '$lib/types/wp-types'
+import { flatListToHierarchical, normalizeAssetUrlsInObject } from '$lib/server/utilities'
+
 export const prerender = false // Disable prerendering for preview functionality
 
-import PreviewContent from '$lib/graphql/query/preview.graphql?raw'
-import { urqlQuery } from '$lib/graphql/client'
-import { canUserPreview } from '$lib/utilities/wordpress-auth'
-import { error, redirect } from '@sveltejs/kit'
-import type { PageServerLoad } from './$types'
-import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-import { cleanNavigationUrls, markStretchFill } from '$lib/utilities/utilities'
-import { flatListToHierarchical } from '$lib/utilities/wordpress-content'
-import { GRAPHQL_ENDPOINT } from '$env/static/private'
-
-// Portfolio-specific helper functions
-const formatYearRange = (startDate: string | null | undefined, endDate: string | null | undefined): string => {
-  // If both dates are empty, return empty string
-  if (!startDate && !endDate) {
-    return ''
-  }
-
-  // If start date is empty but end date exists, return just end year
-  if (!startDate && endDate) {
-    const endYear = new Date(endDate).getFullYear()
-    return endYear.toString()
-  }
-
-  // If end date is empty but start date exists, return just start year
-  if (startDate && !endDate) {
-    const startYear = new Date(startDate).getFullYear()
-    return startYear.toString()
-  }
-
-  // Both dates exist
-  if (startDate && endDate) {
-    const startYear = new Date(startDate).getFullYear()
-    const endYear = new Date(endDate).getFullYear()
-
-    // If same year, return just that year
-    if (startYear === endYear) {
-      return startYear.toString()
-    } else {
-      return `${startYear}–${endYear}`
-    }
-  }
-
-  return ''
+function formatYearRange(start?: string | null, end?: string | null): string {
+	if (!start && !end) return ''
+	if (!start && end) return `(${new Date(end).getFullYear()})`
+	if (start && !end) return `(${new Date(start).getFullYear()} –)`
+	const s = new Date(start!).getFullYear()
+	const e = new Date(end!).getFullYear()
+	return s === e ? `(${s})` : `(${s}–${String(e).slice(-2)})`
 }
 
-
 export const load: PageServerLoad = async function load({ url }) {
-  
-  // Extract preview parameters
-  const previewId = url.searchParams.get('p') || url.searchParams.get('page_id') || url.searchParams.get('preview_id')
-  const previewToken = url.searchParams.get('token')
-  const postType = url.searchParams.get('post_type')
-  const isPreview = !!(previewId || url.searchParams.has('preview'))
-  const isProjectPreview = postType === 'project'
-  
+	// Check if this is a preview request
+	const isPreview = url.searchParams.has('preview') || url.searchParams.has('p') || url.searchParams.has('page_id')
+	const previewId = url.searchParams.get('p') || url.searchParams.get('page_id')
+	const previewToken = url.searchParams.get('token')
 
-  // Handle missing token for preview
-  if (isPreview && !previewToken) {
-    const returnUrl = encodeURIComponent(url.href)
-    const loginUrl = `${WORDPRESS_URL}/wp/wp-login.php?redirect_to=${returnUrl}`
-    throw redirect(302, loginUrl)
-  }
+	// Handle authentication for previews
+	let authResult: { authenticated: boolean; token?: string } = { authenticated: false }
+	if (isPreview) {
+		if (previewToken) {
+			authResult = {
+				authenticated: true,
+				token: previewToken
+			}
+		} else {
+			// No token provided - redirect to WordPress to get one
+			const returnUrl = encodeURIComponent(url.href)
+			const loginUrl = `${WORDPRESS_URL}/wp/wp-login.php?redirect_to=${returnUrl}`
+			throw redirect(302, loginUrl)
+		}
+	}
 
-  // No separate REST validate-token round-trip (the previous source of preview
-  // breakage). The GraphQL query below authenticates via the X-Preview-Token
-  // header that urqlQuery sends when a token is passed — same as the template.
-  // An invalid token simply returns no draft content, handled as a 404 below.
+	try {
+		let pageResponse: Response
 
-  try {
-    let variables: any
-    let queryOptions: any = {}
+		if (isPreview && previewId && previewToken) {
+			// Use preview query by ID with token authentication
+			pageResponse = await graphqlQuery(
+				PreviewById,
+				{ id: previewId },
+				{ token: previewToken }
+			)
+		} else {
+			// Fallback - shouldn't normally reach here
+			error(400, 'Preview requires a post ID and token')
+		}
 
-    if (isPreview && previewId) {
-      // Preview mode: query by ID with preview enabled
-      variables = {
-        id: previewId
-      }
-      
-      // Add auth token if available
-      if (previewToken) {
-        queryOptions.token = previewToken
-      }
-      
-    } else {
-      // Regular mode: should not happen in preview route, but fallback
-      error(400, 'Preview route requires preview parameters')
-    }
+		checkResponse(pageResponse)
+		const pageData = await pageResponse.json()
 
-    // Use the dedicated preview query
-    const data = await urqlQuery(PreviewContent, variables, queryOptions)
-    
+		// Handle GraphQL errors
+		if (pageData.errors) {
+			console.error('GraphQL errors:', pageData.errors)
+			error(500, 'GraphQL query failed')
+		}
 
-    // Extract the node from preview queries
-    // For projects, prioritize nhtblProject which has the full project data
-    const node = isProjectPreview && data.nhtblProject 
-      ? data.nhtblProject 
-      : (data.page || data.nhtblProject || data.post)
-    
-    
-    if (!node) {
-      throw error(404, `Content not found for preview ID: ${previewId}. The content may have been deleted or you may not have permission to view it.`)
-    }
+		// asPreview coerces the autosave to whatever type you query, so both page
+		// and nhtblProject return non-null for any id. Use the post_type the
+		// backend appends to the preview link to pick the right one.
+		const isPortfolio = url.searchParams.get('post_type') === 'project'
+		const node = isPortfolio
+			? pageData?.data?.nhtblProject
+			: pageData?.data?.page || pageData?.data?.nhtblProject
 
-    // Validate preview status
-    if (node.status && !['publish', 'draft', 'private', 'pending', 'inherit'].includes(node.status)) {
-      throw error(403, `Preview not available for content with status "${node.status}". Only draft, private, pending, and published content can be previewed.`)
-    }
+		if (!node) {
+			error(404, `Preview not found for post ID: ${previewId}`)
+		}
 
-    // Process editor blocks — match the portfolio page exactly: build the
-    // hierarchy, mark stretch-section images to fill, and drop the editor-only
-    // excerpt block. No forced alignment or column background.
-    const editorBlocks: ExtendedEditorBlock[] = (node.editorBlocks
-      ? markStretchFill(flatListToHierarchical(node.editorBlocks as ExtendedEditorBlock[]))
-      : []
-    ).filter((b: any) => b.name !== 'core/post-excerpt')
+		// Validate preview status
+		if (node.status && !['publish', 'draft', 'private', 'pending', 'inherit'].includes(node.status)) {
+			error(404, 'Preview not available')
+		}
 
-    const isPortfolioProject = isProjectPreview
-    
+		// Normalize asset URLs
+		normalizeAssetUrlsInObject(pageData)
 
-    // Prepare base return data
-    let returnData: any = {
-      uri: `preview-${previewId}`,
-      backgroundColour: node.backgroundColour?.backgroundColour ?? (isPortfolioProject ? 'black' : 'white'),
-      editorBlocks,
-      breadcrumbs: [], // No SEO data in preview mode
-      isPreview: true,
-      authenticated: !!previewToken,
-      title: node.title || 'Preview',
-      previewData: {
-        status: node.status || 'unknown',
-        lastModified: node.modified,
-        canEdit: canUserPreview({ authenticated: !!previewToken, token: previewToken ?? undefined })
-      }
-    }
+		let editorBlocks: EditorBlock[] = node?.editorBlocks
+			? flatListToHierarchical(node.editorBlocks, {}, pageData.data)
+			: []
 
-    // Add portfolio-specific data if this is a project
-    if (isPortfolioProject) {
-      
-      // Extract services (only child services, not parents)
-      const services = (node as any).nhtblServices?.nodes
-        ?.filter((service: any) => service?.parentId !== null && service?.parentId !== undefined)
-        ?.map((service: any) => service?.name)
-        ?.filter(Boolean) ?? []
-      
-      // Extract clients
-      const clients = (node as any).nhtblClients?.nodes
-        ?.map((client: any) => client?.name)
-        ?.filter(Boolean) ?? []
-      
-      // Format year display
-      const yearDisplay = formatYearRange(
-        (node as any).projectData?.startDate, 
-        (node as any).projectData?.endDate
-      )
-      
+		// Mirror the catch-all's portfolio presentation so previews match the live
+		// page (grey canvas + title card). Drop the excerpt block (shown in card).
+		let portfolio: Record<string, unknown> | undefined
+		if (isPortfolio) {
+			const services = ((node as any).nhtblServices?.nodes ?? [])
+				.filter((s: any) => s?.parentId !== null && s?.parentId !== undefined)
+				.map((s: any) => s?.name)
+				.filter(Boolean)
+			const clients = ((node as any).nhtblClients?.nodes ?? [])
+				.map((c: any) => c?.name)
+				.filter(Boolean)
+			portfolio = {
+				title: (node as any).title ?? '',
+				excerpt: (node as any).excerpt ?? '',
+				clients,
+				services,
+				yearDisplay: formatYearRange(
+					(node as any).projectData?.startDate,
+					(node as any).projectData?.endDate
+				)
+			}
+			editorBlocks = editorBlocks.filter((b) => b.name !== 'core/post-excerpt')
+		}
 
-      // Add portfolio-specific fields
-      returnData = {
-        ...returnData,
-        pageType: 'portfolio-item',
-        yearDisplay,
-        excerpt: (node as any).excerpt ?? '',
-        services,
-        clients,
-        portfolioData: {
-          // Add any additional portfolio-specific data here
-          isPreview: true
-        }
-      }
-    } else {
-      // Ensure non-portfolio projects have the correct pageType
-      returnData.pageType = 'page'
-    }
-    
-    // Clean navigation URLs
-    const backendUrl = new URL(GRAPHQL_ENDPOINT)
-    const cleanedData = cleanNavigationUrls(returnData, backendUrl.origin)
-    
-    return JSON.parse(JSON.stringify(cleanedData))
-  } catch (err: unknown) {
-    // Log the real error server-side so preview failures are diagnosable.
-    console.error('[preview] load failed:', err)
+		return {
+			data: pageData.data,
+			uri: '/',
+			editorBlocks: editorBlocks,
+			isPreview: true,
+			authenticated: authResult.authenticated,
+			pageType: isPortfolio ? 'portfolio' : 'page',
+			portfolio,
+			backgroundColour:
+				((node as any).backgroundColour?.backgroundColour?.[0] as string) ?? 'white',
+			previewData: {
+				status: node.status || 'unknown',
+				lastModified: node.modified || node.date,
+				canEdit: authResult.authenticated
+			}
+		}
+	} catch (err: unknown) {
+		// Check if it's already an HTTP error (like a 404)
+		if (isHttpError(err)) {
+			throw err
+		}
 
-    // Handle SvelteKit errors (already have proper status and message)
-    const httpError = err as { status?: number; message?: string }
-    if (httpError.status && httpError.message) {
-      throw err
-    }
+		// Check if it's a response with status
+		if (err instanceof Response) {
+			const status = err.status
+			error(status || 500, `Error fetching preview: ${await err.text()}`)
+		}
 
-    // Handle GraphQL errors
-    if (err instanceof Error && err.message.includes('GraphQL Error')) {
-      throw error(500, 'Failed to load preview content from WordPress. Please check if the content exists and try again.')
-    }
-    
-    // Handle network errors
-    if (err instanceof Error && (err.message.includes('fetch') || err.message.includes('network'))) {
-      throw error(503, 'Unable to connect to WordPress. Please check your connection and try again.')
-    }
-    
-    // Generic fallback
-    throw error(500, 'An unexpected error occurred while loading the preview. Please try again or contact support.')
-  }
+		// For errors with status property
+		const httpError = err as { status?: number; message?: string }
+		if (httpError.status) {
+			error(httpError.status, httpError.message || 'Preview error')
+		}
+
+		// For any other error
+		const errorMessage = err instanceof Error ? err.message : 'Internal Server Error'
+		error(500, errorMessage)
+	}
 }

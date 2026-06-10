@@ -1,603 +1,563 @@
-query PageContent($uri: String!) {
-  nodeByUri(uri: $uri) {
-    ... on Page {
-      id
-      databaseId
-      backgroundColour {
-        backgroundColour
-        hideNavigation
-      }
-      editorBlocks {
-        name
-        parentClientId
-        clientId
-        ...CoreParagraphFragment
-        ...CoreHeadingFragment
-        ...AcfHomePageHeroFragment
-        ...AcfServicePushFragment
-        ...CoreColumnsFragment
-        ...AcfGalerieFragment
-        ...AcfPortfolioBlockFragment
-        ...CoreGroupFragment
-        ...CoreButtonFragment
-        ...CoreButtonsFragment
-        ...CoreSpacerFragment
-        ...CoreListFragment
-        ...CoreListItemFragment
-        ...PortfolioBlockDetailsFragment
-        ...AcfLinkBlockFragment
-        ...CoreImageFragment
-        ...CoreVideoFragment
-        ...CoreColumnFragment
-        ...AcfSurveyBlockFragment
-        ...AcfImageGalleryFragment
-        ...AcfSlideshowFragment
-        ...AcfSlideFragment
-        ...AcfSubpageNavigationFragment
-      }
-      seo {
-        ...SEOFragment
-      }
-    }
-    ... on Nhtbl_project {
-      id
-      databaseId
-      excerpt
-      title
-      nhtblClients {
-        nodes {
-          name
-          id
-          parentId
-          slug
-        }
-      }
-      nhtblServices {
-        nodes {
-          id
-          name
-          slug
-          parentId
-        }
-      }
-      projectData {
-        startDate
-        endDate
-        imageGallery {
-          nodes {
-            altText
-            colorPalette
-            dominantColor
-            secondaryColor
-            mediaDetails {
-              ...MediaDetailsFragment
-            }
-          }
-        }
-      }
-      editorBlocks {
-        name
-        parentClientId
-        clientId
-        ...CoreParagraphFragment
-        ...CoreHeadingFragment
-        ...AcfHomePageHeroFragment
-        ...AcfServicePushFragment
-        ...CoreColumnsFragment
-        ...AcfGalerieFragment
-        ...AcfPortfolioBlockFragment
-        ...CoreGroupFragment
-        ...CoreButtonFragment
-        ...CoreButtonsFragment
-        ...CoreSpacerFragment
-        ...CoreListFragment
-        ...CoreListItemFragment
-        ...PortfolioBlockDetailsFragment
-        ...AcfLinkBlockFragment
-        ...CoreImageFragment
-        ...CoreVideoFragment
-        ...CoreColumnFragment
-        ...AcfImageGalleryFragment
-        ...AcfSlideshowFragment
-        ...AcfSlideFragment
-        ...AcfSubpageNavigationFragment
-      }
-      seo {
-        ...SEOFragment
-      }
-    }
-  }
+query PageContent($uri: String = "") {
+	nodeByUri(uri: $uri) {
+		__typename
+		... on Page {
+			id
+			databaseId
+			title
+			date
+			backgroundColour {
+				backgroundColour
+				hideNavigation
+			}
+			editorBlocks {
+				...CommonBlockFields
+			}
+		}
+		... on Nhtbl_project {
+			id
+			databaseId
+			title
+			excerpt
+			nhtblClients {
+				nodes {
+					name
+					id
+					parentId
+					slug
+				}
+			}
+			nhtblServices {
+				nodes {
+					id
+					name
+					slug
+					parentId
+				}
+			}
+			projectData {
+				startDate
+				endDate
+				imageGallery {
+					nodes {
+						altText
+						colorPalette
+						dominantColor
+						secondaryColor
+						mediaDetails {
+							...MediaDetailsFragment
+						}
+					}
+				}
+			}
+			editorBlocks {
+				...CommonBlockFields
+			}
+		}
+	}
+}
+
+fragment BlockBasicFields on EditorBlock {
+	name
+	parentClientId
+	clientId
+	type
+}
+
+fragment CommonBlockFields on EditorBlock {
+	...BlockBasicFields
+	... on CoreVideo {
+		attributes {
+			autoplay
+			preload
+			src
+			metadata
+			muted
+			controls
+			caption
+			poster
+			align
+			loop
+			className
+		}
+	}
+	... on CorePostTitle {
+		renderedHtml
+		attributes {
+			className
+			fontFamily
+			fontSize
+			textColor
+			textAlign
+			level
+			align
+		}
+	}
+	... on CoreEmbed {
+		renderedHtml
+		attributes {
+			align
+			url
+		}
+	}
+	... on CoreImage {
+		altText
+		colorPalette
+		dominantColor
+		secondaryColor
+		mediaDetails {
+			sizes(exclude: [MEDIUM_LARGE, MEDIUM]) {
+				sourceUrl
+				height
+				width
+				mimeType
+				name
+			}
+		}
+		attributes {
+			title
+			alt
+			url
+			caption
+			aspectRatio
+			scale
+			width
+			height
+			href
+			linkTarget
+			className
+			align
+		}
+	}
+	... on CoreParagraph {
+		attributes {
+			content
+			fontFamily
+			fontSize
+			textColor
+			align
+			className
+			cssClassName
+		}
+	}
+	... on CoreFootnotes {
+		renderedHtml
+		innerBlocks {
+			name
+		}
+		attributes {
+			metadata
+		}
+	}
+	... on CoreMore {
+		attributes {
+			customText
+		}
+	}
+	... on CoreList {
+		attributes {
+			ordered
+			reversed
+			start
+			textColor
+			type
+		}
+	}
+	... on CoreListItem {
+		attributes {
+			content
+			fontSize
+			fontFamily
+			textColor
+		}
+	}
+	... on CoreAccordionPanel {
+		attributes {
+			openByDefault
+		}
+	}
+	... on CoreAccordionHeading {
+		attributes {
+			fontSize
+			fontFamily
+			showIcon
+			style
+			title
+		}
+	}
+	... on CoreHeading {
+		attributes {
+			content
+			className
+			cssClassName
+			fontFamily
+			fontSize
+			textColor
+			textAlign
+			level
+			align
+		}
+	}
+	... on CoreColumns {
+		attributes {
+			backgroundColor
+			textColor
+			layout
+			className
+			verticalAlignment
+			style
+			align
+			isStackedOnMobile
+		}
+	}
+	... on CoreColumn {
+		attributes {
+			backgroundColor
+			textColor
+			layout
+			className
+			verticalAlignment
+			width
+			style
+		}
+	}
+	... on CoreGroup {
+		attributes {
+			backgroundColor
+			textColor
+			align
+			style
+			layout
+			behavior
+			minHeight
+			contentAlign
+			reveal
+			revealDirection
+			revealStagger
+			parallax
+		}
+	}
+	... on CoreButton {
+		attributes {
+			backgroundColor
+			textColor
+			borderColor
+			className
+			style
+			fontSize
+			fontFamily
+			linkTarget
+			text
+			url
+		}
+	}
+	... on CoreButtons {
+		attributes {
+			align
+			layout
+		}
+	}
+	... on CoreSpacer {
+		attributes {
+			height
+			style
+		}
+	}
+	... on CoreQuote {
+		attributes {
+			citation
+			layout
+			textAlign
+			className
+			fontFamily
+			fontSize
+			textColor
+			align
+			value
+		}
+	}
+	... on CoreLatestPosts {
+		attributes {
+			postsToShow
+			displayPostDate
+			className
+			align
+		}
+		resolvedPosts {
+			...ResolvedPostFields
+		}
+	}
+	... on CoreQuery {
+		attributes {
+			align
+			className
+		}
+		resolvedPosts {
+			...ResolvedPostFields
+		}
+	}
+	... on AcfHomePageHero {
+		attributes {
+			backgroundColor
+			align
+		}
+		homePageHero {
+			images(first: 100) {
+				nodes {
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaType
+					mimeType
+					mediaItemUrl
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfServicePush {
+		attributes {
+			align
+			backgroundColor
+		}
+		servicePush {
+			service {
+				nodes {
+					slug
+					... on Page {
+						id
+						title
+						uri
+						featuredImage {
+							node {
+								altText
+								colorPalette
+								dominantColor
+								secondaryColor
+								mediaDetails {
+									...MediaDetailsFragment
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	... on AcfGalerie {
+		attributes {
+			align
+		}
+		galerie {
+			galerie {
+				nodes {
+					mediaType
+					mimeType
+					mediaItemUrl
+					caption(format: RENDERED)
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfPortfolioBlock {
+		attributes {
+			align
+			backgroundColor
+			textColor
+			style
+		}
+		portfolioBlock {
+			displayMode
+			enableSearch
+			showTags
+			projectSource
+			projectsPerPage
+			sortOrder
+			selectedService {
+				nodes {
+					slug
+					name
+				}
+			}
+			specificProjects {
+				nodes {
+					slug
+					... on Nhtbl_project {
+						id
+						uri
+						title(format: RENDERED)
+						excerpt(format: RENDERED)
+						nhtblClients {
+							nodes {
+								name
+								slug
+							}
+						}
+						nhtblServices {
+							nodes {
+								name
+								slug
+								parentId
+								id
+							}
+						}
+						projectData {
+							startDate
+							endDate
+						}
+						featuredImage {
+							node {
+								altText
+								colorPalette
+								dominantColor
+								secondaryColor
+								mediaDetails {
+									...MediaDetailsFragment
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	... on AcfLinkBlock {
+		attributes {
+			align
+			backgroundColor
+		}
+		linkBlock {
+			internalLink {
+				nodes {
+					slug
+					uri
+				}
+			}
+			externalLink {
+				url
+				title
+				target
+			}
+		}
+	}
+	... on AcfSurveyBlock {
+		surveyBlock {
+			questions {
+				required
+				allowOther
+				useDefaultLikertOptions
+				options {
+					optionLabel
+					optionValue
+				}
+				questionKey
+				questionText
+				questionType
+			}
+		}
+	}
+	... on AcfImageGallery {
+		attributes {
+			align
+			backgroundColor
+			style
+			className
+		}
+		imageGallery {
+			intervalMs
+			aspectRatio
+			caption
+			fullWidth
+			fullHeight
+			images {
+				nodes {
+					altText
+					mediaType
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfSlideshow {
+		attributes {
+			align
+			backgroundColor
+			style
+			className
+		}
+		slideshow {
+			autoplay
+			intervalMs
+			aspectRatio
+			showNavigation
+		}
+	}
+	... on AcfSlide {
+		slide {
+			caption
+			image {
+				node {
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaType
+					mimeType
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfSubpageNavigation {
+		attributes {
+			align
+		}
+		navItems {
+			databaseId
+			title
+			uri
+			isCurrent
+		}
+	}
 }
 
 fragment MediaDetailsFragment on MediaDetails {
-  sizes {
-    name
-    sourceUrl
-    width
-    height
-  }
+	sizes {
+		name
+		sourceUrl
+		width
+		height
+	}
 }
 
-fragment AcfSurveyBlockFragment on AcfSurveyBlock {
-  surveyBlock {
-    questions {
-      required
-      allowOther
-      useDefaultLikertOptions
-      options {
-        optionLabel
-        optionValue
-      }
-      questionKey
-      questionText
-      questionType
-    }
-  }
-}
-
-fragment CoreVideoFragment on CoreVideo {
-  attributes {
-    autoplay
-    align
-    caption
-    controls
-    loop
-    muted
-    playsInline
-    preload
-    src
-    style
-  }
-}
-
-fragment CoreGroupFragment on CoreGroup {
-  attributes {
-    backgroundColor
-    textColor
-    align
-    style
-    layout
-    behavior
-    minHeight
-    contentAlign
-    reveal
-    revealDirection
-    revealStagger
-    parallax
-  }
-}
-
-fragment CoreImageFragment on CoreImage {
-  attributes {
-    alt
-    align
-    aspectRatio
-    borderColor
-    caption
-    cssClassName
-    sizeSlug
-    style
-    src
-  }
-  altText
-  colorPalette
-  dominantColor
-  secondaryColor
-  mediaDetails {
-    ...MediaDetailsFragment
-  }
-}
-
-fragment CoreButtonFragment on CoreButton {
-  attributes {
-    className
-    gradient
-    metadata
-    rel
-    type
-    backgroundColor
-    borderColor
-    textColor
-    style
-    fontSize
-    linkTarget
-    text
-    url
-  }
-  innerBlocks {
-    apiVersion
-    blockEditorCategoryName
-    clientId
-    name
-    parentClientId
-    renderedHtml
-  }
-}
-
-fragment CoreColumnsFragment on CoreColumns {
-  attributes {
-    layout
-    className
-    verticalAlignment
-    style
-    align
-    isStackedOnMobile
-  }
-}
-
-fragment CoreColumnFragment on CoreColumn {
-  attributes {
-    layout
-    className
-    verticalAlignment
-    style
-  }
-}
-
-fragment CoreParagraphFragment on CoreParagraph {
-  attributes {
-    content
-    fontFamily
-    fontSize
-    textColor
-    align
-    cssClassName
-  }
-}
-
-fragment CoreHeadingFragment on CoreHeading {
-  attributes {
-    content
-    fontFamily
-    fontSize
-    textColor
-    level
-    align
-    cssClassName
-  }
-}
-
-fragment CoreSpacerFragment on CoreSpacer {
-  attributes {
-    height
-    style
-  }
-}
-
-fragment CoreButtonsFragment on CoreButtons {
-  attributes {
-    align
-    layout
-  }
-}
-
-fragment AcfHomePageHeroFragment on AcfHomePageHero {
-  attributes {
-    backgroundColor
-    align
-  }
-  homePageHero {
-    images(first: 100) {
-      nodes {
-        altText
-        colorPalette
-        dominantColor
-        secondaryColor
-        mediaDetails {
-          ...MediaDetailsFragment
-        }
-        mediaType
-        mimeType
-        mediaItemUrl
-      }
-    }
-  }
-}
-
-fragment AcfServicePushFragment on AcfServicePush {
-  attributes {
-    align
-    backgroundColor
-  }
-  servicePush {
-    service {
-      nodes {
-        slug
-        ... on Page {
-          id
-          title
-          uri
-          featuredImage {
-            node {
-              altText
-              colorPalette
-              dominantColor
-              secondaryColor
-              mediaDetails {
-                ...MediaDetailsFragment
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-fragment AcfGalerieFragment on AcfGalerie {
-  attributes {
-    align
-  }
-  galerie {
-    galerie {
-      nodes {
-        mediaType
-        mimeType
-        mediaItemUrl
-        caption(format: RENDERED)
-        altText
-        colorPalette
-        dominantColor
-        secondaryColor
-        mediaDetails {
-          ...MediaDetailsFragment
-        }
-      }
-    }
-  }
-}
-
-fragment AcfPortfolioBlockFragment on AcfPortfolioBlock {
-  attributes {
-    alignment: align
-    backgroundColor
-    textColor
-    style
-  }
-  portfolioBlock {
-    displayMode
-    enableSearch
-    showTags
-    projectSource
-    projectsPerPage
-    selectedService {
-      nodes {
-        slug
-        name
-      }
-    }
-    sortOrder
-    specificProjects {
-      nodes {
-        slug
-        ... on Nhtbl_project {
-          id
-          uri
-          nhtblClients {
-            nodes {
-              name
-              slug
-            }
-          }
-          nhtblServices {
-            nodes {
-              name
-              slug
-              parentId
-              id
-            }
-          }
-          projectData {
-            startDate
-            endDate
-          }
-        }
-      }
-    }
-  }
-}
-
-fragment PortfolioBlockDetailsFragment on AcfPortfolioBlock {
-  name
-  attributes {
-    align
-  }
-  portfolioBlock {
-    specificProjects {
-      nodes {
-        slug
-        ... on Nhtbl_project {
-          title(format: RENDERED)
-          excerpt(format: RENDERED)
-          projectData {
-            startDate
-            endDate
-          }
-          nhtblClients {
-            nodes {
-              name
-              slug
-            }
-          }
-          nhtblServices {
-            nodes {
-              name
-              slug
-            }
-          }
-          featuredImage {
-            node {
-              altText
-              colorPalette
-              dominantColor
-              secondaryColor
-              mediaDetails {
-                ...MediaDetailsFragment
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-fragment AcfLinkBlockFragment on AcfLinkBlock {
-  innerBlocks {
-    name
-    parentClientId
-    clientId
-    ...CoreParagraphFragment
-    ...CoreHeadingFragment
-    ...AcfHomePageHeroFragment
-    ...AcfServicePushFragment
-    ...CoreColumnsFragment
-    ...AcfGalerieFragment
-    ...AcfPortfolioBlockFragment
-    ...CoreGroupFragment
-    ...CoreButtonFragment
-    ...CoreButtonsFragment
-    ...CoreSpacerFragment
-    ...CoreListFragment
-    ...CoreListItemFragment
-    ...PortfolioBlockDetailsFragment
-    ...CoreImageFragment
-  }
-  attributes {
-    align
-    backgroundColor
-  }
-  linkBlock {
-    internalLink {
-      nodes {
-        slug
-        uri
-      }
-    }
-    externalLink {
-      url
-      title
-      target
-    }
-  }
-}
-
-fragment SEOFragment on PostTypeSEO {
-  metaDesc
-  metaKeywords
-  opengraphSiteName
-  opengraphTitle
-  opengraphPublisher
-  opengraphUrl
-  title
-  twitterDescription
-  twitterTitle
-  breadcrumbs {
-    text
-    url
-  }
-  twitterImage {
-    altText
-    caption
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
-  }
-  opengraphImage {
-    altText
-    caption
-    mediaDetails {
-      ...MediaDetailsFragment
-    }
-  }
-}
-
-fragment AcfImageGalleryFragment on AcfImageGallery {
-  attributes {
-    align
-    backgroundColor
-    style
-    className
-  }
-  imageGallery {
-    intervalMs
-    aspectRatio
-    caption
-    fullWidth
-    fullHeight
-    images {
-      nodes {
-        altText
-        mediaType
-        mediaDetails {
-          ...MediaDetailsFragment
-        }
-      }
-    }
-  }
-}
-
-fragment AcfSlideshowFragment on AcfSlideshow {
-  attributes {
-    align
-    backgroundColor
-    style
-    className
-  }
-  slideshow {
-    autoplay
-    intervalMs
-    aspectRatio
-    showNavigation
-  }
-}
-
-fragment AcfSlideFragment on AcfSlide {
-  slide {
-    caption
-    image {
-      node {
-        altText
-        colorPalette
-        dominantColor
-        secondaryColor
-        mediaType
-        mimeType
-        mediaDetails {
-          ...MediaDetailsFragment
-        }
-      }
-    }
-  }
-}
-fragment AcfSubpageNavigationFragment on AcfSubpageNavigation {
-  attributes {
-    align
-  }
-  navItems {
-    databaseId
-    title
-    uri
-    isCurrent
-  }
-}
-
-fragment CoreListFragment on CoreList {
-  attributes {
-    ordered
-    reversed
-    start
-    listType: type
-    textColor
-    className
-  }
-}
-
-fragment CoreListItemFragment on CoreListItem {
-  attributes {
-    content
-    fontSize
-    fontFamily
-    textColor
-  }
+fragment ResolvedPostFields on ResolvedPost {
+	title
+	date
+	uri
+	excerpt
+	featuredImage {
+		sourceUrl
+		altText
+		sizes {
+			sourceUrl
+			width
+			height
+			name
+			mimeType
+		}
+	}
 }

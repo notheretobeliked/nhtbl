@@ -1,53 +1,91 @@
 <script lang="ts">
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-  import BlockRenderer from '$components/BlockRenderer.svelte'
-  import { getContext } from 'svelte'
-  interface Props {
-    block: ExtendedEditorBlock
-  }
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreColumnsAttributes, CoreColumnAttributes } from '$lib/graphql/generated'
+	import BlockRenderer from '$components/BlockRenderer.svelte'
+	import { getContext } from 'svelte'
 
-  let { block }: Props = $props()
+	interface Props {
+		block: EditorBlock
+	}
 
-  // Provided by an ancestor CoreGroup in a min-height "stretch" section so the
-  // columns fill the section height. Undefined when not inside such a section.
-  const fillCtx = getContext<{ value: boolean }>('fill-height')
+	let { block }: Props = $props()
+	let attrs = $derived(block.attributes as CoreColumnsAttributes | undefined)
 
-  const isStackedOnMobile: boolean = block.attributes?.isStackedOnMobile ?? false
+	// Set by an ancestor CoreGroup in stretch mode. When true, this Columns
+	// (and its Column children) should fill the available height.
+	const fillCtx = getContext<{ value: boolean } | undefined>('section-fill-height')
+	let fillHeight = $derived(fillCtx?.value === true)
 
-  // Create CSS grid template columns from individual column widths
-  function getGridTemplateColumns(): string {
-    const children = (block as any).children || []
-    return children.map((child: any) => child.attributes?.width || '1fr').join(' ') || '1fr'
-  }
+	function presetToSpacing(value: string): string | null {
+		const match = value.match(/(?:var:preset\|)?spacing\|(\d+)/)
+		if (match) return String(parseInt(match[1], 10) / 10)
+		return null
+	}
 
-  // Get the grid style object
-  function getGridStyle(): string {
-    const gridTemplateColumns = getGridTemplateColumns()
-    return `grid-template-columns: ${gridTemplateColumns};`
-  }
+	// Create CSS grid template columns from individual column widths.
+	// Convert percentages to fr units so gaps don't cause overflow
+	// (e.g. "50% 50%" + gap = >100%, but "50fr 50fr" + gap = exactly 100%).
+	// Columns without an explicit width (Gutenberg "auto") share the REMAINING
+	// proportion equally — matching WP's flex-basis behaviour — so a "33%" + auto
+	// pair becomes "33fr 67fr" (not "33fr 1fr", which would squash the auto one).
+	let gridTemplateColumns = $derived.by(() => {
+		const children = block.children || []
+		const pcts = children.map((child: EditorBlock) => {
+			const width = (child.attributes as CoreColumnAttributes | undefined)?.width
+			const pct = width ? parseFloat(width) : NaN
+			return isNaN(pct) ? null : pct
+		})
+		const explicitSum = pcts.reduce<number>((sum, p) => sum + (p ?? 0), 0)
+		const autoCount = pcts.filter((p) => p === null).length
+		const autoShare = autoCount > 0 ? Math.max(1, (100 - explicitSum) / autoCount) : 0
+		return pcts.map((p) => `${p === null ? autoShare : p}fr`).join(' ') || '1fr'
+	})
 
-  // Get CSS classes for responsive behavior
-  function getCssClasses(): string {
-    const fillClass = fillCtx?.value ? 'h-full' : ''
-    const baseClasses = `${block.attributes?.className || ''} corecolumns grid ${fillClass}`
-    return baseClasses.trim()
-  }
+	let isStackedOnMobile = $derived(attrs?.isStackedOnMobile ?? false)
+
+	let gapClass = $derived.by(() => {
+		const raw = attrs?.style
+		if (!raw) return 'gap-4'
+		try {
+			const style = typeof raw === 'string' ? JSON.parse(raw) : raw
+			const blockGap = style?.spacing?.blockGap
+			if (blockGap) {
+				const tw = presetToSpacing(blockGap)
+				if (tw) return `gap-${tw}`
+			}
+		} catch { /* use default */ }
+		return 'gap-4'
+	})
+
+	let cssClasses = $derived(
+		`${attrs?.className || ''} corecolumns grid w-full ${gapClass} ${fillHeight ? 'h-full auto-rows-fr' : ''}`.trim()
+	)
+	let gridStyle = $derived(
+		isStackedOnMobile
+			? `grid-template-columns: 1fr; --grid-columns: ${gridTemplateColumns};`
+			: `grid-template-columns: ${gridTemplateColumns};`
+	)
+	let children = $derived(block.children || [])
 </script>
 
 <div
-  class="{getCssClasses()}  gap-4"
-  data-stacked={isStackedOnMobile}
-  style={isStackedOnMobile ? `grid-template-columns: 1fr; --grid-columns: ${getGridTemplateColumns()};` : getGridStyle()}
+	class={cssClasses}
+	data-stacked={isStackedOnMobile}
+	style={gridStyle}
 >
-  {#each (block as any).children || [] as childBlock, index}
-    <BlockRenderer block={childBlock} />
-  {/each}
+	{#each children as childBlock, i}
+		<BlockRenderer block={childBlock} staggerIndex={i} />
+	{/each}
 </div>
 
 <style>
-  @media (min-width: 768px) {
-    .corecolumns[data-stacked='true'] {
-      grid-template-columns: var(--grid-columns) !important;
-    }
-  }
+	.corecolumns > :global(*) {
+		min-width: 0;
+	}
+
+	@media (min-width: 768px) {
+		.corecolumns[data-stacked='true'] {
+			grid-template-columns: var(--grid-columns) !important;
+		}
+	}
 </style>

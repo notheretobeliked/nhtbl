@@ -7,10 +7,9 @@
 
 	let { isPreview = false, lastModified = null, canEdit = false }: Props = $props()
 
-	// Format the timestamp nicely
 	function formatTimestamp(timestamp: string | null): string {
 		if (!timestamp) return 'Unknown'
-		
+
 		try {
 			const date = new Date(timestamp)
 			return date.toLocaleString('en-GB', {
@@ -28,7 +27,7 @@
 </script>
 
 {#if isPreview}
-	<div class="fixed top-0 left-0 right-0 z-50 bg-caution text-extremedanger border-b-2 border-extremedanger shadow-lg">
+	<div class="preview-banner" role="status" aria-live="polite">
 		<div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between text-sm font-medium">
 			<div class="flex items-center gap-3">
 				<div class="flex items-center gap-2">
@@ -37,7 +36,7 @@
 					</svg>
 					<span class="font-bold">PREVIEW MODE</span>
 				</div>
-				
+
 				{#if lastModified}
 					<div class="hidden sm:flex items-center gap-1 text-xs opacity-90">
 						<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -50,7 +49,6 @@
 
 			<div class="flex items-center gap-2 text-xs">
 				<span class="hidden sm:inline opacity-90">This is a preview of unpublished changes</span>
-
 			</div>
 		</div>
 	</div>
@@ -60,8 +58,15 @@
 {/if}
 
 <style>
-	/* Ensure the banner stays on top of everything */
-	.z-50 {
+	.preview-banner {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
 		z-index: 9999;
+		background-color: #fef3c7;
+		color: #92400e;
+		border-bottom: 2px solid #d97706;
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 	}
-</style> 
+</style>

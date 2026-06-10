@@ -1,34 +1,44 @@
 <script lang="ts">
+  /*
+    This component ingests an object containing the data from YoastSeO and outputs meta and Opengraph tags
+  */
   import type { ImageObject } from '$lib/types/wp-types'
 
-  // Mark image and squareImage as optional using ? after the type
+  
   interface Props {
-    image?: ImageObject | undefined | null
-    metadescription: string
-    ogLanguage?: string
-    pageTitle: string
-    siteTitle?: string
-    siteUrl: string
+    // Mark image and squareImage as optional using ? after the type
+    image: ImageObject | undefined | null;
+    metadescription: string;
+    ogLanguage?: string;
+    pageTitle: string;
+    siteTitle?: string;
+    siteUrl: string;
   }
 
-  let { image, metadescription, ogLanguage = 'en_UK', pageTitle, siteTitle = 'Not here to be liked', siteUrl }: Props = $props()
+  let {
+    image,
+    metadescription,
+    ogLanguage = 'en_UK',
+    pageTitle,
+    siteTitle = 'Not here to be liked',
+    siteUrl
+  }: Props = $props();
 
   // Helper function to select an image size, defaults to 'large' or the first available size
-  function selectImageSize(sizes, preferredSize = 'large') {
+  type ImageSizeEntry = NonNullable<NonNullable<NonNullable<ImageObject['mediaDetails']>['sizes']>[number]>
+
+  function selectImageSize(sizes: ImageSizeEntry[], preferredSize = 'large'): ImageSizeEntry | undefined {
     return sizes.find(size => size.name === preferredSize) || sizes[0]
   }
 
-  // Use optional chaining (?) and nullish coalescing (??) operators to safely access properties
-  const imageUrl = $derived(image ? selectImageSize(image.mediaDetails.sizes ?? []).sourceUrl ?? undefined : undefined)
+  let validSizes = $derived(
+    image?.mediaDetails?.sizes?.filter((s): s is ImageSizeEntry => s != null) ?? []
+  )
+  let imageUrl = $derived(validSizes.length > 0 ? selectImageSize(validSizes)?.sourceUrl : undefined)
 </script>
 
 <svelte:head>
   <title>{pageTitle}</title>
-  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content={metadescription} />

@@ -1,22 +1,32 @@
 <script lang="ts">
+  /*
+    This component ingests an object containing the data from YoastSeO and outputs twitter specific Opengraph tags
+  */
   import type { ImageObject } from '$lib/types/wp-types'
-  
   interface Props {
-    image?: ImageObject | undefined | null
-    metadescription: string
-    pageTitle: string
-    siteUrl: string
+    image: ImageObject | undefined | null;
+    metadescription: string;
+    pageTitle: string;
+    siteUrl: string;
   }
 
-  let { image, metadescription, pageTitle, siteUrl }: Props = $props()
+  let {
+    image,
+    metadescription,
+    pageTitle,
+    siteUrl
+  }: Props = $props();
 
-  // Helper function to select an image size, defaults to 'large' or the first available size
-  function selectImageSize(sizes, preferredSize = 'large') {
+  type ImageSizeEntry = NonNullable<NonNullable<NonNullable<ImageObject['mediaDetails']>['sizes']>[number]>
+
+  function selectImageSize(sizes: ImageSizeEntry[], preferredSize = 'large'): ImageSizeEntry | undefined {
     return sizes.find(size => size.name === preferredSize) || sizes[0]
   }
 
-  // Use optional chaining (?) and nullish coalescing (??) operators to safely access properties
-  const imageUrl = $derived(image ? selectImageSize(image.mediaDetails.sizes ?? []).sourceUrl ?? undefined : undefined)
+  let validSizes = $derived(
+    image?.mediaDetails?.sizes?.filter((s): s is ImageSizeEntry => s != null) ?? []
+  )
+  let imageUrl = $derived(validSizes.length > 0 ? selectImageSize(validSizes)?.sourceUrl : undefined)
 
 </script>
 

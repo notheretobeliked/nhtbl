@@ -1,48 +1,44 @@
 <script lang="ts">
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-  import Button from '$components/Button.svelte'
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreButtonAttributes } from '$lib/graphql/generated'
+	import Button from '$components/Button.svelte'
 
-  // Expect a core/button block
-  interface Props {
-    block: ExtendedEditorBlock
-  }
+	interface Props {
+		block: EditorBlock
+	}
 
-  let { block }: Props = $props()
-  const getTextClass = (fontSize: string | null) => {
-    switch (fontSize) {
-      case 'sm':
-        return 'text-sm'
-      case 'base':
-        return 'text-sm md:text-base'
-      case 'lg':
-        return 'text-base md:text-lg'
-      case 'xl':
-        return 'text-base md:text-lg lg:text-xl'
-      case '2xl':
-        return 'text-xl md:text-2xl'
-      case null:
-      default:
-        return 'text-sm md:text-base'
-    }
-  }
+	let { block }: Props = $props()
+	let attrs = $derived(block.attributes as CoreButtonAttributes | undefined)
 
-  const getBackgroundClass = (backgroundColor: string | null) => {
-    return backgroundColor ? `bg-${backgroundColor}` : 'bg-nhtbl-green-base'
-  }
+	const getTextClass = (fontSize: string | null) => {
+		switch (fontSize) {
+			case 'sm':
+				return 'text-sm'
+			case 'base':
+				return 'text-sm md:text-base'
+			case 'lg':
+				return 'text-base md:text-lg'
+			case 'xl':
+				return 'text-base md:text-lg lg:text-xl'
+			case '2xl':
+				return 'text-xl md:text-2xl'
+			default:
+				return 'text-sm md:text-base'
+		}
+	}
 
-  const getBorderClass = (borderColor: string | null) => {
-    return borderColor ? `border-${borderColor} border` : 'border-black border'
-  }
-
-  const getTextColorClass = (textColor: string | null) => {
-    return textColor ? `text-${textColor}` : 'text-black'
-  }
+	const getBackgroundClass = (backgroundColor: string | null) =>
+		backgroundColor ? `bg-${backgroundColor}` : 'bg-nhtbl-green-base'
+	const getBorderClass = (borderColor: string | null) =>
+		borderColor ? `border-${borderColor} border` : 'border-black border'
+	const getTextColorClass = (textColor: string | null) =>
+		textColor ? `text-${textColor}` : 'text-black'
 </script>
 
-<Button 
-  textClass={getTextClass(block.attributes?.fontSize ?? null)}
-  colourClass={`${getBackgroundClass(block.attributes?.backgroundColor ?? null)} ${getBorderClass(block.attributes?.borderColor ?? null)}`}
-  textColourClass={getTextColorClass(block.attributes?.textColor ?? null)}
-  url={block.attributes?.url} 
-  label={block.attributes?.text} 
+<Button
+	textClass={getTextClass(attrs?.fontSize ?? null)}
+	colourClass={`${getBackgroundClass(attrs?.backgroundColor ?? null)} ${getBorderClass(attrs?.borderColor ?? null)}`}
+	textColourClass={getTextColorClass(attrs?.textColor ?? null)}
+	url={attrs?.url ?? '/'}
+	label={attrs?.text ?? ''}
 />

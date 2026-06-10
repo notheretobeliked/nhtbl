@@ -1,5 +1,5 @@
 import { dev } from '$app/environment'
-import { urqlQuery } from '$lib/graphql/client'
+import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
 import Projects from '$lib/graphql/query/projects.graphql?raw'
 import type { ProjectsQuery } from '$lib/graphql/generated'
 
@@ -23,7 +23,10 @@ export const getAllProjects = async (): Promise<NonNullable<ProjectsQuery['nhtbl
   
   
   try {
-    const data = await urqlQuery(Projects)
+    const res = await graphqlQuery(Projects)
+    checkResponse(res)
+    const json = await res.json()
+    const data = json.data as ProjectsQuery
     projectsCache = data.nhtblProjects?.nodes || []
     cacheTimestamp = now
     

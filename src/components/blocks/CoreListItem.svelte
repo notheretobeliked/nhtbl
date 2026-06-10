@@ -1,22 +1,29 @@
 <script lang="ts">
-  import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-  import CoreList from './CoreList.svelte'
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreListItemAttributes } from '$lib/graphql/generated'
+	import { classNames } from '$lib/utilities/utilities'
 
-  interface Props {
-    block: ExtendedEditorBlock
-  }
+	interface Props {
+		block: EditorBlock
+		animation?: { delay?: string }
+	}
 
-  let { block }: Props = $props()
-  let attrs = $derived((block.attributes ?? {}) as Record<string, any>)
-  let content = $derived((attrs.content ?? '') as string)
+	let { block }: Props = $props()
+	let attrs = $derived(block.attributes as CoreListItemAttributes | undefined)
 
-  // A list item can contain a nested list (core/list child).
-  let nestedLists = $derived((block.children ?? []).filter((c: any) => c?.name === 'core/list'))
+	let content = $derived(attrs?.content ?? '')
+	let attrClasses = $derived(
+		classNames(
+			attrs?.fontSize,
+			attrs?.textColor,
+			null,
+			attrs?.fontFamily
+		)
+	)
 </script>
 
-<li class="mb-1">
-  {@html content}
-  {#each nestedLists as list}
-    <CoreList block={list} />
-  {/each}
-</li>
+{#if content}
+	<li class={attrClasses}>
+		{@html content}
+	</li>
+{/if}

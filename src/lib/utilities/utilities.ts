@@ -1,210 +1,88 @@
-import type { ImageSize } from "$lib/types/wp-types"
-import type { EditorBlock } from "$lib/graphql/generated"
-import type { HierarchicalOptions } from "./wordpress-content"
+import type { ImageSize } from '$lib/types/wp-types'
 
-export interface ContentSegment {
-  type: 'text' | 'svg'
-  content: string
-  version: 'line' | 'bubble' // Add this line
-  key: string // Unique key for each segment
-}
-
-export const flatListToHierarchical = <T extends Record<string, any>>(
-  data: T[] = [],
-  { idKey = 'clientId', parentKey = 'parentClientId', childrenKey = 'children' }: HierarchicalOptions = {},
-): T[] => {
-  const tree: T[] = []
-  const childrenOf: Record<string, T[]> = {}
-
-  data.forEach(item => {
-    const newItem: any = { ...item }
-    const id: string = newItem[idKey]
-    const parentId: string = newItem[parentKey] || '0'
-
-    childrenOf[id] = childrenOf[id] || []
-    newItem[childrenKey] = childrenOf[id]
-
-    if (parentId !== '0') {
-      childrenOf[parentId] = childrenOf[parentId] || []
-      childrenOf[parentId].push(newItem)
-    } else {
-      tree.push(newItem)
-    }
-  })
-
-  return tree
-}
-
-/**
- * Stamp `attributes.fill = true` on every core/image contained in a CoreGroup
- * "stretch" section (min-height screen/half + content alignment "stretch"), so
- * the image fills the section (100% w/h, object-fit: cover). Mutates and returns
- * the same (already-cloned) hierarchical block list.
- */
-export const markStretchFill = <T extends Record<string, any>>(blocks: T[] = []): T[] => {
-  const isStretchSection = (b: any): boolean =>
-    b?.name === 'core/group' &&
-    (b.attributes?.minHeight === 'screen' || b.attributes?.minHeight === 'half') &&
-    b.attributes?.contentAlign === 'stretch'
-
-  const markImages = (b: any): void => {
-    if (b?.name === 'core/image') {
-      b.attributes = { ...(b.attributes ?? {}), fill: true }
-    }
-    ;(b?.children ?? []).forEach(markImages)
-  }
-
-  const walk = (list: any[] = []): void => {
-    list.forEach((b) => {
-      if (isStretchSection(b)) {
-        ;(b.children ?? []).forEach(markImages)
-      } else {
-        walk(b.children ?? [])
-      }
-    })
-  }
-
-  walk(blocks)
-  return blocks
-}
-
-export const parseContent = (htmlContent: string): ContentSegment[] => {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(htmlContent, 'text/html')
-  const segments: ContentSegment[] = []
-  let index = 0 // Initialize an index counter
-
-  doc.body.childNodes.forEach(node => {
-    let type: 'text' | 'svg' = 'text'
-    let content = ''
-    let version: 'line' | 'bubble' = 'bubble'
-
-    if (node.nodeName === 'SPAN' && node.nodeType === Node.ELEMENT_NODE) {
-      const element = node as HTMLElement
-      if (element.style.textDecoration.includes('underline')) {
-        type = 'svg'
-        content = element.innerHTML // Use innerHTML to preserve nested formatting
-        version = 'line'
-      } else {
-        content = element.outerHTML // For non-underlined spans
-      }
-    } else if (node.nodeName === 'STRONG') {
-      type = 'svg'
-      version = 'bubble'
-      content = (node as HTMLElement).innerHTML // Preserve content inside strong tags
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      // For other element nodes (including <a>, <em>, etc.), preserve the HTML
-      content = (node as HTMLElement).outerHTML
-    } else {
-      // For text nodes, use textContent
-      content = node.textContent || ''
-    }
-    
-    // Increment index for each segment to ensure uniqueness
-    const key = `${type}-${content.substring(0, 10)}-${index++}`
-    segments.push({ type, content, version, key })
-  })
-
-  return segments
-}
-
-export const findImageSizeData = (property: keyof ImageSize, sizes: ImageSize[], name: string): string => {
-  const size = sizes.find(size => size.name === name)
-  if (size && property in size) {
-    return String(size[property])
-  }
-  return ''
-}
-
-/**
- * Like findImageSizeData, but when the requested size doesn't exist (common for
- * small originals that never generate a `large`/`x_large`), falls back to the
- * largest available size. Used for width/height attributes and high-res
- * sources, where an empty value would leave the <img> with no intrinsic aspect
- * ratio (and therefore 0 height when sized with h-auto).
- */
-export const findImageSizeDataOrLargest = (property: keyof ImageSize, sizes: ImageSize[], name: string): string => {
-  const exact = findImageSizeData(property, sizes, name)
-  if (exact) return exact
-  const largest = [...sizes]
-    .filter(size => Number(size.width) > 0)
-    .sort((a, b) => Number(b.width) - Number(a.width))[0]
-  if (largest && property in largest) {
-    return String(largest[property])
-  }
-  return ''
+export const findImageSizeData = (
+	property: keyof ImageSize,
+	sizes: ImageSize[],
+	name: string
+): string => {
+	const size = sizes.find((size) => size.name === name)
+	if (size && property in size) {
+		return String(size[property])
+	}
+	return ''
 }
 
 export const getSrcSet = (sizes: ImageSize[]): string => {
-  return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
+	return sizes.map(({ sourceUrl, width }) => `${sourceUrl} ${width}w`).join(', ')
 }
 
 /**
- * Removes backend hostname from URLs to make them relative
- * @param url - The URL to clean
- * @param backendOrigin - The backend origin to remove (e.g., "http://nhtbl-backend.test")
- * @returns Relative URL or original URL if it doesn't start with backend origin
+ * Generates Tailwind classes only for explicitly set block attributes.
+ * Returns empty strings for unset values, allowing global CSS to handle defaults.
  */
-export const makeUrlRelative = (url: string | null | undefined, backendOrigin: string): string | undefined => {
-  if (!url) return undefined
-  
-  // Extract hostname from backend origin to match both http and https
-  const backendUrl = new URL(backendOrigin)
-  const backendHostname = backendUrl.hostname
-  
-  try {
-    const urlObj = new URL(url)
-    // If the hostname matches our backend, make it relative
-    if (urlObj.hostname === backendHostname) {
-      const relativeUrl = urlObj.pathname + urlObj.search + urlObj.hash
-      return relativeUrl || '/'
-    }
-  } catch {
-    // If URL parsing fails, fall back to simple string matching
-    if (url.startsWith(backendOrigin)) {
-      const relativeUrl = url.replace(backendOrigin, '')
-      return relativeUrl || '/'
-    }
-  }
-  
-  return url
-}
+export const classNames = (
+	fontSize: string | null | undefined,
+	textColor: string | null | undefined,
+	align: string | null | undefined,
+	fontFamily: string | null | undefined
+) => {
+	const classes: string[] = []
 
-/**
- * Recursively cleans navigation URLs in an object structure while preserving media URLs
- * @param obj - Object that may contain URLs
- * @param backendOrigin - The backend origin to remove
- * @param navigationUrlFields - Array of field names that contain navigation URLs (not media)
- */
-export const cleanNavigationUrls = (
-  obj: any, 
-  backendOrigin: string, 
-  navigationUrlFields: string[] = ['url', 'uri', 'href', 'link']
-): any => {
-  if (!obj || typeof obj !== 'object') return obj
-  
-  if (Array.isArray(obj)) {
-    return obj.map(item => cleanNavigationUrls(item, backendOrigin, navigationUrlFields))
-  }
-  
-  const cleaned = { ...obj }
-  
-  for (const [key, value] of Object.entries(cleaned)) {
-    if (navigationUrlFields.includes(key) && typeof value === 'string') {
-      cleaned[key] = makeUrlRelative(value, backendOrigin)
-    } else if (typeof value === 'object' && value !== null) {
-      cleaned[key] = cleanNavigationUrls(value, backendOrigin, navigationUrlFields)
-    }
-  }
-  
-  // Special handling for block attributes that might contain URLs
-  if (cleaned.attributes && typeof cleaned.attributes === 'object') {
-    for (const [key, value] of Object.entries(cleaned.attributes)) {
-      if (navigationUrlFields.includes(key) && typeof value === 'string') {
-        cleaned.attributes[key] = makeUrlRelative(value, backendOrigin)
-      }
-    }
-  }
-  
-  return cleaned
+	// Only add font size class if explicitly set
+	if (fontSize) {
+		switch (fontSize) {
+			case 'xs':
+				classes.push('text-xs')
+				break
+			case 'sm':
+				classes.push('text-sm')
+				break
+			case 'base':
+				classes.push('text-base')
+				break
+			case 'lg':
+				classes.push('text-base md:text-lg')
+				break
+			case 'xl':
+				classes.push('text-lg md:text-xl')
+				break
+			case '2xl':
+				classes.push('text-lg md:text-xl lg:text-2xl')
+				break
+			case '3xl':
+				classes.push('text-xl md:text-2xl lg:text-3xl')
+				break
+			case '4xl':
+				classes.push('text-2xl md:text-4xl')
+				break
+		}
+	}
+
+	// Only add font family class if explicitly set
+	if (fontFamily) {
+		switch (fontFamily) {
+			case 'sans':
+				classes.push('font-sans')
+				break
+		}
+	}
+
+	// Only add alignment class if explicitly set (and not default 'left')
+	if (align && align !== 'left') {
+		switch (align) {
+			case 'center':
+				classes.push('text-center')
+				break
+			case 'right':
+				classes.push('text-right')
+				break
+		}
+	}
+
+	// Only add color class if explicitly set
+	if (textColor) {
+		classes.push(`text-${textColor}`)
+	}
+
+	return classes.join(' ')
 }

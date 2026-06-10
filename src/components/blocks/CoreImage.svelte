@@ -1,73 +1,166 @@
 <script lang="ts">
-	import type { ExtendedEditorBlock } from '$lib/types/wp-types'
-	import type { MediaItem } from '$lib/graphql/generated'
-	import Image from '$components/atoms/Image.svelte'
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreImageAttributes } from '$lib/graphql/generated'
+	import { extractBlockClasses } from '$lib/utilities/block-attributes'
+	import { blockReveal } from '$lib/actions/block-reveal'
+	import { getContext } from 'svelte'
+
 	interface Props {
-		block: ExtendedEditorBlock
+		block: EditorBlock
+		animation?: { delay?: string }
 	}
 
-	let { block }: Props = $props()
+	let { block, animation }: Props = $props()
 
-	// Stamped during block processing (markStretchFill) when this image sits in a
-	// min-height "stretch" section. When true the image fills the section
-	// (100% w/h, object-fit: cover) instead of using its aspect ratio.
-	const fill = Boolean((block.attributes as any)?.fill)
+	// Set by an ancestor CoreGroup whose content-align is explicitly "stretch":
+	// fill the section's full height (cover-cropping) instead of natural height.
+	const fillCtx = getContext<{ value: boolean } | undefined>('section-stretch-children')
+	let fillHeight = $derived(fillCtx?.value === true)
+	let attrs = $derived(block.attributes as CoreImageAttributes | undefined)
+	let bc = $derived(extractBlockClasses(block.attributes as Record<string, unknown>))
 
+	let sizes = $derived(
+		(block.mediaDetails?.sizes ?? []) as Array<{
+			sourceUrl?: string
+			width?: string
+			height?: string
+		}>
+	)
+	let src = $derived(attrs?.url ?? '')
+	let alt = $derived(attrs?.alt ?? '')
+	let caption = $derived(attrs?.caption)
+	let align = $derived(attrs?.align)
+	let aspectRatio = $derived(attrs?.aspectRatio)
+	let scale = $derived(attrs?.scale)
+	let customWidth = $derived(attrs?.width)
+	let customHeight = $derived(attrs?.height)
+	let href = $derived(attrs?.href)
+	let linkTarget = $derived(attrs?.linkTarget)
 
-	// CoreImage blocks now include color data from WordPress
-	const imageObject = {
-		altText: (block as any).altText || block.attributes?.alt || '',
-		colorPalette: (block as any).colorPalette || null,
-		dominantColor: (block as any).dominantColor || null,
-		secondaryColor: (block as any).secondaryColor || null,
-		mediaDetails: {
-			sizes: block.mediaDetails?.sizes ?? []
-		},
-		contentTypeName: 'attachment',
-		databaseId: 0,
-		id: '',
-		isComment: false,
-		isTermNode: false,
-		slug: '',
-		uri: ''
-	} as MediaItem
+	// Resolve intrinsic width/height from mediaDetails when not set by the editor,
+	// so the browser can reserve space and avoid layout shift (CLS). If only one
+	// editor dimension is set, use 'auto' for the other so it's derived from the
+	// aspect ratio.
+	let matchedSize = $derived(sizes.find((s) => s?.sourceUrl === src))
+	let intrinsicWidth = $derived(
+		customWidth || (customHeight ? 'auto' : matchedSize?.width) || undefined
+	)
+	let intrinsicHeight = $derived(
+		customHeight || (customWidth ? 'auto' : matchedSize?.height) || undefined
+	)
 
-	const aspectRatio = block.attributes?.aspectRatio || 'auto'
+	// Only use srcset if the full-size src is represented in the sizes array.
+	// Otherwise the browser picks a small thumbnail instead of the full original.
+	let hasSrcInSizes = $derived(sizes.some((s) => s?.sourceUrl === src))
+	let srcSet = $derived(
+		hasSrcInSizes
+			? sizes
+					.filter((s) => s?.sourceUrl && s?.width)
+					.map((s) => `${s!.sourceUrl} ${s!.width}w`)
+					.join(', ')
+			: ''
+	)
 
-	const aspectRatioClass = (() => {
-		switch (aspectRatio) {
-			case '1':
-				return 'aspect-square'
-			case '4/3':
-				return 'aspect-[4/3]'
-			case '3/4':
-				return 'aspect-[3/4]'
-			case '3/2':
-				return 'aspect-[3/2]'
-			case '16/9':
-				return 'aspect-[16/9]'
-			case '9/16':
-				return 'aspect-[9/16]'
-			default:
-				return 'aspect-auto'
+	let borderRadius = $derived.by(() => {
+		const raw = attrs?.style
+		if (!raw) return ''
+		try {
+			const style = typeof raw === 'string' ? JSON.parse(raw) : raw
+			const radius = style?.border?.radius
+			if (!radius) return ''
+			if (typeof radius === 'string') return radius
+			const { topLeft, topRight, bottomRight, bottomLeft } = radius
+			return `${topLeft ?? '0'} ${topRight ?? '0'} ${bottomRight ?? '0'} ${bottomLeft ?? '0'}`
+		} catch {
+			return ''
 		}
-	})()
+	})
 
+	let imgStyle = $derived.by(() => {
+		const parts: string[] = []
+		if (customWidth) parts.push(`width:${customWidth}`)
+		if (customHeight) parts.push(`height:${customHeight}`)
+		if (aspectRatio) {
+			parts.push(`aspect-ratio:${aspectRatio}`)
+			parts.push(`object-fit:${scale || 'cover'}`)
+		}
+		if (borderRadius) parts.push(`border-radius:${borderRadius}`)
+		return parts.join(';')
+	})
+
+	// The figure declares its alignment bucket; the `.page-main` parent rule
+	// caps non-align figures at the content width and centers them. Wide/full
+	// carry the matching class so the parent rule lets them break out.
+	let alignClass = $derived(
+		align === 'wide'
+			? 'alignwide w-full'
+			: align === 'full'
+				? 'alignfull w-full max-w-full'
+				: 'w-full'
+	)
+
+	let isFullWidth = $derived(align === 'full' || align === 'wide')
+
+	// Image alignment happens within the (content-width) figure. With a custom
+	// width the margin controls placement; center/left/right map to mx-auto /
+	// left / right. Without a custom width a centered image still uses mx-auto.
+	let imgAlignClass = $derived.by(() => {
+		if (!customWidth) return align === 'center' ? 'block mx-auto' : ''
+		if (align === 'center') return 'block mx-auto'
+		if (align === 'right') return 'block ml-auto mr-0'
+		return 'block ml-0 mr-auto'
+	})
+
+	let imgClass = $derived(
+		fillHeight
+			? `w-full h-full object-cover ${imgAlignClass}`.trim()
+			: [
+					customWidth || customHeight
+						? 'h-auto max-w-full'
+						: isFullWidth || aspectRatio
+							? 'w-full h-auto'
+							: 'max-w-full h-auto',
+					imgAlignClass
+				]
+					.filter(Boolean)
+					.join(' ')
+	)
 </script>
 
-<figure class={fill ? 'h-full w-full' : 'mb-0 w-full'}>
-	<Image
-		{imageObject}
-		imageSize="large"
-		naturalFlow={!fill && aspectRatio === 'auto'}
-		extraClasses={fill
-			? 'h-full w-full'
-			: aspectRatio === 'auto'
-				? 'w-full'
-				: aspectRatioClass}
-		fit="cover"
-	/>
-	{#if block.attributes?.caption && !fill}
-		<figcaption class="font-inter mt-2 text-center text-sm">{block.attributes.caption}</figcaption>
-	{/if}
-</figure>
+{#if src}
+	<figure
+		class="{alignClass} {fillHeight ? 'h-full' : ''} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
+		use:blockReveal={animation}
+	>
+		{#if href}
+			<a {href} target={linkTarget || undefined} class="border-0 no-underline">
+				<img
+					{src}
+					{alt}
+					srcset={srcSet || undefined}
+					sizes={srcSet ? '100vw' : undefined}
+					width={intrinsicWidth || undefined}
+					height={intrinsicHeight || undefined}
+					class={imgClass}
+					style={imgStyle || undefined}
+					loading="lazy"
+				/>
+			</a>
+		{:else}
+			<img
+				{src}
+				{alt}
+				srcset={srcSet || undefined}
+				sizes={srcSet ? '100vw' : undefined}
+				width={intrinsicWidth || undefined}
+				height={intrinsicHeight || undefined}
+				class={imgClass}
+				style={imgStyle || undefined}
+				loading="lazy"
+			/>
+		{/if}
+		{#if caption}
+			<figcaption class="font-sans text-sm mt-2 text-center">{@html caption}</figcaption>
+		{/if}
+	</figure>
+{/if}

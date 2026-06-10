@@ -20,7 +20,9 @@ export const resolvePortfolioProjects = (
     case 'specific':
       // Use the data that's already in specificProjects if it has full data
       if (config.specificProjects?.nodes) {
-        const specificNodes = config.specificProjects.nodes
+        // Nodes are a union (Node & ContentNode); the project fields are only on
+        // the Nhtbl_project member, so treat them loosely here.
+        const specificNodes = config.specificProjects.nodes as any[]
         
         // Check if the specific projects already have full data (title, excerpt, etc.)
         const hasFullData = specificNodes.length > 0 && 
@@ -56,8 +58,8 @@ export const resolvePortfolioProjects = (
       }
       if (config.selectedService?.nodes) {
         resolvedProjects = allProjects.filter(project =>
-          project.nhtblServices?.nodes?.some(projectService =>
-            config.selectedService?.nodes?.some(selectedService =>
+          project.nhtblServices?.nodes?.some((projectService: any) =>
+            config.selectedService?.nodes?.some((selectedService: any) =>
               selectedService.slug === projectService.slug
             )
           )
@@ -71,7 +73,7 @@ export const resolvePortfolioProjects = (
 
   // Apply sorting if specified
   if (config.sortOrder && resolvedProjects.length > 0) {
-    resolvedProjects = applySorting(resolvedProjects, config.sortOrder)
+    resolvedProjects = applySorting(resolvedProjects, config.sortOrder as any)
   }
 
   // Apply limit if specified
@@ -118,7 +120,7 @@ const applySorting = (projects: ProjectNode[], sortOrder: string): ProjectNode[]
  * Get display mode from configuration
  */
 export const getDisplayMode = (config: PortfolioConfig): 'horizontal_scroll' | 'masonry' | 'list' => {
-  const mode = config.displayMode?.[0]
+  const mode = config?.displayMode?.[0]
   
   if (mode === 'horizontal_scroll' || mode === 'masonry' || mode === 'list') {
     return mode

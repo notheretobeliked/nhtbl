@@ -8,7 +8,11 @@
 		dataSectionBehavior?: string | null
 	}
 
-	let { children, class: className = '', dataSectionBehavior = null }: Props = $props()
+	let {
+		children,
+		class: className = '',
+		dataSectionBehavior = null
+	}: Props = $props()
 
 	let root: HTMLDivElement | undefined = $state()
 
@@ -24,17 +28,25 @@
 	}
 
 	/**
-	 * Find parallax units within the container. A direct child is one unit,
-	 * EXCEPT when it wraps a Columns block (`.corecolumns` grid) — then each
-	 * column inside becomes its own unit. Wrapping multiple blocks in a
-	 * sub-group bundles them as one unit (the sub-group is one child).
+	 * Find parallax units within the parallax container.
+	 *
+	 * Direct children of the container are units, EXCEPT when a child is a
+	 * core/columns block — those are "transparent": each Column inside
+	 * becomes its own unit instead. Wrapping multiple blocks in a
+	 * sub-group bundles them as one unit (since the sub-group is one child).
 	 */
 	function findUnits(container: HTMLElement): HTMLElement[] {
 		const units: HTMLElement[] = []
 		for (const child of Array.from(container.children) as HTMLElement[]) {
-			const grid = child.querySelector(':scope .corecolumns') as HTMLElement | null
-			if (grid) {
-				for (const col of Array.from(grid.children) as HTMLElement[]) units.push(col)
+			if (child.classList.contains('core-columns')) {
+				const grid = child.querySelector(
+					':scope > .corecolumns'
+				) as HTMLElement | null
+				if (grid) {
+					for (const col of Array.from(grid.children) as HTMLElement[]) {
+						if (col.classList.contains('core-column')) units.push(col)
+					}
+				}
 			} else {
 				units.push(child)
 			}
@@ -51,18 +63,22 @@
 		if (units.length === 0) return
 
 		const depths = units.map((_, i) => depthForIndex(i))
-		// Disable transitions on parallax units. BlockRenderer wraps children
-		// with a transform transition (in-view reveal) that would re-trigger
-		// every frame and make the parallax visibly lag.
+		// Disable transitions on parallax units. BlockRenderer wraps each child
+		// with `transition: transform 0.5s ease` (block-reveal animation),
+		// which would re-trigger every frame and make the parallax visibly lag.
 		for (const u of units) {
 			u.style.willChange = 'transform'
 			u.style.transition = 'none'
 		}
 
-		// Cache each unit's untransformed document-relative top. Reading the
-		// rect in the rAF loop would feed the applied transform back in and drift.
+		// Cache each unit's untransformed document-relative top. Reading
+		// getBoundingClientRect() in the rAF loop would create a feedback
+		// loop because the rect reflects the applied transform — leading
+		// to drift even when scrolling has stopped.
 		let baselines: { top: number; height: number }[] = []
 		const measure = () => {
+			// Reset transforms so we read true layout positions, then let
+			// the next rAF frame re-apply correct transforms.
 			for (const u of units) u.style.transform = ''
 			const scrollY = window.scrollY
 			baselines = units.map((u) => {
@@ -72,6 +88,9 @@
 		}
 		measure()
 
+		// Continuously running rAF loop while any unit is in (or near) the
+		// viewport. Scroll-event-driven updates lag behind smooth /
+		// compositor-thread scrolling.
 		let rafId = 0
 		const intersecting = new Set<HTMLElement>()
 
@@ -104,6 +123,8 @@
 		)
 		for (const u of units) observer.observe(u)
 
+		// Re-measure when layout might have shifted (resize, late-loading
+		// images changing surrounding heights, etc.).
 		const onResize = () => measure()
 		window.addEventListener('resize', onResize, { passive: true })
 		const ro = 'ResizeObserver' in window ? new ResizeObserver(measure) : null
@@ -123,6 +144,10 @@
 	})
 </script>
 
-<div bind:this={root} class={className} data-section-behavior={dataSectionBehavior}>
+<div
+	bind:this={root}
+	class={className}
+	data-section-behavior={dataSectionBehavior}
+>
 	{@render children?.()}
 </div>

@@ -45,10 +45,12 @@ export const extractProjectImages = (
 
     // Extract CoreImage blocks - check both __typename and block name
     const imageBlocks = project.editorBlocks.filter(
-      (block): block is any => 
-        block?.__typename === 'CoreImage' || 
-        block?.name === 'core/image' ||
-        (block && 'mediaDetails' in block)
+      (block): block is any =>
+        Boolean(
+          block?.__typename === 'CoreImage' ||
+          block?.name === 'core/image' ||
+          (block && 'mediaDetails' in block)
+        )
     )
 
     for (const imageBlock of imageBlocks) {
@@ -59,8 +61,8 @@ export const extractProjectImages = (
         // MediaItem compatible structure
         mediaDetails: {
           sizes: imageBlock.mediaDetails.sizes
-            .filter((size): size is NonNullable<typeof size> => size !== null)
-            .map(size => ({
+            .filter((size: any) => size !== null)
+            .map((size: any) => ({
               name: size.name ?? '',
               sourceUrl: size.sourceUrl ?? '',
               width: size.width ?? '',

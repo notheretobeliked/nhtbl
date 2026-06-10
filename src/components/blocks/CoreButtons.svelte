@@ -1,37 +1,45 @@
 <script lang="ts">
-  import CoreButton from '$components/blocks/CoreButton.svelte'
-  import type { CoreButtonsBlock } from '$lib/types/wp-types'
-  
-  interface Props {
-    block: CoreButtonsBlock
-  }
+	import type { EditorBlock } from '$lib/types/wp-types'
+	import type { CoreButtonsAttributes } from '$lib/graphql/generated'
+	import CoreButton from '$components/blocks/CoreButton.svelte'
 
-  let { block }: Props = $props()
-  const children = block.children
-  const bgColor = block.attributes.backgroundColor ?? 'white'
-  const { justifyContent } = block.attributes?.layout ?? 'left'
+	interface Props {
+		block: EditorBlock
+	}
 
-  // Utility to generate CSS classes based on justifyContent value
-  function justifyContentClass(justifyContent: 'space-between' | 'left' | 'right' | 'center'): string {
-    switch (justifyContent) {
-      case 'left':
-        return 'justify-start'
-      case 'center':
-        return 'justify-center'
-      case 'right':
-        return 'justify-end'
-      case 'space-between':
-        return 'justify-between'
-      default:
-        return ''
-    }
-  }
+	let { block }: Props = $props()
+	let attrs = $derived(block.attributes as CoreButtonsAttributes | undefined)
+
+	let children = $derived(block.children || [])
+	let justifyContent = $derived(
+		(attrs?.layout as { justifyContent?: string } | null)?.justifyContent ?? 'left'
+	)
+
+	// Utility to generate CSS classes based on justifyContent value
+	function justifyContentClass(
+		value: 'space-between' | 'left' | 'right' | 'center' | string
+	): string {
+		switch (value) {
+			case 'left':
+				return 'justify-start'
+			case 'center':
+				return 'justify-center'
+			case 'right':
+				return 'justify-end'
+			case 'space-between':
+				return 'justify-between'
+			default:
+				return ''
+		}
+	}
 </script>
 
 <div class="px-2 md:px-0">
-  <div class={`m-auto flex ${justifyContentClass(justifyContent)} ${bgColor === 'black' ? '!text-white' : ''}`}>
-    {#each children as block, index}
-      <CoreButton block={block} />
-    {/each}
-  </div>
+	<div
+		class={`m-auto flex ${justifyContentClass(justifyContent)}`}
+	>
+		{#each children as buttonBlock}
+			<CoreButton block={buttonBlock} />
+		{/each}
+	</div>
 </div>

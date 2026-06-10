@@ -1,16 +1,10 @@
 <script lang="ts">
-  import type { MediaItem } from '$lib/graphql/generated'
-  import type { PortfolioBlockDetailsFragmentFragment, AcfPortfolioBlockFragmentFragment } from '$lib/graphql/generated'
+  import type { MediaItem, ProjectsQuery } from '$lib/graphql/generated'
   import Image from '$components/atoms/Image.svelte'
   import CoreHeading from '$components/blocks/CoreHeading.svelte'
 
-  // Extract project types from both fragments and merge them
-  type DetailsProjectNode = NonNullable<NonNullable<NonNullable<PortfolioBlockDetailsFragmentFragment['portfolioBlock']>['portfolioItems']>['nodes']>[number]
-
-  type AcfProjectNode = NonNullable<NonNullable<NonNullable<AcfPortfolioBlockFragmentFragment['portfolioBlock']>['portfolioItems']>['nodes']>[number]
-
-  // Merge the two project types to get all fields
-  type ProjectData = Extract<DetailsProjectNode, { __typename?: 'Nhtbl_project' }> & Extract<AcfProjectNode, { __typename?: 'Nhtbl_project' }>
+  // A resolved portfolio project node (see projects.graphql / portfolioResolver).
+  type ProjectData = NonNullable<NonNullable<ProjectsQuery['nhtblProjects']>['nodes']>[number]
 
   interface Props {
     project: ProjectData
@@ -162,13 +156,13 @@
                 {#each serviceNames as serviceName}
                   {#if onServiceClick}
                     <button 
-                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
                         ? 'bg-black text-white'
                         : 'text-black hover:bg-black hover:text-white'}"
                       onclick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
-                        onServiceClick?.(serviceName)
+                        onServiceClick?.(serviceName ?? '')
                       }}
                     >
                       {serviceName}
@@ -208,13 +202,13 @@
           {#each serviceNames as serviceName}
             {#if onServiceClick}
               <button
-                class="group-hover:border-[var(--pf-bg)] font-sans text-xs rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                class="group-hover:border-[var(--pf-bg)] font-sans text-xs rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
                   ? 'bg-[var(--pf-fg)] text-[var(--pf-bg)]'
                   : 'hover:bg-black/20'}"
                 onclick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  onServiceClick?.(serviceName)
+                  onServiceClick?.(serviceName ?? '')
                 }}
               >
                 {serviceName}
@@ -259,13 +253,13 @@
             {#each serviceNames as serviceName}
               {#if onServiceClick}
                 <button 
-                  class="group-hover:border-[var(--pf-bg)] font-sans text-sm rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                  class="group-hover:border-[var(--pf-bg)] font-sans text-sm rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
                     ? 'bg-[var(--pf-fg)] text-[var(--pf-bg)]'
                     : 'hover:bg-black/20'}"
                   onclick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
-                    onServiceClick?.(serviceName)
+                    onServiceClick?.(serviceName ?? '')
                   }}
                 >
                   {serviceName}
