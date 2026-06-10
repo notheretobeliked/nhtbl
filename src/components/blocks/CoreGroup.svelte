@@ -96,19 +96,10 @@
 
 	let hasMinHeight = $derived(sectionMinHeight === 'screen' || sectionMinHeight === 'half')
 
-	// Auto-stretch when the section has a single Columns child — common case
-	// of a 2-col layout where the columns should fill 100vh. With multiple
-	// direct children (heading + columns + spacer etc.), stretch mode would
-	// give the first child the full row and stack the rest in auto rows;
-	// fall back to sectionContentAlign in that case so authors can rely on
-	// `center` for vertically centred stacks.
-	let onlyChildIsColumns = $derived(
-		children.length === 1 &&
-			(children[0] as { name?: string })?.name === 'core/columns'
-	)
-	let useFillLayout = $derived(
-		hasMinHeight && (sectionContentAlign === 'stretch' || onlyChildIsColumns)
-	)
+	// Fill the section only when the author explicitly chose "stretch" content
+	// alignment. Other alignments (center/top/bottom) keep their content at its
+	// natural height and position it within the min-height section.
+	let useFillLayout = $derived(hasMinHeight && sectionContentAlign === 'stretch')
 
 	// Provide a fill-height context to descendants when in stretch mode.
 	// CoreColumns / leaf blocks read this via getContext('section-fill-height')
@@ -119,6 +110,16 @@
 	setContext('section-fill-height', fillCtx)
 	$effect(() => {
 		fillCtx.value = useFillLayout
+	})
+
+	// Explicit "stretch" content-align: leaf media (image/video) should cover-fill
+	// the section height. Kept separate from section-fill-height, which also fires
+	// for the single-Columns auto-fill case (there the columns fill, but the images
+	// inside them must keep their natural size).
+	const stretchCtx = $state({ value: false })
+	setContext('section-stretch-children', stretchCtx)
+	$effect(() => {
+		stretchCtx.value = hasMinHeight && sectionContentAlign === 'stretch'
 	})
 
 	let sectionClasses = $derived.by(() => {

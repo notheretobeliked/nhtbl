@@ -8,6 +8,15 @@ import { flatListToHierarchical, normalizeAssetUrlsInObject } from '$lib/server/
 
 export const prerender = false // Disable prerendering for preview functionality
 
+function formatYearRange(start?: string | null, end?: string | null): string {
+	if (!start && !end) return ''
+	if (!start && end) return `(${new Date(end).getFullYear()})`
+	if (start && !end) return `(${new Date(start).getFullYear()} –)`
+	const s = new Date(start!).getFullYear()
+	const e = new Date(end!).getFullYear()
+	return s === e ? `(${s})` : `(${s}–${String(e).slice(-2)})`
+}
+
 export const load: PageServerLoad = async function load({ url }) {
 	// Check if this is a preview request
 	const isPreview = url.searchParams.has('preview') || url.searchParams.has('p') || url.searchParams.has('page_id')
@@ -54,8 +63,13 @@ export const load: PageServerLoad = async function load({ url }) {
 			error(500, 'GraphQL query failed')
 		}
 
-		// Check if we have content - try both page and post
-		const node = pageData?.data?.page || pageData?.data?.post
+		// asPreview coerces the autosave to whatever type you query, so both page
+		// and nhtblProject return non-null for any id. Use the post_type the
+		// backend appends to the preview link to pick the right one.
+		const isPortfolio = url.searchParams.get('post_type') === 'project'
+		const node = isPortfolio
+			? pageData?.data?.nhtblProject
+			: pageData?.data?.page || pageData?.data?.nhtblProject
 
 		if (!node) {
 			error(404, `Preview not found for post ID: ${previewId}`)
@@ -73,12 +87,40 @@ export const load: PageServerLoad = async function load({ url }) {
 			? flatListToHierarchical(node.editorBlocks, {}, pageData.data)
 			: []
 
+		// Mirror the catch-all's portfolio presentation so previews match the live
+		// page (grey canvas + title card). Drop the excerpt block (shown in card).
+		let portfolio: Record<string, unknown> | undefined
+		if (isPortfolio) {
+			const services = ((node as any).nhtblServices?.nodes ?? [])
+				.filter((s: any) => s?.parentId !== null && s?.parentId !== undefined)
+				.map((s: any) => s?.name)
+				.filter(Boolean)
+			const clients = ((node as any).nhtblClients?.nodes ?? [])
+				.map((c: any) => c?.name)
+				.filter(Boolean)
+			portfolio = {
+				title: (node as any).title ?? '',
+				excerpt: (node as any).excerpt ?? '',
+				clients,
+				services,
+				yearDisplay: formatYearRange(
+					(node as any).projectData?.startDate,
+					(node as any).projectData?.endDate
+				)
+			}
+			editorBlocks = editorBlocks.filter((b) => b.name !== 'core/post-excerpt')
+		}
+
 		return {
 			data: pageData.data,
 			uri: '/',
 			editorBlocks: editorBlocks,
 			isPreview: true,
 			authenticated: authResult.authenticated,
+			pageType: isPortfolio ? 'portfolio' : 'page',
+			portfolio,
+			backgroundColour:
+				((node as any).backgroundColour?.backgroundColour?.[0] as string) ?? 'white',
 			previewData: {
 				status: node.status || 'unknown',
 				lastModified: node.modified || node.date,

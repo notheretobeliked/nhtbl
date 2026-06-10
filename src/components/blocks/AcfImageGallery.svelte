@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { EditorBlock, ImageSize } from '$lib/types/wp-types'
+	import type { EditorBlock } from '$lib/types/wp-types'
 	import { fade } from 'svelte/transition'
 	import { cubicInOut } from 'svelte/easing'
-	import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
+	import Image from '$components/atoms/Image.svelte'
 
 	interface Props {
 		block: EditorBlock
@@ -48,17 +48,6 @@
 		return () => clearInterval(id)
 	})
 
-	function sizesOf(image: any): ImageSize[] {
-		return (image?.mediaDetails?.sizes ?? [])
-			.filter((s: any) => s && typeof s.name === 'string')
-			.map((s: any) => ({
-				sourceUrl: s.sourceUrl ?? '',
-				width: parseInt(s.width ?? '0'),
-				height: parseInt(s.height ?? '0'),
-				name: s.name ?? ''
-			}))
-	}
-
 	// Stable box: every image is absolutely positioned and crossfades over a
 	// container with a FIXED height. The height comes from an explicit aspect
 	// ratio, or — for 'auto' — from the first image's intrinsic ratio.
@@ -93,17 +82,13 @@
 		>
 			{#each images as image, i (i)}
 				{#if i === activeIndex || i === previousIndex}
-					{@const sizes = sizesOf(image)}
-					<img
-						src={findImageSizeData('sourceUrl', sizes, 'large')}
-						srcset={getSrcSet(sizes)}
-						sizes="100vw"
-						alt={image?.altText ?? ''}
-						loading="lazy"
-						class="absolute inset-0 h-full w-full object-cover"
+					<div
+						class="absolute inset-0 h-full w-full"
 						style:z-index={i === activeIndex ? 1 : 0}
 						in:fade={{ duration: 800, easing: cubicInOut }}
-					/>
+					>
+						<Image imageObject={image} imageSize="large" fit="cover" />
+					</div>
 				{/if}
 			{/each}
 		</div>

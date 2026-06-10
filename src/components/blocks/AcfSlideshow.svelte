@@ -112,9 +112,9 @@
 			<div class="absolute right-4 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-3">
 				{#each slides as _, i}
 					<button
-						class="h-3 w-3 rounded-full border border-white/70 transition-colors {i === activeIndex
-							? 'bg-white'
-							: 'bg-transparent hover:bg-white/40'}"
+						class="h-4 w-4 md:h-5 md:w-5 rounded-full border border-nhtbl-green-base/70 transition-colors {i === activeIndex
+							? 'bg-nhtbl-green-base'
+							: 'bg-transparent hover:bg-nhtbl-green-base/40'}"
 						onclick={() => goTo(i)}
 						aria-label="Go to slide {i + 1}"
 					></button>

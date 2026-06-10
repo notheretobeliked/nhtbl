@@ -29,11 +29,11 @@
 </script>
 
 <div class="carousel relative aspect-video">
-	{#each images as image, index (image.mediaDetails.sizes[0].sourceUrl)}
+	{#each images as image, index ((image as any)?.mediaDetails?.sizes?.[0]?.sourceUrl ?? index)}
 		{#if currentSlideIndex === index}
 			<div in:fade|global={{ duration: 500 }} out:fade|global={{ duration: 500 }}>
 				<div class="w-full aspect-video absolute inset-0">
-					<Image imageObject={image} imageSize="large" fit="contain" />
+					<Image imageObject={image as any} imageSize="large" fit="contain" />
 				</div>
 			</div>
 		{/if}

@@ -3,6 +3,7 @@
 	import type { CoreImageAttributes } from '$lib/graphql/generated'
 	import { extractBlockClasses } from '$lib/utilities/block-attributes'
 	import { blockReveal } from '$lib/actions/block-reveal'
+	import { getContext } from 'svelte'
 
 	interface Props {
 		block: EditorBlock
@@ -10,6 +11,11 @@
 	}
 
 	let { block, animation }: Props = $props()
+
+	// Set by an ancestor CoreGroup whose content-align is explicitly "stretch":
+	// fill the section's full height (cover-cropping) instead of natural height.
+	const fillCtx = getContext<{ value: boolean } | undefined>('section-stretch-children')
+	let fillHeight = $derived(fillCtx?.value === true)
 	let attrs = $derived(block.attributes as CoreImageAttributes | undefined)
 	let bc = $derived(extractBlockClasses(block.attributes as Record<string, unknown>))
 
@@ -106,22 +112,24 @@
 	})
 
 	let imgClass = $derived(
-		[
-			customWidth || customHeight
-				? 'h-auto max-w-full'
-				: isFullWidth || aspectRatio
-					? 'w-full h-auto'
-					: 'max-w-full h-auto',
-			imgAlignClass
-		]
-			.filter(Boolean)
-			.join(' ')
+		fillHeight
+			? `w-full h-full object-cover ${imgAlignClass}`.trim()
+			: [
+					customWidth || customHeight
+						? 'h-auto max-w-full'
+						: isFullWidth || aspectRatio
+							? 'w-full h-auto'
+							: 'max-w-full h-auto',
+					imgAlignClass
+				]
+					.filter(Boolean)
+					.join(' ')
 	)
 </script>
 
 {#if src}
 	<figure
-		class="{alignClass} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
+		class="{alignClass} {fillHeight ? 'h-full' : ''} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
 		use:blockReveal={animation}
 	>
 		{#if href}

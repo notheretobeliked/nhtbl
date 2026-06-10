@@ -83,7 +83,7 @@
 		AcfHomePageHero: HomePageHero,
 		AcfSlideshow,
 		AcfSlide,
-		AcfPortfolioBlock: PortfolioBlock,
+		AcfPortfolioBlock: PortfolioBlock as any,
 		AcfImageGallery,
 		AcfSubpageNavigation: SubpageNavigation,
 		AcfLinkBlock,
@@ -208,6 +208,8 @@
 		class:block-visible={visible}
 		style:transition-delay={shouldAnimate && staggerIndex !== undefined ? staggerDelay : undefined}
 		style:border-radius={blockClasses.borderRadius}
+		style:background-color={blockClasses.customBg}
+		style:color={blockClasses.customText}
 		bind:this={el}
 	>
 		{#if component}

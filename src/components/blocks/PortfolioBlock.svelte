@@ -588,10 +588,10 @@
         >
           <div class="relative overflow-hidden rounded-lg">
             <Image 
-              imageObject={image} 
+              imageObject={image as any} 
               imageSize="medium" 
               fit="cover" 
-              aspect="auto"
+
               lazy={true}
             />
             <!-- Hover overlay -->

@@ -1,14 +1,13 @@
 <script lang="ts">
-	import BlockRenderer from '$components/BlockRenderer.svelte'
-	import type { PageData } from './$types'
+	import PageBody from '$components/PageBody.svelte'
 	import PreviewBanner from '$components/PreviewBanner.svelte'
+	import type { PageData } from './$types'
 
 	interface Props {
 		data: PageData
 	}
 
 	let { data }: Props = $props()
-	let editorBlocks = $derived(data.editorBlocks ?? [])
 </script>
 
 <PreviewBanner
@@ -17,8 +16,9 @@
 	canEdit={data.previewData?.canEdit}
 />
 
-<div class="page-main pt-24 min-h-screen flex flex-col">
-	{#each editorBlocks as block (block.clientId)}
-		<BlockRenderer {block} />
-	{/each}
-</div>
+<PageBody
+	editorBlocks={data.editorBlocks ?? []}
+	pageType={(data as any).pageType}
+	portfolio={(data as any).portfolio ?? {}}
+	backgroundColour={(data as any).backgroundColour ?? 'white'}
+/>

@@ -29,6 +29,7 @@ interface LoadReturn {
 	menu: NormalizedMenu
 	seo: Record<string, unknown>
 	uri: string
+	breadcrumbs?: Array<{ text: string; url: string }>
 }
 
 /** Routes that should not trigger a GraphQL query */
@@ -134,11 +135,31 @@ export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
 			}
 		}
 
+		// Surface Yoast breadcrumbs with relative URLs (the Header shows them once
+		// scrolled). Yoast returns absolute backend/prod URLs — reduce to the path.
+		const rawCrumbs = ((pageNode?.seo as { breadcrumbs?: Array<{ text?: string; url?: string }> })
+			?.breadcrumbs ?? []) as Array<{ text?: string; url?: string }>
+		const breadcrumbs = rawCrumbs.map((c) => {
+			let url = c.url ?? ''
+			try {
+				url = new URL(url).pathname
+			} catch {
+				/* leave as-is if not a parseable URL */
+			}
+			return { text: c.text ?? '', url }
+		})
+
+		// Portfolio items read as Home > Work > Project; Yoast omits the Work level.
+		if (uri.startsWith('/portfolio/') && !breadcrumbs.some((c) => c.url === '/portfolio')) {
+			breadcrumbs.splice(1, 0, { text: 'Work', url: '/portfolio' })
+		}
+
 		return {
 			data,
 			menu,
 			seo: seoData,
-			uri
+			uri,
+			breadcrumbs
 		} satisfies LoadReturn
 	} catch (err: unknown) {
 		// Let SvelteKit HttpErrors propagate (e.g. 404 from +page.server.ts)

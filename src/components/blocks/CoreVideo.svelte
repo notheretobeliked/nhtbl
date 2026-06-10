@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { EditorBlock } from '$lib/types/wp-types'
 	import type { CoreVideoAttributes } from '$lib/graphql/generated'
+	import { getContext } from 'svelte'
 
 	interface Props {
 		block: EditorBlock
@@ -8,6 +9,10 @@
 
 	let { block }: Props = $props()
 	let attrs = $derived(block.attributes as CoreVideoAttributes | undefined)
+
+	// Ancestor CoreGroup with content-align "stretch": cover-fill the section height.
+	const fillCtx = getContext<{ value: boolean } | undefined>('section-stretch-children')
+	let fillHeight = $derived(fillCtx?.value === true)
 
 	// Extract video attributes with safe defaults using $derived
 	let src = $derived(attrs?.src || '')
@@ -43,7 +48,7 @@
 	})
 </script>
 
-<figure class={`w-full ${alignClass} ${customClasses}`}>
+<figure class={`w-full ${fillHeight ? 'h-full' : ''} ${alignClass} ${customClasses}`}>
 	{#if src}
 		<video
 			{src}
@@ -53,7 +58,7 @@
 			{autoplay}
 			{muted}
 			{loop}
-			class="w-full h-auto"
+			class={fillHeight ? 'w-full h-full object-cover' : 'w-full h-auto'}
 			playsinline
 		>
 			Your browser does not support the video tag.

@@ -62,8 +62,8 @@
     const questions: any[] = []
     
     surveyBlocks().forEach(block => {
-      if (block.surveyBlock?.questions) {
-        questions.push(...block.surveyBlock.questions)
+      if ((block as any).surveyBlock?.questions) {
+        questions.push(...(block as any).surveyBlock.questions)
       }
     })
     

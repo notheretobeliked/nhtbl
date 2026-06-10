@@ -129,7 +129,7 @@
 				{@render hamburgerButton('pr-2')}
 
 				<div class="hidden md:flex items-center gap-4">
-					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center list-none m-0 p-0">
+					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center list-none m-0 py-0 pl-0 pr-2">
 						{#each menuItems as menuItem}
 							<li>{@render navLink(menuItem)}</li>
 						{/each}

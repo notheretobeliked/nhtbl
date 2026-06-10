@@ -18,10 +18,19 @@
 	let metadescription = $derived((data.seo.metaDesc ?? '') as string)
 	let pageTitle = $derived((data.seo.title ?? '') as string)
 	let siteUrl = $derived((data.seo.opengraphUrl ?? '') as string)
-	let siteTitle = $derived((data.seo.opengraphSiteName ?? '') as string)
+	let siteTitle = $derived(((data.seo as any).opengraphSiteName ?? '') as string)
 
+	// Hide the site chrome on previews, and on pages with the "hide navigation"
+	// flag set (e.g. the standalone survey).
+	let isPreview = $derived($page.url.pathname.startsWith('/preview'))
+	let hideNavigation = $derived(
+		((data as any).data?.page?.backgroundColour?.hideNavigation as boolean) === true
+	)
+	let showHeader = $derived(!isPreview && !hideNavigation)
 </script>
-<Header {menuItems} {siteTitle}/>
+{#if showHeader}
+	<Header {menuItems} {siteTitle} />
+{/if}
 {#key $page.url.pathname}
 	<OpenGraph {image} {metadescription} {pageTitle} {siteTitle} {siteUrl} />
 	<Twitter {image} {metadescription} {pageTitle} {siteUrl} />

@@ -14,9 +14,9 @@
 
 {#if shouldRender}
 	<nav aria-label="Breadcrumb" class="breadcrumbs {className}">
-		<ol class="flex items-center space-x-0 md:space-x-1 text-sm text-gray-600">
+		<ol class="flex items-center space-x-0 md:space-x-1 text-sm text-gray-600 m-0 p-0 list-none">
 			{#each validBreadcrumbs as crumb, index}
-				<li class="flex items-center flex-nowrap">
+				<li class="flex items-center flex-nowrap m-0 p-0">
 					{#if index > 0}
 						<svg class="w-4 h-4 md:mx-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
 							<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />

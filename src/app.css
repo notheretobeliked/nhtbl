@@ -138,13 +138,8 @@
 	@apply max-w-[1300px] mx-auto;
 }
 
-/* Structural block spacing — divs get mb-8, prose elements render bare. */
-.page-main > div {
-	@apply mb-8;
-}
-.page-main > *:last-child {
-	@apply mb-0;
-}
+/* nhtbl renders structural blocks (groups/sections) flush — no inter-block
+   gap. Prose elements keep their own margins (set in @layer base). */
 
 /* Mirror WP's is-layout-constrained for groups with "Inner blocks use content
    width" (CoreGroup adds .section-group-constrained). */

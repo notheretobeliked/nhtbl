@@ -18,7 +18,7 @@
   ]
 
   // Extract questions from the survey block and populate default Likert options if needed
-  const questions = (block.surveyBlock?.questions || []).map((question: any) => {
+  const questions = ((block as any).surveyBlock?.questions || []).map((question: any) => {
     // If this is a Likert scale with useDefaultLikertOptions, ensure options are populated
     if (question.questionType[0] === 'likert_scale' && (question.useDefaultLikertOptions === true || question.useDefaultLikertOptions === 1)) {
       return {

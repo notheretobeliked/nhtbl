@@ -156,13 +156,13 @@
                 {#each serviceNames as serviceName}
                   {#if onServiceClick}
                     <button 
-                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
                         ? 'bg-black text-white'
                         : 'text-black hover:bg-black hover:text-white'}"
                       onclick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
-                        onServiceClick?.(serviceName)
+                        onServiceClick?.(serviceName ?? '')
                       }}
                     >
                       {serviceName}
@@ -202,13 +202,13 @@
           {#each serviceNames as serviceName}
             {#if onServiceClick}
               <button
-                class="group-hover:border-[var(--pf-bg)] font-sans text-xs rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                class="group-hover:border-[var(--pf-bg)] font-sans text-xs rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
                   ? 'bg-[var(--pf-fg)] text-[var(--pf-bg)]'
                   : 'hover:bg-black/20'}"
                 onclick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  onServiceClick?.(serviceName)
+                  onServiceClick?.(serviceName ?? '')
                 }}
               >
                 {serviceName}
@@ -253,13 +253,13 @@
             {#each serviceNames as serviceName}
               {#if onServiceClick}
                 <button 
-                  class="group-hover:border-[var(--pf-bg)] font-sans text-sm rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName)
+                  class="group-hover:border-[var(--pf-bg)] font-sans text-sm rounded-full border border-[var(--pf-fg)] px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
                     ? 'bg-[var(--pf-fg)] text-[var(--pf-bg)]'
                     : 'hover:bg-black/20'}"
                   onclick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
-                    onServiceClick?.(serviceName)
+                    onServiceClick?.(serviceName ?? '')
                   }}
                 >
                   {serviceName}

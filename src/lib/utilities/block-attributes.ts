@@ -10,6 +10,9 @@ export interface BlockClasses {
 	alignClasses: string
 	borderRadius: string | undefined
 	className: string
+	/** Custom (hex/raw) colours from the editor colour picker — applied inline. */
+	customBg: string | undefined
+	customText: string | undefined
 }
 
 /**
@@ -30,7 +33,9 @@ export function extractBlockClasses(attributes: Record<string, unknown> | undefi
 		textColorClasses: '',
 		alignClasses: '',
 		borderRadius: undefined,
-		className: ''
+		className: '',
+		customBg: undefined,
+		customText: undefined
 	}
 
 	if (!attributes) return result
@@ -96,6 +101,25 @@ export function extractBlockClasses(attributes: Record<string, unknown> | undefi
 				}
 
 				result.spacingClasses = classes.join(' ')
+			}
+
+			// Custom colours from the editor colour picker (style.color). A preset
+			// reference (var:preset|color|slug) becomes a bg-/text- class; a raw
+			// value (hex/rgb) is applied inline.
+			const color = style?.color
+			if (color) {
+				const bg = color.background as string | undefined
+				if (bg) {
+					const preset = bg.match(/var:preset\|color\|(.+)/)
+					if (preset) result.bgClasses = `${result.bgClasses} bg-${preset[1]}`.trim()
+					else result.customBg = bg
+				}
+				const txt = color.text as string | undefined
+				if (txt) {
+					const preset = txt.match(/var:preset\|color\|(.+)/)
+					if (preset) result.textColorClasses = `${result.textColorClasses} text-${preset[1]}`.trim()
+					else result.customText = txt
+				}
 			}
 
 			// Border radius

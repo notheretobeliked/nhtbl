@@ -35,7 +35,7 @@
 			const pct = width ? parseFloat(width) : NaN
 			return isNaN(pct) ? null : pct
 		})
-		const explicitSum = pcts.reduce((sum, p) => sum + (p ?? 0), 0)
+		const explicitSum = pcts.reduce<number>((sum, p) => sum + (p ?? 0), 0)
 		const autoCount = pcts.filter((p) => p === null).length
 		const autoShare = autoCount > 0 ? Math.max(1, (100 - explicitSum) / autoCount) : 0
 		return pcts.map((p) => `${p === null ? autoShare : p}fr`).join(' ') || '1fr'

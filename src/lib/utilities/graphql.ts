@@ -23,7 +23,7 @@ interface GraphQLOptions {
 
 export async function graphqlQuery(
 	query: string,
-	variables: Record<string, unknown>,
+	variables: Record<string, unknown> = {},
 	options?: GraphQLOptions
 ): Promise<Response> {
 	const headers: HeadersInit = {

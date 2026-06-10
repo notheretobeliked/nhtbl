@@ -1,6 +1,5 @@
 query PreviewById($id: ID!) {
-	# asPreview: true tells WPGraphQL to return the latest autosave/revision
-	# (the unsaved editor changes) rather than the published content.
+	# asPreview: true returns the latest autosave/revision (unsaved editor changes).
 	page(id: $id, idType: DATABASE_ID, asPreview: true) {
 		__typename
 		id
@@ -9,13 +8,15 @@ query PreviewById($id: ID!) {
 		date
 		status
 		modified
+		backgroundColour {
+			backgroundColour
+			hideNavigation
+		}
 		editorBlocks {
 			...CommonBlockFields
 		}
 	}
-
-	# Also try as post, likewise returning the latest autosave/revision.
-	post(id: $id, idType: DATABASE_ID, asPreview: true) {
+	nhtblProject(id: $id, idType: DATABASE_ID, asPreview: true) {
 		__typename
 		id
 		databaseId
@@ -23,19 +24,26 @@ query PreviewById($id: ID!) {
 		date
 		status
 		modified
-		featuredImage {
-			node {
-				altText
-				mediaDetails {
-					sizes {
-						name
-						mimeType
-						height
-						width
-						sourceUrl
-					}
-				}
+		excerpt
+		nhtblClients {
+			nodes {
+				name
+				id
+				parentId
+				slug
 			}
+		}
+		nhtblServices {
+			nodes {
+				id
+				name
+				slug
+				parentId
+			}
+		}
+		projectData {
+			startDate
+			endDate
 		}
 		editorBlocks {
 			...CommonBlockFields
@@ -87,6 +95,10 @@ fragment CommonBlockFields on EditorBlock {
 		}
 	}
 	... on CoreImage {
+		altText
+		colorPalette
+		dominantColor
+		secondaryColor
 		mediaDetails {
 			sizes(exclude: [MEDIUM_LARGE, MEDIUM]) {
 				sourceUrl
@@ -108,6 +120,7 @@ fragment CommonBlockFields on EditorBlock {
 			href
 			linkTarget
 			className
+			align
 		}
 	}
 	... on CoreParagraph {
@@ -182,6 +195,7 @@ fragment CommonBlockFields on EditorBlock {
 	... on CoreColumns {
 		attributes {
 			backgroundColor
+			textColor
 			layout
 			className
 			verticalAlignment
@@ -193,6 +207,7 @@ fragment CommonBlockFields on EditorBlock {
 	... on CoreColumn {
 		attributes {
 			backgroundColor
+			textColor
 			layout
 			className
 			verticalAlignment
@@ -203,34 +218,31 @@ fragment CommonBlockFields on EditorBlock {
 	... on CoreGroup {
 		attributes {
 			backgroundColor
+			textColor
 			align
 			style
 			layout
-			sectionBehavior
-			sectionMinHeight
-			sectionContentAlign
-			sectionReveal
-			sectionRevealDirection
-			sectionRevealStagger
-			sectionParallax
+			behavior
+			minHeight
+			contentAlign
+			reveal
+			revealDirection
+			revealStagger
+			parallax
 		}
 	}
 	... on CoreButton {
 		attributes {
 			backgroundColor
+			textColor
+			borderColor
+			className
 			style
 			fontSize
+			fontFamily
 			linkTarget
 			text
 			url
-		}
-		innerBlocks {
-			apiVersion
-			blockEditorCategoryName
-			clientId
-			name
-			parentClientId
-			renderedHtml
 		}
 	}
 	... on CoreButtons {
@@ -256,6 +268,290 @@ fragment CommonBlockFields on EditorBlock {
 			textColor
 			align
 			value
+		}
+	}
+	... on CoreLatestPosts {
+		attributes {
+			postsToShow
+			displayPostDate
+			className
+			align
+		}
+		resolvedPosts {
+			...ResolvedPostFields
+		}
+	}
+	... on CoreQuery {
+		attributes {
+			align
+			className
+		}
+		resolvedPosts {
+			...ResolvedPostFields
+		}
+	}
+	... on AcfHomePageHero {
+		attributes {
+			backgroundColor
+			align
+		}
+		homePageHero {
+			images(first: 100) {
+				nodes {
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaType
+					mimeType
+					mediaItemUrl
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfServicePush {
+		attributes {
+			align
+			backgroundColor
+		}
+		servicePush {
+			service {
+				nodes {
+					slug
+					... on Page {
+						id
+						title
+						uri
+						featuredImage {
+							node {
+								altText
+								colorPalette
+								dominantColor
+								secondaryColor
+								mediaDetails {
+									...MediaDetailsFragment
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	... on AcfGalerie {
+		attributes {
+			align
+		}
+		galerie {
+			galerie {
+				nodes {
+					mediaType
+					mimeType
+					mediaItemUrl
+					caption(format: RENDERED)
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfPortfolioBlock {
+		attributes {
+			align
+			backgroundColor
+			textColor
+			style
+		}
+		portfolioBlock {
+			displayMode
+			enableSearch
+			showTags
+			projectSource
+			projectsPerPage
+			sortOrder
+			selectedService {
+				nodes {
+					slug
+					name
+				}
+			}
+			specificProjects {
+				nodes {
+					slug
+					... on Nhtbl_project {
+						id
+						uri
+						title(format: RENDERED)
+						excerpt(format: RENDERED)
+						nhtblClients {
+							nodes {
+								name
+								slug
+							}
+						}
+						nhtblServices {
+							nodes {
+								name
+								slug
+								parentId
+								id
+							}
+						}
+						projectData {
+							startDate
+							endDate
+						}
+						featuredImage {
+							node {
+								altText
+								colorPalette
+								dominantColor
+								secondaryColor
+								mediaDetails {
+									...MediaDetailsFragment
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	... on AcfLinkBlock {
+		attributes {
+			align
+			backgroundColor
+		}
+		linkBlock {
+			internalLink {
+				nodes {
+					slug
+					uri
+				}
+			}
+			externalLink {
+				url
+				title
+				target
+			}
+		}
+	}
+	... on AcfSurveyBlock {
+		surveyBlock {
+			questions {
+				required
+				allowOther
+				useDefaultLikertOptions
+				options {
+					optionLabel
+					optionValue
+				}
+				questionKey
+				questionText
+				questionType
+			}
+		}
+	}
+	... on AcfImageGallery {
+		attributes {
+			align
+			backgroundColor
+			style
+			className
+		}
+		imageGallery {
+			intervalMs
+			aspectRatio
+			caption
+			fullWidth
+			fullHeight
+			images {
+				nodes {
+					altText
+					mediaType
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfSlideshow {
+		attributes {
+			align
+			backgroundColor
+			style
+			className
+		}
+		slideshow {
+			autoplay
+			intervalMs
+			aspectRatio
+			showNavigation
+		}
+	}
+	... on AcfSlide {
+		slide {
+			caption
+			image {
+				node {
+					altText
+					colorPalette
+					dominantColor
+					secondaryColor
+					mediaType
+					mimeType
+					mediaDetails {
+						...MediaDetailsFragment
+					}
+				}
+			}
+		}
+	}
+	... on AcfSubpageNavigation {
+		attributes {
+			align
+		}
+		navItems {
+			databaseId
+			title
+			uri
+			isCurrent
+		}
+	}
+}
+
+fragment MediaDetailsFragment on MediaDetails {
+	sizes {
+		name
+		sourceUrl
+		width
+		height
+	}
+}
+
+fragment ResolvedPostFields on ResolvedPost {
+	title
+	date
+	uri
+	excerpt
+	featuredImage {
+		sourceUrl
+		altText
+		sizes {
+			sourceUrl
+			width
+			height
+			name
+			mimeType
 		}
 	}
 }

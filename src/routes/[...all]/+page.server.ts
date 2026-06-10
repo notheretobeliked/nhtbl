@@ -151,6 +151,10 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 			editorBlocks = editorBlocks.filter((b) => b.name !== 'core/post-excerpt')
 		}
 
+		// Page background colour (ACF field, returned as a slug array).
+		const backgroundColour =
+			((node as any).backgroundColour?.backgroundColour?.[0] as string) ?? 'white'
+
 		return {
 			data: pageData.data,
 			uri: uri,
@@ -158,7 +162,8 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 			hasSurvey,
 			id: (node as { databaseId?: number }).databaseId,
 			pageType: isPortfolio ? 'portfolio' : 'page',
-			portfolio
+			portfolio,
+			backgroundColour
 		}
 	} catch (err: unknown) {
 		console.error('Server Error:', err)
