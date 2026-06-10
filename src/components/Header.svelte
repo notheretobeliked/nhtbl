@@ -106,7 +106,7 @@
 	{/snippet}
 
 	<nav
-		class="h-12 fixed top-4 left-2 md:left-4 {collapsed
+		class="h-12 fixed top-4 left-2 md:left-4 pr-2 {collapsed
 			? 'right-[calc(100%_-_56px)] md:right-[calc(100%_-_64px)]'
 			: 'right-2 md:right-4'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-[right] duration-500 ease-in-out"
 	>
