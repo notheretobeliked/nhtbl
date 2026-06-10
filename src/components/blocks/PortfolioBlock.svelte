@@ -8,6 +8,7 @@
   import type { AcfPortfolioBlock, ProjectsQuery, ProjectImagesQuery } from '$lib/graphql/generated'
   import { getDisplayMode } from '$lib/utilities/portfolioResolver'
   import { filterImagesByProject, randomizeImages, type ProcessedImage } from '$lib/utilities/imageExtractor'
+  import { staggerReveal } from '$lib/actions/stagger-reveal'
 
   interface Props {
     block: AcfPortfolioBlock & {
@@ -520,7 +521,7 @@
   <div class="portfolio-carousel horizontal-gallery {alignmentClass} relative overflow-hidden">
     <div class="cards-container flex gap-4 overflow-x-auto pb-4">
       {#each filteredProjects as project (project.slug)}
-        <div class="flex-shrink-0 w-[85%] lg:w-5/12">
+        <div class="flex-shrink-0 w-[85%] lg:w-5/12" use:staggerReveal>
           <FeaturedProject displayMode="block" {project} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
         </div>
       {/each}
@@ -530,8 +531,12 @@
   <!-- Masonry Layout -->
   <div class="portfolio-masonry my-16 full-width-breakout">
     {#if filteredProjects.length > 0}
-      <Masonry items={filteredProjects} {minColWidth} {maxColWidth} {gap} idKey="slug" let:item animate>
-        <FeaturedProject displayMode="masonryBlock" project={item} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
+      <Masonry items={filteredProjects} {minColWidth} {maxColWidth} {gap} idKey="slug" animate>
+        {#snippet children({ item }: { item: any })}
+          <div use:staggerReveal>
+            <FeaturedProject displayMode="masonryBlock" project={item} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
+          </div>
+        {/snippet}
       </Masonry>
     {:else}
       <div class="text-center py-12 {alignmentClass}">
@@ -560,7 +565,9 @@
 
     <div class="space-y-5">
       {#each sortedProjects as project (project.slug)}
-        <FeaturedProject displayMode="grid" {project} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
+        <div use:staggerReveal>
+          <FeaturedProject displayMode="grid" {project} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
+        </div>
       {/each}
     </div>
 
@@ -578,13 +585,15 @@
         <p>Loading images...</p>
       </div>
     {:else if displayedImages.length > 0}
-      <Masonry items={displayedImages} {minColWidth} {maxColWidth} {gap} idKey="id" animate let:item={image}>
-        <div 
+      <Masonry items={displayedImages} {minColWidth} {maxColWidth} {gap} idKey="id" animate>
+        {#snippet children({ item: image }: { item: ProcessedImage })}
+        <div
           class="cursor-pointer hover:opacity-80 transition-opacity group"
           onclick={() => handleImageClick(image)}
           role="button"
           tabindex="0"
           onkeydown={(e) => e.key === 'Enter' && handleImageClick(image)}
+          use:staggerReveal
         >
           <div class="relative overflow-hidden rounded-lg">
             <Image 
@@ -605,6 +614,7 @@
             From: <a href={image.projectUri} class="underline hover:opacity-70" onclick={(e) => e.stopPropagation()}>{image.projectTitle}</a>
           </p>
         </div>
+        {/snippet}
       </Masonry>
     {:else}
       <div class="text-center py-12 {alignmentClass}">

@@ -96,6 +96,11 @@
 	// and instead their children animate in with stagger.
 	const containerTypes = new Set(['CoreColumns', 'CoreGroup'])
 
+	// Blocks that animate their own contents (e.g. the portfolio staggers each
+	// masonry/list item in) — they skip the whole-block fade so the two don't
+	// double up.
+	const selfAnimatingTypes = new Set(['AcfPortfolioBlock'])
+
 	// Prose blocks render bare (no wrapper div) so they get natural spacing
 	const proseTypes = new Set([
 		'CoreParagraph',
@@ -162,7 +167,8 @@
 	let isTopLevel = $derived(!block.parentClientId)
 	let isContainer = $derived(containerTypes.has(blockType))
 	let shouldAnimate = $derived(
-		(isTopLevel && !isContainer) || staggerIndex !== undefined
+		!selfAnimatingTypes.has(blockType) &&
+			((isTopLevel && !isContainer) || staggerIndex !== undefined)
 	)
 	let staggerDelay = $derived(
 		staggerIndex !== undefined ? `${staggerIndex * 0.15}s` : '0s'
@@ -173,6 +179,10 @@
 
 	// For structural blocks, manage animation on the wrapper div
 	let visible = $state(true) // start visible for SSR
+	// The stagger delay only makes sense for the above-fold cascade. A block that
+	// reveals on its own intersection below the fold should not also wait out its
+	// stagger delay — that left tall sections (e.g. a "show all" portfolio) blank.
+	let cascadeDelay = $state(true)
 	let el: HTMLDivElement
 
 	$effect(() => {
@@ -184,6 +194,11 @@
 		if (rect.top < window.innerHeight) return
 
 		visible = false
+		cascadeDelay = false
+		// Trigger as soon as any part enters (threshold 0), not at 10% of the
+		// block's area — a block taller than the viewport may never reach 10%
+		// until it nearly fills the screen. rootMargin pre-fires just before it
+		// scrolls into view so it's never seen blank.
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				if (entry.isIntersecting) {
@@ -191,7 +206,7 @@
 					observer.disconnect()
 				}
 			},
-			{ threshold: 0.1 }
+			{ threshold: 0, rootMargin: '0px 0px 15% 0px' }
 		)
 		observer.observe(el)
 		return () => observer.disconnect()
@@ -206,7 +221,7 @@
 		class="{blockClass} {verticalAlignClasses} {alignClasses} {blockClasses.spacingClasses} {blockClasses.bgClasses} {blockClasses.textColorClasses} {blockClasses.className} {forceFullHeight ? 'h-full' : ''}"
 		class:block-reveal={shouldAnimate}
 		class:block-visible={visible}
-		style:transition-delay={shouldAnimate && staggerIndex !== undefined ? staggerDelay : undefined}
+		style:transition-delay={shouldAnimate && staggerIndex !== undefined && cascadeDelay ? staggerDelay : undefined}
 		style:border-radius={blockClasses.borderRadius}
 		style:background-color={blockClasses.customBg}
 		style:color={blockClasses.customText}

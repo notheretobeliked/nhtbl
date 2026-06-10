@@ -20,6 +20,10 @@ export function blockReveal(node: HTMLElement, params?: { delay?: string }) {
 	// Below the fold: start hidden, animate in on scroll
 	node.classList.remove('block-visible')
 
+	// Trigger as soon as any part of the block enters (threshold 0), not at 10%
+	// of its area — a block taller than the viewport may never reach 10% until it
+	// nearly fills the screen, leaving tall sections (e.g. a "show all" portfolio)
+	// blank for seconds. rootMargin pre-fires just before it scrolls into view.
 	const observer = new IntersectionObserver(
 		([entry]) => {
 			if (entry.isIntersecting) {
@@ -27,7 +31,7 @@ export function blockReveal(node: HTMLElement, params?: { delay?: string }) {
 				observer.disconnect()
 			}
 		},
-		{ threshold: 0.1 }
+		{ threshold: 0, rootMargin: '0px 0px 15% 0px' }
 	)
 	observer.observe(node)
 
