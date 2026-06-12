@@ -482,6 +482,7 @@ fragment CommonBlockFields on EditorBlock {
 			images {
 				nodes {
 					altText
+					sourceUrl
 					mediaType
 					mediaDetails {
 						...MediaDetailsFragment
@@ -536,6 +537,8 @@ fragment CommonBlockFields on EditorBlock {
 }
 
 fragment MediaDetailsFragment on MediaDetails {
+	width
+	height
 	sizes {
 		name
 		sourceUrl

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MediaItem, MediaSize } from '$lib/graphql/generated'
 	import type { ImageSize } from '$lib/types/wp-types'
-	import { findImageSizeData, getSrcSet } from '$lib/utilities/utilities'
+	import { getSrcSet } from '$lib/utilities/utilities'
 
 	type ImageSizeName = string
 
@@ -21,6 +21,12 @@
 		width?: string | number
 		height?: string | number
 		alt?: string
+		// Natural mode: render a single bare <img> in normal document flow
+		// (no fill wrapper / h-full / spacer overlay). The caller owns layout via
+		// `extraClasses` + `imgStyle`. Used by CoreImage, which already computes
+		// its own alignment/aspect/border classes.
+		natural?: boolean
+		imgStyle?: string
 	}
 
 	let {
@@ -34,7 +40,9 @@
 		srcset: srcsetProp,
 		width: widthProp,
 		height: heightProp,
-		alt: altProp
+		alt: altProp,
+		natural = false,
+		imgStyle
 	}: Props = $props()
 
 	let sizes = $derived(
@@ -48,9 +56,21 @@
 			})) ?? []
 	)
 
-	let src = $derived(srcProp ?? findImageSizeData('sourceUrl', sizes, imageSize))
-	let width = $derived(widthProp ?? findImageSizeData('width', sizes, imageSize))
-	let height = $derived(heightProp ?? findImageSizeData('height', sizes, imageSize))
+	// Pick the requested named size; if this image doesn't have it (WP doesn't
+	// generate every size for every image — e.g. small images have no `large`),
+	// fall back to the largest available so the image still renders.
+	let chosenSize = $derived.by(() => {
+		if (srcProp) return null
+		const named = sizes.find((s) => s.name === imageSize)
+		if (named) return named
+		return [...sizes].sort((a, b) => (b.width ?? 0) - (a.width ?? 0))[0] ?? null
+	})
+
+	// Final fallback: some attachments have no generated sizes at all — use the
+	// full-size sourceUrl from the node so the image still renders.
+	let src = $derived(srcProp ?? chosenSize?.sourceUrl ?? imageObject?.sourceUrl ?? '')
+	let width = $derived(widthProp ?? (chosenSize ? String(chosenSize.width) : ''))
+	let height = $derived(heightProp ?? (chosenSize ? String(chosenSize.height) : ''))
 	let altText = $derived(altProp ?? imageObject?.altText ?? '')
 	let srcsetAttr = $derived(srcProp ? (srcsetProp ?? '') : getSrcSet(sizes))
 
@@ -71,6 +91,20 @@
 
 	let srcsetLabels = $derived(srcProp ? '100vw' : determineSizes(imageSize))
 </script>
+{#if natural}
+  <!-- Bare image in normal flow; caller owns layout via extraClasses/imgStyle. -->
+  <img
+    loading={lazy ? 'lazy' : 'eager'}
+    class={`${shadow ? 'drop-shadow-lg ' : ''}${extraClasses}`.trim()}
+    style={imgStyle || undefined}
+    {src}
+    alt={altText}
+    {width}
+    {height}
+    srcset={srcsetAttr || undefined}
+    sizes={srcsetAttr ? srcsetLabels : undefined}
+  />
+{:else}
 <div class="relative w-full h-full max-w-none flex justify-center">
   <img
     loading={lazy ? 'lazy' : 'eager'}
@@ -82,11 +116,5 @@
     srcset={srcsetAttr || undefined}
     sizes={srcsetAttr ? srcsetLabels : undefined}
   />
-  <img 
-    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-    class="absolute inset-0 w-full h-full"
-    alt=""
-    {width}
-    {height}
-  />
 </div>
+{/if}

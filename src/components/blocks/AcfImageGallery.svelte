@@ -57,6 +57,10 @@
 			const h = parseInt(s?.height ?? '0')
 			if (w > 0 && h > 0) return `${w} / ${h}`
 		}
+		// No generated sizes — use the full image's intrinsic dimensions.
+		const fw = Number(image?.mediaDetails?.width ?? 0)
+		const fh = Number(image?.mediaDetails?.height ?? 0)
+		if (fw > 0 && fh > 0) return `${fw} / ${fh}`
 		return null
 	}
 

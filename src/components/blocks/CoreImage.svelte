@@ -4,6 +4,7 @@
 	import { extractBlockClasses } from '$lib/utilities/block-attributes'
 	import { blockReveal } from '$lib/actions/block-reveal'
 	import { getContext } from 'svelte'
+	import Image from '$components/atoms/Image.svelte'
 
 	interface Props {
 		block: EditorBlock
@@ -134,29 +135,27 @@
 	>
 		{#if href}
 			<a {href} target={linkTarget || undefined} class="border-0 no-underline">
-				<img
+				<Image
+					natural
 					{src}
 					{alt}
 					srcset={srcSet || undefined}
-					sizes={srcSet ? '100vw' : undefined}
 					width={intrinsicWidth || undefined}
 					height={intrinsicHeight || undefined}
-					class={imgClass}
-					style={imgStyle || undefined}
-					loading="lazy"
+					extraClasses={imgClass}
+					imgStyle={imgStyle || undefined}
 				/>
 			</a>
 		{:else}
-			<img
+			<Image
+				natural
 				{src}
 				{alt}
 				srcset={srcSet || undefined}
-				sizes={srcSet ? '100vw' : undefined}
 				width={intrinsicWidth || undefined}
 				height={intrinsicHeight || undefined}
-				class={imgClass}
-				style={imgStyle || undefined}
-				loading="lazy"
+				extraClasses={imgClass}
+				imgStyle={imgStyle || undefined}
 			/>
 		{/if}
 		{#if caption}
