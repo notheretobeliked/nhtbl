@@ -6,12 +6,21 @@
 	type ImageSizeName = string
 
 	interface Props {
-		imageObject: MediaItem
+		imageObject?: MediaItem
 		lazy?: boolean
 		imageSize?: ImageSizeName
 		fit?: 'cover' | 'contain' | 'fill' | 'none'
 		extraClasses?: string
 		shadow?: boolean
+		// Explicit overrides — when `src` is passed, the atom renders it directly
+		// (with the given srcset/dimensions) instead of selecting a named size
+		// from `imageObject`. Used by CoreImage, which already knows the editor's
+		// chosen url, srcset and intrinsic dimensions.
+		src?: string
+		srcset?: string
+		width?: string | number
+		height?: string | number
+		alt?: string
 	}
 
 	let {
@@ -20,7 +29,12 @@
 		imageSize = 'thumbnail',
 		fit = 'none',
 		extraClasses = '',
-		shadow = false
+		shadow = false,
+		src: srcProp,
+		srcset: srcsetProp,
+		width: widthProp,
+		height: heightProp,
+		alt: altProp
 	}: Props = $props()
 
 	let sizes = $derived(
@@ -34,10 +48,11 @@
 			})) ?? []
 	)
 
-	let src = $derived(findImageSizeData('sourceUrl', sizes, imageSize))
-	let width = $derived(findImageSizeData('width', sizes, imageSize))
-	let height = $derived(findImageSizeData('height', sizes, imageSize))
-	let altText = $derived(imageObject?.altText ?? '')
+	let src = $derived(srcProp ?? findImageSizeData('sourceUrl', sizes, imageSize))
+	let width = $derived(widthProp ?? findImageSizeData('width', sizes, imageSize))
+	let height = $derived(heightProp ?? findImageSizeData('height', sizes, imageSize))
+	let altText = $derived(altProp ?? imageObject?.altText ?? '')
+	let srcsetAttr = $derived(srcProp ? (srcsetProp ?? '') : getSrcSet(sizes))
 
 	function determineSizes(sizeName: ImageSizeName): string {
 		switch (sizeName) {
@@ -54,7 +69,7 @@
 		}
 	}
 
-	let srcsetLabels = $derived(determineSizes(imageSize))
+	let srcsetLabels = $derived(srcProp ? '100vw' : determineSizes(imageSize))
 </script>
 <div class="relative w-full h-full max-w-none flex justify-center">
   <img
@@ -64,8 +79,8 @@
     alt={altText}
     {width}
     {height}
-    srcset={getSrcSet(sizes)}
-    sizes={srcsetLabels}
+    srcset={srcsetAttr || undefined}
+    sizes={srcsetAttr ? srcsetLabels : undefined}
   />
   <img 
     src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"

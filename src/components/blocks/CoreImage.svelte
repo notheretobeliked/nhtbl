@@ -129,7 +129,7 @@
 
 {#if src}
 	<figure
-		class="{alignClass} {fillHeight ? 'h-full' : ''} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container"
+		class="{alignClass} {fillHeight ? 'h-full' : ''} {bc.spacingClasses} {bc.bgClasses} {bc.textColorClasses} relative @container mb-4"
 		use:blockReveal={animation}
 	>
 		{#if href}
@@ -160,7 +160,7 @@
 			/>
 		{/if}
 		{#if caption}
-			<figcaption class="font-sans text-sm mt-2 text-center">{@html caption}</figcaption>
+			<figcaption class="font-sans text-sm mt-2 text-left">{@html caption}</figcaption>
 		{/if}
 	</figure>
 {/if}

@@ -585,15 +585,21 @@
         <p>Loading images...</p>
       </div>
     {:else if displayedImages.length > 0}
-      <Masonry items={displayedImages} {minColWidth} {maxColWidth} {gap} idKey="id" animate>
+      <!-- order="row-first" (round-robin): the gallery can hold hundreds of images,
+           and svelte-bricks' default balanced-stable re-runs an O(n) redistribution on
+           every ResizeObserver measurement (O(n²) → main-thread freeze). row-first
+           distributes without reading measured heights, so it scales. -->
+      <Masonry items={displayedImages} {minColWidth} {maxColWidth} {gap} idKey="id" order="row-first">
         {#snippet children({ item: image }: { item: ProcessedImage })}
+        <!-- No per-item reveal here: the gallery can hold hundreds of images, and
+             making each one opacity:0 + will-change + an observer entry overwhelms
+             the compositor. The grid/list (dozens of items) keep the stagger. -->
         <div
           class="cursor-pointer hover:opacity-80 transition-opacity group"
           onclick={() => handleImageClick(image)}
           role="button"
           tabindex="0"
           onkeydown={(e) => e.key === 'Enter' && handleImageClick(image)}
-          use:staggerReveal
         >
           <div class="relative overflow-hidden rounded-lg">
             <Image 

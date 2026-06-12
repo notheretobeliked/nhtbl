@@ -182,7 +182,6 @@
 	opacity: 0;
 	transform: translateY(14px);
 	transition: opacity 0.4s ease, transform 0.4s ease;
-	will-change: opacity, transform;
 }
 .stagger-reveal.is-revealed {
 	opacity: 1;
