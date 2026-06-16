@@ -12,12 +12,13 @@
 	let slide = $derived((block as Record<string, any>).slide ?? {})
 	let imageNode = $derived(slide?.image?.node ?? null)
 	let caption = $derived((slide?.caption ?? '') as string)
+	$inspect(imageNode)
 </script>
 
 <div class="acf-slide relative h-full w-full">
 	{#if imageNode}
 		<div class="absolute inset-0 h-full w-full">
-			<Image imageObject={imageNode} imageSize="large" fit="cover" />
+			<Image imageObject={imageNode} imageSize="2048x2048" fit="cover" />
 		</div>
 	{/if}
 
