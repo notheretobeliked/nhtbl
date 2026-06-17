@@ -8,7 +8,11 @@ export const config = {
 	isr: {
 		expiration: false,
 		bypassToken: ISR_BYPASS_TOKEN
-	}
+	},
+	// The WP GraphQL backend can be slow (cold starts), and a regeneration that
+	// outruns the default function limit returns a 504 and never updates the
+	// cache. Give renders headroom. (Fixing the backend latency is the real cure.)
+	maxDuration: 60
 }
 
 import PageContent from '$lib/graphql/query/page.graphql?raw'
