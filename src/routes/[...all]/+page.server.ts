@@ -1,19 +1,5 @@
-import { ISR_BYPASS_TOKEN } from '$env/static/private'
-
-// Incremental Static Regeneration: each dynamic page is rendered once, cached on
-// Vercel's edge, and only re-rendered on demand when the backend POSTs to
-// /api/revalidate (which re-fetches it with the x-prerender-revalidate header).
-// expiration:false = cache until explicitly revalidated (no time-based refresh).
-export const config = {
-	isr: {
-		expiration: false,
-		bypassToken: ISR_BYPASS_TOKEN
-	},
-	// The WP GraphQL backend can be slow (cold starts), and a regeneration that
-	// outruns the default function limit returns a 504 and never updates the
-	// cache. Give renders headroom. (Fixing the backend latency is the real cure.)
-	maxDuration: 60
-}
+// SSR with live data on every request (no ISR/caching at the app layer).
+export const prerender = false
 
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
