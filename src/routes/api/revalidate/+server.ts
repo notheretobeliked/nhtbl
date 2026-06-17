@@ -45,15 +45,21 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		return json({ error: 'No paths provided' }, { status: 400 })
 	}
 
-	// Normalise to SvelteKit's canonical no-trailing-slash form (a trailing slash
-	// 308-redirects, and Vercel won't revalidate across a redirect), and expand
-	// each path to both the page HTML and its `__data.json` (separate ISR
-	// entries — HTML for full loads, data for client-side navigation).
+	// Each page path expands to two separate ISR entries: the page HTML (used on
+	// full loads) and its `__data.json` (used on client-side navigation). Both
+	// must be revalidated or one half goes stale.
+	//
+	// The data entry is the tricky one on a catch-all route: a bypass-token
+	// request skips Vercel's rewrite that normally turns `/foo/__data.json` into
+	// `/[...all]/__data.json?__pathname=/foo`, so without supplying `__pathname`
+	// ourselves the function reconstructs `uri = /foo/__data.json` and 404s.
+	// `__pathname` is part of the ISR cache key, so passing the page path also
+	// targets the exact entry the client reads.
 	const normalize = (p: string) => (p === '/' ? '/' : p.replace(/\/+$/, ''))
-	const dataPath = (p: string) => `${p === '/' ? '' : p}/__data.json`
 	const targets = paths.flatMap((p: string) => {
-		const clean = normalize(p)
-		return [clean, dataPath(clean)]
+		const page = normalize(p)
+		const base = page === '/' ? '' : page
+		return [page, `${base}/__data.json?__pathname=${page}`]
 	})
 
 	const work = pool(targets, CONCURRENCY, (path) =>
