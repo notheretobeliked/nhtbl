@@ -24,8 +24,15 @@ export const POST: RequestHandler = async ({ request }) => {
 		return json({ error: 'No paths provided' }, { status: 400 })
 	}
 
+	// SvelteKit caches the page HTML and its load data (`<path>/__data.json`) as
+	// SEPARATE ISR entries. A full refresh fetches the HTML, but client-side
+	// navigation only fetches the data — so we must revalidate both, or SPA
+	// navigation keeps showing stale content after the HTML is already fresh.
+	const dataPath = (p: string) => `${p === '/' ? '' : p.replace(/\/$/, '')}/__data.json`
+	const targets = paths.flatMap((p: string) => [p, dataPath(p)])
+
 	const results = await Promise.all(
-		paths.map(async (path: string) => {
+		targets.map(async (path: string) => {
 			try {
 				const url = new URL(path, PUBLIC_SITE_URL)
 				const res = await fetch(url.toString(), {
