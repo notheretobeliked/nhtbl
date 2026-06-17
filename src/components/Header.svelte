@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 	import type { MenuItem } from '$lib/types/wp-types'
 	import Breadcrumbs from '$components/Breadcrumbs.svelte'
-	import { slide, fade } from 'svelte/transition'
+	import { slide } from 'svelte/transition'
 	import { onMount } from 'svelte'
 
 	interface Props {
@@ -57,6 +57,12 @@
 		}))
 	)
 
+	// The Contact link is rendered separately as a CTA pill, so keep it out of the
+	// main menu list (desktop + mobile overlay).
+	const CONTACT_URI = '/connect'
+	const mainMenuItems = $derived(menuItems.filter((item) => item.uri !== CONTACT_URI))
+	const contactItem = $derived(menuItems.find((item) => item.uri === CONTACT_URI))
+
 	const toggleMenu = () => {
 		open = !open
 	}
@@ -97,7 +103,7 @@
 		<a
 			href={item.uri ?? '/'}
 			{onclick}
-			class="font-sans text-xl md:text-lg border-b-4 {item.current
+			class="font-sans text-xl md:text-base lg:text-lg border-b-4 {item.current
 				? 'border-nhtbl-green-base'
 				: 'border-b-transparent hover:border-b-nhtbl-purple-base'}"
 		>
@@ -106,31 +112,31 @@
 	{/snippet}
 
 	<nav
-		class="h-12 fixed top-4 left-2 md:left-4 pr-2 {collapsed
-			? 'right-[calc(100%_-_56px)] md:right-[calc(100%_-_64px)]'
-			: 'right-2 md:right-4'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-[right] duration-500 ease-in-out"
+		class="h-12 fixed top-4 left-2 md:left-4 w-fit md:w-auto {collapsed
+			? 'md:right-[calc(100%-64px)]'
+			: 'md:right-40'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-[right] duration-500 ease-in-out"
 	>
 		{#if collapsed}
-			<!-- State 2: just the logo, centred in the circle. -->
-			<a href="/" aria-label="Home" class="absolute inset-0 z-40 flex items-center justify-center">
+			<!-- State 2: just the logo — fixed w-12 so it's exactly 48×48 (a true
+			     circle, matching the burger pill) regardless of the nav width. -->
+			<a href="/" aria-label="Home" class="flex h-full w-12 items-center justify-center">
 				<img src="/Nhtbl-logo.webp" alt="Not here to be liked" class="h-6 w-6 max-w-none object-contain" />
 			</a>
 		{:else}
 			<!-- Expanded: state 1 wordmark (at top) or state 3 breadcrumbs (scrolled) + menu. -->
-			<div class="flex h-full w-full items-center justify-between px-1 ml-1">
-				{#if atTop}
-					<a href="/" class="z-30 block font-display text-base md:text-lg pl-2 whitespace-nowrap">
-						Not here to be liked
+			<div class="flex h-full w-full items-center justify-between pl-1.5 pr-4">
+				{#if atTop }
+					<a href="/" class="z-30 flex gap-2 font-display items-center pl-2 text-base md:text-lg whitespace-nowrap">
+						<img src="/Nhtbl-logo.webp" alt="A happy earth with smiley layered on top" class="h-6 w-6 max-w-none" />
+						<span>Not here to be liked</span>
 					</a>
 				{:else}
 					<Breadcrumbs {breadcrumbs} />
 				{/if}
 
-				{@render hamburgerButton('pr-2')}
-
 				<div class="hidden md:flex items-center gap-4">
 					<ul role="navigation" aria-label="Main" class="flex flex-row gap-6 items-center list-none m-0 py-0 pl-0 pr-2">
-						{#each menuItems as menuItem}
+						{#each mainMenuItems as menuItem}
 							<li>{@render navLink(menuItem)}</li>
 						{/each}
 					</ul>
@@ -139,16 +145,26 @@
 		{/if}
 	</nav>
 
-	<!-- Collapsed (mobile): a matching circle around the hamburger. -->
-	{#if collapsed}
-		<div
-			class="md:hidden fixed top-4 right-2 h-12 w-12 z-30 flex items-center justify-center rounded-full border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 backdrop-blur-md"
-			in:fade={{ delay: 500, duration: 200 }}
-			out:fade={{ duration: 150 }}
+	<!-- Contact CTA pill — separate from the nav so the collapse can't clip it.
+	     Desktop: pinned top-right. Mobile: sits just left of the burger. Stays put
+	     in every state (top / scrolled / collapsed). -->
+	{#if contactItem}
+		<a
+			href={contactItem.uri ?? CONTACT_URI}
+			aria-current={contactItem.current ? 'page' : undefined}
+			class="fixed top-4 right-18 md:right-4 z-30 flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-nhtbl-green-base px-5 font-sans text-base lg:text-lg text-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] transition-[filter] duration-200 hover:brightness-95"
 		>
-			{@render hamburgerButton()}
-		</div>
+			{contactItem.label}
+		</a>
 	{/if}
+
+	<!-- Burger gets its own pill at the far right on mobile, so the Contact pill
+	     can sit to its left and both survive the nav collapsing to a circle. -->
+	<div
+		class="md:hidden fixed top-4 right-2 h-12 w-12 z-40 flex items-center justify-center rounded-full shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 backdrop-blur-md"
+	>
+		{@render hamburgerButton()}
+	</div>
 
 	<!-- Mobile menu (kept outside the clipping pill) -->
 	{#if open}
@@ -158,7 +174,7 @@
 			class="fixed w-full items-center md:hidden h-screen top-0 left-0 z-30 bg-white/95 backdrop-blur-md justify-center flex-col gap-6 flex list-none m-0 p-0"
 			transition:slide={{ duration: 400, axis: 'y' }}
 		>
-			{#each menuItems as menuItem, i}
+			{#each mainMenuItems as menuItem, i}
 				<li class="menu-item" style="animation-delay: {100 + i * 50}ms;">
 					{@render navLink(menuItem, () => (open = false))}
 				</li>
