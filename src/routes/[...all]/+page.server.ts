@@ -1,4 +1,15 @@
-export const prerender = false
+import { ISR_BYPASS_TOKEN } from '$env/static/private'
+
+// Incremental Static Regeneration: each dynamic page is rendered once, cached on
+// Vercel's edge, and only re-rendered on demand when the backend POSTs to
+// /api/revalidate (which re-fetches it with the x-prerender-revalidate header).
+// expiration:false = cache until explicitly revalidated (no time-based refresh).
+export const config = {
+	isr: {
+		expiration: false,
+		bypassToken: ISR_BYPASS_TOKEN
+	}
+}
 
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
