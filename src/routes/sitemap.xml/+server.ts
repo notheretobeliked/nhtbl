@@ -11,6 +11,7 @@ interface ContentNode {
 interface SitemapData {
 	pages: { nodes: ContentNode[] }
 	posts: { nodes: ContentNode[] }
+	projects: { nodes: ContentNode[] }
 }
 
 export const GET: RequestHandler = async () => {
@@ -21,7 +22,11 @@ export const GET: RequestHandler = async () => {
 	const data: SitemapData = json.data
 
 	const siteUrl = PUBLIC_SITE_URL.replace(/\/$/, '')
-	const nodes = [...(data.pages?.nodes ?? []), ...(data.posts?.nodes ?? [])]
+	const nodes = [
+		...(data.pages?.nodes ?? []),
+		...(data.posts?.nodes ?? []),
+		...(data.projects?.nodes ?? [])
+	]
 
 	const urls = nodes.map((node) => {
 		const loc = `${siteUrl}${node.uri}`

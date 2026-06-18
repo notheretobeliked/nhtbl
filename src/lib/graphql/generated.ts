@@ -22226,7 +22226,7 @@ export type ProjectsQuery = { __typename?: 'RootQuery', nhtblProjects?: { __type
 export type SitemapQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SitemapQuery = { __typename?: 'RootQuery', pages?: { __typename?: 'RootQueryToContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null }> } | null, posts?: { __typename?: 'RootQueryToContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null }> } | null };
+export type SitemapQuery = { __typename?: 'RootQuery', pages?: { __typename?: 'RootQueryToContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null }> } | null, posts?: { __typename?: 'RootQueryToContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null }> } | null, projects?: { __typename?: 'RootQueryToNhtbl_projectConnection', nodes: Array<{ __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null }> } | null };
 
 export const SeoFragmentFragmentDoc = gql`
     fragment SeoFragment on PostTypeSEO {
@@ -22989,6 +22989,12 @@ export const SitemapDocument = gql`
     }
   }
   posts: contentNodes(where: {contentTypes: [POST], status: PUBLISH}, first: 500) {
+    nodes {
+      uri
+      modifiedGmt
+    }
+  }
+  projects: nhtblProjects(where: {status: PUBLISH}, first: 500) {
     nodes {
       uri
       modifiedGmt

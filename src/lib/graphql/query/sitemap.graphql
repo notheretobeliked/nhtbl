@@ -11,4 +11,10 @@ query Sitemap {
       modifiedGmt
     }
   }
+  projects: nhtblProjects(where: { status: PUBLISH }, first: 500) {
+    nodes {
+      uri
+      modifiedGmt
+    }
+  }
 }
