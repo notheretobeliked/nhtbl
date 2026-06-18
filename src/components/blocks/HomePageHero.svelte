@@ -33,10 +33,13 @@
 	let y = $state<number>(0)
 	let percentage = $state(100)
 
-	// Exactly one background image is shown for the current percentage — computing
-	// a single active index avoids band-edge gaps that blanked/flickered the hero.
-	let activeImage = $derived(
-		Math.min(images.length - 1, Math.max(0, Math.floor(percentage / (100 / Math.max(1, images.length)))))
+	// Continuous crossfade position for the inline (non-top) hero: a fractional
+	// index 0 → (N-1) that tracks scroll directly. Two adjacent images crossfade
+	// by scroll position instead of firing a fixed-duration CSS fade per band —
+	// so fast scrolling can't stack half-finished fades on top of each other.
+	// Same last→first order as the floored index above.
+	let imagePos = $derived(
+		(Math.max(0, Math.min(100, percentage)) / 100) * Math.max(0, images.length - 1)
 	)
 
 	// Top-of-page scroll-pin animation state.
@@ -65,6 +68,8 @@
 		mounted = true
 	})
 
+	let rafPending = false
+
 	$effect(() => {
 		void y
 		if (!mounted) return
@@ -76,15 +81,27 @@
 			transformString = !stopped
 				? `transform: scale(${percentage}%)`
 				: `transform: scale(35%); position:absolute; top:${topStart}px`
-		} else if (inlineEl) {
-			// Animate across the WHOLE time the hero is on screen — progress 0 as its
-			// top enters from the bottom, 1 as its bottom leaves the top — so it's
-			// never idle/blank, and it works wherever the block sits on the page.
+			return
+		}
+
+		// Coalesce a burst of scroll events into one measurement per frame — reading
+		// getBoundingClientRect()/offsetHeight on every event (while also writing
+		// styles) thrashes layout and is the main source of the jank.
+		if (!inlineEl || rafPending) return
+		rafPending = true
+		requestAnimationFrame(() => {
+			rafPending = false
+			if (!inlineEl) return
 			const vh = window.innerHeight || 1
 			const rect = inlineEl.getBoundingClientRect()
-			const progress = Math.max(0, Math.min(1, (vh - rect.top) / inlineEl.offsetHeight))
+			// Tie progress to the sticky PIN travel (the card pinned at top:0 until it
+			// releases), not the whole time on screen. The scale + crossfade then run
+			// exactly while the hero is pinned, instead of starting before it settles
+			// and finishing after it has scrolled away.
+			const pinTravel = Math.max(1, inlineEl.offsetHeight - vh)
+			const progress = Math.max(0, Math.min(1, -rect.top / pinTravel))
 			percentage = 100 - progress * 100
-		}
+		})
 	})
 </script>
 
@@ -162,12 +179,13 @@
 			     (it does NOT create a containing block, so it won't break sticky). -->
 			<div class="sticky top-0 h-screen w-full overflow-hidden" style="backface-visibility:hidden">
 				{#each images as image, index}
+					<!-- Opacity is a triangular crossfade around the scroll-linked position:
+					     only the two images adjacent to `imagePos` are ever partly visible,
+					     and they fade by scroll distance — no CSS transition to stack up. -->
+					{@const opacity = Math.max(0, 1 - Math.abs(imagePos - index))}
 					<div
-						class="absolute inset-0 w-full h-full transition-opacity duration-700 ease-out {index ===
-						activeImage
-							? 'opacity-100'
-							: 'opacity-0'}"
-						style="transform:translateZ(0);backface-visibility:hidden"
+						class="absolute inset-0 w-full h-full"
+						style="opacity:{opacity};transform:translateZ(0);backface-visibility:hidden;will-change:opacity"
 					>
 						<Image imageObject={image} lazy={false} imageSize="medium" fit="cover" />
 					</div>
