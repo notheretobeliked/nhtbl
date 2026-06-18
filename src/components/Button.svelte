@@ -26,9 +26,7 @@
 
 <a
 	href={url}
-	class="{finalColourClass} rounded-full transition-all duration-500 hover:bg-black hover:text-nhtbl-green-base hover:border-nhtbl-green-base pt-3 {font === 'display'
-		? 'pb-2'
-		: 'pb-3'} px-4 {textClass} {textColourClass} font-{font} cursor-pointer"
+	class="{finalColourClass} rounded-full transition-all duration-500 hover:bg-black hover:text-nhtbl-green-base hover:border-nhtbl-green-base py-3 px-4 {textClass} {textColourClass} font-{font} cursor-pointer"
 	role="button"
 >
 	{label}

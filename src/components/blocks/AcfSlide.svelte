@@ -24,7 +24,7 @@
 
 	{#if caption}
 		<figcaption
-			class="hidden absolute bottom-3 left-3 z-10 max-w-[50%] md:max-w-[33%] rounded bg-white/80 px-3 py-1.5 text-sm text-black backdrop-blur-sm [&_a]:underline"
+			class="absolute bottom-3 left-3 z-10 max-w-[50%] md:max-w-[33%] rounded bg-white/80 px-3 py-1.5 text-sm text-black backdrop-blur-sm [&_a]:underline"
 		>
 			{@html caption}
 		</figcaption>

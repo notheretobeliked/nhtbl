@@ -29,7 +29,7 @@
 	let textClass = $derived(`text-${textColor}`)
 	let fontSizeClass = $derived(classNames(fontSize ?? 'base', null, null, null))
 	let fontFamilyClass = $derived(fontFamily ? `font-${fontFamily}` : '')
-	let paddingClass = $derived(fontSize === 'sm' ? 'py-1 px-[1.5rem]' : 'py-2 px-[2.5rem]')
+	let paddingClass = $derived(fontSize === 'sm' ? 'pt-1 pb-1.5 px-[1.5rem]' : 'pt-2 pb-2.5 px-[2.5rem]')
 </script>
 
 <a
