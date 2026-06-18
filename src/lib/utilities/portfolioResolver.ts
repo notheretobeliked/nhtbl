@@ -121,11 +121,17 @@ const applySorting = (projects: ProjectNode[], sortOrder: string): ProjectNode[]
  */
 export const getDisplayMode = (config: PortfolioConfig): 'horizontal_scroll' | 'masonry' | 'list' => {
   const mode = config?.displayMode?.[0]
-  
-  if (mode === 'horizontal_scroll' || mode === 'masonry' || mode === 'list') {
+
+  // The ACF select stores the list option as `vertical_list` (see the block's
+  // display_mode choices), but the component's view modes call it `list`.
+  if (mode === 'vertical_list' || mode === 'list') {
+    return 'list'
+  }
+
+  if (mode === 'horizontal_scroll' || mode === 'masonry') {
     return mode
   }
-  
+
   // Default fallback
   return 'horizontal_scroll'
 }
