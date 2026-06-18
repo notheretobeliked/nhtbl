@@ -15,7 +15,7 @@
 	$inspect(imageNode)
 </script>
 
-<div class="acf-slide relative h-full w-full">
+<figure class="acf-slide relative h-full w-full">
 	{#if imageNode}
 		<div class="absolute inset-0 h-full w-full">
 			<Image imageObject={imageNode} imageSize="2048x2048" fit="cover" />
@@ -24,9 +24,16 @@
 
 	{#if caption}
 		<figcaption
-			class="absolute bottom-3 left-3 z-10 max-w-[80%] rounded bg-white/80 px-3 py-1.5 text-sm text-black backdrop-blur-sm [&_a]:underline"
+			class="hidden absolute bottom-3 left-3 z-10 max-w-[50%] md:max-w-[33%] rounded bg-white/80 px-3 py-1.5 text-sm text-black backdrop-blur-sm [&_a]:underline"
 		>
 			{@html caption}
 		</figcaption>
 	{/if}
-</div>
+	</figure>
+
+	<style lang="postcss">
+		@reference '../../app.css';
+		:global(figure.acf-slide p) {
+			@apply mb-0 text-xs md:text-base;
+		}
+	</style>
