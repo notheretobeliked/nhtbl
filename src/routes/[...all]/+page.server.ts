@@ -1,5 +1,5 @@
 // SSR with live data on every request (no ISR/caching at the app layer).
-export const prerender = false
+export const prerender = true
 
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
