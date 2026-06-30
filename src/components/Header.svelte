@@ -24,9 +24,13 @@
 	// At the very top of the page we show the wordmark; once scrolled (and
 	// expanded via hover/scroll-up) we show breadcrumbs + menu.
 	const atTop = $derived(scrollY < 60)
-	const hasBreadcrumbs = $derived(
-		Array.isArray(breadcrumbs) && breadcrumbs.some((c: any) => c?.text?.trim())
+	const crumbCount = $derived(
+		Array.isArray(breadcrumbs) ? breadcrumbs.filter((c: any) => c?.text?.trim()).length : 0
 	)
+	const hasBreadcrumbs = $derived(crumbCount > 0)
+	// The homepage yields a single "Home" crumb that renders as just the logo —
+	// no trail — so the collapsed pill should be padded symmetrically.
+	const logoOnlyCrumb = $derived(crumbCount === 1)
 
 	// Collapse to a compact pill when scrolling down; expand on scroll up, when the
 	// pointer is near the top (desktop hover), or while the mobile menu is open.
@@ -124,7 +128,7 @@
 			     logo) on its own; no menu. Falls back to just the logo on pages with
 			     no trail (a true 48×48 circle, matching the burger pill). -->
 			{#if hasBreadcrumbs}
-				<div class="flex h-full items-center pl-1.5 pr-4">
+				<div class="flex h-full items-center pl-1.5 {logoOnlyCrumb ? 'pr-1.5' : 'pr-4'}">
 					<Breadcrumbs {breadcrumbs} />
 				</div>
 			{:else}
