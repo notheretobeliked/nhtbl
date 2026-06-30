@@ -22,11 +22,14 @@
 	const currentPagePath = $derived($page.url.pathname)
 	const breadcrumbs = $derived(($page.data as any)?.breadcrumbs || [])
 	// At the very top of the page we show the wordmark; once scrolled (and
-	// expanded via hover/scroll-up) we show breadcrumbs instead.
+	// expanded via hover/scroll-up) we show breadcrumbs + menu.
 	const atTop = $derived(scrollY < 60)
+	const hasBreadcrumbs = $derived(
+		Array.isArray(breadcrumbs) && breadcrumbs.some((c: any) => c?.text?.trim())
+	)
 
-	// Collapse to the logo circle when scrolling down; expand on scroll up, when
-	// the pointer is near the top (desktop hover), or while the mobile menu is open.
+	// Collapse to a compact pill when scrolling down; expand on scroll up, when the
+	// pointer is near the top (desktop hover), or while the mobile menu is open.
 	const collapsed = $derived(scrolledDown && !hovering && !open)
 
 	// Update position + direction synchronously in the scroll handler (not a
@@ -112,21 +115,28 @@
 	{/snippet}
 
 	<nav
-		class="h-12 fixed top-4 left-2 md:left-4 w-fit md:w-auto {collapsed
-			? 'md:right-[calc(100%-64px)]'
-			: 'md:right-40'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-[right] duration-500 ease-in-out"
+		class="h-12 fixed top-4 left-2 md:left-4 w-fit {collapsed
+			? 'md:w-fit md:right-auto'
+			: 'md:w-auto md:right-40'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-all duration-500 ease-in-out"
 	>
 		{#if collapsed}
-			<!-- State 2: just the logo — fixed w-12 so it's exactly 48×48 (a true
-			     circle, matching the burger pill) regardless of the nav width. -->
-			<a href="/" aria-label="Home" class="flex h-full w-12 items-center justify-center">
-				<img src="/Nhtbl-logo.webp" alt="Not here to be liked" class="h-6 w-6 max-w-none object-contain" />
-			</a>
+			<!-- State 2: compact pill — the breadcrumb trail (which begins with the
+			     logo) on its own; no menu. Falls back to just the logo on pages with
+			     no trail (a true 48×48 circle, matching the burger pill). -->
+			{#if hasBreadcrumbs}
+				<div class="flex h-full items-center pl-1.5 pr-4">
+					<Breadcrumbs {breadcrumbs} />
+				</div>
+			{:else}
+				<a href="/" aria-label="Home" class="flex h-full w-12 items-center justify-center">
+					<img src="/Nhtbl-logo.webp" alt="Not here to be liked" class="h-6 w-6 max-w-none object-contain" />
+				</a>
+			{/if}
 		{:else}
 			<!-- Expanded: state 1 wordmark (at top) or state 3 breadcrumbs (scrolled) + menu. -->
 			<div class="flex h-full w-full items-center justify-between pl-1.5 pr-4">
-				{#if atTop }
-					<a href="/" class="z-30 flex gap-2 font-display items-center pl-2 text-base md:text-lg whitespace-nowrap">
+				{#if atTop}
+					<a href="/" class="z-30 flex gap-2 font-display items-center text-base md:text-lg whitespace-nowrap">
 						<img src="/Nhtbl-logo.webp" alt="A happy earth with smiley layered on top" class="h-6 w-6 max-w-none" />
 						<span>Not here to be liked</span>
 					</a>

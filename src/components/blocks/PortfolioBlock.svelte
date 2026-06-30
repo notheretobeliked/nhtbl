@@ -264,7 +264,13 @@
   const sortValue = (project: any, key: SortKey): string | number => {
     switch (key) {
       case 'year': {
-        const d = project.projectData?.startDate || project.projectData?.endDate
+        // Sort by end year so the most recently finished work comes first.
+        // Ongoing projects (a start but no end) are treated as ending on Jan 1 of
+        // the current year: they outrank older finished work but fall below
+        // projects actually completed later this year.
+        const { startDate, endDate } = project.projectData ?? {}
+        if (startDate && !endDate) return new Date(new Date().getFullYear(), 0, 1).getTime()
+        const d = endDate || startDate
         return d ? new Date(d).getTime() : 0
       }
       case 'client':

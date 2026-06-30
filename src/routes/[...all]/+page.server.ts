@@ -50,7 +50,8 @@ async function resolvePortfolioBlocks(blocks: EditorBlock[]): Promise<EditorBloc
 function formatYearRange(start?: string | null, end?: string | null): string {
 	if (!start && !end) return ''
 	if (!start && end) return `(${new Date(end).getFullYear()})`
-	if (start && !end) return `(${new Date(start).getFullYear()} –)`
+	// Ongoing: treat a missing end as January of the current year.
+	if (start && !end) end = `${new Date().getFullYear()}-01-01`
 	const s = new Date(start!).getFullYear()
 	const e = new Date(end!).getFullYear()
 	return s === e ? `(${s})` : `(${s}–${String(e).slice(-2)})`

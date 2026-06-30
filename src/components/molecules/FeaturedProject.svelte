@@ -67,10 +67,10 @@
       return `(${endYear})`
     }
 
-    // If end date is empty but start date exists, return just start year
+    // Ongoing: a start year but no end year. Treat the end as January of the
+    // current year so it renders as a normal range ending this year.
     if (startDate && !endDate) {
-      const startYear = new Date(startDate).getFullYear()
-      return `(${startYear} –)`
+      endDate = `${new Date().getFullYear()}-01-01`
     }
 
     // Both dates exist
@@ -151,28 +151,28 @@
                 
               </p>
             {/if}
-            <!-- {#if showTags && serviceNames.length > 0}
-              <div class="services flex flex-row gap-1 mt-2 flex-wrap justify-center">
-                {#each serviceNames as serviceName}
-                  {#if onServiceClick}
-                    <button 
-                      class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
-                        ? 'bg-black text-white'
-                        : 'text-black hover:bg-black hover:text-white'}"
-                      onclick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        onServiceClick?.(serviceName ?? '')
-                      }}
-                    >
-                      {serviceName}
-                    </button>
-                  {:else}
-                    <div class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap text-black">{serviceName}</div>
-                  {/if}
-                {/each}
-              </div>
-            {/if} -->
+              <!-- {#if showTags && serviceNames.length > 0}
+                <div class="services flex flex-row gap-1 mt-2 flex-wrap justify-center">
+                  {#each serviceNames as serviceName}
+                    {#if onServiceClick}
+                      <button 
+                        class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap transition-colors cursor-pointer {selectedServices.includes(serviceName ?? '')
+                          ? 'bg-black text-white'
+                          : 'text-black hover:bg-black hover:text-white'}"
+                        onclick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          onServiceClick?.(serviceName ?? '')
+                        }}
+                      >
+                        {serviceName}
+                      </button>
+                    {:else}
+                      <div class="font-sans text-xs rounded-full border border-black px-2 py-0 whitespace-nowrap text-black">{serviceName}</div>
+                    {/if}
+                  {/each}
+                </div>
+              {/if} -->
           </div>
         {/if}
       </div>
