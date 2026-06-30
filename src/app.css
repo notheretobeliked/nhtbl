@@ -135,7 +135,11 @@
    content width and centred, unless it opts into a wider/full bucket via
    alignwide/alignfull. */
 .page-main > *:not(.alignfull):not(.alignwide) {
-	@apply max-w-[856px] mx-auto;
+	@apply max-w-[856px] mx-auto px-2 md:px-3; 
+}
+
+.page-main > .core-group {
+	@apply px-2 md:px-3;
 }
 
 /* Bare prose elements render without a wrapper, so as flex children the rule
