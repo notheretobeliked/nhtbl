@@ -13,6 +13,9 @@ query PageMeta($uri: String!) {
 		}
 	}
 	page:nodeByUri(uri: $uri) {
+		... on ContentNode {
+			noindex
+		}
 		... on Page {
 			seo {
 				...SeoFragment

@@ -28,6 +28,8 @@ interface LoadReturn {
 	data: PageMetaQuery
 	menu: NormalizedMenu
 	seo: Record<string, unknown>
+	/** Page is set to be hidden from search engines (ContentNode.noindex). */
+	noindex: boolean
 	uri: string
 }
 
@@ -66,6 +68,7 @@ export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
 				opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
 				opengraphImage: null
 			},
+			noindex: false,
 			uri
 		} satisfies LoadReturn
 	}
@@ -91,6 +94,7 @@ export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
 					opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
 					opengraphImage: null
 				},
+				noindex: false,
 				uri
 			} satisfies LoadReturn
 		}
@@ -141,6 +145,7 @@ export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
 			data,
 			menu,
 			seo: seoData,
+			noindex: pageNode?.noindex === true,
 			uri
 		} satisfies LoadReturn
 	} catch (err: unknown) {

@@ -1,5 +1,15 @@
 export const prerender = true
 
+import { fetchPublishedContent, uriToParam } from '$lib/server/content-index'
+import type { EntryGenerator } from './$types'
+
+/**
+ * Prerender every published page and post, not just the ones the crawler reaches
+ * by following links from '/' — so an unlinked ("hidden") page is still built.
+ */
+export const entries: EntryGenerator = async () =>
+	(await fetchPublishedContent()).map((item) => ({ all: uriToParam(item.uri) }))
+
 import PageContent from '$lib/graphql/query/page.graphql?raw'
 import {
 	assertGraphQLSucceeded,

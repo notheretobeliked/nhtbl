@@ -21,6 +21,12 @@
 	let siteTitle = $derived((data.seo.opengraphSiteName ?? '') as string)
 
 </script>
+<svelte:head>
+	{#if data.noindex}
+		<!-- Hidden page: built and reachable by URL, but kept out of search engines. -->
+		<meta name="robots" content="noindex" />
+	{/if}
+</svelte:head>
 <Header {menuItems} {siteTitle}/>
 {#key $page.url.pathname}
 	<OpenGraph {image} {metadescription} {pageTitle} {siteTitle} {siteUrl} />
