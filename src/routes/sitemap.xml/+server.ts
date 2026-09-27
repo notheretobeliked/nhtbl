@@ -1,34 +1,11 @@
-import SitemapQuery from '$lib/graphql/query/sitemap.graphql?raw'
-import { assertGraphQLSucceeded, checkResponse, graphqlQuery } from '$lib/utilities/graphql'
 import { PUBLIC_SITE_URL } from '$env/static/public'
+import { fetchPublishedContent, indexable } from '$lib/server/content-index'
 import type { RequestHandler } from './$types'
 
-interface ContentNode {
-	uri: string
-	modifiedGmt: string | null
-}
-
-interface SitemapData {
-	pages: { nodes: ContentNode[] }
-	posts: { nodes: ContentNode[] }
-	projects: { nodes: ContentNode[] }
-}
-
 export const GET: RequestHandler = async () => {
-	const response = await graphqlQuery(SitemapQuery, {})
-	checkResponse(response)
-
-	const json = await response.json()
-	assertGraphQLSucceeded(json, 'sitemap')
-
-	const data: SitemapData = json.data
-
 	const siteUrl = PUBLIC_SITE_URL.replace(/\/$/, '')
-	const nodes = [
-		...(data.pages?.nodes ?? []),
-		...(data.posts?.nodes ?? []),
-		...(data.projects?.nodes ?? [])
-	]
+	// Hidden pages (noindex) are still built, just not listed.
+	const nodes = indexable(await fetchPublishedContent())
 
 	const urls = nodes.map((node) => {
 		const loc = `${siteUrl}${node.uri}`

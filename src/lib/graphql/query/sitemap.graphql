@@ -1,20 +1,16 @@
-query Sitemap {
-  pages: contentNodes(where: { contentTypes: [PAGE], status: PUBLISH }, first: 500) {
-    nodes {
-      uri
-      modifiedGmt
-    }
-  }
-  posts: contentNodes(where: { contentTypes: [POST], status: PUBLISH }, first: 500) {
-    nodes {
-      uri
-      modifiedGmt
-    }
-  }
-  projects: nhtblProjects(where: { status: PUBLISH }, first: 500) {
-    nodes {
-      uri
-      modifiedGmt
-    }
-  }
+# Published content, paginated. Feeds both the sitemap (indexable items only)
+# and the catch-all route's prerender entries (everything, including hidden
+# pages that nothing links to).
+query Sitemap($after: String) {
+	contentNodes(first: 100, after: $after, where: { contentTypes: [PAGE, POST, PROJECT], status: PUBLISH }) {
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		nodes {
+			uri
+			modifiedGmt
+			noindex
+		}
+	}
 }

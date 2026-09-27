@@ -28,6 +28,12 @@
 	)
 	let showHeader = $derived(!isPreview && !hideNavigation)
 </script>
+<svelte:head>
+	{#if data.noindex}
+		<!-- Hidden page: built and reachable by URL, but kept out of search engines. -->
+		<meta name="robots" content="noindex" />
+	{/if}
+</svelte:head>
 {#if showHeader}
 	<Header {menuItems} {siteTitle} />
 {/if}
