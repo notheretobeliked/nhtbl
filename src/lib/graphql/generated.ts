@@ -14,8 +14,34 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** Generic Array Scalar Type */
   BlockAttributesArray: { input: any; output: any; }
+  /** Generic Object Scalar Type */
   BlockAttributesObject: { input: any; output: any; }
+};
+
+/** Block registered by ACF */
+export type AcfBlock = {
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the Block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Connection between the FeaturedProjects_Fields type and the ContentNode type */
@@ -72,7 +98,7 @@ export type AcfFieldGroupFields = {
 };
 
 /** A block used for editing the site */
-export type AcfGalerie = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfGalerie & {
+export type AcfGalerie = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfGalerie & {
   __typename?: 'AcfGalerie';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -119,10 +145,12 @@ export type AcfGalerieAttributes = {
   mode: Scalars['String']['output'];
   /** The &quot;name&quot; field on the &quot;AcfGalerieAttributes&quot; block or block attributes */
   name: Scalars['String']['output'];
+  /** The &quot;style&quot; field on the &quot;AcfGalerieAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
 
 /** A block used for editing the site */
-export type AcfHomePageHero = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfHomePageHero & {
+export type AcfHomePageHero = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfHomePageHero & {
   __typename?: 'AcfHomePageHero';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -176,7 +204,7 @@ export type AcfHomePageHeroAttributes = {
 };
 
 /** A block used for editing the site */
-export type AcfImageGallery = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfImageGallery & {
+export type AcfImageGallery = AcfBlock & BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfImageGallery & {
   __typename?: 'AcfImageGallery';
   /** The anchor field for the block. */
   anchor?: Maybe<Scalars['String']['output']>;
@@ -211,7 +239,7 @@ export type AcfImageGalleryAttributes = BlockWithSupportsAnchor & {
   __typename?: 'AcfImageGalleryAttributes';
   /** The &quot;align&quot; field on the &quot;AcfImageGalleryAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;AcfImageGalleryAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;AcfImageGalleryAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -243,7 +271,7 @@ export type AcfLink = {
 };
 
 /** A block used for editing the site */
-export type AcfLinkBlock = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfLinkBlock & {
+export type AcfLinkBlock = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfLinkBlock & {
   __typename?: 'AcfLinkBlock';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -330,7 +358,7 @@ export type AcfMediaItemConnectionPageInfo = MediaItemConnectionPageInfo & PageI
 };
 
 /** A block used for editing the site */
-export type AcfPortfolioBlock = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfPortfolioBlock & {
+export type AcfPortfolioBlock = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfPortfolioBlock & {
   __typename?: 'AcfPortfolioBlock';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -384,7 +412,7 @@ export type AcfPortfolioBlockAttributes = {
 };
 
 /** A block used for editing the site */
-export type AcfServicePush = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfServicePush & {
+export type AcfServicePush = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfServicePush & {
   __typename?: 'AcfServicePush';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -438,7 +466,7 @@ export type AcfServicePushAttributes = {
 };
 
 /** A block used for editing the site */
-export type AcfSlide = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSlide & {
+export type AcfSlide = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSlide & {
   __typename?: 'AcfSlide';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -488,7 +516,7 @@ export type AcfSlideAttributes = {
 };
 
 /** A block used for editing the site */
-export type AcfSlideshow = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSlideshow & {
+export type AcfSlideshow = AcfBlock & BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSlideshow & {
   __typename?: 'AcfSlideshow';
   /** The anchor field for the block. */
   anchor?: Maybe<Scalars['String']['output']>;
@@ -523,7 +551,7 @@ export type AcfSlideshowAttributes = BlockWithSupportsAnchor & {
   __typename?: 'AcfSlideshowAttributes';
   /** The &quot;align&quot; field on the &quot;AcfSlideshowAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;AcfSlideshowAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;AcfSlideshowAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -544,7 +572,7 @@ export type AcfSlideshowAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type AcfSubpageNavigation = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSubpageNavigation & {
+export type AcfSubpageNavigation = AcfBlock & BlockWithSupportsAnchor & EditorBlock & PageEditorBlock & WithAcfSubpageNavigation & {
   __typename?: 'AcfSubpageNavigation';
   /** The anchor field for the block. */
   anchor?: Maybe<Scalars['String']['output']>;
@@ -581,7 +609,7 @@ export type AcfSubpageNavigationAttributes = BlockWithSupportsAnchor & {
   __typename?: 'AcfSubpageNavigationAttributes';
   /** The &quot;align&quot; field on the &quot;AcfSubpageNavigationAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;AcfSubpageNavigationAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;AcfSubpageNavigationAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
@@ -600,7 +628,7 @@ export type AcfSubpageNavigationAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type AcfSurveyBlock = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSurveyBlock & {
+export type AcfSurveyBlock = AcfBlock & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & WithAcfSurveyBlock & {
   __typename?: 'AcfSurveyBlock';
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
@@ -645,6 +673,8 @@ export type AcfSurveyBlockAttributes = {
   mode: Scalars['String']['output'];
   /** The &quot;name&quot; field on the &quot;AcfSurveyBlockAttributes&quot; block or block attributes */
   name: Scalars['String']['output'];
+  /** The &quot;style&quot; field on the &quot;AcfSurveyBlockAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
 
 /** Connection between the PortfolioBlock_Fields type and the TermNode type */
@@ -760,7 +790,7 @@ export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermN
   /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<CategoryToAncestorsCategoryConnection>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the term.
    * @deprecated Deprecated in favor of databaseId
    */
   categoryId?: Maybe<Scalars['Int']['output']>;
@@ -856,6 +886,7 @@ export type CategoryEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -865,6 +896,7 @@ export type CategoryEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -1031,6 +1063,11 @@ export type CategoryToCategoryConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -1084,6 +1121,8 @@ export type CategoryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -1108,6 +1147,8 @@ export type CategoryToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1182,6 +1223,8 @@ export type CategoryToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -1218,6 +1261,8 @@ export type CategoryToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1234,17 +1279,17 @@ export type CategoryToTaxonomyConnectionEdge = Edge & OneToOneConnection & Taxon
 /** A response or reaction to content submitted by users. Comments are typically associated with a specific content entry. */
 export type Comment = DatabaseIdentifier & Node & UniformResourceIdentifiable & {
   __typename?: 'Comment';
-  /** User agent used to post the comment. This field is equivalent to WP_Comment-&gt;comment_agent and the value matching the &quot;comment_agent&quot; column in SQL. */
+  /** User agent (browser or client) used to post the comment. */
   agent?: Maybe<Scalars['String']['output']>;
   /**
-   * The approval status of the comment. This field is equivalent to WP_Comment-&gt;comment_approved and the value matching the &quot;comment_approved&quot; column in SQL.
+   * The approval status of the comment.
    * @deprecated Deprecated in favor of the `status` field
    */
   approved?: Maybe<Scalars['Boolean']['output']>;
   /** The author of the comment */
   author?: Maybe<CommentToCommenterConnectionEdge>;
   /**
-   * IP address for the author at the time of commenting. This field is equivalent to WP_Comment-&gt;comment_author_IP and the value matching the &quot;comment_author_IP&quot; column in SQL.
+   * IP address for the author at the time of commenting.
    * @deprecated Use the ipAddress field on the edge between the comment and author
    */
   authorIp?: Maybe<Scalars['String']['output']>;
@@ -1255,13 +1300,13 @@ export type Comment = DatabaseIdentifier & Node & UniformResourceIdentifiable & 
   commentId?: Maybe<Scalars['Int']['output']>;
   /** Connection between the Comment type and the ContentNode type */
   commentedOn?: Maybe<CommentToContentNodeConnectionEdge>;
-  /** Content of the comment. This field is equivalent to WP_Comment-&gt;comment_content and the value matching the &quot;comment_content&quot; column in SQL. */
+  /** Content of the comment. */
   content?: Maybe<Scalars['String']['output']>;
   /** The unique identifier stored in the database */
   databaseId: Scalars['Int']['output'];
-  /** Date the comment was posted in local time. This field is equivalent to WP_Comment-&gt;date and the value matching the &quot;date&quot; column in SQL. */
+  /** Date the comment was posted in local time. */
   date?: Maybe<Scalars['String']['output']>;
-  /** Date the comment was posted in GMT. This field is equivalent to WP_Comment-&gt;date_gmt and the value matching the &quot;date_gmt&quot; column in SQL. */
+  /** Date the comment was posted in GMT. */
   dateGmt?: Maybe<Scalars['String']['output']>;
   /** The globally unique identifier for the comment object */
   id: Scalars['ID']['output'];
@@ -1277,7 +1322,7 @@ export type Comment = DatabaseIdentifier & Node & UniformResourceIdentifiable & 
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** Karma value for the comment. This field is equivalent to WP_Comment-&gt;comment_karma and the value matching the &quot;comment_karma&quot; column in SQL. */
+  /** Karma value for the comment. */
   karma?: Maybe<Scalars['Int']['output']>;
   /** The permalink of the comment */
   link?: Maybe<Scalars['String']['output']>;
@@ -1289,9 +1334,9 @@ export type Comment = DatabaseIdentifier & Node & UniformResourceIdentifiable & 
   parentId?: Maybe<Scalars['ID']['output']>;
   /** Connection between the Comment type and the Comment type */
   replies?: Maybe<CommentToCommentConnection>;
-  /** The approval status of the comment. This field is equivalent to WP_Comment-&gt;comment_approved and the value matching the &quot;comment_approved&quot; column in SQL. */
+  /** The approval status of the comment. */
   status?: Maybe<CommentStatusEnum>;
-  /** Type of comment. This field is equivalent to WP_Comment-&gt;comment_type and the value matching the &quot;comment_type&quot; column in SQL. */
+  /** Type of comment. */
   type?: Maybe<Scalars['String']['output']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
@@ -1489,6 +1534,11 @@ export type CommentToCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -1502,7 +1552,7 @@ export type CommentToCommenterConnectionEdge = CommenterConnectionEdge & Edge & 
   cursor?: Maybe<Scalars['String']['output']>;
   /** Email address representing the author for this particular comment */
   email?: Maybe<Scalars['String']['output']>;
-  /** IP address of the author at the time of making this comment. This field is equivalent to WP_Comment-&gt;comment_author_IP and the value matching the &quot;comment_author_IP&quot; column in SQL. */
+  /** IP address of the author at the time of making this comment. */
   ipAddress?: Maybe<Scalars['String']['output']>;
   /** The display name of the comment author for this particular comment */
   name?: Maybe<Scalars['String']['output']>;
@@ -1586,6 +1636,11 @@ export type CommentToParentCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -1686,7 +1741,7 @@ export type ContentNode = {
   enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
   /** Connection between the ContentNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
@@ -1714,11 +1769,11 @@ export type ContentNode = {
   modifiedGmt?: Maybe<Scalars['String']['output']>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -1735,6 +1790,7 @@ export type ContentNodeEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -1744,6 +1800,7 @@ export type ContentNodeEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 /** A paginated collection of ContentNode Nodes, Supports cursor-based pagination and filtering to efficiently retrieve sets of ContentNode Nodes */
@@ -1852,6 +1909,12 @@ export type ContentNodeToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnec
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Arguments for filtering the ContentNodeToEnqueuedScriptConnection connection */
+export type ContentNodeToEnqueuedScriptConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 /** Connection between the ContentNode type and the EnqueuedStylesheet type */
 export type ContentNodeToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
   __typename?: 'ContentNodeToEnqueuedStylesheetConnection';
@@ -1887,11 +1950,25 @@ export type ContentNodeToEnqueuedStylesheetConnectionPageInfo = EnqueuedStyleshe
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Arguments for filtering the ContentNodeToEnqueuedStylesheetConnection connection */
+export type ContentNodeToEnqueuedStylesheetConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 /** A layout pattern that can help inform how content might be structured and displayed. Templates can define specialized layouts for different types of content. */
 export type ContentTemplate = {
   /** The name of the template */
   templateName?: Maybe<Scalars['String']['output']>;
 };
+
+/** The templates that can be assigned to content. Used to filter a connection by the template its content uses. */
+export enum ContentTemplateEnum {
+  /** The default template, applied when no specific template is assigned. */
+  DefaultTemplate = 'DEFAULT_TEMPLATE',
+  /** The "Custom Template" template. */
+  TemplateCustomBladeTemplate = 'TEMPLATE_CUSTOM_BLADE_TEMPLATE'
+}
 
 /** An Post Type object */
 export type ContentType = Node & UniformResourceIdentifiable & {
@@ -2086,6 +2163,8 @@ export type ContentTypeToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -2110,6 +2189,8 @@ export type ContentTypeToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2213,7 +2294,7 @@ export type CoreAccordionAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreAccordionAttributes';
   /** The &quot;align&quot; field on the &quot;CoreAccordionAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreAccordionAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;ariaLabel&quot; field on the &quot;CoreAccordionAttributes&quot; block or block attributes */
   ariaLabel?: Maybe<Scalars['String']['output']>;
@@ -2283,7 +2364,7 @@ export type CoreAccordionHeading = BlockWithSupportsAnchor & EditorBlock & Nhtbl
 /** Attributes of the CoreAccordionHeading Block Type */
 export type CoreAccordionHeadingAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreAccordionHeadingAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreAccordionHeadingAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreAccordionHeadingAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -2415,16 +2496,12 @@ export type CoreAccordionPanelAttributes = {
   fontSize?: Maybe<Scalars['String']['output']>;
   /** The &quot;gradient&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
   gradient?: Maybe<Scalars['String']['output']>;
-  /** The &quot;isSelected&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
-  isSelected: Scalars['Boolean']['output'];
   /** The &quot;layout&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;lock&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;openByDefault&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
-  openByDefault: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreAccordionPanelAttributes&quot; block or block attributes */
@@ -2432,8 +2509,10 @@ export type CoreAccordionPanelAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreArchives = EditorBlock & {
+export type CoreArchives = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreArchives';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreArchives Block Type */
@@ -2459,10 +2538,12 @@ export type CoreArchives = EditorBlock & {
 };
 
 /** Attributes of the CoreArchives Block Type */
-export type CoreArchivesAttributes = {
+export type CoreArchivesAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreArchivesAttributes';
   /** The &quot;align&quot; field on the &quot;CoreArchivesAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreArchivesAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreArchivesAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreArchivesAttributes&quot; block or block attributes */
@@ -2527,7 +2608,7 @@ export type CoreAudioAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreAudioAttributes';
   /** The &quot;align&quot; field on the &quot;CoreAudioAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreAudioAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;autoplay&quot; field on the &quot;CoreAudioAttributes&quot; block or block attributes */
   autoplay?: Maybe<Scalars['Boolean']['output']>;
@@ -2554,8 +2635,10 @@ export type CoreAudioAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreAvatar = EditorBlock & {
+export type CoreAvatar = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreAvatar';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreAvatar Block Type */
@@ -2581,10 +2664,12 @@ export type CoreAvatar = EditorBlock & {
 };
 
 /** Attributes of the CoreAvatar Block Type */
-export type CoreAvatarAttributes = {
+export type CoreAvatarAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreAvatarAttributes';
   /** The &quot;align&quot; field on the &quot;CoreAvatarAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreAvatarAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreAvatarAttributes&quot; block or block attributes */
   borderColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreAvatarAttributes&quot; block or block attributes */
@@ -2646,6 +2731,74 @@ export type CoreBlockAttributes = {
 };
 
 /** A block used for editing the site */
+export type CoreBreadcrumbs = BlockWithSupportsAnchor & EditorBlock & {
+  __typename?: 'CoreBreadcrumbs';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreBreadcrumbs Block Type */
+  attributes?: Maybe<CoreBreadcrumbsAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreBreadcrumbs Block Type */
+export type CoreBreadcrumbsAttributes = BlockWithSupportsAnchor & {
+  __typename?: 'CoreBreadcrumbsAttributes';
+  /** The &quot;align&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;borderColor&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  borderColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontFamily&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;gradient&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  gradient?: Maybe<Scalars['String']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;prefersTaxonomy&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  prefersTaxonomy: Scalars['Boolean']['output'];
+  /** The &quot;separator&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  separator: Scalars['String']['output'];
+  /** The &quot;showCurrentItem&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  showCurrentItem: Scalars['Boolean']['output'];
+  /** The &quot;showHomeItem&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  showHomeItem: Scalars['Boolean']['output'];
+  /** The &quot;showOnHomePage&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  showOnHomePage: Scalars['Boolean']['output'];
+  /** The &quot;style&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreBreadcrumbsAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+/** A block used for editing the site */
 export type CoreButton = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreButton';
   /** The anchor field for the block. */
@@ -2677,7 +2830,7 @@ export type CoreButton = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEdi
 /** Attributes of the CoreButton Block Type */
 export type CoreButtonAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreButtonAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -2711,8 +2864,6 @@ export type CoreButtonAttributes = BlockWithSupportsAnchor & {
   tagName: Scalars['String']['output'];
   /** The &quot;text&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
   text?: Maybe<Scalars['String']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;title&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
@@ -2721,8 +2872,6 @@ export type CoreButtonAttributes = BlockWithSupportsAnchor & {
   type: Scalars['String']['output'];
   /** The &quot;url&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
   url?: Maybe<Scalars['String']['output']>;
-  /** The &quot;width&quot; field on the &quot;CoreButtonAttributes&quot; block or block attributes */
-  width?: Maybe<Scalars['Float']['output']>;
 };
 
 /** A block used for editing the site */
@@ -2759,7 +2908,7 @@ export type CoreButtonsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreButtonsAttributes';
   /** The &quot;align&quot; field on the &quot;CoreButtonsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreButtonsAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreButtonsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -2786,8 +2935,10 @@ export type CoreButtonsAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreCalendar = EditorBlock & {
+export type CoreCalendar = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCalendar';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCalendar Block Type */
@@ -2813,10 +2964,12 @@ export type CoreCalendar = EditorBlock & {
 };
 
 /** Attributes of the CoreCalendar Block Type */
-export type CoreCalendarAttributes = {
+export type CoreCalendarAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCalendarAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCalendarAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreCalendarAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCalendarAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreCalendarAttributes&quot; block or block attributes */
@@ -2840,8 +2993,10 @@ export type CoreCalendarAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCategories = EditorBlock & {
+export type CoreCategories = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCategories';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCategories Block Type */
@@ -2867,10 +3022,12 @@ export type CoreCategories = EditorBlock & {
 };
 
 /** Attributes of the CoreCategories Block Type */
-export type CoreCategoriesAttributes = {
+export type CoreCategoriesAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCategoriesAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCategoriesAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreCategoriesAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCategoriesAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCategoriesAttributes&quot; block or block attributes */
@@ -2943,7 +3100,7 @@ export type CoreCodeAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCodeAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCodeAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreCodeAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCodeAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -3003,7 +3160,7 @@ export type CoreColumn = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEdi
 /** Attributes of the CoreColumn Block Type */
 export type CoreColumnAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreColumnAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreColumnAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreColumnAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -3069,7 +3226,7 @@ export type CoreColumnsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreColumnsAttributes';
   /** The &quot;align&quot; field on the &quot;CoreColumnsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreColumnsAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreColumnsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -3102,8 +3259,10 @@ export type CoreColumnsAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreCommentAuthorName = EditorBlock & {
+export type CoreCommentAuthorName = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentAuthorName';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentAuthorName Block Type */
@@ -3129,8 +3288,10 @@ export type CoreCommentAuthorName = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentAuthorName Block Type */
-export type CoreCommentAuthorNameAttributes = {
+export type CoreCommentAuthorNameAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentAuthorNameAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentAuthorNameAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentAuthorNameAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentAuthorNameAttributes&quot; block or block attributes */
@@ -3153,15 +3314,15 @@ export type CoreCommentAuthorNameAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreCommentAuthorNameAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreCommentAuthorNameAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreCommentAuthorNameAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreCommentContent = EditorBlock & {
+export type CoreCommentContent = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentContent';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentContent Block Type */
@@ -3187,8 +3348,10 @@ export type CoreCommentContent = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentContent Block Type */
-export type CoreCommentContentAttributes = {
+export type CoreCommentContentAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentContentAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentContentAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentContentAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentContentAttributes&quot; block or block attributes */
@@ -3207,15 +3370,15 @@ export type CoreCommentContentAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreCommentContentAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreCommentContentAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreCommentContentAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreCommentDate = EditorBlock & {
+export type CoreCommentDate = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentDate';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentDate Block Type */
@@ -3241,8 +3404,10 @@ export type CoreCommentDate = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentDate Block Type */
-export type CoreCommentDateAttributes = {
+export type CoreCommentDateAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentDateAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentDateAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentDateAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentDateAttributes&quot; block or block attributes */
@@ -3270,8 +3435,10 @@ export type CoreCommentDateAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCommentEditLink = EditorBlock & {
+export type CoreCommentEditLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentEditLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentEditLink Block Type */
@@ -3297,8 +3464,10 @@ export type CoreCommentEditLink = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentEditLink Block Type */
-export type CoreCommentEditLinkAttributes = {
+export type CoreCommentEditLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentEditLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentEditLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentEditLinkAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentEditLinkAttributes&quot; block or block attributes */
@@ -3319,13 +3488,13 @@ export type CoreCommentEditLinkAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreCommentEditLinkAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreCommentEditLinkAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreCommentReplyLink = EditorBlock & {
+export type CoreCommentReplyLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentReplyLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentReplyLink Block Type */
@@ -3351,8 +3520,10 @@ export type CoreCommentReplyLink = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentReplyLink Block Type */
-export type CoreCommentReplyLinkAttributes = {
+export type CoreCommentReplyLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentReplyLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentReplyLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentReplyLinkAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentReplyLinkAttributes&quot; block or block attributes */
@@ -3371,13 +3542,13 @@ export type CoreCommentReplyLinkAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreCommentReplyLinkAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreCommentReplyLinkAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreCommentTemplate = EditorBlock & {
+export type CoreCommentTemplate = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentTemplate';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentTemplate Block Type */
@@ -3403,10 +3574,12 @@ export type CoreCommentTemplate = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentTemplate Block Type */
-export type CoreCommentTemplateAttributes = {
+export type CoreCommentTemplateAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentTemplateAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCommentTemplateAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentTemplateAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentTemplateAttributes&quot; block or block attributes */
   borderColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreCommentTemplateAttributes&quot; block or block attributes */
@@ -3424,8 +3597,10 @@ export type CoreCommentTemplateAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreComments = EditorBlock & {
+export type CoreComments = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreComments';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreComments Block Type */
@@ -3451,10 +3626,12 @@ export type CoreComments = EditorBlock & {
 };
 
 /** Attributes of the CoreComments Block Type */
-export type CoreCommentsAttributes = {
+export type CoreCommentsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentsAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCommentsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentsAttributes&quot; block or block attributes */
@@ -3482,8 +3659,10 @@ export type CoreCommentsAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCommentsPagination = EditorBlock & {
+export type CoreCommentsPagination = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentsPagination';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentsPagination Block Type */
@@ -3509,10 +3688,12 @@ export type CoreCommentsPagination = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentsPagination Block Type */
-export type CoreCommentsPaginationAttributes = {
+export type CoreCommentsPaginationAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentsPaginationAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCommentsPaginationAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentsPaginationAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentsPaginationAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreCommentsPaginationAttributes&quot; block or block attributes */
@@ -3538,8 +3719,10 @@ export type CoreCommentsPaginationAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCommentsPaginationNext = EditorBlock & {
+export type CoreCommentsPaginationNext = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentsPaginationNext';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentsPaginationNext Block Type */
@@ -3565,8 +3748,10 @@ export type CoreCommentsPaginationNext = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentsPaginationNext Block Type */
-export type CoreCommentsPaginationNextAttributes = {
+export type CoreCommentsPaginationNextAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentsPaginationNextAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentsPaginationNextAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentsPaginationNextAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreCommentsPaginationNextAttributes&quot; block or block attributes */
@@ -3588,8 +3773,10 @@ export type CoreCommentsPaginationNextAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCommentsPaginationNumbers = EditorBlock & {
+export type CoreCommentsPaginationNumbers = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentsPaginationNumbers';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentsPaginationNumbers Block Type */
@@ -3615,8 +3802,10 @@ export type CoreCommentsPaginationNumbers = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentsPaginationNumbers Block Type */
-export type CoreCommentsPaginationNumbersAttributes = {
+export type CoreCommentsPaginationNumbersAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentsPaginationNumbersAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentsPaginationNumbersAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentsPaginationNumbersAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreCommentsPaginationNumbersAttributes&quot; block or block attributes */
@@ -3636,8 +3825,10 @@ export type CoreCommentsPaginationNumbersAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCommentsPaginationPrevious = EditorBlock & {
+export type CoreCommentsPaginationPrevious = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentsPaginationPrevious';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentsPaginationPrevious Block Type */
@@ -3663,8 +3854,10 @@ export type CoreCommentsPaginationPrevious = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentsPaginationPrevious Block Type */
-export type CoreCommentsPaginationPreviousAttributes = {
+export type CoreCommentsPaginationPreviousAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentsPaginationPreviousAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentsPaginationPreviousAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentsPaginationPreviousAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreCommentsPaginationPreviousAttributes&quot; block or block attributes */
@@ -3686,8 +3879,10 @@ export type CoreCommentsPaginationPreviousAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreCommentsTitle = EditorBlock & {
+export type CoreCommentsTitle = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreCommentsTitle';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreCommentsTitle Block Type */
@@ -3713,10 +3908,12 @@ export type CoreCommentsTitle = EditorBlock & {
 };
 
 /** Attributes of the CoreCommentsTitle Block Type */
-export type CoreCommentsTitleAttributes = {
+export type CoreCommentsTitleAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCommentsTitleAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
@@ -3743,8 +3940,6 @@ export type CoreCommentsTitleAttributes = {
   showPostTitle: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreCommentsTitleAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
@@ -3783,9 +3978,11 @@ export type CoreCoverAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreCoverAttributes';
   /** The &quot;align&quot; field on the &quot;CoreCoverAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;allowedVideoProviders&quot; field on the &quot;CoreCoverAttributes&quot; block or block attributes */
+  allowedVideoProviders: Scalars['BlockAttributesArray']['output'];
   /** The &quot;alt&quot; field on the &quot;CoreCoverAttributes&quot; block or block attributes */
   alt: Scalars['String']['output'];
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreCoverAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundType&quot; field on the &quot;CoreCoverAttributes&quot; block or block attributes */
   backgroundType: Scalars['String']['output'];
@@ -3881,7 +4078,7 @@ export type CoreDetailsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreDetailsAttributes';
   /** The &quot;align&quot; field on the &quot;CoreDetailsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreDetailsAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreDetailsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -3916,8 +4113,10 @@ export type CoreDetailsAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreEmbed = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreEmbed = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreEmbed';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreEmbed Block Type */
@@ -3943,12 +4142,14 @@ export type CoreEmbed = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock 
 };
 
 /** Attributes of the CoreEmbed Block Type */
-export type CoreEmbedAttributes = {
+export type CoreEmbedAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreEmbedAttributes';
   /** The &quot;align&quot; field on the &quot;CoreEmbedAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
   /** The &quot;allowResponsive&quot; field on the &quot;CoreEmbedAttributes&quot; block or block attributes */
   allowResponsive: Scalars['Boolean']['output'];
+  /** The &quot;anchor&quot; field on the &quot;CoreEmbedAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;caption&quot; field on the &quot;CoreEmbedAttributes&quot; block or block attributes */
   caption?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreEmbedAttributes&quot; block or block attributes */
@@ -4005,7 +4206,7 @@ export type CoreFileAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreFileAttributes';
   /** The &quot;align&quot; field on the &quot;CoreFileAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreFileAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreFileAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -4046,8 +4247,10 @@ export type CoreFileAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreFootnotes = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreFootnotes = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreFootnotes';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreFootnotes Block Type */
@@ -4073,8 +4276,10 @@ export type CoreFootnotes = EditorBlock & NhtblProjectEditorBlock & PageEditorBl
 };
 
 /** Attributes of the CoreFootnotes Block Type */
-export type CoreFootnotesAttributes = {
+export type CoreFootnotesAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreFootnotesAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreFootnotesAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreFootnotesAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreFootnotesAttributes&quot; block or block attributes */
@@ -4169,7 +4374,7 @@ export type CoreGalleryAttributes = BlockWithSupportsAnchor & {
   align?: Maybe<Scalars['String']['output']>;
   /** The &quot;allowResize&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   allowResize: Scalars['Boolean']['output'];
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;aspectRatio&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   aspectRatio: Scalars['String']['output'];
@@ -4183,6 +4388,8 @@ export type CoreGalleryAttributes = BlockWithSupportsAnchor & {
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;columns&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   columns?: Maybe<Scalars['Float']['output']>;
+  /** The &quot;dynamicContent&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
+  dynamicContent?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;fixedHeight&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   fixedHeight: Scalars['Boolean']['output'];
   /** The &quot;gradient&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
@@ -4203,6 +4410,8 @@ export type CoreGalleryAttributes = BlockWithSupportsAnchor & {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;navigationButtonType&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
+  navigationButtonType: Scalars['String']['output'];
   /** The &quot;randomOrder&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
   randomOrder: Scalars['Boolean']['output'];
   /** The &quot;shortCodeTransforms&quot; field on the &quot;CoreGalleryAttributes&quot; block or block attributes */
@@ -4264,7 +4473,7 @@ export type CoreGroupAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreGroupAttributes';
   /** The &quot;align&quot; field on the &quot;CoreGroupAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreGroupAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;ariaLabel&quot; field on the &quot;CoreGroupAttributes&quot; block or block attributes */
   ariaLabel?: Maybe<Scalars['String']['output']>;
@@ -4344,7 +4553,7 @@ export type CoreHeadingAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreHeadingAttributes';
   /** The &quot;align&quot; field on the &quot;CoreHeadingAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreHeadingAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreHeadingAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -4374,15 +4583,15 @@ export type CoreHeadingAttributes = BlockWithSupportsAnchor & {
   placeholder?: Maybe<Scalars['String']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreHeadingAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreHeadingAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreHeadingAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreHomeLink = EditorBlock & {
+export type CoreHomeLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreHomeLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreHomeLink Block Type */
@@ -4408,10 +4617,14 @@ export type CoreHomeLink = EditorBlock & {
 };
 
 /** Attributes of the CoreHomeLink Block Type */
-export type CoreHomeLinkAttributes = {
+export type CoreHomeLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreHomeLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;description&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
+  description?: Maybe<Scalars['String']['output']>;
   /** The &quot;fontFamily&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
   fontFamily?: Maybe<Scalars['String']['output']>;
   /** The &quot;fontSize&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
@@ -4422,6 +4635,8 @@ export type CoreHomeLinkAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;opensInNewTab&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
+  opensInNewTab: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CoreHomeLinkAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
@@ -4462,6 +4677,68 @@ export type CoreHtmlAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreHtmlAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+};
+
+/** A block used for editing the site */
+export type CoreIcon = BlockWithSupportsAnchor & EditorBlock & {
+  __typename?: 'CoreIcon';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreIcon Block Type */
+  attributes?: Maybe<CoreIconAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreIcon Block Type */
+export type CoreIconAttributes = BlockWithSupportsAnchor & {
+  __typename?: 'CoreIconAttributes';
+  /** The &quot;align&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;ariaLabel&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  ariaLabel?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;borderColor&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  borderColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;flipHorizontal&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  flipHorizontal: Scalars['Boolean']['output'];
+  /** The &quot;flipVertical&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  flipVertical: Scalars['Boolean']['output'];
+  /** The &quot;icon&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  icon?: Maybe<Scalars['String']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;rotation&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  rotation: Scalars['Float']['output'];
+  /** The &quot;style&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreIconAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
@@ -4510,7 +4787,7 @@ export type CoreImageAttributes = BlockWithSupportsAnchor & {
   align?: Maybe<Scalars['String']['output']>;
   /** The &quot;alt&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   alt: Scalars['String']['output'];
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;aspectRatio&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   aspectRatio?: Maybe<Scalars['String']['output']>;
@@ -4524,12 +4801,16 @@ export type CoreImageAttributes = BlockWithSupportsAnchor & {
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;cssClassName&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   cssClassName?: Maybe<Scalars['String']['output']>;
+  /** The &quot;focalPoint&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
+  focalPoint?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;height&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   height?: Maybe<Scalars['String']['output']>;
   /** The &quot;href&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   href?: Maybe<Scalars['String']['output']>;
   /** The &quot;id&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   id?: Maybe<Scalars['Float']['output']>;
+  /** The &quot;isDecorative&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
+  isDecorative: Scalars['Boolean']['output'];
   /** The &quot;lightbox&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
   lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;linkClass&quot; field on the &quot;CoreImageAttributes&quot; block or block attributes */
@@ -4561,8 +4842,10 @@ export type CoreImageAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreLatestComments = EditorBlock & {
+export type CoreLatestComments = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreLatestComments';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreLatestComments Block Type */
@@ -4588,10 +4871,12 @@ export type CoreLatestComments = EditorBlock & {
 };
 
 /** Attributes of the CoreLatestComments Block Type */
-export type CoreLatestCommentsAttributes = {
+export type CoreLatestCommentsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreLatestCommentsAttributes';
   /** The &quot;align&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
@@ -4600,10 +4885,10 @@ export type CoreLatestCommentsAttributes = {
   commentsToShow: Scalars['Float']['output'];
   /** The &quot;displayAvatar&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
   displayAvatar: Scalars['Boolean']['output'];
+  /** The &quot;displayContent&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
+  displayContent: Scalars['String']['output'];
   /** The &quot;displayDate&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
   displayDate: Scalars['Boolean']['output'];
-  /** The &quot;displayExcerpt&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
-  displayExcerpt: Scalars['Boolean']['output'];
   /** The &quot;fontFamily&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
   fontFamily?: Maybe<Scalars['String']['output']>;
   /** The &quot;fontSize&quot; field on the &quot;CoreLatestCommentsAttributes&quot; block or block attributes */
@@ -4621,8 +4906,10 @@ export type CoreLatestCommentsAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreLatestPosts = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreLatestPosts = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreLatestPosts';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreLatestPosts Block Type */
@@ -4650,12 +4937,14 @@ export type CoreLatestPosts = EditorBlock & NhtblProjectEditorBlock & PageEditor
 };
 
 /** Attributes of the CoreLatestPosts Block Type */
-export type CoreLatestPostsAttributes = {
+export type CoreLatestPostsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreLatestPostsAttributes';
   /** The &quot;addLinkToFeaturedImage&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   addLinkToFeaturedImage: Scalars['Boolean']['output'];
   /** The &quot;align&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
@@ -4664,8 +4953,6 @@ export type CoreLatestPostsAttributes = {
   categories?: Maybe<Array<Maybe<Scalars['BlockAttributesObject']['output']>>>;
   /** The &quot;className&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
-  /** The &quot;columns&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
-  columns: Scalars['Float']['output'];
   /** The &quot;displayAuthor&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   displayAuthor: Scalars['Boolean']['output'];
   /** The &quot;displayFeaturedImage&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
@@ -4692,6 +4979,8 @@ export type CoreLatestPostsAttributes = {
   fontSize?: Maybe<Scalars['String']['output']>;
   /** The &quot;gradient&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   gradient?: Maybe<Scalars['String']['output']>;
+  /** The &quot;layout&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
+  layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;lock&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
@@ -4700,8 +4989,6 @@ export type CoreLatestPostsAttributes = {
   order: Scalars['String']['output'];
   /** The &quot;orderBy&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   orderBy: Scalars['String']['output'];
-  /** The &quot;postLayout&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
-  postLayout: Scalars['String']['output'];
   /** The &quot;postsToShow&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
   postsToShow: Scalars['Float']['output'];
   /** The &quot;selectedAuthor&quot; field on the &quot;CoreLatestPostsAttributes&quot; block or block attributes */
@@ -4752,6 +5039,8 @@ export type CoreLegacyWidgetAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreLegacyWidgetAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreLegacyWidgetAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
 
 /** A block used for editing the site */
@@ -4786,7 +5075,7 @@ export type CoreList = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEdito
 /** Attributes of the CoreList Block Type */
 export type CoreListAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreListAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreListAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreListAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -4856,7 +5145,7 @@ export type CoreListItem = BlockWithSupportsAnchor & EditorBlock & NhtblProjectE
 /** Attributes of the CoreListItem Block Type */
 export type CoreListItemAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreListItemAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreListItemAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreListItemAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -4885,8 +5174,10 @@ export type CoreListItemAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreLoginout = EditorBlock & {
+export type CoreLoginout = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreLoginout';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreLoginout Block Type */
@@ -4912,8 +5203,10 @@ export type CoreLoginout = EditorBlock & {
 };
 
 /** Attributes of the CoreLoginout Block Type */
-export type CoreLoginoutAttributes = {
+export type CoreLoginoutAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreLoginoutAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreLoginoutAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreLoginoutAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreLoginoutAttributes&quot; block or block attributes */
@@ -4939,8 +5232,10 @@ export type CoreLoginoutAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreMath = EditorBlock & {
+export type CoreMath = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreMath';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreMath Block Type */
@@ -4966,10 +5261,20 @@ export type CoreMath = EditorBlock & {
 };
 
 /** Attributes of the CoreMath Block Type */
-export type CoreMathAttributes = {
+export type CoreMathAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreMathAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;borderColor&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  borderColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;gradient&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  gradient?: Maybe<Scalars['String']['output']>;
   /** The &quot;latex&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
   latex?: Maybe<Scalars['String']['output']>;
   /** The &quot;lock&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
@@ -4978,6 +5283,10 @@ export type CoreMathAttributes = {
   mathML?: Maybe<Scalars['String']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreMathAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
@@ -5014,7 +5323,7 @@ export type CoreMediaTextAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreMediaTextAttributes';
   /** The &quot;align&quot; field on the &quot;CoreMediaTextAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreMediaTextAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreMediaTextAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -5157,8 +5466,10 @@ export type CoreMoreAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreNavigation = EditorBlock & {
+export type CoreNavigation = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreNavigation';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreNavigation Block Type */
@@ -5184,10 +5495,12 @@ export type CoreNavigation = EditorBlock & {
 };
 
 /** Attributes of the CoreNavigation Block Type */
-export type CoreNavigationAttributes = {
+export type CoreNavigationAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreNavigationAttributes';
   /** The &quot;align&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;ariaLabel&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
   ariaLabel?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
@@ -5218,8 +5531,8 @@ export type CoreNavigationAttributes = {
   maxNestingLevel: Scalars['Float']['output'];
   /** The &quot;metadata&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;openSubmenusOnClick&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
-  openSubmenusOnClick: Scalars['Boolean']['output'];
+  /** The &quot;overlay&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
+  overlay?: Maybe<Scalars['String']['output']>;
   /** The &quot;overlayBackgroundColor&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
   overlayBackgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;overlayMenu&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
@@ -5236,6 +5549,8 @@ export type CoreNavigationAttributes = {
   showSubmenuIcon: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;submenuVisibility&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
+  submenuVisibility: Scalars['String']['output'];
   /** The &quot;textColor&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;__unstableLocation&quot; field on the &quot;CoreNavigationAttributes&quot; block or block attributes */
@@ -5243,8 +5558,10 @@ export type CoreNavigationAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreNavigationLink = EditorBlock & {
+export type CoreNavigationLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreNavigationLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreNavigationLink Block Type */
@@ -5270,8 +5587,10 @@ export type CoreNavigationLink = EditorBlock & {
 };
 
 /** Attributes of the CoreNavigationLink Block Type */
-export type CoreNavigationLinkAttributes = {
+export type CoreNavigationLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreNavigationLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreNavigationLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreNavigationLinkAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;description&quot; field on the &quot;CoreNavigationLinkAttributes&quot; block or block attributes */
@@ -5307,8 +5626,62 @@ export type CoreNavigationLinkAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreNavigationSubmenu = EditorBlock & {
+export type CoreNavigationOverlayClose = EditorBlock & {
+  __typename?: 'CoreNavigationOverlayClose';
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreNavigationOverlayClose Block Type */
+  attributes?: Maybe<CoreNavigationOverlayCloseAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreNavigationOverlayClose Block Type */
+export type CoreNavigationOverlayCloseAttributes = {
+  __typename?: 'CoreNavigationOverlayCloseAttributes';
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;displayMode&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  displayMode: Scalars['String']['output'];
+  /** The &quot;fontFamily&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;text&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  text?: Maybe<Scalars['String']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreNavigationOverlayCloseAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+/** A block used for editing the site */
+export type CoreNavigationSubmenu = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreNavigationSubmenu';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreNavigationSubmenu Block Type */
@@ -5334,8 +5707,10 @@ export type CoreNavigationSubmenu = EditorBlock & {
 };
 
 /** Attributes of the CoreNavigationSubmenu Block Type */
-export type CoreNavigationSubmenuAttributes = {
+export type CoreNavigationSubmenuAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreNavigationSubmenuAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;description&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
@@ -5346,6 +5721,8 @@ export type CoreNavigationSubmenuAttributes = {
   fontSize?: Maybe<Scalars['String']['output']>;
   /** The &quot;id&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
   id?: Maybe<Scalars['Float']['output']>;
+  /** The &quot;isParentSubmenu&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
+  isParentSubmenu: Scalars['Boolean']['output'];
   /** The &quot;isTopLevelItem&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
   isTopLevelItem?: Maybe<Scalars['Boolean']['output']>;
   /** The &quot;kind&quot; field on the &quot;CoreNavigationSubmenuAttributes&quot; block or block attributes */
@@ -5407,8 +5784,10 @@ export type CoreNextpageAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePageList = EditorBlock & {
+export type CorePageList = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePageList';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePageList Block Type */
@@ -5434,8 +5813,10 @@ export type CorePageList = EditorBlock & {
 };
 
 /** Attributes of the CorePageList Block Type */
-export type CorePageListAttributes = {
+export type CorePageListAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePageListAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
@@ -5448,8 +5829,6 @@ export type CorePageListAttributes = {
   fontSize?: Maybe<Scalars['String']['output']>;
   /** The &quot;gradient&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
   gradient?: Maybe<Scalars['String']['output']>;
-  /** The &quot;isNested&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
-  isNested: Scalars['Boolean']['output'];
   /** The &quot;lock&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CorePageListAttributes&quot; block or block attributes */
@@ -5463,8 +5842,10 @@ export type CorePageListAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePageListItem = EditorBlock & {
+export type CorePageListItem = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePageListItem';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePageListItem Block Type */
@@ -5490,8 +5871,10 @@ export type CorePageListItem = EditorBlock & {
 };
 
 /** Attributes of the CorePageListItem Block Type */
-export type CorePageListItemAttributes = {
+export type CorePageListItemAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePageListItemAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePageListItemAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CorePageListItemAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;hasChildren&quot; field on the &quot;CorePageListItemAttributes&quot; block or block attributes */
@@ -5506,6 +5889,8 @@ export type CorePageListItemAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CorePageListItemAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CorePageListItemAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;title&quot; field on the &quot;CorePageListItemAttributes&quot; block or block attributes */
   title?: Maybe<Scalars['String']['output']>;
 };
@@ -5544,7 +5929,7 @@ export type CoreParagraphAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreParagraphAttributes';
   /** The &quot;align&quot; field on the &quot;CoreParagraphAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreParagraphAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreParagraphAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -5616,11 +6001,159 @@ export type CorePatternAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;slug&quot; field on the &quot;CorePatternAttributes&quot; block or block attributes */
   slug?: Maybe<Scalars['String']['output']>;
+  /** The &quot;style&quot; field on the &quot;CorePatternAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostAuthor = EditorBlock & {
+export type CorePlaylist = BlockWithSupportsAnchor & EditorBlock & {
+  __typename?: 'CorePlaylist';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CorePlaylist Block Type */
+  attributes?: Maybe<CorePlaylistAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CorePlaylist Block Type */
+export type CorePlaylistAttributes = BlockWithSupportsAnchor & {
+  __typename?: 'CorePlaylistAttributes';
+  /** The &quot;align&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;borderColor&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  borderColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;caption&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  caption?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;gradient&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  gradient?: Maybe<Scalars['String']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;order&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  order: Scalars['String']['output'];
+  /** The &quot;showArtists&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  showArtists: Scalars['Boolean']['output'];
+  /** The &quot;showImages&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  showImages: Scalars['Boolean']['output'];
+  /** The &quot;showNumbers&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  showNumbers: Scalars['Boolean']['output'];
+  /** The &quot;showPlayButtonArtwork&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  showPlayButtonArtwork: Scalars['Boolean']['output'];
+  /** The &quot;showTrackLength&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  showTrackLength: Scalars['Boolean']['output'];
+  /** The &quot;showTracklist&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  showTracklist: Scalars['Boolean']['output'];
+  /** The &quot;style&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;type&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  type: Scalars['String']['output'];
+  /** The &quot;waveformBackgroundColor&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  waveformBackgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;waveformBackgroundGradient&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  waveformBackgroundGradient?: Maybe<Scalars['String']['output']>;
+  /** The &quot;waveformColor&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  waveformColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;waveformGradient&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  waveformGradient?: Maybe<Scalars['String']['output']>;
+  /** The &quot;waveformStyle&quot; field on the &quot;CorePlaylistAttributes&quot; block or block attributes */
+  waveformStyle: Scalars['String']['output'];
+};
+
+/** A block used for editing the site */
+export type CorePlaylistTrack = EditorBlock & {
+  __typename?: 'CorePlaylistTrack';
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CorePlaylistTrack Block Type */
+  attributes?: Maybe<CorePlaylistTrackAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CorePlaylistTrack Block Type */
+export type CorePlaylistTrackAttributes = {
+  __typename?: 'CorePlaylistTrackAttributes';
+  /** The &quot;album&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  album?: Maybe<Scalars['String']['output']>;
+  /** The &quot;artist&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  artist?: Maybe<Scalars['String']['output']>;
+  /** The &quot;blob&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  blob?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;id&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  id?: Maybe<Scalars['Float']['output']>;
+  /** The &quot;image&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  image?: Maybe<Scalars['String']['output']>;
+  /** The &quot;imageAlt&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  imageAlt?: Maybe<Scalars['String']['output']>;
+  /** The &quot;length&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  length?: Maybe<Scalars['String']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;src&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  src?: Maybe<Scalars['String']['output']>;
+  /** The &quot;style&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;title&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  title?: Maybe<Scalars['String']['output']>;
+  /** The &quot;type&quot; field on the &quot;CorePlaylistTrackAttributes&quot; block or block attributes */
+  type: Scalars['String']['output'];
+};
+
+/** A block used for editing the site */
+export type CorePostAuthor = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostAuthor';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostAuthor Block Type */
@@ -5646,8 +6179,10 @@ export type CorePostAuthor = EditorBlock & {
 };
 
 /** Attributes of the CorePostAuthor Block Type */
-export type CorePostAuthorAttributes = {
+export type CorePostAuthorAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostAuthorAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostAuthorAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;avatarSize&quot; field on the &quot;CorePostAuthorAttributes&quot; block or block attributes */
   avatarSize: Scalars['Float']['output'];
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostAuthorAttributes&quot; block or block attributes */
@@ -5685,8 +6220,10 @@ export type CorePostAuthorAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePostAuthorBiography = EditorBlock & {
+export type CorePostAuthorBiography = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostAuthorBiography';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostAuthorBiography Block Type */
@@ -5712,8 +6249,10 @@ export type CorePostAuthorBiography = EditorBlock & {
 };
 
 /** Attributes of the CorePostAuthorBiography Block Type */
-export type CorePostAuthorBiographyAttributes = {
+export type CorePostAuthorBiographyAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostAuthorBiographyAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostAuthorBiographyAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostAuthorBiographyAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostAuthorBiographyAttributes&quot; block or block attributes */
@@ -5732,15 +6271,15 @@ export type CorePostAuthorBiographyAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostAuthorBiographyAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostAuthorBiographyAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostAuthorBiographyAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostAuthorName = EditorBlock & {
+export type CorePostAuthorName = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostAuthorName';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostAuthorName Block Type */
@@ -5766,8 +6305,10 @@ export type CorePostAuthorName = EditorBlock & {
 };
 
 /** Attributes of the CorePostAuthorName Block Type */
-export type CorePostAuthorNameAttributes = {
+export type CorePostAuthorNameAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostAuthorNameAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostAuthorNameAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostAuthorNameAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostAuthorNameAttributes&quot; block or block attributes */
@@ -5790,8 +6331,6 @@ export type CorePostAuthorNameAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostAuthorNameAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostAuthorNameAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostAuthorNameAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
@@ -5849,8 +6388,10 @@ export type CorePostCommentsAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePostCommentsCount = EditorBlock & {
+export type CorePostCommentsCount = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostCommentsCount';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostCommentsCount Block Type */
@@ -5876,8 +6417,10 @@ export type CorePostCommentsCount = EditorBlock & {
 };
 
 /** Attributes of the CorePostCommentsCount Block Type */
-export type CorePostCommentsCountAttributes = {
+export type CorePostCommentsCountAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostCommentsCountAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostCommentsCountAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostCommentsCountAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostCommentsCountAttributes&quot; block or block attributes */
@@ -5896,15 +6439,15 @@ export type CorePostCommentsCountAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostCommentsCountAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostCommentsCountAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostCommentsCountAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostCommentsForm = EditorBlock & {
+export type CorePostCommentsForm = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostCommentsForm';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostCommentsForm Block Type */
@@ -5930,8 +6473,10 @@ export type CorePostCommentsForm = EditorBlock & {
 };
 
 /** Attributes of the CorePostCommentsForm Block Type */
-export type CorePostCommentsFormAttributes = {
+export type CorePostCommentsFormAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostCommentsFormAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostCommentsFormAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostCommentsFormAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostCommentsFormAttributes&quot; block or block attributes */
@@ -5948,15 +6493,15 @@ export type CorePostCommentsFormAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostCommentsFormAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostCommentsFormAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostCommentsFormAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostCommentsLink = EditorBlock & {
+export type CorePostCommentsLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostCommentsLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostCommentsLink Block Type */
@@ -5982,8 +6527,10 @@ export type CorePostCommentsLink = EditorBlock & {
 };
 
 /** Attributes of the CorePostCommentsLink Block Type */
-export type CorePostCommentsLinkAttributes = {
+export type CorePostCommentsLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostCommentsLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostCommentsLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostCommentsLinkAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostCommentsLinkAttributes&quot; block or block attributes */
@@ -6000,13 +6547,13 @@ export type CorePostCommentsLinkAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostCommentsLinkAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostCommentsLinkAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostContent = EditorBlock & {
+export type CorePostContent = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostContent';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostContent Block Type */
@@ -6032,10 +6579,12 @@ export type CorePostContent = EditorBlock & {
 };
 
 /** Attributes of the CorePostContent Block Type */
-export type CorePostContentAttributes = {
+export type CorePostContentAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostContentAttributes';
   /** The &quot;align&quot; field on the &quot;CorePostContentAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CorePostContentAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostContentAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostContentAttributes&quot; block or block attributes */
@@ -6063,8 +6612,10 @@ export type CorePostContentAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePostDate = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CorePostDate = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CorePostDate';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostDate Block Type */
@@ -6090,8 +6641,10 @@ export type CorePostDate = EditorBlock & NhtblProjectEditorBlock & PageEditorBlo
 };
 
 /** Attributes of the CorePostDate Block Type */
-export type CorePostDateAttributes = {
+export type CorePostDateAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostDateAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostDateAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostDateAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostDateAttributes&quot; block or block attributes */
@@ -6116,15 +6669,15 @@ export type CorePostDateAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostDateAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostDateAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostDateAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostExcerpt = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CorePostExcerpt = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CorePostExcerpt';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostExcerpt Block Type */
@@ -6150,8 +6703,10 @@ export type CorePostExcerpt = EditorBlock & NhtblProjectEditorBlock & PageEditor
 };
 
 /** Attributes of the CorePostExcerpt Block Type */
-export type CorePostExcerptAttributes = {
+export type CorePostExcerptAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostExcerptAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostExcerptAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostExcerptAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostExcerptAttributes&quot; block or block attributes */
@@ -6176,15 +6731,15 @@ export type CorePostExcerptAttributes = {
   showMoreOnNewLine: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CorePostExcerptAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostExcerptAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostExcerptAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostFeaturedImage = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CorePostFeaturedImage = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CorePostFeaturedImage';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostFeaturedImage Block Type */
@@ -6210,10 +6765,12 @@ export type CorePostFeaturedImage = EditorBlock & NhtblProjectEditorBlock & Page
 };
 
 /** Attributes of the CorePostFeaturedImage Block Type */
-export type CorePostFeaturedImageAttributes = {
+export type CorePostFeaturedImageAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostFeaturedImageAttributes';
   /** The &quot;align&quot; field on the &quot;CorePostFeaturedImageAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CorePostFeaturedImageAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;aspectRatio&quot; field on the &quot;CorePostFeaturedImageAttributes&quot; block or block attributes */
   aspectRatio?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostFeaturedImageAttributes&quot; block or block attributes */
@@ -6255,8 +6812,10 @@ export type CorePostFeaturedImageAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePostNavigationLink = EditorBlock & {
+export type CorePostNavigationLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostNavigationLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostNavigationLink Block Type */
@@ -6282,8 +6841,10 @@ export type CorePostNavigationLink = EditorBlock & {
 };
 
 /** Attributes of the CorePostNavigationLink Block Type */
-export type CorePostNavigationLinkAttributes = {
+export type CorePostNavigationLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostNavigationLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;arrow&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
   arrow: Scalars['String']['output'];
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
@@ -6308,8 +6869,6 @@ export type CorePostNavigationLinkAttributes = {
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;taxonomy&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
   taxonomy: Scalars['String']['output'];
-  /** The &quot;textAlign&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;type&quot; field on the &quot;CorePostNavigationLinkAttributes&quot; block or block attributes */
@@ -6317,8 +6876,10 @@ export type CorePostNavigationLinkAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePostTemplate = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CorePostTemplate = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CorePostTemplate';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostTemplate Block Type */
@@ -6344,10 +6905,12 @@ export type CorePostTemplate = EditorBlock & NhtblProjectEditorBlock & PageEdito
 };
 
 /** Attributes of the CorePostTemplate Block Type */
-export type CorePostTemplateAttributes = {
+export type CorePostTemplateAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostTemplateAttributes';
   /** The &quot;align&quot; field on the &quot;CorePostTemplateAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CorePostTemplateAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostTemplateAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostTemplateAttributes&quot; block or block attributes */
@@ -6373,8 +6936,10 @@ export type CorePostTemplateAttributes = {
 };
 
 /** A block used for editing the site */
-export type CorePostTerms = EditorBlock & {
+export type CorePostTerms = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostTerms';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostTerms Block Type */
@@ -6417,8 +6982,10 @@ export type CorePostTermsTermsArgs = {
 };
 
 /** Attributes of the CorePostTerms Block Type */
-export type CorePostTermsAttributes = {
+export type CorePostTermsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostTermsAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostTermsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostTermsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostTermsAttributes&quot; block or block attributes */
@@ -6445,8 +7012,6 @@ export type CorePostTermsAttributes = {
   suffix: Scalars['String']['output'];
   /** The &quot;term&quot; field on the &quot;CorePostTermsAttributes&quot; block or block attributes */
   term?: Maybe<Scalars['String']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostTermsAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostTermsAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
@@ -6496,8 +7061,10 @@ export type CorePostTermsToTermNodeConnectionPageInfo = PageInfo & TermNodeConne
 };
 
 /** A block used for editing the site */
-export type CorePostTimeToRead = EditorBlock & {
+export type CorePostTimeToRead = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CorePostTimeToRead';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostTimeToRead Block Type */
@@ -6523,8 +7090,10 @@ export type CorePostTimeToRead = EditorBlock & {
 };
 
 /** Attributes of the CorePostTimeToRead Block Type */
-export type CorePostTimeToReadAttributes = {
+export type CorePostTimeToReadAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostTimeToReadAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CorePostTimeToReadAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;averageReadingSpeed&quot; field on the &quot;CorePostTimeToReadAttributes&quot; block or block attributes */
   averageReadingSpeed: Scalars['Float']['output'];
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostTimeToReadAttributes&quot; block or block attributes */
@@ -6549,15 +7118,15 @@ export type CorePostTimeToReadAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePostTimeToReadAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostTimeToReadAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostTimeToReadAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CorePostTitle = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CorePostTitle = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CorePostTitle';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CorePostTitle Block Type */
@@ -6583,10 +7152,12 @@ export type CorePostTitle = EditorBlock & NhtblProjectEditorBlock & PageEditorBl
 };
 
 /** Attributes of the CorePostTitle Block Type */
-export type CorePostTitleAttributes = {
+export type CorePostTitleAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePostTitleAttributes';
   /** The &quot;align&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
@@ -6611,12 +7182,12 @@ export type CorePostTitleAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;placeholder&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
+  placeholder?: Maybe<Scalars['String']['output']>;
   /** The &quot;rel&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
   rel: Scalars['String']['output'];
   /** The &quot;style&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePostTitleAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
@@ -6653,7 +7224,7 @@ export type CorePreformatted = BlockWithSupportsAnchor & EditorBlock & {
 /** Attributes of the CorePreformatted Block Type */
 export type CorePreformattedAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePreformattedAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CorePreformattedAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePreformattedAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6713,7 +7284,7 @@ export type CorePullquoteAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CorePullquoteAttributes';
   /** The &quot;align&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6735,8 +7306,6 @@ export type CorePullquoteAttributes = BlockWithSupportsAnchor & {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;value&quot; field on the &quot;CorePullquoteAttributes&quot; block or block attributes */
@@ -6744,8 +7313,10 @@ export type CorePullquoteAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreQuery = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreQuery = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreQuery';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQuery Block Type */
@@ -6773,10 +7344,12 @@ export type CoreQuery = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock 
 };
 
 /** Attributes of the CoreQuery Block Type */
-export type CoreQueryAttributes = {
+export type CoreQueryAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryAttributes';
   /** The &quot;align&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;enhancedPagination&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
@@ -6793,13 +7366,17 @@ export type CoreQueryAttributes = {
   query: Scalars['BlockAttributesObject']['output'];
   /** The &quot;queryId&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
   queryId?: Maybe<Scalars['Float']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;tagName&quot; field on the &quot;CoreQueryAttributes&quot; block or block attributes */
   tagName: Scalars['String']['output'];
 };
 
 /** A block used for editing the site */
-export type CoreQueryNoResults = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreQueryNoResults = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreQueryNoResults';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryNoResults Block Type */
@@ -6825,10 +7402,12 @@ export type CoreQueryNoResults = EditorBlock & NhtblProjectEditorBlock & PageEdi
 };
 
 /** Attributes of the CoreQueryNoResults Block Type */
-export type CoreQueryNoResultsAttributes = {
+export type CoreQueryNoResultsAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryNoResultsAttributes';
   /** The &quot;align&quot; field on the &quot;CoreQueryNoResultsAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryNoResultsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryNoResultsAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreQueryNoResultsAttributes&quot; block or block attributes */
@@ -6850,8 +7429,10 @@ export type CoreQueryNoResultsAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreQueryPagination = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreQueryPagination = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreQueryPagination';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryPagination Block Type */
@@ -6877,10 +7458,12 @@ export type CoreQueryPagination = EditorBlock & NhtblProjectEditorBlock & PageEd
 };
 
 /** Attributes of the CoreQueryPagination Block Type */
-export type CoreQueryPaginationAttributes = {
+export type CoreQueryPaginationAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryPaginationAttributes';
   /** The &quot;align&quot; field on the &quot;CoreQueryPaginationAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryPaginationAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryPaginationAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreQueryPaginationAttributes&quot; block or block attributes */
@@ -6908,8 +7491,10 @@ export type CoreQueryPaginationAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreQueryPaginationNext = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreQueryPaginationNext = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreQueryPaginationNext';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryPaginationNext Block Type */
@@ -6935,8 +7520,10 @@ export type CoreQueryPaginationNext = EditorBlock & NhtblProjectEditorBlock & Pa
 };
 
 /** Attributes of the CoreQueryPaginationNext Block Type */
-export type CoreQueryPaginationNextAttributes = {
+export type CoreQueryPaginationNextAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryPaginationNextAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryPaginationNextAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryPaginationNextAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreQueryPaginationNextAttributes&quot; block or block attributes */
@@ -6958,8 +7545,10 @@ export type CoreQueryPaginationNextAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreQueryPaginationNumbers = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreQueryPaginationNumbers = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreQueryPaginationNumbers';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryPaginationNumbers Block Type */
@@ -6985,8 +7574,10 @@ export type CoreQueryPaginationNumbers = EditorBlock & NhtblProjectEditorBlock &
 };
 
 /** Attributes of the CoreQueryPaginationNumbers Block Type */
-export type CoreQueryPaginationNumbersAttributes = {
+export type CoreQueryPaginationNumbersAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryPaginationNumbersAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryPaginationNumbersAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryPaginationNumbersAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreQueryPaginationNumbersAttributes&quot; block or block attributes */
@@ -7008,8 +7599,10 @@ export type CoreQueryPaginationNumbersAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreQueryPaginationPrevious = EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
+export type CoreQueryPaginationPrevious = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEditorBlock & PageEditorBlock & PostEditorBlock & {
   __typename?: 'CoreQueryPaginationPrevious';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryPaginationPrevious Block Type */
@@ -7035,8 +7628,10 @@ export type CoreQueryPaginationPrevious = EditorBlock & NhtblProjectEditorBlock 
 };
 
 /** Attributes of the CoreQueryPaginationPrevious Block Type */
-export type CoreQueryPaginationPreviousAttributes = {
+export type CoreQueryPaginationPreviousAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryPaginationPreviousAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryPaginationPreviousAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryPaginationPreviousAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreQueryPaginationPreviousAttributes&quot; block or block attributes */
@@ -7058,8 +7653,10 @@ export type CoreQueryPaginationPreviousAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreQueryTitle = EditorBlock & {
+export type CoreQueryTitle = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreQueryTitle';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryTitle Block Type */
@@ -7085,10 +7682,12 @@ export type CoreQueryTitle = EditorBlock & {
 };
 
 /** Attributes of the CoreQueryTitle Block Type */
-export type CoreQueryTitleAttributes = {
+export type CoreQueryTitleAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryTitleAttributes';
   /** The &quot;align&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
@@ -7115,8 +7714,6 @@ export type CoreQueryTitleAttributes = {
   showSearchTerm: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;type&quot; field on the &quot;CoreQueryTitleAttributes&quot; block or block attributes */
@@ -7124,8 +7721,10 @@ export type CoreQueryTitleAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreQueryTotal = EditorBlock & {
+export type CoreQueryTotal = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreQueryTotal';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreQueryTotal Block Type */
@@ -7151,10 +7750,12 @@ export type CoreQueryTotal = EditorBlock & {
 };
 
 /** Attributes of the CoreQueryTotal Block Type */
-export type CoreQueryTotalAttributes = {
+export type CoreQueryTotalAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQueryTotalAttributes';
   /** The &quot;align&quot; field on the &quot;CoreQueryTotalAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreQueryTotalAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQueryTotalAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreQueryTotalAttributes&quot; block or block attributes */
@@ -7213,7 +7814,7 @@ export type CoreQuoteAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreQuoteAttributes';
   /** The &quot;align&quot; field on the &quot;CoreQuoteAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreQuoteAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreQuoteAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -7248,8 +7849,10 @@ export type CoreQuoteAttributes = BlockWithSupportsAnchor & {
 };
 
 /** A block used for editing the site */
-export type CoreReadMore = EditorBlock & {
+export type CoreReadMore = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreReadMore';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreReadMore Block Type */
@@ -7275,8 +7878,10 @@ export type CoreReadMore = EditorBlock & {
 };
 
 /** Attributes of the CoreReadMore Block Type */
-export type CoreReadMoreAttributes = {
+export type CoreReadMoreAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreReadMoreAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreReadMoreAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreReadMoreAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreReadMoreAttributes&quot; block or block attributes */
@@ -7304,8 +7909,10 @@ export type CoreReadMoreAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreRss = EditorBlock & {
+export type CoreRss = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreRss';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreRss Block Type */
@@ -7331,10 +7938,12 @@ export type CoreRss = EditorBlock & {
 };
 
 /** Attributes of the CoreRss Block Type */
-export type CoreRssAttributes = {
+export type CoreRssAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreRssAttributes';
   /** The &quot;align&quot; field on the &quot;CoreRssAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreRssAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreRssAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;blockLayout&quot; field on the &quot;CoreRssAttributes&quot; block or block attributes */
@@ -7374,8 +7983,10 @@ export type CoreRssAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreSearch = EditorBlock & {
+export type CoreSearch = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreSearch';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreSearch Block Type */
@@ -7401,10 +8012,12 @@ export type CoreSearch = EditorBlock & {
 };
 
 /** Attributes of the CoreSearch Block Type */
-export type CoreSearchAttributes = {
+export type CoreSearchAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSearchAttributes';
   /** The &quot;align&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
@@ -7423,8 +8036,6 @@ export type CoreSearchAttributes = {
   fontSize?: Maybe<Scalars['String']['output']>;
   /** The &quot;gradient&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
   gradient?: Maybe<Scalars['String']['output']>;
-  /** The &quot;isSearchFieldHidden&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
-  isSearchFieldHidden: Scalars['Boolean']['output'];
   /** The &quot;label&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
   label?: Maybe<Scalars['String']['output']>;
   /** The &quot;lock&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
@@ -7439,6 +8050,8 @@ export type CoreSearchAttributes = {
   showLabel: Scalars['Boolean']['output'];
   /** The &quot;style&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;tagName&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
+  tagName: Scalars['String']['output'];
   /** The &quot;textColor&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;width&quot; field on the &quot;CoreSearchAttributes&quot; block or block attributes */
@@ -7481,7 +8094,7 @@ export type CoreSeparatorAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSeparatorAttributes';
   /** The &quot;align&quot; field on the &quot;CoreSeparatorAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreSeparatorAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreSeparatorAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -7542,8 +8155,10 @@ export type CoreShortcodeAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreSiteLogo = EditorBlock & {
+export type CoreSiteLogo = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreSiteLogo';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreSiteLogo Block Type */
@@ -7569,10 +8184,12 @@ export type CoreSiteLogo = EditorBlock & {
 };
 
 /** Attributes of the CoreSiteLogo Block Type */
-export type CoreSiteLogoAttributes = {
+export type CoreSiteLogoAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSiteLogoAttributes';
   /** The &quot;align&quot; field on the &quot;CoreSiteLogoAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreSiteLogoAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreSiteLogoAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;isLink&quot; field on the &quot;CoreSiteLogoAttributes&quot; block or block attributes */
@@ -7592,8 +8209,10 @@ export type CoreSiteLogoAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreSiteTagline = EditorBlock & {
+export type CoreSiteTagline = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreSiteTagline';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreSiteTagline Block Type */
@@ -7619,10 +8238,12 @@ export type CoreSiteTagline = EditorBlock & {
 };
 
 /** Attributes of the CoreSiteTagline Block Type */
-export type CoreSiteTaglineAttributes = {
+export type CoreSiteTaglineAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSiteTaglineAttributes';
   /** The &quot;align&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
@@ -7645,15 +8266,15 @@ export type CoreSiteTaglineAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreSiteTaglineAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreSiteTitle = EditorBlock & {
+export type CoreSiteTitle = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreSiteTitle';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreSiteTitle Block Type */
@@ -7679,10 +8300,12 @@ export type CoreSiteTitle = EditorBlock & {
 };
 
 /** Attributes of the CoreSiteTitle Block Type */
-export type CoreSiteTitleAttributes = {
+export type CoreSiteTitleAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSiteTitleAttributes';
   /** The &quot;align&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
@@ -7709,15 +8332,15 @@ export type CoreSiteTitleAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreSiteTitleAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreSocialLink = EditorBlock & {
+export type CoreSocialLink = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreSocialLink';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreSocialLink Block Type */
@@ -7743,8 +8366,10 @@ export type CoreSocialLink = EditorBlock & {
 };
 
 /** Attributes of the CoreSocialLink Block Type */
-export type CoreSocialLinkAttributes = {
+export type CoreSocialLinkAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSocialLinkAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreSocialLinkAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreSocialLinkAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;label&quot; field on the &quot;CoreSocialLinkAttributes&quot; block or block attributes */
@@ -7757,6 +8382,8 @@ export type CoreSocialLinkAttributes = {
   rel?: Maybe<Scalars['String']['output']>;
   /** The &quot;service&quot; field on the &quot;CoreSocialLinkAttributes&quot; block or block attributes */
   service?: Maybe<Scalars['String']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreSocialLinkAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;url&quot; field on the &quot;CoreSocialLinkAttributes&quot; block or block attributes */
   url?: Maybe<Scalars['String']['output']>;
 };
@@ -7795,7 +8422,7 @@ export type CoreSocialLinksAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSocialLinksAttributes';
   /** The &quot;align&quot; field on the &quot;CoreSocialLinksAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreSocialLinksAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreSocialLinksAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -7865,7 +8492,7 @@ export type CoreSpacer = BlockWithSupportsAnchor & EditorBlock & NhtblProjectEdi
 /** Attributes of the CoreSpacer Block Type */
 export type CoreSpacerAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreSpacerAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreSpacerAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreSpacerAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
@@ -7879,6 +8506,175 @@ export type CoreSpacerAttributes = BlockWithSupportsAnchor & {
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;width&quot; field on the &quot;CoreSpacerAttributes&quot; block or block attributes */
   width?: Maybe<Scalars['String']['output']>;
+};
+
+/** A block used for editing the site */
+export type CoreTabList = EditorBlock & {
+  __typename?: 'CoreTabList';
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreTabList Block Type */
+  attributes?: Maybe<CoreTabListAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreTabList Block Type */
+export type CoreTabListAttributes = {
+  __typename?: 'CoreTabListAttributes';
+  /** The &quot;ariaLabel&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  ariaLabel?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;borderColor&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  borderColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontFamily&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;layout&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;tabs&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  tabs: Array<Maybe<CoreTabListAttributesTabs>>;
+  /** The &quot;textColor&quot; field on the &quot;CoreTabListAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+/** The &quot;CoreTabListAttributesTabs&quot; field on the &quot;CoreTabListAttributes&quot; block attribute field */
+export type CoreTabListAttributesTabs = {
+  __typename?: 'CoreTabListAttributesTabs';
+  /** The &quot;label&quot; field on the &quot;CoreTabListAttributesTabs&quot; block attribute field */
+  label?: Maybe<Scalars['String']['output']>;
+};
+
+/** A block used for editing the site */
+export type CoreTabPanel = BlockWithSupportsAnchor & EditorBlock & {
+  __typename?: 'CoreTabPanel';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreTabPanel Block Type */
+  attributes?: Maybe<CoreTabPanelAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreTabPanel Block Type */
+export type CoreTabPanelAttributes = BlockWithSupportsAnchor & {
+  __typename?: 'CoreTabPanelAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontFamily&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;label&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  label: Scalars['String']['output'];
+  /** The &quot;layout&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreTabPanelAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+/** A block used for editing the site */
+export type CoreTabPanels = EditorBlock & {
+  __typename?: 'CoreTabPanels';
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreTabPanels Block Type */
+  attributes?: Maybe<CoreTabPanelsAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreTabPanels Block Type */
+export type CoreTabPanelsAttributes = {
+  __typename?: 'CoreTabPanelsAttributes';
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;borderColor&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  borderColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontFamily&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreTabPanelsAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
@@ -7915,7 +8711,7 @@ export type CoreTableAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTableAttributes';
   /** The &quot;align&quot; field on the &quot;CoreTableAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreTableAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreTableAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -8022,8 +8818,70 @@ export type CoreTableAttributesHeadCells = {
 };
 
 /** A block used for editing the site */
-export type CoreTagCloud = EditorBlock & {
+export type CoreTabs = BlockWithSupportsAnchor & EditorBlock & {
+  __typename?: 'CoreTabs';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The API version of the Gutenberg Block */
+  apiVersion?: Maybe<Scalars['Int']['output']>;
+  /** Attributes of the CoreTabs Block Type */
+  attributes?: Maybe<CoreTabsAttributes>;
+  /** The name of the category the Block belongs to */
+  blockEditorCategoryName?: Maybe<Scalars['String']['output']>;
+  /** The id of the Block */
+  clientId?: Maybe<Scalars['String']['output']>;
+  /** CSS Classnames to apply to the block */
+  cssClassNames?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** The inner blocks of the Block */
+  innerBlocks?: Maybe<Array<Maybe<EditorBlock>>>;
+  /** Whether the block is Dynamic (server rendered) */
+  isDynamic: Scalars['Boolean']['output'];
+  /** The name of the block */
+  name?: Maybe<Scalars['String']['output']>;
+  /** The parent id of the Block */
+  parentClientId?: Maybe<Scalars['String']['output']>;
+  /** The rendered HTML for the block */
+  renderedHtml?: Maybe<Scalars['String']['output']>;
+  /** The (GraphQL) type of the block */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** Attributes of the CoreTabs Block Type */
+export type CoreTabsAttributes = BlockWithSupportsAnchor & {
+  __typename?: 'CoreTabsAttributes';
+  /** The &quot;activeTabIndex&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  activeTabIndex: Scalars['Float']['output'];
+  /** The &quot;align&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;backgroundColor&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  /** The &quot;className&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  className?: Maybe<Scalars['String']['output']>;
+  /** The &quot;editorActiveTabIndex&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  editorActiveTabIndex?: Maybe<Scalars['Float']['output']>;
+  /** The &quot;fontFamily&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  /** The &quot;fontSize&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  fontSize?: Maybe<Scalars['String']['output']>;
+  /** The &quot;layout&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;lock&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;metadata&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;textColor&quot; field on the &quot;CoreTabsAttributes&quot; block or block attributes */
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+/** A block used for editing the site */
+export type CoreTagCloud = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreTagCloud';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreTagCloud Block Type */
@@ -8049,10 +8907,12 @@ export type CoreTagCloud = EditorBlock & {
 };
 
 /** Attributes of the CoreTagCloud Block Type */
-export type CoreTagCloudAttributes = {
+export type CoreTagCloudAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTagCloudAttributes';
   /** The &quot;align&quot; field on the &quot;CoreTagCloudAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreTagCloudAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreTagCloudAttributes&quot; block or block attributes */
   borderColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreTagCloudAttributes&quot; block or block attributes */
@@ -8119,6 +8979,8 @@ export type CoreTemplatePartAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;slug&quot; field on the &quot;CoreTemplatePartAttributes&quot; block or block attributes */
   slug?: Maybe<Scalars['String']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTemplatePartAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;tagName&quot; field on the &quot;CoreTemplatePartAttributes&quot; block or block attributes */
   tagName?: Maybe<Scalars['String']['output']>;
   /** The &quot;theme&quot; field on the &quot;CoreTemplatePartAttributes&quot; block or block attributes */
@@ -8126,8 +8988,10 @@ export type CoreTemplatePartAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreTermCount = EditorBlock & {
+export type CoreTermCount = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreTermCount';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreTermCount Block Type */
@@ -8153,8 +9017,10 @@ export type CoreTermCount = EditorBlock & {
 };
 
 /** Attributes of the CoreTermCount Block Type */
-export type CoreTermCountAttributes = {
+export type CoreTermCountAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTermCountAttributes';
+  /** The &quot;anchor&quot; field on the &quot;CoreTermCountAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreTermCountAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreTermCountAttributes&quot; block or block attributes */
@@ -8180,8 +9046,10 @@ export type CoreTermCountAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreTermDescription = EditorBlock & {
+export type CoreTermDescription = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreTermDescription';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreTermDescription Block Type */
@@ -8207,10 +9075,12 @@ export type CoreTermDescription = EditorBlock & {
 };
 
 /** Attributes of the CoreTermDescription Block Type */
-export type CoreTermDescriptionAttributes = {
+export type CoreTermDescriptionAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTermDescriptionAttributes';
   /** The &quot;align&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
@@ -8227,15 +9097,15 @@ export type CoreTermDescriptionAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreTermDescriptionAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreTermName = EditorBlock & {
+export type CoreTermName = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreTermName';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreTermName Block Type */
@@ -8261,10 +9131,12 @@ export type CoreTermName = EditorBlock & {
 };
 
 /** Attributes of the CoreTermName Block Type */
-export type CoreTermNameAttributes = {
+export type CoreTermNameAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTermNameAttributes';
   /** The &quot;align&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
@@ -8281,21 +9153,23 @@ export type CoreTermNameAttributes = {
   isLink: Scalars['Boolean']['output'];
   /** The &quot;level&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   level: Scalars['Float']['output'];
+  /** The &quot;levelOptions&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
+  levelOptions?: Maybe<Scalars['BlockAttributesArray']['output']>;
   /** The &quot;lock&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreTermNameAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** A block used for editing the site */
-export type CoreTermTemplate = EditorBlock & {
+export type CoreTermTemplate = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreTermTemplate';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreTermTemplate Block Type */
@@ -8321,10 +9195,12 @@ export type CoreTermTemplate = EditorBlock & {
 };
 
 /** Attributes of the CoreTermTemplate Block Type */
-export type CoreTermTemplateAttributes = {
+export type CoreTermTemplateAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTermTemplateAttributes';
   /** The &quot;align&quot; field on the &quot;CoreTermTemplateAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreTermTemplateAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreTermTemplateAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;borderColor&quot; field on the &quot;CoreTermTemplateAttributes&quot; block or block attributes */
@@ -8350,8 +9226,10 @@ export type CoreTermTemplateAttributes = {
 };
 
 /** A block used for editing the site */
-export type CoreTermsQuery = EditorBlock & {
+export type CoreTermsQuery = BlockWithSupportsAnchor & EditorBlock & {
   __typename?: 'CoreTermsQuery';
+  /** The anchor field for the block. */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The API version of the Gutenberg Block */
   apiVersion?: Maybe<Scalars['Int']['output']>;
   /** Attributes of the CoreTermsQuery Block Type */
@@ -8377,10 +9255,12 @@ export type CoreTermsQuery = EditorBlock & {
 };
 
 /** Attributes of the CoreTermsQuery Block Type */
-export type CoreTermsQueryAttributes = {
+export type CoreTermsQueryAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreTermsQueryAttributes';
   /** The &quot;align&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
+  /** The &quot;anchor&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
+  anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;className&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;layout&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
@@ -8389,6 +9269,8 @@ export type CoreTermsQueryAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;tagName&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
   tagName: Scalars['String']['output'];
   /** The &quot;termQuery&quot; field on the &quot;CoreTermsQueryAttributes&quot; block or block attributes */
@@ -8435,6 +9317,8 @@ export type CoreTextColumnsAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreTextColumnsAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreTextColumnsAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;width&quot; field on the &quot;CoreTextColumnsAttributes&quot; block or block attributes */
   width?: Maybe<Scalars['String']['output']>;
 };
@@ -8478,7 +9362,7 @@ export type CoreVerse = BlockWithSupportsAnchor & EditorBlock & {
 /** Attributes of the CoreVerse Block Type */
 export type CoreVerseAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreVerseAttributes';
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreVerseAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;backgroundColor&quot; field on the &quot;CoreVerseAttributes&quot; block or block attributes */
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -8500,8 +9384,6 @@ export type CoreVerseAttributes = BlockWithSupportsAnchor & {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;style&quot; field on the &quot;CoreVerseAttributes&quot; block or block attributes */
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
-  /** The &quot;textAlign&quot; field on the &quot;CoreVerseAttributes&quot; block or block attributes */
-  textAlign?: Maybe<Scalars['String']['output']>;
   /** The &quot;textColor&quot; field on the &quot;CoreVerseAttributes&quot; block or block attributes */
   textColor?: Maybe<Scalars['String']['output']>;
 };
@@ -8540,7 +9422,7 @@ export type CoreVideoAttributes = BlockWithSupportsAnchor & {
   __typename?: 'CoreVideoAttributes';
   /** The &quot;align&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
   align?: Maybe<Scalars['String']['output']>;
-  /** The anchor field for the block. */
+  /** The &quot;anchor&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
   anchor?: Maybe<Scalars['String']['output']>;
   /** The &quot;autoplay&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
   autoplay?: Maybe<Scalars['Boolean']['output']>;
@@ -8552,6 +9434,8 @@ export type CoreVideoAttributes = BlockWithSupportsAnchor & {
   className?: Maybe<Scalars['String']['output']>;
   /** The &quot;controls&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
   controls: Scalars['Boolean']['output'];
+  /** The &quot;height&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
+  height?: Maybe<Scalars['Float']['output']>;
   /** The &quot;id&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
   id?: Maybe<Scalars['Float']['output']>;
   /** The &quot;lock&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
@@ -8574,6 +9458,8 @@ export type CoreVideoAttributes = BlockWithSupportsAnchor & {
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;tracks&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
   tracks: Array<Maybe<Scalars['BlockAttributesObject']['output']>>;
+  /** The &quot;width&quot; field on the &quot;CoreVideoAttributes&quot; block or block attributes */
+  width?: Maybe<Scalars['Float']['output']>;
 };
 
 /** A block used for editing the site */
@@ -8612,6 +9498,8 @@ export type CoreWidgetGroupAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;CoreWidgetGroupAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;CoreWidgetGroupAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;title&quot; field on the &quot;CoreWidgetGroupAttributes&quot; block or block attributes */
   title?: Maybe<Scalars['String']['output']>;
 };
@@ -8645,6 +9533,11 @@ export type CreateCategoryPayload = {
 
 /** Input for the createComment mutation. */
 export type CreateCommentInput = {
+  /**
+   * The approval status of the comment.
+   * @deprecated Deprecated in favor of the status field
+   */
+  approved?: InputMaybe<Scalars['String']['input']>;
   /** The name of the comment's author. */
   author?: InputMaybe<Scalars['String']['input']>;
   /** The email of the comment's author. */
@@ -9066,8 +9959,14 @@ export type DatabaseIdentifier = {
 export type DateInput = {
   /** Day of the month (from 1 to 31) */
   day?: InputMaybe<Scalars['Int']['input']>;
+  /** Hour of the day (from 0 to 23) */
+  hour?: InputMaybe<Scalars['Int']['input']>;
+  /** Minute of the hour (from 0 to 59) */
+  minute?: InputMaybe<Scalars['Int']['input']>;
   /** Month number (from 1 to 12) */
   month?: InputMaybe<Scalars['Int']['input']>;
+  /** Second of the minute (from 0 to 59) */
+  second?: InputMaybe<Scalars['Int']['input']>;
   /** 4 digit year (e.g. 2017) */
   year?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -9383,12 +10282,14 @@ export type DeleteUserPayload = {
 };
 
 /** The discussion setting type */
-export type DiscussionSettings = {
+export type DiscussionSettings = Node & {
   __typename?: 'DiscussionSettings';
   /** Allow people to submit comments on new posts. */
   defaultCommentStatus?: Maybe<Scalars['String']['output']>;
   /** Allow link notifications from other blogs (pingbacks and trackbacks) on new articles. */
   defaultPingStatus?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
 };
 
 /** Represents a connection between two objects. Contains both the related object (node) and metadata about the relationship (cursor). */
@@ -9686,7 +10587,7 @@ export type Galerie_FieldsGalerieArgs = {
 };
 
 /** The general setting type */
-export type GeneralSettings = {
+export type GeneralSettings = Node & {
   __typename?: 'GeneralSettings';
   /** A date format for all date strings. */
   dateFormat?: Maybe<Scalars['String']['output']>;
@@ -9694,6 +10595,10 @@ export type GeneralSettings = {
   description?: Maybe<Scalars['String']['output']>;
   /** This address is used for admin purposes, like new user notification. */
   email?: Maybe<Scalars['String']['output']>;
+  /** The address at which visitors reach the site&#039;s front end. Can differ from the `url` field when the front end and the content management backend are served from different addresses, such as on headless or decoupled installs. */
+  homeUrl?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
   /** WordPress locale code. */
   language?: Maybe<Scalars['String']['output']>;
   /** The media item representing the site icon configured in site settings, used as the site&#039;s favicon and app icon. */
@@ -9753,7 +10658,7 @@ export type HierarchicalContentNode = {
   enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
   /** Connection between the ContentNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
@@ -9787,11 +10692,11 @@ export type HierarchicalContentNode = {
   parentId?: Maybe<Scalars['ID']['output']>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -9828,6 +10733,7 @@ export type HierarchicalContentNodeEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -9837,6 +10743,7 @@ export type HierarchicalContentNodeEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 /** Connection between the HierarchicalContentNode type and the ContentNode type */
@@ -9886,6 +10793,8 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -9910,6 +10819,8 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -9961,6 +10872,8 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -9985,6 +10898,8 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -10063,6 +10978,7 @@ export type HierarchicalTermNodeEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -10072,6 +10988,7 @@ export type HierarchicalTermNodeEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 /** The &quot;HomePageHero&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
@@ -10304,7 +11221,7 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   filePath?: Maybe<Scalars['String']['output']>;
   /** The filesize in bytes of the resource */
   fileSize?: Maybe<Scalars['Int']['output']>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** Whether the attachment object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -10331,7 +11248,7 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   /** Details about the mediaItem */
   mediaDetails?: Maybe<MediaDetails>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
    */
   mediaItemId: Scalars['Int']['output'];
@@ -10355,7 +11272,7 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   password?: Maybe<Scalars['String']['output']>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** Secondary dominant color of the image (hex format) */
   secondaryColor?: Maybe<Scalars['String']['output']>;
@@ -10363,7 +11280,7 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   seo?: Maybe<PostTypeSeo>;
   /** The sizes attribute value for an image. */
   sizes?: Maybe<Scalars['String']['output']>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** Url of the mediaItem */
   sourceUrl?: Maybe<Scalars['String']['output']>;
@@ -10428,6 +11345,7 @@ export type MediaItemEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -10437,6 +11355,7 @@ export type MediaItemEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -10679,6 +11598,11 @@ export type MediaItemToCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -10726,9 +11650,9 @@ export type Menu = DatabaseIdentifier & Node & {
   menuId?: Maybe<Scalars['Int']['output']>;
   /** Connection between the Menu type and the MenuItem type */
   menuItems?: Maybe<MenuToMenuItemConnection>;
-  /** Display name of the menu. Equivalent to WP_Term-&gt;name. */
+  /** Display name of the menu. */
   name?: Maybe<Scalars['String']['output']>;
-  /** The url friendly name of the menu. Equivalent to WP_Term-&gt;slug */
+  /** The url friendly name of the menu. */
   slug?: Maybe<Scalars['String']['output']>;
 };
 
@@ -11334,7 +12258,7 @@ export type Nhtbl_Client = DatabaseIdentifier & HierarchicalNode & HierarchicalT
   /** Connection between the Nhtbl_client type and the nhtbl_project type */
   nhtblProjects?: Maybe<Nhtbl_ClientToNhtbl_ProjectConnection>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the term.
    * @deprecated Deprecated in favor of databaseId
    */
   nhtbl_clientId?: Maybe<Scalars['Int']['output']>;
@@ -11396,6 +12320,7 @@ export type Nhtbl_ClientEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -11405,6 +12330,7 @@ export type Nhtbl_ClientEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -11527,6 +12453,8 @@ export type Nhtbl_ClientToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -11551,6 +12479,8 @@ export type Nhtbl_ClientToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -11628,6 +12558,11 @@ export type Nhtbl_ClientToNhtbl_ClientConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -11687,6 +12622,8 @@ export type Nhtbl_ClientToNhtbl_ProjectConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -11711,6 +12648,8 @@ export type Nhtbl_ClientToNhtbl_ProjectConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -11778,7 +12717,7 @@ export type Nhtbl_Project = ContentNode & DatabaseIdentifier & HierarchicalConte
   featuredImageDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** Globally unique ID of the featured image assigned to the node */
   featuredImageId?: Maybe<Scalars['ID']['output']>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** Whether the project object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -11813,7 +12752,7 @@ export type Nhtbl_Project = ContentNode & DatabaseIdentifier & HierarchicalConte
   /** Connection between the Nhtbl_project type and the nhtbl_service type */
   nhtblServices?: Maybe<Nhtbl_ProjectToNhtbl_ServiceConnection>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
    */
   nhtbl_projectId: Scalars['Int']['output'];
@@ -11829,7 +12768,7 @@ export type Nhtbl_Project = ContentNode & DatabaseIdentifier & HierarchicalConte
   preview?: Maybe<Nhtbl_ProjectToPreviewConnectionEdge>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** Fields of the ProjectData ACF Field Group */
   projectData?: Maybe<ProjectData>;
@@ -11839,7 +12778,7 @@ export type Nhtbl_Project = ContentNode & DatabaseIdentifier & HierarchicalConte
   revisions?: Maybe<Nhtbl_ProjectToRevisionConnection>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -11892,6 +12831,7 @@ export type Nhtbl_ProjectEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -11901,6 +12841,7 @@ export type Nhtbl_ProjectEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -12092,6 +13033,11 @@ export type Nhtbl_ProjectToNhtbl_ClientConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -12171,6 +13117,11 @@ export type Nhtbl_ProjectToNhtbl_ServiceConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -12239,6 +13190,8 @@ export type Nhtbl_ProjectToRevisionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12263,6 +13216,8 @@ export type Nhtbl_ProjectToRevisionConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -12342,6 +13297,11 @@ export type Nhtbl_ProjectToTermNodeConnectionWhereArgs = {
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** The Taxonomy to filter terms by */
   taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -12388,7 +13348,7 @@ export type Nhtbl_Service = DatabaseIdentifier & HierarchicalNode & Hierarchical
   /** Connection between the Nhtbl_service type and the nhtbl_project type */
   nhtblProjects?: Maybe<Nhtbl_ServiceToNhtbl_ProjectConnection>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the term.
    * @deprecated Deprecated in favor of databaseId
    */
   nhtbl_serviceId?: Maybe<Scalars['Int']['output']>;
@@ -12450,6 +13410,7 @@ export type Nhtbl_ServiceEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -12459,6 +13420,7 @@ export type Nhtbl_ServiceEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -12581,6 +13543,8 @@ export type Nhtbl_ServiceToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12605,6 +13569,8 @@ export type Nhtbl_ServiceToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -12662,6 +13628,8 @@ export type Nhtbl_ServiceToNhtbl_ProjectConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12686,6 +13654,8 @@ export type Nhtbl_ServiceToNhtbl_ProjectConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -12763,6 +13733,11 @@ export type Nhtbl_ServiceToNhtbl_ServiceConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -12814,7 +13789,7 @@ export type Nhtbl_Survey = ContentNode & DatabaseIdentifier & HierarchicalConten
   enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
   /** Connection between the ContentNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** Whether the survey object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -12845,7 +13820,7 @@ export type Nhtbl_Survey = ContentNode & DatabaseIdentifier & HierarchicalConten
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
    */
   nhtbl_surveyId: Scalars['Int']['output'];
@@ -12861,7 +13836,7 @@ export type Nhtbl_Survey = ContentNode & DatabaseIdentifier & HierarchicalConten
   preview?: Maybe<Nhtbl_SurveyToPreviewConnectionEdge>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** If the current node is a revision, this field exposes the node this is a revision of. Returns null if the node is not a revision of another node. */
   revisionOf?: Maybe<NodeWithRevisionsToContentNodeConnectionEdge>;
@@ -12869,7 +13844,7 @@ export type Nhtbl_Survey = ContentNode & DatabaseIdentifier & HierarchicalConten
   revisions?: Maybe<Nhtbl_SurveyToRevisionConnection>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -12910,6 +13885,7 @@ export type Nhtbl_SurveyEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -12919,6 +13895,7 @@ export type Nhtbl_SurveyEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -12988,7 +13965,7 @@ export type Nhtbl_SurveyResponse = ContentNode & DatabaseIdentifier & Hierarchic
   enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
   /** Connection between the ContentNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** Whether the survey_response object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -13017,7 +13994,7 @@ export type Nhtbl_SurveyResponse = ContentNode & DatabaseIdentifier & Hierarchic
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
    */
   nhtbl_surveyResponseId: Scalars['Int']['output'];
@@ -13033,11 +14010,11 @@ export type Nhtbl_SurveyResponse = ContentNode & DatabaseIdentifier & Hierarchic
   preview?: Maybe<Nhtbl_SurveyResponseToPreviewConnectionEdge>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -13078,6 +14055,7 @@ export type Nhtbl_SurveyResponseEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -13087,6 +14065,7 @@ export type Nhtbl_SurveyResponseEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -13182,6 +14161,8 @@ export type Nhtbl_SurveyToRevisionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -13206,6 +14187,8 @@ export type Nhtbl_SurveyToRevisionConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -13474,7 +14457,7 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   featuredImageDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** Globally unique ID of the featured image assigned to the node */
   featuredImageId?: Maybe<Scalars['ID']['output']>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** Whether the page object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -13509,7 +14492,7 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
    */
   pageId: Scalars['Int']['output'];
@@ -13525,7 +14508,7 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   preview?: Maybe<PageToPreviewConnectionEdge>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
-  /** Whether the object is a node in the preview state */
+  /** The globally unique ID of the preview node */
   previewRevisionId?: Maybe<Scalars['ID']['output']>;
   /** If the current node is a revision, this field exposes the node this is a revision of. Returns null if the node is not a revision of another node. */
   revisionOf?: Maybe<NodeWithRevisionsToContentNodeConnectionEdge>;
@@ -13533,7 +14516,7 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   revisions?: Maybe<PageToRevisionConnection>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -13594,6 +14577,7 @@ export type PageEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -13603,6 +14587,7 @@ export type PageEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -13790,6 +14775,11 @@ export type PageToCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -13858,6 +14848,8 @@ export type PageToRevisionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -13882,8 +14874,23 @@ export type PageToRevisionConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The permalink setting type */
+export type PermalinkSettings = Node & {
+  __typename?: 'PermalinkSettings';
+  /** The prefix used in the URLs of category archive pages. */
+  categoryBase?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
+  /** The structure used to build the URLs for content on the site. */
+  structure?: Maybe<Scalars['String']['output']>;
+  /** The prefix used in the URLs of tag archive pages. */
+  tagBase?: Maybe<Scalars['String']['output']>;
 };
 
 /** An plugin object */
@@ -14100,7 +15107,7 @@ export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & 
   featuredImageDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** Globally unique ID of the featured image assigned to the node */
   featuredImageId?: Maybe<Scalars['ID']['output']>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  /** The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes. */
   guid?: Maybe<Scalars['String']['output']>;
   /** Whether the post object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -14146,7 +15153,7 @@ export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & 
   /** Connection between the Post type and the postFormat type */
   postFormats?: Maybe<PostToPostFormatConnection>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
    */
   postId: Scalars['Int']['output'];
@@ -14162,7 +15169,7 @@ export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & 
   revisions?: Maybe<PostToRevisionConnection>;
   /** The Yoast SEO data of the ContentNode */
   seo?: Maybe<PostTypeSeo>;
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  /** The URL-friendly, human-readable identifier for the content node, used in its permalink. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
@@ -14228,6 +15235,7 @@ export type PostEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -14237,6 +15245,7 @@ export type PostEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContentNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -14401,7 +15410,7 @@ export type PostFormat = DatabaseIdentifier & Node & TermNode & UniformResourceI
   /** The human friendly name of the object. */
   name?: Maybe<Scalars['String']['output']>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the term.
    * @deprecated Deprecated in favor of databaseId
    */
   postFormatId?: Maybe<Scalars['Int']['output']>;
@@ -14440,6 +15449,7 @@ export type PostFormatEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -14449,6 +15459,7 @@ export type PostFormatEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -14554,6 +15565,8 @@ export type PostFormatToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -14578,6 +15591,8 @@ export type PostFormatToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -14643,6 +15658,8 @@ export type PostFormatToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -14679,6 +15696,8 @@ export type PostFormatToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -14897,6 +15916,11 @@ export type PostToCategoryConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -14994,6 +16018,11 @@ export type PostToCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -15005,10 +16034,7 @@ export type PostToParentConnectionEdge = Edge & OneToOneConnection & PostConnect
   __typename?: 'PostToParentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The node of the connection, without the edges
-   * @deprecated This content type is not hierarchical and typically will not have a parent
-   */
+  /** The node of the connection, without the edges */
   node: Post;
 };
 
@@ -15026,15 +16052,9 @@ export type PostToPostConnection = Connection & PostConnection & {
 /** An edge in a connection */
 export type PostToPostConnectionEdge = Edge & PostConnectionEdge & {
   __typename?: 'PostToPostConnectionEdge';
-  /**
-   * A cursor for use in pagination
-   * @deprecated This content type is not hierarchical and typically will not have ancestors
-   */
+  /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The item at the end of the edge
-   * @deprecated This content type is not hierarchical and typically will not have ancestors
-   */
+  /** The item at the end of the edge */
   node: Post;
 };
 
@@ -15128,6 +16148,11 @@ export type PostToPostFormatConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -15204,6 +16229,8 @@ export type PostToRevisionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -15240,6 +16267,8 @@ export type PostToRevisionConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -15319,6 +16348,11 @@ export type PostToTagConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -15400,6 +16434,11 @@ export type PostToTermNodeConnectionWhereArgs = {
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** The Taxonomy to filter terms by */
   taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -15463,18 +16502,27 @@ export type PostTypeLabelDetails = {
 
 export type PostTypeSeo = {
   __typename?: 'PostTypeSEO';
+  analysis?: Maybe<SeoAnalysis>;
+  breadcrumbTitle?: Maybe<Scalars['String']['output']>;
   breadcrumbs?: Maybe<Array<Maybe<SeoPostTypeBreadcrumbs>>>;
   canonical?: Maybe<Scalars['String']['output']>;
   cornerstone?: Maybe<Scalars['Boolean']['output']>;
   focuskw?: Maybe<Scalars['String']['output']>;
   fullHead?: Maybe<Scalars['String']['output']>;
+  head?: Maybe<SeoHead>;
+  language?: Maybe<Scalars['String']['output']>;
   metaDesc?: Maybe<Scalars['String']['output']>;
   metaKeywords?: Maybe<Scalars['String']['output']>;
   metaRobotsNofollow?: Maybe<Scalars['String']['output']>;
   metaRobotsNoindex?: Maybe<Scalars['String']['output']>;
+  objectLastModified?: Maybe<Scalars['String']['output']>;
+  objectPublishedAt?: Maybe<Scalars['String']['output']>;
   opengraphAuthor?: Maybe<Scalars['String']['output']>;
   opengraphDescription?: Maybe<Scalars['String']['output']>;
+  opengraphEnabled?: Maybe<Scalars['Boolean']['output']>;
+  opengraphFbAppId?: Maybe<Scalars['String']['output']>;
   opengraphImage?: Maybe<MediaItem>;
+  opengraphLocale?: Maybe<Scalars['String']['output']>;
   opengraphModifiedTime?: Maybe<Scalars['String']['output']>;
   opengraphPublishedTime?: Maybe<Scalars['String']['output']>;
   opengraphPublisher?: Maybe<Scalars['String']['output']>;
@@ -15483,10 +16531,17 @@ export type PostTypeSeo = {
   opengraphType?: Maybe<Scalars['String']['output']>;
   opengraphUrl?: Maybe<Scalars['String']['output']>;
   readingTime?: Maybe<Scalars['Float']['output']>;
+  region?: Maybe<Scalars['String']['output']>;
+  relNext?: Maybe<Scalars['String']['output']>;
+  relPrev?: Maybe<Scalars['String']['output']>;
+  robots?: Maybe<SeoRobots>;
   schema?: Maybe<SeoPostTypeSchema>;
   title?: Maybe<Scalars['String']['output']>;
+  twitterCardType?: Maybe<Scalars['String']['output']>;
+  twitterCreator?: Maybe<Scalars['String']['output']>;
   twitterDescription?: Maybe<Scalars['String']['output']>;
   twitterImage?: Maybe<MediaItem>;
+  twitterSite?: Maybe<Scalars['String']['output']>;
   twitterTitle?: Maybe<Scalars['String']['output']>;
 };
 
@@ -15550,8 +16605,10 @@ export type ProjectData_FieldsImageGalleryArgs = {
 };
 
 /** The reading setting type */
-export type ReadingSettings = {
+export type ReadingSettings = Node & {
   __typename?: 'ReadingSettings';
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
   /** The ID of the page that should display the latest posts */
   pageForPosts?: Maybe<Scalars['Int']['output']>;
   /** The ID of the page that should be displayed on the front page */
@@ -16150,6 +17207,8 @@ export type RootQuery = {
   pageBy?: Maybe<Page>;
   /** Connection between the RootQuery type and the page type */
   pages?: Maybe<RootQueryToPageConnection>;
+  /** Fields of the &#039;PermalinkSettings&#039; settings group */
+  permalinkSettings?: Maybe<PermalinkSettings>;
   /** A WordPress plugin */
   plugin?: Maybe<Plugin>;
   /** Connection between the RootQuery type and the Plugin type */
@@ -16574,6 +17633,7 @@ export type RootQueryRegisteredScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<RootQueryToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -16583,6 +17643,7 @@ export type RootQueryRegisteredStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<RootQueryToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -16766,6 +17827,11 @@ export type RootQueryToCategoryConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -16863,6 +17929,11 @@ export type RootQueryToCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -16916,6 +17987,8 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16940,6 +18013,8 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17014,6 +18089,12 @@ export type RootQueryToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnecti
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Arguments for filtering the RootQueryToEnqueuedScriptConnection connection */
+export type RootQueryToEnqueuedScriptConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 /** Connection between the RootQuery type and the EnqueuedStylesheet type */
 export type RootQueryToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
   __typename?: 'RootQueryToEnqueuedStylesheetConnection';
@@ -17047,6 +18128,12 @@ export type RootQueryToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheet
   seo?: Maybe<SeoPostTypePageInfo>;
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the RootQueryToEnqueuedStylesheetConnection connection */
+export type RootQueryToEnqueuedStylesheetConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 /** Connection between the RootQuery type and the mediaItem type */
@@ -17102,6 +18189,8 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17126,6 +18215,8 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17295,6 +18386,11 @@ export type RootQueryToNhtbl_ClientConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -17354,6 +18450,8 @@ export type RootQueryToNhtbl_ProjectConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17378,6 +18476,8 @@ export type RootQueryToNhtbl_ProjectConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17455,6 +18555,11 @@ export type RootQueryToNhtbl_ServiceConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -17506,6 +18611,8 @@ export type RootQueryToNhtbl_SurveyConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17530,6 +18637,8 @@ export type RootQueryToNhtbl_SurveyConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17579,6 +18688,8 @@ export type RootQueryToNhtbl_SurveyResponseConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17603,6 +18714,8 @@ export type RootQueryToNhtbl_SurveyResponseConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17660,6 +18773,8 @@ export type RootQueryToPageConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17684,6 +18799,8 @@ export type RootQueryToPageConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17794,6 +18911,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17830,6 +18949,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -17907,6 +19028,11 @@ export type RootQueryToPostFormatConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -17960,6 +19086,8 @@ export type RootQueryToRevisionsConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17984,6 +19112,8 @@ export type RootQueryToRevisionsConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -18061,6 +19191,11 @@ export type RootQueryToTagConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Array of slugs to return term(s) for. Default empty. */
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -18177,6 +19312,11 @@ export type RootQueryToTermNodeConnectionWhereArgs = {
   slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** The Taxonomy to filter terms by */
   taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /**
+   * Array of term taxonomy IDs, to match when querying terms.
+   * @deprecated Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.
+   */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
@@ -18322,6 +19462,30 @@ export type RootQueryToUserRoleConnectionPageInfo = PageInfo & UserRoleConnectio
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** The Yoast SEO advanced site configuration */
+export type SeoAdvanced = {
+  __typename?: 'SEOAdvanced';
+  contentAnalysisActive?: Maybe<Scalars['Boolean']['output']>;
+  environmentType?: Maybe<Scalars['String']['output']>;
+  hasMultipleAuthors?: Maybe<Scalars['Boolean']['output']>;
+  inclusiveLanguageAnalysisActive?: Maybe<Scalars['Boolean']['output']>;
+  indexNowEnabled?: Maybe<Scalars['Boolean']['output']>;
+  indexNowKey?: Maybe<Scalars['String']['output']>;
+  keywordAnalysisActive?: Maybe<Scalars['Boolean']['output']>;
+  siteType?: Maybe<Scalars['String']['output']>;
+  xmlSitemapEnabled?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** The Yoast SEO analysis scores and link counts */
+export type SeoAnalysis = {
+  __typename?: 'SEOAnalysis';
+  inclusiveLanguageScore?: Maybe<Scalars['Int']['output']>;
+  incomingLinkCount?: Maybe<Scalars['Int']['output']>;
+  keywordScore?: Maybe<Scalars['Int']['output']>;
+  linkCount?: Maybe<Scalars['Int']['output']>;
+  readabilityScore?: Maybe<Scalars['Int']['output']>;
+};
+
 /** The Yoast SEO breadcrumb config */
 export type SeoBreadcrumbs = {
   __typename?: 'SEOBreadcrumbs';
@@ -18345,6 +19509,7 @@ export enum SeoCardType {
 /** The Yoast SEO site level configuration data */
 export type SeoConfig = {
   __typename?: 'SEOConfig';
+  advanced?: Maybe<SeoAdvanced>;
   breadcrumbs?: Maybe<SeoBreadcrumbs>;
   contentTypes?: Maybe<SeoContentTypes>;
   meta?: Maybe<SeoGlobalMeta>;
@@ -18360,6 +19525,7 @@ export type SeoConfig = {
 export type SeoContentType = {
   __typename?: 'SEOContentType';
   archive?: Maybe<SeoContentTypeArchive>;
+  articleType?: Maybe<Scalars['String']['output']>;
   metaDesc?: Maybe<Scalars['String']['output']>;
   metaRobotsNoindex?: Maybe<Scalars['Boolean']['output']>;
   schema?: Maybe<SeoPageInfoSchema>;
@@ -18374,11 +19540,13 @@ export type SeoContentTypeArchive = {
   breadcrumbTitle?: Maybe<Scalars['String']['output']>;
   fullHead?: Maybe<Scalars['String']['output']>;
   hasArchive?: Maybe<Scalars['Boolean']['output']>;
+  head?: Maybe<SeoHead>;
   metaDesc?: Maybe<Scalars['String']['output']>;
   metaRobotsFollow?: Maybe<Scalars['String']['output']>;
   metaRobotsIndex?: Maybe<Scalars['String']['output']>;
   metaRobotsNofollow?: Maybe<Scalars['Boolean']['output']>;
   metaRobotsNoindex?: Maybe<Scalars['Boolean']['output']>;
+  social?: Maybe<SeoSocialArchive>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -18401,6 +19569,7 @@ export type SeoGlobalMeta = {
   date?: Maybe<SeoGlobalMetaDate>;
   homepage?: Maybe<SeoGlobalMetaHome>;
   notFound?: Maybe<SeoGlobalMeta404>;
+  search?: Maybe<SeoGlobalMetaSearch>;
 };
 
 /** The Yoast SEO meta 404 data */
@@ -18414,6 +19583,9 @@ export type SeoGlobalMeta404 = {
 export type SeoGlobalMetaAuthor = {
   __typename?: 'SEOGlobalMetaAuthor';
   description?: Maybe<Scalars['String']['output']>;
+  noindex?: Maybe<Scalars['Boolean']['output']>;
+  noindexNoPosts?: Maybe<Scalars['Boolean']['output']>;
+  social?: Maybe<SeoSocialArchive>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -18427,6 +19599,8 @@ export type SeoGlobalMetaConfig = {
 export type SeoGlobalMetaDate = {
   __typename?: 'SEOGlobalMetaDate';
   description?: Maybe<Scalars['String']['output']>;
+  noindex?: Maybe<Scalars['Boolean']['output']>;
+  social?: Maybe<SeoSocialArchive>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -18437,10 +19611,24 @@ export type SeoGlobalMetaHome = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
+/** The Yoast SEO search results data */
+export type SeoGlobalMetaSearch = {
+  __typename?: 'SEOGlobalMetaSearch';
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+/** The Yoast SEO head output as structured HTML and JSON */
+export type SeoHead = {
+  __typename?: 'SEOHead';
+  html?: Maybe<Scalars['String']['output']>;
+  json?: Maybe<Scalars['String']['output']>;
+};
+
 /** The Open Graph data */
 export type SeoOpenGraph = {
   __typename?: 'SEOOpenGraph';
   defaultImage?: Maybe<MediaItem>;
+  enabled?: Maybe<Scalars['Boolean']['output']>;
   frontPage?: Maybe<SeoOpenGraphFrontPage>;
 };
 
@@ -18487,6 +19675,16 @@ export type SeoRedirect = {
   type?: Maybe<Scalars['Int']['output']>;
 };
 
+/** The Yoast SEO robots directives */
+export type SeoRobots = {
+  __typename?: 'SEORobots';
+  noarchive?: Maybe<Scalars['Boolean']['output']>;
+  nofollow?: Maybe<Scalars['String']['output']>;
+  noimageindex?: Maybe<Scalars['Boolean']['output']>;
+  noindex?: Maybe<Scalars['String']['output']>;
+  nosnippet?: Maybe<Scalars['Boolean']['output']>;
+};
+
 /** The Yoast SEO schema data */
 export type SeoSchema = {
   __typename?: 'SEOSchema';
@@ -18509,12 +19707,21 @@ export type SeoSocial = {
   facebook?: Maybe<SeoSocialFacebook>;
   instagram?: Maybe<SeoSocialInstagram>;
   linkedIn?: Maybe<SeoSocialLinkedIn>;
+  mastodon?: Maybe<SeoSocialMastodon>;
   mySpace?: Maybe<SeoSocialMySpace>;
   otherSocials?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   pinterest?: Maybe<SeoSocialPinterest>;
   twitter?: Maybe<SeoSocialTwitter>;
   wikipedia?: Maybe<SeoSocialWikipedia>;
   youTube?: Maybe<SeoSocialYoutube>;
+};
+
+/** The Yoast SEO Premium social settings for an archive */
+export type SeoSocialArchive = {
+  __typename?: 'SEOSocialArchive';
+  description?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<MediaItem>;
+  title?: Maybe<Scalars['String']['output']>;
 };
 
 export type SeoSocialFacebook = {
@@ -18533,6 +19740,11 @@ export type SeoSocialLinkedIn = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
+export type SeoSocialMastodon = {
+  __typename?: 'SEOSocialMastodon';
+  url?: Maybe<Scalars['String']['output']>;
+};
+
 export type SeoSocialMySpace = {
   __typename?: 'SEOSocialMySpace';
   url?: Maybe<Scalars['String']['output']>;
@@ -18547,6 +19759,7 @@ export type SeoSocialPinterest = {
 export type SeoSocialTwitter = {
   __typename?: 'SEOSocialTwitter';
   cardType?: Maybe<SeoCardType>;
+  enabled?: Maybe<Scalars['Boolean']['output']>;
   username?: Maybe<Scalars['String']['output']>;
 };
 
@@ -18577,6 +19790,7 @@ export type SeoTaxonomyTypeArchive = {
   __typename?: 'SEOTaxonomyTypeArchive';
   metaDesc?: Maybe<Scalars['String']['output']>;
   metaRobotsNoindex?: Maybe<Scalars['Boolean']['output']>;
+  social?: Maybe<SeoSocialArchive>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -18592,22 +19806,32 @@ export type SeoTaxonomyTypes = {
 
 export type SeoUser = {
   __typename?: 'SEOUser';
+  analysis?: Maybe<SeoAnalysis>;
   breadcrumbTitle?: Maybe<Scalars['String']['output']>;
   canonical?: Maybe<Scalars['String']['output']>;
   fullHead?: Maybe<Scalars['String']['output']>;
+  head?: Maybe<SeoHead>;
   language?: Maybe<Scalars['String']['output']>;
   metaDesc?: Maybe<Scalars['String']['output']>;
   metaRobotsNofollow?: Maybe<Scalars['String']['output']>;
   metaRobotsNoindex?: Maybe<Scalars['String']['output']>;
   opengraphDescription?: Maybe<Scalars['String']['output']>;
+  opengraphEnabled?: Maybe<Scalars['Boolean']['output']>;
+  opengraphFbAppId?: Maybe<Scalars['String']['output']>;
   opengraphImage?: Maybe<MediaItem>;
+  opengraphLocale?: Maybe<Scalars['String']['output']>;
   opengraphTitle?: Maybe<Scalars['String']['output']>;
   region?: Maybe<Scalars['String']['output']>;
+  relNext?: Maybe<Scalars['String']['output']>;
+  relPrev?: Maybe<Scalars['String']['output']>;
+  robots?: Maybe<SeoRobots>;
   schema?: Maybe<SeoUserSchema>;
   social?: Maybe<SeoUserSocial>;
   title?: Maybe<Scalars['String']['output']>;
+  twitterCreator?: Maybe<Scalars['String']['output']>;
   twitterDescription?: Maybe<Scalars['String']['output']>;
   twitterImage?: Maybe<MediaItem>;
+  twitterSite?: Maybe<Scalars['String']['output']>;
   twitterTitle?: Maybe<Scalars['String']['output']>;
 };
 
@@ -18624,6 +19848,7 @@ export type SeoUserSocial = {
   facebook?: Maybe<Scalars['String']['output']>;
   instagram?: Maybe<Scalars['String']['output']>;
   linkedIn?: Maybe<Scalars['String']['output']>;
+  mastodon?: Maybe<Scalars['String']['output']>;
   mySpace?: Maybe<Scalars['String']['output']>;
   pinterest?: Maybe<Scalars['String']['output']>;
   soundCloud?: Maybe<Scalars['String']['output']>;
@@ -18723,41 +19948,49 @@ export type ServicePush_FieldsServiceArgs = {
 /** All of the registered settings */
 export type Settings = {
   __typename?: 'Settings';
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   discussionSettingsDefaultCommentStatus?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   discussionSettingsDefaultPingStatus?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsDateFormat?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsDescription?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsEmail?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
+  generalSettingsHomeUrl?: Maybe<Scalars['String']['output']>;
+  /** Settings of the string Settings Group */
   generalSettingsLanguage?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   generalSettingsStartOfWeek?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsTimeFormat?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsTimezone?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsTitle?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsUrl?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the string Settings Group */
+  permalinkSettingsCategoryBase?: Maybe<Scalars['String']['output']>;
+  /** Settings of the string Settings Group */
+  permalinkSettingsStructure?: Maybe<Scalars['String']['output']>;
+  /** Settings of the string Settings Group */
+  permalinkSettingsTagBase?: Maybe<Scalars['String']['output']>;
+  /** Settings of the integer Settings Group */
   readingSettingsPageForPosts?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   readingSettingsPageOnFront?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   readingSettingsPostsPerPage?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   readingSettingsShowOnFront?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   writingSettingsDefaultCategory?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   writingSettingsDefaultPostFormat?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the boolean Settings Group */
+  /** Settings of the boolean Settings Group */
   writingSettingsUseSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -19195,7 +20428,7 @@ export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & Unif
   /** An alphanumeric identifier for the object unique to its type. */
   slug?: Maybe<Scalars['String']['output']>;
   /**
-   * The id field matches the WP_Post-&gt;ID field.
+   * The unique numeric identifier for the term.
    * @deprecated Deprecated in favor of databaseId
    */
   tagId?: Maybe<Scalars['Int']['output']>;
@@ -19228,6 +20461,7 @@ export type TagEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -19237,6 +20471,7 @@ export type TagEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -19342,6 +20577,8 @@ export type TagToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -19366,6 +20603,8 @@ export type TagToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -19431,6 +20670,8 @@ export type TagToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -19467,6 +20708,8 @@ export type TagToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -19487,7 +20730,7 @@ export type Taxonomy = Node & {
   connectedContentTypes?: Maybe<TaxonomyToContentTypeConnection>;
   /** List of Term Nodes associated with the Taxonomy */
   connectedTerms?: Maybe<TaxonomyToTermNodeConnection>;
-  /** Description of the taxonomy. This field is equivalent to WP_Taxonomy-&gt;description */
+  /** Description of the taxonomy. */
   description?: Maybe<Scalars['String']['output']>;
   /** The plural name of the post type within the GraphQL Schema. */
   graphqlPluralName?: Maybe<Scalars['String']['output']>;
@@ -19501,7 +20744,7 @@ export type Taxonomy = Node & {
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Name of the taxonomy shown in the menu. Usually plural. */
   label?: Maybe<Scalars['String']['output']>;
-  /** The display name of the taxonomy. This field is equivalent to WP_Taxonomy-&gt;label */
+  /** The display name of the taxonomy. */
   name?: Maybe<Scalars['String']['output']>;
   /** Whether the taxonomy is publicly queryable */
   public?: Maybe<Scalars['Boolean']['output']>;
@@ -19509,7 +20752,7 @@ export type Taxonomy = Node & {
   restBase?: Maybe<Scalars['String']['output']>;
   /** The REST Controller class assigned to handling this content type. */
   restControllerClass?: Maybe<Scalars['String']['output']>;
-  /** Whether to show the taxonomy as part of a tag cloud widget. This field is equivalent to WP_Taxonomy-&gt;show_tagcloud */
+  /** Whether to show the taxonomy as part of a tag cloud widget. */
   showCloud?: Maybe<Scalars['Boolean']['output']>;
   /** Whether to display a column for the taxonomy on its post type listing screens. */
   showInAdminColumn?: Maybe<Scalars['Boolean']['output']>;
@@ -19601,18 +20844,27 @@ export enum TaxonomyIdTypeEnum {
 
 export type TaxonomySeo = {
   __typename?: 'TaxonomySEO';
+  analysis?: Maybe<SeoAnalysis>;
+  breadcrumbTitle?: Maybe<Scalars['String']['output']>;
   breadcrumbs?: Maybe<Array<Maybe<SeoPostTypeBreadcrumbs>>>;
   canonical?: Maybe<Scalars['String']['output']>;
   cornerstone?: Maybe<Scalars['Boolean']['output']>;
   focuskw?: Maybe<Scalars['String']['output']>;
   fullHead?: Maybe<Scalars['String']['output']>;
+  head?: Maybe<SeoHead>;
+  language?: Maybe<Scalars['String']['output']>;
   metaDesc?: Maybe<Scalars['String']['output']>;
   metaKeywords?: Maybe<Scalars['String']['output']>;
   metaRobotsNofollow?: Maybe<Scalars['String']['output']>;
   metaRobotsNoindex?: Maybe<Scalars['String']['output']>;
+  objectLastModified?: Maybe<Scalars['String']['output']>;
+  objectPublishedAt?: Maybe<Scalars['String']['output']>;
   opengraphAuthor?: Maybe<Scalars['String']['output']>;
   opengraphDescription?: Maybe<Scalars['String']['output']>;
+  opengraphEnabled?: Maybe<Scalars['Boolean']['output']>;
+  opengraphFbAppId?: Maybe<Scalars['String']['output']>;
   opengraphImage?: Maybe<MediaItem>;
+  opengraphLocale?: Maybe<Scalars['String']['output']>;
   opengraphModifiedTime?: Maybe<Scalars['String']['output']>;
   opengraphPublishedTime?: Maybe<Scalars['String']['output']>;
   opengraphPublisher?: Maybe<Scalars['String']['output']>;
@@ -19620,10 +20872,17 @@ export type TaxonomySeo = {
   opengraphTitle?: Maybe<Scalars['String']['output']>;
   opengraphType?: Maybe<Scalars['String']['output']>;
   opengraphUrl?: Maybe<Scalars['String']['output']>;
+  region?: Maybe<Scalars['String']['output']>;
+  relNext?: Maybe<Scalars['String']['output']>;
+  relPrev?: Maybe<Scalars['String']['output']>;
+  robots?: Maybe<SeoRobots>;
   schema?: Maybe<SeoTaxonomySchema>;
   title?: Maybe<Scalars['String']['output']>;
+  twitterCardType?: Maybe<Scalars['String']['output']>;
+  twitterCreator?: Maybe<Scalars['String']['output']>;
   twitterDescription?: Maybe<Scalars['String']['output']>;
   twitterImage?: Maybe<MediaItem>;
+  twitterSite?: Maybe<Scalars['String']['output']>;
   twitterTitle?: Maybe<Scalars['String']['output']>;
 };
 
@@ -19746,6 +21005,7 @@ export type TermNodeEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -19755,6 +21015,7 @@ export type TermNodeEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TermNodeToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 /** A paginated collection of TermNode Nodes, Supports cursor-based pagination and filtering to efficiently retrieve sets of TermNode Nodes */
@@ -19838,6 +21099,12 @@ export type TermNodeToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectio
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Arguments for filtering the TermNodeToEnqueuedScriptConnection connection */
+export type TermNodeToEnqueuedScriptConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 /** Connection between the TermNode type and the EnqueuedStylesheet type */
 export type TermNodeToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
   __typename?: 'TermNodeToEnqueuedStylesheetConnection';
@@ -19873,6 +21140,12 @@ export type TermNodeToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetC
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Arguments for filtering the TermNodeToEnqueuedStylesheetConnection connection */
+export type TermNodeToEnqueuedStylesheetConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 /** Sorting attributes for taxonomy term collections. Determines which property of taxonomy terms is used for ordering results. */
 export enum TermObjectsConnectionOrderbyEnum {
   /** Ordering by number of associated content items. */
@@ -19894,27 +21167,27 @@ export enum TermObjectsConnectionOrderbyEnum {
 /** A theme object */
 export type Theme = Node & {
   __typename?: 'Theme';
-  /** Name of the theme author(s), could also be a company name. This field is equivalent to WP_Theme-&gt;get( &quot;Author&quot; ). */
+  /** Name of the theme author(s), could also be a company name. */
   author?: Maybe<Scalars['String']['output']>;
-  /** URI for the author/company website. This field is equivalent to WP_Theme-&gt;get( &quot;AuthorURI&quot; ). */
+  /** URI for the author/company website. */
   authorUri?: Maybe<Scalars['String']['output']>;
-  /** The description of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Description&quot; ). */
+  /** The description of the theme. */
   description?: Maybe<Scalars['String']['output']>;
   /** The globally unique identifier of the theme object. */
   id: Scalars['ID']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
-  /** Display name of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Name&quot; ). */
+  /** Display name of the theme. */
   name?: Maybe<Scalars['String']['output']>;
-  /** The URL of the screenshot for the theme. The screenshot is intended to give an overview of what the theme looks like. This field is equivalent to WP_Theme-&gt;get_screenshot(). */
+  /** The URL of the screenshot for the theme. The screenshot is intended to give an overview of what the theme looks like. */
   screenshot?: Maybe<Scalars['String']['output']>;
-  /** The theme slug is used to internally match themes. Theme slugs can have subdirectories like: my-theme/sub-theme. This field is equivalent to WP_Theme-&gt;get_stylesheet(). */
+  /** The theme slug is used to internally match themes. Theme slugs can have subdirectories like: my-theme/sub-theme. */
   slug?: Maybe<Scalars['String']['output']>;
-  /** URI for the author/company website. This field is equivalent to WP_Theme-&gt;get( &quot;Tags&quot; ). */
+  /** A list of tags associated with the theme, typically describing its features (e.g. custom-logo, accessibility-ready, full-site-editing). */
   tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** A URI if the theme has a website associated with it. The Theme URI is handy for directing users to a theme site for support etc. This field is equivalent to WP_Theme-&gt;get( &quot;ThemeURI&quot; ). */
+  /** A URI if the theme has a website associated with it. The Theme URI is handy for directing users to a theme site for support etc. */
   themeUri?: Maybe<Scalars['String']['output']>;
-  /** The current version of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Version&quot; ). */
+  /** The current version of the theme. */
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -19999,6 +21272,11 @@ export type UpdateCategoryPayload = {
 
 /** Input for the updateComment mutation. */
 export type UpdateCommentInput = {
+  /**
+   * The approval status of the comment.
+   * @deprecated Deprecated in favor of the status field
+   */
+  approved?: InputMaybe<Scalars['String']['input']>;
   /** The name of the comment's author. */
   author?: InputMaybe<Scalars['String']['input']>;
   /** The email of the comment's author. */
@@ -20385,7 +21663,10 @@ export type UpdateSettingsInput = {
   generalSettingsTimezone?: InputMaybe<Scalars['String']['input']>;
   /** Site title. */
   generalSettingsTitle?: InputMaybe<Scalars['String']['input']>;
-  /** Site URL. */
+  /**
+   * Site URL.
+   * @deprecated The site URL is read-only and cannot be changed through the API.
+   */
   generalSettingsUrl?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the page that should display the latest posts */
   readingSettingsPageForPosts?: InputMaybe<Scalars['Int']['input']>;
@@ -20414,6 +21695,8 @@ export type UpdateSettingsPayload = {
   discussionSettings?: Maybe<DiscussionSettings>;
   /** Update the GeneralSettings setting. */
   generalSettings?: Maybe<GeneralSettings>;
+  /** Update the PermalinkSettings setting. */
+  permalinkSettings?: Maybe<PermalinkSettings>;
   /** Update the ReadingSettings setting. */
   readingSettings?: Maybe<ReadingSettings>;
   /** Update the WritingSettings setting. */
@@ -20511,15 +21794,15 @@ export type User = Commenter & DatabaseIdentifier & Node & UniformResourceIdenti
   databaseId: Scalars['Int']['output'];
   /** Description of the user. */
   description?: Maybe<Scalars['String']['output']>;
-  /** Email address of the user. This is equivalent to the WP_User-&gt;user_email property. */
+  /** Email address of the user. */
   email?: Maybe<Scalars['String']['output']>;
   /** Connection between the User type and the EnqueuedScript type */
   enqueuedScripts?: Maybe<UserToEnqueuedScriptConnection>;
   /** Connection between the User type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<UserToEnqueuedStylesheetConnection>;
-  /** A complete list of capabilities including capabilities inherited from a role. This is equivalent to the array keys of WP_User-&gt;allcaps. */
+  /** A complete list of capabilities including capabilities inherited from a role. */
   extraCapabilities?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** First name of the user. This is equivalent to the WP_User-&gt;user_first_name property. */
+  /** First name of the user. */
   firstName?: Maybe<Scalars['String']['output']>;
   /** Whether the user has enabled keyboard shortcuts for comment moderation. Defaults to false. */
   hasCommentShortcutsEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -20541,17 +21824,17 @@ export type User = Commenter & DatabaseIdentifier & Node & UniformResourceIdenti
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** Last name of the user. This is equivalent to the WP_User-&gt;user_last_name property. */
+  /** Last name of the user. */
   lastName?: Maybe<Scalars['String']['output']>;
   /** The preferred language locale set for the user. Value derived from get_user_locale(). */
   locale?: Maybe<Scalars['String']['output']>;
   /** Connection between the User type and the mediaItem type */
   mediaItems?: Maybe<UserToMediaItemConnection>;
-  /** Display name of the user. This is equivalent to the WP_User-&gt;display_name property. */
+  /** Display name of the user. */
   name?: Maybe<Scalars['String']['output']>;
   /** Connection between the User type and the nhtbl_project type */
   nhtblProjects?: Maybe<UserToNhtbl_ProjectConnection>;
-  /** The nicename for the user. This field is equivalent to WP_User-&gt;user_nicename */
+  /** The url friendly name for the user, used to reference the user in a public url. */
   nicename?: Maybe<Scalars['String']['output']>;
   /** Nickname of the user. */
   nickname?: Maybe<Scalars['String']['output']>;
@@ -20569,18 +21852,18 @@ export type User = Commenter & DatabaseIdentifier & Node & UniformResourceIdenti
   seo?: Maybe<SeoUser>;
   /** Whether the Toolbar should be displayed when the user is viewing the site. */
   shouldShowAdminToolbar?: Maybe<Scalars['Boolean']['output']>;
-  /** The slug for the user. This field is equivalent to WP_User-&gt;user_nicename */
+  /** The url friendly identifier for the user. */
   slug?: Maybe<Scalars['String']['output']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
   /** A website url that is associated with the user. */
   url?: Maybe<Scalars['String']['output']>;
   /**
-   * The Id of the user. Equivalent to WP_User-&gt;ID
+   * The unique numeric identifier for the user.
    * @deprecated Deprecated in favor of the databaseId field
    */
   userId?: Maybe<Scalars['Int']['output']>;
-  /** Username for the user. This field is equivalent to WP_User-&gt;user_login. */
+  /** Username for the user. This is the unique identifier the user provides to log in. */
   username?: Maybe<Scalars['String']['output']>;
 };
 
@@ -20609,6 +21892,7 @@ export type UserEnqueuedScriptsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<UserToEnqueuedScriptConnectionWhereArgs>;
 };
 
 
@@ -20618,6 +21902,7 @@ export type UserEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<UserToEnqueuedStylesheetConnectionWhereArgs>;
 };
 
 
@@ -20776,19 +22061,19 @@ export type UserRoleConnectionPageInfo = {
 
 /** Permission levels for user accounts. Defines the standard access levels that control what actions users can perform within the system. */
 export enum UserRoleEnum {
-  /** User role with specific capabilities */
+  /** Full system access with ability to manage all aspects of the site. */
   Administrator = 'ADMINISTRATOR',
-  /** User role with specific capabilities */
+  /** Can publish and manage their own content. */
   Author = 'AUTHOR',
-  /** User role with specific capabilities */
+  /** Can write and manage their own content but cannot publish. */
   Contributor = 'CONTRIBUTOR',
-  /** User role with specific capabilities */
+  /** Content management access without administrative capabilities. */
   Editor = 'EDITOR',
   /** User role with specific capabilities */
   SeoEditor = 'SEO_EDITOR',
   /** User role with specific capabilities */
   SeoManager = 'SEO_MANAGER',
-  /** User role with specific capabilities */
+  /** Can only manage their profile and read content. */
   Subscriber = 'SUBSCRIBER'
 }
 
@@ -20883,6 +22168,11 @@ export type UserToCommentConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Search term(s) to retrieve matching comments for. */
   search?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Comment status to limit results by.
+   * @deprecated Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string
+   */
+  status?: InputMaybe<Scalars['String']['input']>;
   /** One or more Comment Statuses to limit results by */
   statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
@@ -20924,6 +22214,12 @@ export type UserToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectionPag
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Arguments for filtering the UserToEnqueuedScriptConnection connection */
+export type UserToEnqueuedScriptConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 /** Connection between the User type and the EnqueuedStylesheet type */
 export type UserToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
   __typename?: 'UserToEnqueuedStylesheetConnection';
@@ -20957,6 +22253,12 @@ export type UserToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetConne
   seo?: Maybe<SeoPostTypePageInfo>;
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the UserToEnqueuedStylesheetConnection connection */
+export type UserToEnqueuedStylesheetConnectionWhereArgs = {
+  /** Limit results to assets whose handle is in the provided list. Handles that do not match an asset are ignored. An empty list matches no assets, while omitting the argument (or passing null) leaves the connection unfiltered. */
+  handlesIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 /** Connection between the User type and the mediaItem type */
@@ -21012,6 +22314,8 @@ export type UserToMediaItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -21036,6 +22340,8 @@ export type UserToMediaItemConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -21093,6 +22399,8 @@ export type UserToNhtbl_ProjectConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -21117,6 +22425,8 @@ export type UserToNhtbl_ProjectConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -21174,6 +22484,8 @@ export type UserToPageConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -21198,6 +22510,8 @@ export type UserToPageConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -21263,6 +22577,8 @@ export type UserToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -21299,6 +22615,8 @@ export type UserToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -21350,6 +22668,8 @@ export type UserToRevisionsConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -21374,6 +22694,8 @@ export type UserToRevisionsConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -21554,12 +22876,14 @@ export type WithAcfSurveyResponse = {
 };
 
 /** The writing setting type */
-export type WritingSettings = {
+export type WritingSettings = Node & {
   __typename?: 'WritingSettings';
   /** Default post category. */
   defaultCategory?: Maybe<Scalars['Int']['output']>;
   /** Default post format. */
   defaultPostFormat?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
   /** Convert emoticons like :-) and :-P to graphics on display. */
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -21604,6 +22928,8 @@ export type YoastFaqBlockAttributes = {
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;questions&quot; field on the &quot;YoastFaqBlockAttributes&quot; block or block attributes */
   questions?: Maybe<Scalars['BlockAttributesArray']['output']>;
+  /** The &quot;style&quot; field on the &quot;YoastFaqBlockAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
 
 /** A block used for editing the site */
@@ -21662,6 +22988,8 @@ export type YoastHowToBlockAttributes = {
   minutes?: Maybe<Scalars['String']['output']>;
   /** The &quot;steps&quot; field on the &quot;YoastHowToBlockAttributes&quot; block or block attributes */
   steps?: Maybe<Scalars['BlockAttributesArray']['output']>;
+  /** The &quot;style&quot; field on the &quot;YoastHowToBlockAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;unorderedList&quot; field on the &quot;YoastHowToBlockAttributes&quot; block or block attributes */
   unorderedList?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -21702,6 +23030,8 @@ export type YoastSeoBreadcrumbsAttributes = {
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   /** The &quot;metadata&quot; field on the &quot;YoastSeoBreadcrumbsAttributes&quot; block or block attributes */
   metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  /** The &quot;style&quot; field on the &quot;YoastSeoBreadcrumbsAttributes&quot; block or block attributes */
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
 };
 
 export type PageMetaQueryVariables = Exact<{
@@ -21718,7 +23048,7 @@ export type PageContentQueryVariables = Exact<{
 }>;
 
 
-export type PageContentQuery = { __typename?: 'RootQuery', nodeByUri?: { __typename: 'Category' } | { __typename: 'Comment' } | { __typename: 'ContentType' } | { __typename: 'MediaItem' } | { __typename: 'Nhtbl_client' } | { __typename: 'Nhtbl_project', id: string, databaseId: number, title?: string | null, excerpt?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, id: string, parentId?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', id: string, name?: string | null, slug?: string | null, parentId?: string | null }> } | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null, imageGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null, editorBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfGalerieAttributes', align?: string | null } | null, galerie?: { __typename?: 'Galerie', galerie?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, caption?: string | null, altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfHomePageHero', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfHomePageHeroAttributes', backgroundColor?: string | null, align?: string | null } | null, homePageHero?: { __typename?: 'HomePageHero', images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfImageGallery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfImageGalleryAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, imageGallery?: { __typename?: 'ImageGallery', intervalMs?: number | null, aspectRatio?: Array<string | null> | null, caption?: string | null, fullWidth?: boolean | null, fullHeight?: boolean | null, images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfLinkBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfLinkBlockAttributes', align?: string | null, backgroundColor?: string | null } | null, linkBlock?: { __typename?: 'LinkBlock', internalLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null, uri?: string | null } | { __typename?: 'Page', slug?: string | null, uri?: string | null } | { __typename?: 'Post', slug?: string | null, uri?: string | null }> } | null, externalLink?: { __typename?: 'AcfLink', url?: string | null, title?: string | null, target?: string | null } | null } | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfPortfolioBlockAttributes', align?: string | null, backgroundColor?: string | null, textColor?: string | null, style?: any | null } | null, portfolioBlock?: { __typename?: 'PortfolioBlock', displayMode?: Array<string | null> | null, enableSearch?: boolean | null, showTags?: boolean | null, projectSource?: string | null, projectsPerPage?: number | null, sortOrder?: Array<string | null> | null, selectedService?: { __typename?: 'AcfTermNodeConnection', nodes: Array<{ __typename?: 'Category', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_client', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_service', slug?: string | null, name?: string | null } | { __typename?: 'PostFormat', slug?: string | null, name?: string | null } | { __typename?: 'Tag', slug?: string | null, name?: string | null }> } | null, specificProjects?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', id: string, uri?: string | null, title?: string | null, excerpt?: string | null, slug?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null, parentId?: string | null, id: string }> } | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfServicePush', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfServicePushAttributes', align?: string | null, backgroundColor?: string | null } | null, servicePush?: { __typename?: 'ServicePush', service?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', id: string, title?: string | null, uri?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfSlide', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, slide?: { __typename?: 'Slide', caption?: string | null, image?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | null } | { __typename?: 'AcfSlideshow', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSlideshowAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, slideshow?: { __typename?: 'Slideshow', autoplay?: boolean | null, intervalMs?: number | null, aspectRatio?: Array<string | null> | null, showNavigation?: boolean | null } | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSubpageNavigationAttributes', align?: string | null } | null, navItems?: Array<{ __typename?: 'SubpageNavItem', databaseId?: number | null, title?: string | null, uri?: string | null, isCurrent?: boolean | null } | null> | null } | { __typename?: 'AcfSurveyBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, surveyBlock?: { __typename?: 'SurveyBlock', questions?: Array<{ __typename?: 'SurveyBlockQuestions', required?: boolean | null, allowOther?: boolean | null, useDefaultLikertOptions?: boolean | null, questionKey?: string | null, questionText?: string | null, questionType?: Array<string | null> | null, options?: Array<{ __typename?: 'SurveyBlockQuestionsOptions', optionLabel?: string | null, optionValue?: string | null } | null> | null } | null> | null } | null } | { __typename?: 'CoreAccordion', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionHeadingAttributes', fontSize?: string | null, fontFamily?: string | null, showIcon: boolean, style?: any | null, title?: string | null } | null } | { __typename?: 'CoreAccordionItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionPanelAttributes', openByDefault: boolean } | null } | { __typename?: 'CoreArchives', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAudio', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAvatar', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreButton', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonAttributes', backgroundColor?: string | null, textColor?: string | null, borderColor?: string | null, className?: string | null, style?: any | null, fontSize?: string | null, fontFamily?: string | null, linkTarget?: string | null, text?: string | null, url?: string | null } | null } | { __typename?: 'CoreButtons', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonsAttributes', align?: string | null, layout?: any | null } | null } | { __typename?: 'CoreCalendar', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCategories', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCode', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreColumn', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, width?: string | null, style?: any | null } | null } | { __typename?: 'CoreColumns', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnsAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, style?: any | null, align?: string | null, isStackedOnMobile: boolean } | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCover', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreDetails', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreEmbed', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreEmbedAttributes', align?: string | null, url?: string | null } | null } | { __typename?: 'CoreFile', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreFootnotes', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, innerBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreImage', name?: string | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null, attributes?: { __typename?: 'CoreFootnotesAttributes', metadata?: any | null } | null } | { __typename?: 'CoreFreeform', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreGallery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreGroupAttributes', backgroundColor?: string | null, textColor?: string | null, align?: string | null, style?: any | null, layout?: any | null, behavior?: string | null, minHeight?: string | null, contentAlign?: string | null, reveal?: string | null, revealDirection?: string | null, revealStagger?: number | null, parallax?: boolean | null } | null } | { __typename?: 'CoreHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreHeadingAttributes', content?: string | null, className?: string | null, cssClassName?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, textAlign?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CoreHomeLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreHtml', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreImage', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', sourceUrl?: string | null, height?: string | null, width?: string | null, mimeType?: string | null, name?: string | null } | null> | null } | null, attributes?: { __typename?: 'CoreImageAttributes', title?: string | null, alt: string, url?: string | null, caption?: string | null, aspectRatio?: string | null, scale?: string | null, width?: string | null, height?: string | null, href?: string | null, linkTarget?: string | null, className?: string | null, align?: string | null } | null } | { __typename?: 'CoreLatestComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreLatestPostsAttributes', postsToShow: number, displayPostDate: boolean, className?: string | null, align?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreLegacyWidget', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListAttributes', ordered: boolean, reversed?: boolean | null, start?: number | null, textColor?: string | null, type?: string | null } | null } | { __typename?: 'CoreListItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListItemAttributes', content?: string | null, fontSize?: string | null, fontFamily?: string | null, textColor?: string | null } | null } | { __typename?: 'CoreLoginout', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMath', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMediaText', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMissing', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMore', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreMoreAttributes', customText: string } | null } | { __typename?: 'CoreNavigation', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNextpage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePageList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePageListItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreParagraph', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreParagraphAttributes', content?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, className?: string | null, cssClassName?: string | null } | null } | { __typename?: 'CorePattern', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostContent', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostDate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTerms', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTitle', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CorePostTitleAttributes', className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, textAlign?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CorePreformatted', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePullquote', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQuery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQueryAttributes', align?: string | null, className?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreQueryNoResults', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQuote', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQuoteAttributes', citation?: string | null, layout?: any | null, textAlign?: string | null, className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, value: string } | null } | { __typename?: 'CoreReadMore', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreRss', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSearch', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSeparator', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreShortcode', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSpacer', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreSpacerAttributes', height?: string | null, style?: any | null } | null } | { __typename?: 'CoreTable', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermCount', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermName', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreVerse', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreVideo', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreVideoAttributes', autoplay?: boolean | null, preload: string, src?: string | null, metadata?: any | null, muted?: boolean | null, controls: boolean, caption?: string | null, poster?: string | null, align?: string | null, loop?: boolean | null, className?: string | null } | null } | { __typename?: 'CoreWidgetGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | null> | null } | { __typename: 'Nhtbl_service' } | { __typename: 'Nhtbl_survey' } | { __typename: 'Nhtbl_surveyResponse' } | { __typename: 'Page', id: string, databaseId: number, title?: string | null, date?: string | null, backgroundColour?: { __typename?: 'BackgroundColour', backgroundColour?: Array<string | null> | null, hideNavigation?: boolean | null } | null, editorBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfGalerieAttributes', align?: string | null } | null, galerie?: { __typename?: 'Galerie', galerie?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, caption?: string | null, altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfHomePageHero', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfHomePageHeroAttributes', backgroundColor?: string | null, align?: string | null } | null, homePageHero?: { __typename?: 'HomePageHero', images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfImageGallery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfImageGalleryAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, imageGallery?: { __typename?: 'ImageGallery', intervalMs?: number | null, aspectRatio?: Array<string | null> | null, caption?: string | null, fullWidth?: boolean | null, fullHeight?: boolean | null, images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfLinkBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfLinkBlockAttributes', align?: string | null, backgroundColor?: string | null } | null, linkBlock?: { __typename?: 'LinkBlock', internalLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null, uri?: string | null } | { __typename?: 'Page', slug?: string | null, uri?: string | null } | { __typename?: 'Post', slug?: string | null, uri?: string | null }> } | null, externalLink?: { __typename?: 'AcfLink', url?: string | null, title?: string | null, target?: string | null } | null } | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfPortfolioBlockAttributes', align?: string | null, backgroundColor?: string | null, textColor?: string | null, style?: any | null } | null, portfolioBlock?: { __typename?: 'PortfolioBlock', displayMode?: Array<string | null> | null, enableSearch?: boolean | null, showTags?: boolean | null, projectSource?: string | null, projectsPerPage?: number | null, sortOrder?: Array<string | null> | null, selectedService?: { __typename?: 'AcfTermNodeConnection', nodes: Array<{ __typename?: 'Category', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_client', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_service', slug?: string | null, name?: string | null } | { __typename?: 'PostFormat', slug?: string | null, name?: string | null } | { __typename?: 'Tag', slug?: string | null, name?: string | null }> } | null, specificProjects?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', id: string, uri?: string | null, title?: string | null, excerpt?: string | null, slug?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null, parentId?: string | null, id: string }> } | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfServicePush', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfServicePushAttributes', align?: string | null, backgroundColor?: string | null } | null, servicePush?: { __typename?: 'ServicePush', service?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', id: string, title?: string | null, uri?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfSlide', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, slide?: { __typename?: 'Slide', caption?: string | null, image?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | null } | { __typename?: 'AcfSlideshow', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSlideshowAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, slideshow?: { __typename?: 'Slideshow', autoplay?: boolean | null, intervalMs?: number | null, aspectRatio?: Array<string | null> | null, showNavigation?: boolean | null } | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSubpageNavigationAttributes', align?: string | null } | null, navItems?: Array<{ __typename?: 'SubpageNavItem', databaseId?: number | null, title?: string | null, uri?: string | null, isCurrent?: boolean | null } | null> | null } | { __typename?: 'AcfSurveyBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, surveyBlock?: { __typename?: 'SurveyBlock', questions?: Array<{ __typename?: 'SurveyBlockQuestions', required?: boolean | null, allowOther?: boolean | null, useDefaultLikertOptions?: boolean | null, questionKey?: string | null, questionText?: string | null, questionType?: Array<string | null> | null, options?: Array<{ __typename?: 'SurveyBlockQuestionsOptions', optionLabel?: string | null, optionValue?: string | null } | null> | null } | null> | null } | null } | { __typename?: 'CoreAccordion', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionHeadingAttributes', fontSize?: string | null, fontFamily?: string | null, showIcon: boolean, style?: any | null, title?: string | null } | null } | { __typename?: 'CoreAccordionItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionPanelAttributes', openByDefault: boolean } | null } | { __typename?: 'CoreButton', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonAttributes', backgroundColor?: string | null, textColor?: string | null, borderColor?: string | null, className?: string | null, style?: any | null, fontSize?: string | null, fontFamily?: string | null, linkTarget?: string | null, text?: string | null, url?: string | null } | null } | { __typename?: 'CoreButtons', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonsAttributes', align?: string | null, layout?: any | null } | null } | { __typename?: 'CoreColumn', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, width?: string | null, style?: any | null } | null } | { __typename?: 'CoreColumns', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnsAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, style?: any | null, align?: string | null, isStackedOnMobile: boolean } | null } | { __typename?: 'CoreCover', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreEmbed', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreEmbedAttributes', align?: string | null, url?: string | null } | null } | { __typename?: 'CoreFootnotes', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, innerBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreImage', name?: string | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null, attributes?: { __typename?: 'CoreFootnotesAttributes', metadata?: any | null } | null } | { __typename?: 'CoreGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreGroupAttributes', backgroundColor?: string | null, textColor?: string | null, align?: string | null, style?: any | null, layout?: any | null, behavior?: string | null, minHeight?: string | null, contentAlign?: string | null, reveal?: string | null, revealDirection?: string | null, revealStagger?: number | null, parallax?: boolean | null } | null } | { __typename?: 'CoreHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreHeadingAttributes', content?: string | null, className?: string | null, cssClassName?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, textAlign?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CoreHtml', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreImage', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', sourceUrl?: string | null, height?: string | null, width?: string | null, mimeType?: string | null, name?: string | null } | null> | null } | null, attributes?: { __typename?: 'CoreImageAttributes', title?: string | null, alt: string, url?: string | null, caption?: string | null, aspectRatio?: string | null, scale?: string | null, width?: string | null, height?: string | null, href?: string | null, linkTarget?: string | null, className?: string | null, align?: string | null } | null } | { __typename?: 'CoreLatestPosts', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreLatestPostsAttributes', postsToShow: number, displayPostDate: boolean, className?: string | null, align?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListAttributes', ordered: boolean, reversed?: boolean | null, start?: number | null, textColor?: string | null, type?: string | null } | null } | { __typename?: 'CoreListItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListItemAttributes', content?: string | null, fontSize?: string | null, fontFamily?: string | null, textColor?: string | null } | null } | { __typename?: 'CoreParagraph', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreParagraphAttributes', content?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, className?: string | null, cssClassName?: string | null } | null } | { __typename?: 'CorePostDate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTitle', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CorePostTitleAttributes', className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, textAlign?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CoreQuery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQueryAttributes', align?: string | null, className?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreQueryNoResults', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQuote', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQuoteAttributes', citation?: string | null, layout?: any | null, textAlign?: string | null, className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, value: string } | null } | { __typename?: 'CoreSpacer', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreSpacerAttributes', height?: string | null, style?: any | null } | null } | { __typename?: 'CoreVideo', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreVideoAttributes', autoplay?: boolean | null, preload: string, src?: string | null, metadata?: any | null, muted?: boolean | null, controls: boolean, caption?: string | null, poster?: string | null, align?: string | null, loop?: boolean | null, className?: string | null } | null } | null> | null } | { __typename: 'Post' } | { __typename: 'PostFormat' } | { __typename: 'Tag' } | { __typename: 'User' } | null };
+export type PageContentQuery = { __typename?: 'RootQuery', nodeByUri?: { __typename: 'Category' } | { __typename: 'Comment' } | { __typename: 'ContentType' } | { __typename: 'MediaItem' } | { __typename: 'Nhtbl_client' } | { __typename: 'Nhtbl_project', id: string, databaseId: number, title?: string | null, excerpt?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, id: string, parentId?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', id: string, name?: string | null, slug?: string | null, parentId?: string | null }> } | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null, imageGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null, editorBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfGalerieAttributes', align?: string | null } | null, galerie?: { __typename?: 'Galerie', galerie?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, caption?: string | null, altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfHomePageHero', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfHomePageHeroAttributes', backgroundColor?: string | null, align?: string | null } | null, homePageHero?: { __typename?: 'HomePageHero', images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfImageGallery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfImageGalleryAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, imageGallery?: { __typename?: 'ImageGallery', intervalMs?: number | null, aspectRatio?: Array<string | null> | null, caption?: string | null, fullWidth?: boolean | null, fullHeight?: boolean | null, images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfLinkBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfLinkBlockAttributes', align?: string | null, backgroundColor?: string | null } | null, linkBlock?: { __typename?: 'LinkBlock', internalLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null, uri?: string | null } | { __typename?: 'Page', slug?: string | null, uri?: string | null } | { __typename?: 'Post', slug?: string | null, uri?: string | null }> } | null, externalLink?: { __typename?: 'AcfLink', url?: string | null, title?: string | null, target?: string | null } | null } | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfPortfolioBlockAttributes', align?: string | null, backgroundColor?: string | null, textColor?: string | null, style?: any | null } | null, portfolioBlock?: { __typename?: 'PortfolioBlock', displayMode?: Array<string | null> | null, enableSearch?: boolean | null, showTags?: boolean | null, projectSource?: string | null, projectsPerPage?: number | null, sortOrder?: Array<string | null> | null, selectedService?: { __typename?: 'AcfTermNodeConnection', nodes: Array<{ __typename?: 'Category', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_client', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_service', slug?: string | null, name?: string | null } | { __typename?: 'PostFormat', slug?: string | null, name?: string | null } | { __typename?: 'Tag', slug?: string | null, name?: string | null }> } | null, specificProjects?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', id: string, uri?: string | null, title?: string | null, excerpt?: string | null, slug?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null, parentId?: string | null, id: string }> } | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfServicePush', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfServicePushAttributes', align?: string | null, backgroundColor?: string | null } | null, servicePush?: { __typename?: 'ServicePush', service?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', id: string, title?: string | null, uri?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfSlide', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, slide?: { __typename?: 'Slide', caption?: string | null, image?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | null } | { __typename?: 'AcfSlideshow', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSlideshowAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, slideshow?: { __typename?: 'Slideshow', autoplay?: boolean | null, intervalMs?: number | null, aspectRatio?: Array<string | null> | null, showNavigation?: boolean | null } | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSubpageNavigationAttributes', align?: string | null } | null, navItems?: Array<{ __typename?: 'SubpageNavItem', databaseId?: number | null, title?: string | null, uri?: string | null, isCurrent?: boolean | null } | null> | null } | { __typename?: 'AcfSurveyBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, surveyBlock?: { __typename?: 'SurveyBlock', questions?: Array<{ __typename?: 'SurveyBlockQuestions', required?: boolean | null, allowOther?: boolean | null, useDefaultLikertOptions?: boolean | null, questionKey?: string | null, questionText?: string | null, questionType?: Array<string | null> | null, options?: Array<{ __typename?: 'SurveyBlockQuestionsOptions', optionLabel?: string | null, optionValue?: string | null } | null> | null } | null> | null } | null } | { __typename?: 'CoreAccordion', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionHeadingAttributes', fontSize?: string | null, fontFamily?: string | null, showIcon: boolean, style?: any | null, title?: string | null } | null } | { __typename?: 'CoreAccordionItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionItemAttributes', openByDefault: boolean } | null } | { __typename?: 'CoreAccordionPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreArchives', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAudio', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAvatar', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreButton', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonAttributes', backgroundColor?: string | null, textColor?: string | null, borderColor?: string | null, className?: string | null, style?: any | null, fontSize?: string | null, fontFamily?: string | null, linkTarget?: string | null, text?: string | null, url?: string | null } | null } | { __typename?: 'CoreButtons', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonsAttributes', align?: string | null, layout?: any | null } | null } | { __typename?: 'CoreCalendar', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCategories', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCode', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreColumn', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, width?: string | null, style?: any | null } | null } | { __typename?: 'CoreColumns', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnsAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, style?: any | null, align?: string | null, isStackedOnMobile: boolean } | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreCover', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreDetails', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreEmbed', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreEmbedAttributes', align?: string | null, url?: string | null } | null } | { __typename?: 'CoreFile', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreFootnotes', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, innerBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreBreadcrumbs', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreIcon', name?: string | null } | { __typename?: 'CoreImage', name?: string | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationOverlayClose', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePlaylist', name?: string | null } | { __typename?: 'CorePlaylistTrack', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTabList', name?: string | null } | { __typename?: 'CoreTabPanel', name?: string | null } | { __typename?: 'CoreTabPanels', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTabs', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null, attributes?: { __typename?: 'CoreFootnotesAttributes', metadata?: any | null } | null } | { __typename?: 'CoreFreeform', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreGallery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreGroupAttributes', backgroundColor?: string | null, textColor?: string | null, align?: string | null, style?: any | null, layout?: any | null, behavior?: string | null, minHeight?: string | null, contentAlign?: string | null, reveal?: string | null, revealDirection?: string | null, revealStagger?: number | null, parallax?: boolean | null } | null } | { __typename?: 'CoreHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreHeadingAttributes', content?: string | null, className?: string | null, cssClassName?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CoreHomeLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreHtml', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreIcon', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreImage', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', sourceUrl?: string | null, height?: string | null, width?: string | null, mimeType?: string | null, name?: string | null } | null> | null } | null, attributes?: { __typename?: 'CoreImageAttributes', title?: string | null, alt: string, url?: string | null, caption?: string | null, aspectRatio?: string | null, scale?: string | null, width?: string | null, height?: string | null, href?: string | null, linkTarget?: string | null, className?: string | null, align?: string | null } | null } | { __typename?: 'CoreLatestComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreLatestPostsAttributes', postsToShow: number, displayPostDate: boolean, className?: string | null, align?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreLegacyWidget', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListAttributes', ordered: boolean, reversed?: boolean | null, start?: number | null, textColor?: string | null, type?: string | null } | null } | { __typename?: 'CoreListItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListItemAttributes', content?: string | null, fontSize?: string | null, fontFamily?: string | null, textColor?: string | null } | null } | { __typename?: 'CoreLoginout', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMath', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMediaText', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMissing', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreMore', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreMoreAttributes', customText: string } | null } | { __typename?: 'CoreNavigation', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNavigationOverlayClose', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreNextpage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePageList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePageListItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreParagraph', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreParagraphAttributes', content?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, className?: string | null, cssClassName?: string | null } | null } | { __typename?: 'CorePattern', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePlaylist', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePlaylistTrack', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostContent', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostDate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTerms', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTitle', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CorePostTitleAttributes', className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CorePreformatted', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePullquote', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQuery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQueryAttributes', align?: string | null, className?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreQueryNoResults', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQuote', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQuoteAttributes', citation?: string | null, layout?: any | null, textAlign?: string | null, className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, value: string } | null } | { __typename?: 'CoreReadMore', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreRss', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSearch', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSeparator', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreShortcode', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreSpacer', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreSpacerAttributes', height?: string | null, style?: any | null } | null } | { __typename?: 'CoreTabList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTabPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTabPanels', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTable', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTabs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermCount', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermName', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreVerse', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreVideo', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreVideoAttributes', autoplay?: boolean | null, preload: string, src?: string | null, metadata?: any | null, muted?: boolean | null, controls: boolean, caption?: string | null, poster?: string | null, align?: string | null, loop?: boolean | null, className?: string | null } | null } | { __typename?: 'CoreWidgetGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | null> | null } | { __typename: 'Nhtbl_service' } | { __typename: 'Nhtbl_survey' } | { __typename: 'Nhtbl_surveyResponse' } | { __typename: 'Page', id: string, databaseId: number, title?: string | null, date?: string | null, backgroundColour?: { __typename?: 'BackgroundColour', backgroundColour?: Array<string | null> | null, hideNavigation?: boolean | null } | null, editorBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfGalerieAttributes', align?: string | null } | null, galerie?: { __typename?: 'Galerie', galerie?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, caption?: string | null, altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfHomePageHero', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfHomePageHeroAttributes', backgroundColor?: string | null, align?: string | null } | null, homePageHero?: { __typename?: 'HomePageHero', images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfImageGallery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfImageGalleryAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, imageGallery?: { __typename?: 'ImageGallery', intervalMs?: number | null, aspectRatio?: Array<string | null> | null, caption?: string | null, fullWidth?: boolean | null, fullHeight?: boolean | null, images?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null } | { __typename?: 'AcfLinkBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfLinkBlockAttributes', align?: string | null, backgroundColor?: string | null } | null, linkBlock?: { __typename?: 'LinkBlock', internalLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null, uri?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null, uri?: string | null } | { __typename?: 'Page', slug?: string | null, uri?: string | null } | { __typename?: 'Post', slug?: string | null, uri?: string | null }> } | null, externalLink?: { __typename?: 'AcfLink', url?: string | null, title?: string | null, target?: string | null } | null } | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfPortfolioBlockAttributes', align?: string | null, backgroundColor?: string | null, textColor?: string | null, style?: any | null } | null, portfolioBlock?: { __typename?: 'PortfolioBlock', displayMode?: Array<string | null> | null, enableSearch?: boolean | null, showTags?: boolean | null, projectSource?: string | null, projectsPerPage?: number | null, sortOrder?: Array<string | null> | null, selectedService?: { __typename?: 'AcfTermNodeConnection', nodes: Array<{ __typename?: 'Category', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_client', slug?: string | null, name?: string | null } | { __typename?: 'Nhtbl_service', slug?: string | null, name?: string | null } | { __typename?: 'PostFormat', slug?: string | null, name?: string | null } | { __typename?: 'Tag', slug?: string | null, name?: string | null }> } | null, specificProjects?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', id: string, uri?: string | null, title?: string | null, excerpt?: string | null, slug?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null, parentId?: string | null, id: string }> } | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfServicePush', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfServicePushAttributes', align?: string | null, backgroundColor?: string | null } | null, servicePush?: { __typename?: 'ServicePush', service?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Nhtbl_project', slug?: string | null } | { __typename?: 'Nhtbl_survey', slug?: string | null } | { __typename?: 'Nhtbl_surveyResponse', slug?: string | null } | { __typename?: 'Page', id: string, title?: string | null, uri?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | { __typename?: 'Post', slug?: string | null }> } | null } | null } | { __typename?: 'AcfSlide', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, slide?: { __typename?: 'Slide', caption?: string | null, image?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaType?: string | null, mimeType?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null } | null } | { __typename?: 'AcfSlideshow', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSlideshowAttributes', align?: string | null, backgroundColor?: string | null, style?: any | null, className?: string | null } | null, slideshow?: { __typename?: 'Slideshow', autoplay?: boolean | null, intervalMs?: number | null, aspectRatio?: Array<string | null> | null, showNavigation?: boolean | null } | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfSubpageNavigationAttributes', align?: string | null } | null, navItems?: Array<{ __typename?: 'SubpageNavItem', databaseId?: number | null, title?: string | null, uri?: string | null, isCurrent?: boolean | null } | null> | null } | { __typename?: 'AcfSurveyBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, surveyBlock?: { __typename?: 'SurveyBlock', questions?: Array<{ __typename?: 'SurveyBlockQuestions', required?: boolean | null, allowOther?: boolean | null, useDefaultLikertOptions?: boolean | null, questionKey?: string | null, questionText?: string | null, questionType?: Array<string | null> | null, options?: Array<{ __typename?: 'SurveyBlockQuestionsOptions', optionLabel?: string | null, optionValue?: string | null } | null> | null } | null> | null } | null } | { __typename?: 'CoreAccordion', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionHeadingAttributes', fontSize?: string | null, fontFamily?: string | null, showIcon: boolean, style?: any | null, title?: string | null } | null } | { __typename?: 'CoreAccordionItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionItemAttributes', openByDefault: boolean } | null } | { __typename?: 'CoreAccordionPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreButton', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonAttributes', backgroundColor?: string | null, textColor?: string | null, borderColor?: string | null, className?: string | null, style?: any | null, fontSize?: string | null, fontFamily?: string | null, linkTarget?: string | null, text?: string | null, url?: string | null } | null } | { __typename?: 'CoreButtons', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonsAttributes', align?: string | null, layout?: any | null } | null } | { __typename?: 'CoreColumn', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, width?: string | null, style?: any | null } | null } | { __typename?: 'CoreColumns', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreColumnsAttributes', backgroundColor?: string | null, textColor?: string | null, layout?: any | null, className?: string | null, verticalAlignment?: string | null, style?: any | null, align?: string | null, isStackedOnMobile: boolean } | null } | { __typename?: 'CoreCover', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreEmbed', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreEmbedAttributes', align?: string | null, url?: string | null } | null } | { __typename?: 'CoreFootnotes', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, innerBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreBreadcrumbs', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreIcon', name?: string | null } | { __typename?: 'CoreImage', name?: string | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationOverlayClose', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePlaylist', name?: string | null } | { __typename?: 'CorePlaylistTrack', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTabList', name?: string | null } | { __typename?: 'CoreTabPanel', name?: string | null } | { __typename?: 'CoreTabPanels', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTabs', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null, attributes?: { __typename?: 'CoreFootnotesAttributes', metadata?: any | null } | null } | { __typename?: 'CoreGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreGroupAttributes', backgroundColor?: string | null, textColor?: string | null, align?: string | null, style?: any | null, layout?: any | null, behavior?: string | null, minHeight?: string | null, contentAlign?: string | null, reveal?: string | null, revealDirection?: string | null, revealStagger?: number | null, parallax?: boolean | null } | null } | { __typename?: 'CoreHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreHeadingAttributes', content?: string | null, className?: string | null, cssClassName?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CoreHtml', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreImage', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', sourceUrl?: string | null, height?: string | null, width?: string | null, mimeType?: string | null, name?: string | null } | null> | null } | null, attributes?: { __typename?: 'CoreImageAttributes', title?: string | null, alt: string, url?: string | null, caption?: string | null, aspectRatio?: string | null, scale?: string | null, width?: string | null, height?: string | null, href?: string | null, linkTarget?: string | null, className?: string | null, align?: string | null } | null } | { __typename?: 'CoreLatestPosts', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreLatestPostsAttributes', postsToShow: number, displayPostDate: boolean, className?: string | null, align?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListAttributes', ordered: boolean, reversed?: boolean | null, start?: number | null, textColor?: string | null, type?: string | null } | null } | { __typename?: 'CoreListItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreListItemAttributes', content?: string | null, fontSize?: string | null, fontFamily?: string | null, textColor?: string | null } | null } | { __typename?: 'CoreParagraph', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreParagraphAttributes', content?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, className?: string | null, cssClassName?: string | null } | null } | { __typename?: 'CorePostDate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CorePostTitle', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CorePostTitleAttributes', className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, level: number, align?: string | null } | null } | { __typename?: 'CoreQuery', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQueryAttributes', align?: string | null, className?: string | null } | null, resolvedPosts?: Array<{ __typename?: 'ResolvedPost', title?: string | null, date?: string | null, uri?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'ResolvedPostImage', sourceUrl?: string | null, altText?: string | null, sizes?: Array<{ __typename?: 'ResolvedPostImageSize', sourceUrl?: string | null, width?: string | null, height?: string | null, name?: string | null, mimeType?: string | null } | null> | null } | null } | null> | null } | { __typename?: 'CoreQueryNoResults', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null } | { __typename?: 'CoreQuote', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreQuoteAttributes', citation?: string | null, layout?: any | null, textAlign?: string | null, className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, value: string } | null } | { __typename?: 'CoreSpacer', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreSpacerAttributes', height?: string | null, style?: any | null } | null } | { __typename?: 'CoreVideo', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreVideoAttributes', autoplay?: boolean | null, preload: string, src?: string | null, metadata?: any | null, muted?: boolean | null, controls: boolean, caption?: string | null, poster?: string | null, align?: string | null, loop?: boolean | null, className?: string | null } | null } | null> | null } | { __typename: 'Post' } | { __typename: 'PostFormat' } | { __typename: 'Tag' } | { __typename: 'User' } | null };
 
 type BlockBasicFields_AcfGalerie_Fragment = { __typename?: 'AcfGalerie', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -21755,6 +23085,8 @@ type BlockBasicFields_CoreAudio_Fragment = { __typename?: 'CoreAudio', name?: st
 type BlockBasicFields_CoreAvatar_Fragment = { __typename?: 'CoreAvatar', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CoreBlock_Fragment = { __typename?: 'CoreBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type BlockBasicFields_CoreBreadcrumbs_Fragment = { __typename?: 'CoreBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CoreButton_Fragment = { __typename?: 'CoreButton', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -21816,6 +23148,8 @@ type BlockBasicFields_CoreHomeLink_Fragment = { __typename?: 'CoreHomeLink', nam
 
 type BlockBasicFields_CoreHtml_Fragment = { __typename?: 'CoreHtml', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
+type BlockBasicFields_CoreIcon_Fragment = { __typename?: 'CoreIcon', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
 type BlockBasicFields_CoreImage_Fragment = { __typename?: 'CoreImage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CoreLatestComments_Fragment = { __typename?: 'CoreLatestComments', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
@@ -21842,6 +23176,8 @@ type BlockBasicFields_CoreNavigation_Fragment = { __typename?: 'CoreNavigation',
 
 type BlockBasicFields_CoreNavigationLink_Fragment = { __typename?: 'CoreNavigationLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
+type BlockBasicFields_CoreNavigationOverlayClose_Fragment = { __typename?: 'CoreNavigationOverlayClose', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
 type BlockBasicFields_CoreNavigationSubmenu_Fragment = { __typename?: 'CoreNavigationSubmenu', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CoreNextpage_Fragment = { __typename?: 'CoreNextpage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
@@ -21853,6 +23189,10 @@ type BlockBasicFields_CorePageListItem_Fragment = { __typename?: 'CorePageListIt
 type BlockBasicFields_CoreParagraph_Fragment = { __typename?: 'CoreParagraph', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CorePattern_Fragment = { __typename?: 'CorePattern', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type BlockBasicFields_CorePlaylist_Fragment = { __typename?: 'CorePlaylist', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type BlockBasicFields_CorePlaylistTrack_Fragment = { __typename?: 'CorePlaylistTrack', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CorePostAuthor_Fragment = { __typename?: 'CorePostAuthor', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -21930,7 +23270,15 @@ type BlockBasicFields_CoreSocialLinks_Fragment = { __typename?: 'CoreSocialLinks
 
 type BlockBasicFields_CoreSpacer_Fragment = { __typename?: 'CoreSpacer', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
+type BlockBasicFields_CoreTabList_Fragment = { __typename?: 'CoreTabList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type BlockBasicFields_CoreTabPanel_Fragment = { __typename?: 'CoreTabPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type BlockBasicFields_CoreTabPanels_Fragment = { __typename?: 'CoreTabPanels', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
 type BlockBasicFields_CoreTable_Fragment = { __typename?: 'CoreTable', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type BlockBasicFields_CoreTabs_Fragment = { __typename?: 'CoreTabs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type BlockBasicFields_CoreTagCloud_Fragment = { __typename?: 'CoreTagCloud', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -21960,7 +23308,7 @@ type BlockBasicFields_YoastHowToBlock_Fragment = { __typename?: 'YoastHowToBlock
 
 type BlockBasicFields_YoastSeoBreadcrumbs_Fragment = { __typename?: 'YoastSeoBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
-export type BlockBasicFieldsFragment = BlockBasicFields_AcfGalerie_Fragment | BlockBasicFields_AcfHomePageHero_Fragment | BlockBasicFields_AcfImageGallery_Fragment | BlockBasicFields_AcfLinkBlock_Fragment | BlockBasicFields_AcfPortfolioBlock_Fragment | BlockBasicFields_AcfServicePush_Fragment | BlockBasicFields_AcfSlide_Fragment | BlockBasicFields_AcfSlideshow_Fragment | BlockBasicFields_AcfSubpageNavigation_Fragment | BlockBasicFields_AcfSurveyBlock_Fragment | BlockBasicFields_CoreAccordion_Fragment | BlockBasicFields_CoreAccordionHeading_Fragment | BlockBasicFields_CoreAccordionItem_Fragment | BlockBasicFields_CoreAccordionPanel_Fragment | BlockBasicFields_CoreArchives_Fragment | BlockBasicFields_CoreAudio_Fragment | BlockBasicFields_CoreAvatar_Fragment | BlockBasicFields_CoreBlock_Fragment | BlockBasicFields_CoreButton_Fragment | BlockBasicFields_CoreButtons_Fragment | BlockBasicFields_CoreCalendar_Fragment | BlockBasicFields_CoreCategories_Fragment | BlockBasicFields_CoreCode_Fragment | BlockBasicFields_CoreColumn_Fragment | BlockBasicFields_CoreColumns_Fragment | BlockBasicFields_CoreCommentAuthorName_Fragment | BlockBasicFields_CoreCommentContent_Fragment | BlockBasicFields_CoreCommentDate_Fragment | BlockBasicFields_CoreCommentEditLink_Fragment | BlockBasicFields_CoreCommentReplyLink_Fragment | BlockBasicFields_CoreCommentTemplate_Fragment | BlockBasicFields_CoreComments_Fragment | BlockBasicFields_CoreCommentsPagination_Fragment | BlockBasicFields_CoreCommentsPaginationNext_Fragment | BlockBasicFields_CoreCommentsPaginationNumbers_Fragment | BlockBasicFields_CoreCommentsPaginationPrevious_Fragment | BlockBasicFields_CoreCommentsTitle_Fragment | BlockBasicFields_CoreCover_Fragment | BlockBasicFields_CoreDetails_Fragment | BlockBasicFields_CoreEmbed_Fragment | BlockBasicFields_CoreFile_Fragment | BlockBasicFields_CoreFootnotes_Fragment | BlockBasicFields_CoreFreeform_Fragment | BlockBasicFields_CoreGallery_Fragment | BlockBasicFields_CoreGroup_Fragment | BlockBasicFields_CoreHeading_Fragment | BlockBasicFields_CoreHomeLink_Fragment | BlockBasicFields_CoreHtml_Fragment | BlockBasicFields_CoreImage_Fragment | BlockBasicFields_CoreLatestComments_Fragment | BlockBasicFields_CoreLatestPosts_Fragment | BlockBasicFields_CoreLegacyWidget_Fragment | BlockBasicFields_CoreList_Fragment | BlockBasicFields_CoreListItem_Fragment | BlockBasicFields_CoreLoginout_Fragment | BlockBasicFields_CoreMath_Fragment | BlockBasicFields_CoreMediaText_Fragment | BlockBasicFields_CoreMissing_Fragment | BlockBasicFields_CoreMore_Fragment | BlockBasicFields_CoreNavigation_Fragment | BlockBasicFields_CoreNavigationLink_Fragment | BlockBasicFields_CoreNavigationSubmenu_Fragment | BlockBasicFields_CoreNextpage_Fragment | BlockBasicFields_CorePageList_Fragment | BlockBasicFields_CorePageListItem_Fragment | BlockBasicFields_CoreParagraph_Fragment | BlockBasicFields_CorePattern_Fragment | BlockBasicFields_CorePostAuthor_Fragment | BlockBasicFields_CorePostAuthorBiography_Fragment | BlockBasicFields_CorePostAuthorName_Fragment | BlockBasicFields_CorePostComments_Fragment | BlockBasicFields_CorePostCommentsCount_Fragment | BlockBasicFields_CorePostCommentsForm_Fragment | BlockBasicFields_CorePostCommentsLink_Fragment | BlockBasicFields_CorePostContent_Fragment | BlockBasicFields_CorePostDate_Fragment | BlockBasicFields_CorePostExcerpt_Fragment | BlockBasicFields_CorePostFeaturedImage_Fragment | BlockBasicFields_CorePostNavigationLink_Fragment | BlockBasicFields_CorePostTemplate_Fragment | BlockBasicFields_CorePostTerms_Fragment | BlockBasicFields_CorePostTimeToRead_Fragment | BlockBasicFields_CorePostTitle_Fragment | BlockBasicFields_CorePreformatted_Fragment | BlockBasicFields_CorePullquote_Fragment | BlockBasicFields_CoreQuery_Fragment | BlockBasicFields_CoreQueryNoResults_Fragment | BlockBasicFields_CoreQueryPagination_Fragment | BlockBasicFields_CoreQueryPaginationNext_Fragment | BlockBasicFields_CoreQueryPaginationNumbers_Fragment | BlockBasicFields_CoreQueryPaginationPrevious_Fragment | BlockBasicFields_CoreQueryTitle_Fragment | BlockBasicFields_CoreQueryTotal_Fragment | BlockBasicFields_CoreQuote_Fragment | BlockBasicFields_CoreReadMore_Fragment | BlockBasicFields_CoreRss_Fragment | BlockBasicFields_CoreSearch_Fragment | BlockBasicFields_CoreSeparator_Fragment | BlockBasicFields_CoreShortcode_Fragment | BlockBasicFields_CoreSiteLogo_Fragment | BlockBasicFields_CoreSiteTagline_Fragment | BlockBasicFields_CoreSiteTitle_Fragment | BlockBasicFields_CoreSocialLink_Fragment | BlockBasicFields_CoreSocialLinks_Fragment | BlockBasicFields_CoreSpacer_Fragment | BlockBasicFields_CoreTable_Fragment | BlockBasicFields_CoreTagCloud_Fragment | BlockBasicFields_CoreTemplatePart_Fragment | BlockBasicFields_CoreTermCount_Fragment | BlockBasicFields_CoreTermDescription_Fragment | BlockBasicFields_CoreTermName_Fragment | BlockBasicFields_CoreTermTemplate_Fragment | BlockBasicFields_CoreTermsQuery_Fragment | BlockBasicFields_CoreTextColumns_Fragment | BlockBasicFields_CoreVerse_Fragment | BlockBasicFields_CoreVideo_Fragment | BlockBasicFields_CoreWidgetGroup_Fragment | BlockBasicFields_YoastFaqBlock_Fragment | BlockBasicFields_YoastHowToBlock_Fragment | BlockBasicFields_YoastSeoBreadcrumbs_Fragment;
+export type BlockBasicFieldsFragment = BlockBasicFields_AcfGalerie_Fragment | BlockBasicFields_AcfHomePageHero_Fragment | BlockBasicFields_AcfImageGallery_Fragment | BlockBasicFields_AcfLinkBlock_Fragment | BlockBasicFields_AcfPortfolioBlock_Fragment | BlockBasicFields_AcfServicePush_Fragment | BlockBasicFields_AcfSlide_Fragment | BlockBasicFields_AcfSlideshow_Fragment | BlockBasicFields_AcfSubpageNavigation_Fragment | BlockBasicFields_AcfSurveyBlock_Fragment | BlockBasicFields_CoreAccordion_Fragment | BlockBasicFields_CoreAccordionHeading_Fragment | BlockBasicFields_CoreAccordionItem_Fragment | BlockBasicFields_CoreAccordionPanel_Fragment | BlockBasicFields_CoreArchives_Fragment | BlockBasicFields_CoreAudio_Fragment | BlockBasicFields_CoreAvatar_Fragment | BlockBasicFields_CoreBlock_Fragment | BlockBasicFields_CoreBreadcrumbs_Fragment | BlockBasicFields_CoreButton_Fragment | BlockBasicFields_CoreButtons_Fragment | BlockBasicFields_CoreCalendar_Fragment | BlockBasicFields_CoreCategories_Fragment | BlockBasicFields_CoreCode_Fragment | BlockBasicFields_CoreColumn_Fragment | BlockBasicFields_CoreColumns_Fragment | BlockBasicFields_CoreCommentAuthorName_Fragment | BlockBasicFields_CoreCommentContent_Fragment | BlockBasicFields_CoreCommentDate_Fragment | BlockBasicFields_CoreCommentEditLink_Fragment | BlockBasicFields_CoreCommentReplyLink_Fragment | BlockBasicFields_CoreCommentTemplate_Fragment | BlockBasicFields_CoreComments_Fragment | BlockBasicFields_CoreCommentsPagination_Fragment | BlockBasicFields_CoreCommentsPaginationNext_Fragment | BlockBasicFields_CoreCommentsPaginationNumbers_Fragment | BlockBasicFields_CoreCommentsPaginationPrevious_Fragment | BlockBasicFields_CoreCommentsTitle_Fragment | BlockBasicFields_CoreCover_Fragment | BlockBasicFields_CoreDetails_Fragment | BlockBasicFields_CoreEmbed_Fragment | BlockBasicFields_CoreFile_Fragment | BlockBasicFields_CoreFootnotes_Fragment | BlockBasicFields_CoreFreeform_Fragment | BlockBasicFields_CoreGallery_Fragment | BlockBasicFields_CoreGroup_Fragment | BlockBasicFields_CoreHeading_Fragment | BlockBasicFields_CoreHomeLink_Fragment | BlockBasicFields_CoreHtml_Fragment | BlockBasicFields_CoreIcon_Fragment | BlockBasicFields_CoreImage_Fragment | BlockBasicFields_CoreLatestComments_Fragment | BlockBasicFields_CoreLatestPosts_Fragment | BlockBasicFields_CoreLegacyWidget_Fragment | BlockBasicFields_CoreList_Fragment | BlockBasicFields_CoreListItem_Fragment | BlockBasicFields_CoreLoginout_Fragment | BlockBasicFields_CoreMath_Fragment | BlockBasicFields_CoreMediaText_Fragment | BlockBasicFields_CoreMissing_Fragment | BlockBasicFields_CoreMore_Fragment | BlockBasicFields_CoreNavigation_Fragment | BlockBasicFields_CoreNavigationLink_Fragment | BlockBasicFields_CoreNavigationOverlayClose_Fragment | BlockBasicFields_CoreNavigationSubmenu_Fragment | BlockBasicFields_CoreNextpage_Fragment | BlockBasicFields_CorePageList_Fragment | BlockBasicFields_CorePageListItem_Fragment | BlockBasicFields_CoreParagraph_Fragment | BlockBasicFields_CorePattern_Fragment | BlockBasicFields_CorePlaylist_Fragment | BlockBasicFields_CorePlaylistTrack_Fragment | BlockBasicFields_CorePostAuthor_Fragment | BlockBasicFields_CorePostAuthorBiography_Fragment | BlockBasicFields_CorePostAuthorName_Fragment | BlockBasicFields_CorePostComments_Fragment | BlockBasicFields_CorePostCommentsCount_Fragment | BlockBasicFields_CorePostCommentsForm_Fragment | BlockBasicFields_CorePostCommentsLink_Fragment | BlockBasicFields_CorePostContent_Fragment | BlockBasicFields_CorePostDate_Fragment | BlockBasicFields_CorePostExcerpt_Fragment | BlockBasicFields_CorePostFeaturedImage_Fragment | BlockBasicFields_CorePostNavigationLink_Fragment | BlockBasicFields_CorePostTemplate_Fragment | BlockBasicFields_CorePostTerms_Fragment | BlockBasicFields_CorePostTimeToRead_Fragment | BlockBasicFields_CorePostTitle_Fragment | BlockBasicFields_CorePreformatted_Fragment | BlockBasicFields_CorePullquote_Fragment | BlockBasicFields_CoreQuery_Fragment | BlockBasicFields_CoreQueryNoResults_Fragment | BlockBasicFields_CoreQueryPagination_Fragment | BlockBasicFields_CoreQueryPaginationNext_Fragment | BlockBasicFields_CoreQueryPaginationNumbers_Fragment | BlockBasicFields_CoreQueryPaginationPrevious_Fragment | BlockBasicFields_CoreQueryTitle_Fragment | BlockBasicFields_CoreQueryTotal_Fragment | BlockBasicFields_CoreQuote_Fragment | BlockBasicFields_CoreReadMore_Fragment | BlockBasicFields_CoreRss_Fragment | BlockBasicFields_CoreSearch_Fragment | BlockBasicFields_CoreSeparator_Fragment | BlockBasicFields_CoreShortcode_Fragment | BlockBasicFields_CoreSiteLogo_Fragment | BlockBasicFields_CoreSiteTagline_Fragment | BlockBasicFields_CoreSiteTitle_Fragment | BlockBasicFields_CoreSocialLink_Fragment | BlockBasicFields_CoreSocialLinks_Fragment | BlockBasicFields_CoreSpacer_Fragment | BlockBasicFields_CoreTabList_Fragment | BlockBasicFields_CoreTabPanel_Fragment | BlockBasicFields_CoreTabPanels_Fragment | BlockBasicFields_CoreTable_Fragment | BlockBasicFields_CoreTabs_Fragment | BlockBasicFields_CoreTagCloud_Fragment | BlockBasicFields_CoreTemplatePart_Fragment | BlockBasicFields_CoreTermCount_Fragment | BlockBasicFields_CoreTermDescription_Fragment | BlockBasicFields_CoreTermName_Fragment | BlockBasicFields_CoreTermTemplate_Fragment | BlockBasicFields_CoreTermsQuery_Fragment | BlockBasicFields_CoreTextColumns_Fragment | BlockBasicFields_CoreVerse_Fragment | BlockBasicFields_CoreVideo_Fragment | BlockBasicFields_CoreWidgetGroup_Fragment | BlockBasicFields_YoastFaqBlock_Fragment | BlockBasicFields_YoastHowToBlock_Fragment | BlockBasicFields_YoastSeoBreadcrumbs_Fragment;
 
 type CommonBlockFields_AcfGalerie_Fragment = { __typename?: 'AcfGalerie', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'AcfGalerieAttributes', align?: string | null } | null, galerie?: { __typename?: 'Galerie', galerie?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', mediaType?: string | null, mimeType?: string | null, mediaItemUrl?: string | null, caption?: string | null, altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null }> } | null } | null };
 
@@ -21986,9 +23334,9 @@ type CommonBlockFields_CoreAccordion_Fragment = { __typename?: 'CoreAccordion', 
 
 type CommonBlockFields_CoreAccordionHeading_Fragment = { __typename?: 'CoreAccordionHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionHeadingAttributes', fontSize?: string | null, fontFamily?: string | null, showIcon: boolean, style?: any | null, title?: string | null } | null };
 
-type CommonBlockFields_CoreAccordionItem_Fragment = { __typename?: 'CoreAccordionItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+type CommonBlockFields_CoreAccordionItem_Fragment = { __typename?: 'CoreAccordionItem', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionItemAttributes', openByDefault: boolean } | null };
 
-type CommonBlockFields_CoreAccordionPanel_Fragment = { __typename?: 'CoreAccordionPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreAccordionPanelAttributes', openByDefault: boolean } | null };
+type CommonBlockFields_CoreAccordionPanel_Fragment = { __typename?: 'CoreAccordionPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreArchives_Fragment = { __typename?: 'CoreArchives', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -21997,6 +23345,8 @@ type CommonBlockFields_CoreAudio_Fragment = { __typename?: 'CoreAudio', name?: s
 type CommonBlockFields_CoreAvatar_Fragment = { __typename?: 'CoreAvatar', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreBlock_Fragment = { __typename?: 'CoreBlock', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CoreBreadcrumbs_Fragment = { __typename?: 'CoreBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreButton_Fragment = { __typename?: 'CoreButton', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreButtonAttributes', backgroundColor?: string | null, textColor?: string | null, borderColor?: string | null, className?: string | null, style?: any | null, fontSize?: string | null, fontFamily?: string | null, linkTarget?: string | null, text?: string | null, url?: string | null } | null };
 
@@ -22044,7 +23394,7 @@ type CommonBlockFields_CoreEmbed_Fragment = { __typename?: 'CoreEmbed', rendered
 
 type CommonBlockFields_CoreFile_Fragment = { __typename?: 'CoreFile', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
-type CommonBlockFields_CoreFootnotes_Fragment = { __typename?: 'CoreFootnotes', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, innerBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreImage', name?: string | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null, attributes?: { __typename?: 'CoreFootnotesAttributes', metadata?: any | null } | null };
+type CommonBlockFields_CoreFootnotes_Fragment = { __typename?: 'CoreFootnotes', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, innerBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreBreadcrumbs', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreIcon', name?: string | null } | { __typename?: 'CoreImage', name?: string | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationOverlayClose', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePlaylist', name?: string | null } | { __typename?: 'CorePlaylistTrack', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTabList', name?: string | null } | { __typename?: 'CoreTabPanel', name?: string | null } | { __typename?: 'CoreTabPanels', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTabs', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null, attributes?: { __typename?: 'CoreFootnotesAttributes', metadata?: any | null } | null };
 
 type CommonBlockFields_CoreFreeform_Fragment = { __typename?: 'CoreFreeform', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -22052,11 +23402,13 @@ type CommonBlockFields_CoreGallery_Fragment = { __typename?: 'CoreGallery', name
 
 type CommonBlockFields_CoreGroup_Fragment = { __typename?: 'CoreGroup', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreGroupAttributes', backgroundColor?: string | null, textColor?: string | null, align?: string | null, style?: any | null, layout?: any | null, behavior?: string | null, minHeight?: string | null, contentAlign?: string | null, reveal?: string | null, revealDirection?: string | null, revealStagger?: number | null, parallax?: boolean | null } | null };
 
-type CommonBlockFields_CoreHeading_Fragment = { __typename?: 'CoreHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreHeadingAttributes', content?: string | null, className?: string | null, cssClassName?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, textAlign?: string | null, level: number, align?: string | null } | null };
+type CommonBlockFields_CoreHeading_Fragment = { __typename?: 'CoreHeading', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreHeadingAttributes', content?: string | null, className?: string | null, cssClassName?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, level: number, align?: string | null } | null };
 
 type CommonBlockFields_CoreHomeLink_Fragment = { __typename?: 'CoreHomeLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreHtml_Fragment = { __typename?: 'CoreHtml', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CoreIcon_Fragment = { __typename?: 'CoreIcon', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreImage_Fragment = { __typename?: 'CoreImage', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', sourceUrl?: string | null, height?: string | null, width?: string | null, mimeType?: string | null, name?: string | null } | null> | null } | null, attributes?: { __typename?: 'CoreImageAttributes', title?: string | null, alt: string, url?: string | null, caption?: string | null, aspectRatio?: string | null, scale?: string | null, width?: string | null, height?: string | null, href?: string | null, linkTarget?: string | null, className?: string | null, align?: string | null } | null };
 
@@ -22084,6 +23436,8 @@ type CommonBlockFields_CoreNavigation_Fragment = { __typename?: 'CoreNavigation'
 
 type CommonBlockFields_CoreNavigationLink_Fragment = { __typename?: 'CoreNavigationLink', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
+type CommonBlockFields_CoreNavigationOverlayClose_Fragment = { __typename?: 'CoreNavigationOverlayClose', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
 type CommonBlockFields_CoreNavigationSubmenu_Fragment = { __typename?: 'CoreNavigationSubmenu', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreNextpage_Fragment = { __typename?: 'CoreNextpage', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
@@ -22095,6 +23449,10 @@ type CommonBlockFields_CorePageListItem_Fragment = { __typename?: 'CorePageListI
 type CommonBlockFields_CoreParagraph_Fragment = { __typename?: 'CoreParagraph', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreParagraphAttributes', content?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, align?: string | null, className?: string | null, cssClassName?: string | null } | null };
 
 type CommonBlockFields_CorePattern_Fragment = { __typename?: 'CorePattern', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CorePlaylist_Fragment = { __typename?: 'CorePlaylist', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CorePlaylistTrack_Fragment = { __typename?: 'CorePlaylistTrack', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CorePostAuthor_Fragment = { __typename?: 'CorePostAuthor', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -22126,7 +23484,7 @@ type CommonBlockFields_CorePostTerms_Fragment = { __typename?: 'CorePostTerms', 
 
 type CommonBlockFields_CorePostTimeToRead_Fragment = { __typename?: 'CorePostTimeToRead', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
-type CommonBlockFields_CorePostTitle_Fragment = { __typename?: 'CorePostTitle', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CorePostTitleAttributes', className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, textAlign?: string | null, level: number, align?: string | null } | null };
+type CommonBlockFields_CorePostTitle_Fragment = { __typename?: 'CorePostTitle', renderedHtml?: string | null, name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CorePostTitleAttributes', className?: string | null, fontFamily?: string | null, fontSize?: string | null, textColor?: string | null, level: number, align?: string | null } | null };
 
 type CommonBlockFields_CorePreformatted_Fragment = { __typename?: 'CorePreformatted', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -22172,7 +23530,15 @@ type CommonBlockFields_CoreSocialLinks_Fragment = { __typename?: 'CoreSocialLink
 
 type CommonBlockFields_CoreSpacer_Fragment = { __typename?: 'CoreSpacer', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null, attributes?: { __typename?: 'CoreSpacerAttributes', height?: string | null, style?: any | null } | null };
 
+type CommonBlockFields_CoreTabList_Fragment = { __typename?: 'CoreTabList', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CoreTabPanel_Fragment = { __typename?: 'CoreTabPanel', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CoreTabPanels_Fragment = { __typename?: 'CoreTabPanels', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
 type CommonBlockFields_CoreTable_Fragment = { __typename?: 'CoreTable', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
+
+type CommonBlockFields_CoreTabs_Fragment = { __typename?: 'CoreTabs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
 type CommonBlockFields_CoreTagCloud_Fragment = { __typename?: 'CoreTagCloud', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
@@ -22202,7 +23568,7 @@ type CommonBlockFields_YoastHowToBlock_Fragment = { __typename?: 'YoastHowToBloc
 
 type CommonBlockFields_YoastSeoBreadcrumbs_Fragment = { __typename?: 'YoastSeoBreadcrumbs', name?: string | null, parentClientId?: string | null, clientId?: string | null, type?: string | null };
 
-export type CommonBlockFieldsFragment = CommonBlockFields_AcfGalerie_Fragment | CommonBlockFields_AcfHomePageHero_Fragment | CommonBlockFields_AcfImageGallery_Fragment | CommonBlockFields_AcfLinkBlock_Fragment | CommonBlockFields_AcfPortfolioBlock_Fragment | CommonBlockFields_AcfServicePush_Fragment | CommonBlockFields_AcfSlide_Fragment | CommonBlockFields_AcfSlideshow_Fragment | CommonBlockFields_AcfSubpageNavigation_Fragment | CommonBlockFields_AcfSurveyBlock_Fragment | CommonBlockFields_CoreAccordion_Fragment | CommonBlockFields_CoreAccordionHeading_Fragment | CommonBlockFields_CoreAccordionItem_Fragment | CommonBlockFields_CoreAccordionPanel_Fragment | CommonBlockFields_CoreArchives_Fragment | CommonBlockFields_CoreAudio_Fragment | CommonBlockFields_CoreAvatar_Fragment | CommonBlockFields_CoreBlock_Fragment | CommonBlockFields_CoreButton_Fragment | CommonBlockFields_CoreButtons_Fragment | CommonBlockFields_CoreCalendar_Fragment | CommonBlockFields_CoreCategories_Fragment | CommonBlockFields_CoreCode_Fragment | CommonBlockFields_CoreColumn_Fragment | CommonBlockFields_CoreColumns_Fragment | CommonBlockFields_CoreCommentAuthorName_Fragment | CommonBlockFields_CoreCommentContent_Fragment | CommonBlockFields_CoreCommentDate_Fragment | CommonBlockFields_CoreCommentEditLink_Fragment | CommonBlockFields_CoreCommentReplyLink_Fragment | CommonBlockFields_CoreCommentTemplate_Fragment | CommonBlockFields_CoreComments_Fragment | CommonBlockFields_CoreCommentsPagination_Fragment | CommonBlockFields_CoreCommentsPaginationNext_Fragment | CommonBlockFields_CoreCommentsPaginationNumbers_Fragment | CommonBlockFields_CoreCommentsPaginationPrevious_Fragment | CommonBlockFields_CoreCommentsTitle_Fragment | CommonBlockFields_CoreCover_Fragment | CommonBlockFields_CoreDetails_Fragment | CommonBlockFields_CoreEmbed_Fragment | CommonBlockFields_CoreFile_Fragment | CommonBlockFields_CoreFootnotes_Fragment | CommonBlockFields_CoreFreeform_Fragment | CommonBlockFields_CoreGallery_Fragment | CommonBlockFields_CoreGroup_Fragment | CommonBlockFields_CoreHeading_Fragment | CommonBlockFields_CoreHomeLink_Fragment | CommonBlockFields_CoreHtml_Fragment | CommonBlockFields_CoreImage_Fragment | CommonBlockFields_CoreLatestComments_Fragment | CommonBlockFields_CoreLatestPosts_Fragment | CommonBlockFields_CoreLegacyWidget_Fragment | CommonBlockFields_CoreList_Fragment | CommonBlockFields_CoreListItem_Fragment | CommonBlockFields_CoreLoginout_Fragment | CommonBlockFields_CoreMath_Fragment | CommonBlockFields_CoreMediaText_Fragment | CommonBlockFields_CoreMissing_Fragment | CommonBlockFields_CoreMore_Fragment | CommonBlockFields_CoreNavigation_Fragment | CommonBlockFields_CoreNavigationLink_Fragment | CommonBlockFields_CoreNavigationSubmenu_Fragment | CommonBlockFields_CoreNextpage_Fragment | CommonBlockFields_CorePageList_Fragment | CommonBlockFields_CorePageListItem_Fragment | CommonBlockFields_CoreParagraph_Fragment | CommonBlockFields_CorePattern_Fragment | CommonBlockFields_CorePostAuthor_Fragment | CommonBlockFields_CorePostAuthorBiography_Fragment | CommonBlockFields_CorePostAuthorName_Fragment | CommonBlockFields_CorePostComments_Fragment | CommonBlockFields_CorePostCommentsCount_Fragment | CommonBlockFields_CorePostCommentsForm_Fragment | CommonBlockFields_CorePostCommentsLink_Fragment | CommonBlockFields_CorePostContent_Fragment | CommonBlockFields_CorePostDate_Fragment | CommonBlockFields_CorePostExcerpt_Fragment | CommonBlockFields_CorePostFeaturedImage_Fragment | CommonBlockFields_CorePostNavigationLink_Fragment | CommonBlockFields_CorePostTemplate_Fragment | CommonBlockFields_CorePostTerms_Fragment | CommonBlockFields_CorePostTimeToRead_Fragment | CommonBlockFields_CorePostTitle_Fragment | CommonBlockFields_CorePreformatted_Fragment | CommonBlockFields_CorePullquote_Fragment | CommonBlockFields_CoreQuery_Fragment | CommonBlockFields_CoreQueryNoResults_Fragment | CommonBlockFields_CoreQueryPagination_Fragment | CommonBlockFields_CoreQueryPaginationNext_Fragment | CommonBlockFields_CoreQueryPaginationNumbers_Fragment | CommonBlockFields_CoreQueryPaginationPrevious_Fragment | CommonBlockFields_CoreQueryTitle_Fragment | CommonBlockFields_CoreQueryTotal_Fragment | CommonBlockFields_CoreQuote_Fragment | CommonBlockFields_CoreReadMore_Fragment | CommonBlockFields_CoreRss_Fragment | CommonBlockFields_CoreSearch_Fragment | CommonBlockFields_CoreSeparator_Fragment | CommonBlockFields_CoreShortcode_Fragment | CommonBlockFields_CoreSiteLogo_Fragment | CommonBlockFields_CoreSiteTagline_Fragment | CommonBlockFields_CoreSiteTitle_Fragment | CommonBlockFields_CoreSocialLink_Fragment | CommonBlockFields_CoreSocialLinks_Fragment | CommonBlockFields_CoreSpacer_Fragment | CommonBlockFields_CoreTable_Fragment | CommonBlockFields_CoreTagCloud_Fragment | CommonBlockFields_CoreTemplatePart_Fragment | CommonBlockFields_CoreTermCount_Fragment | CommonBlockFields_CoreTermDescription_Fragment | CommonBlockFields_CoreTermName_Fragment | CommonBlockFields_CoreTermTemplate_Fragment | CommonBlockFields_CoreTermsQuery_Fragment | CommonBlockFields_CoreTextColumns_Fragment | CommonBlockFields_CoreVerse_Fragment | CommonBlockFields_CoreVideo_Fragment | CommonBlockFields_CoreWidgetGroup_Fragment | CommonBlockFields_YoastFaqBlock_Fragment | CommonBlockFields_YoastHowToBlock_Fragment | CommonBlockFields_YoastSeoBreadcrumbs_Fragment;
+export type CommonBlockFieldsFragment = CommonBlockFields_AcfGalerie_Fragment | CommonBlockFields_AcfHomePageHero_Fragment | CommonBlockFields_AcfImageGallery_Fragment | CommonBlockFields_AcfLinkBlock_Fragment | CommonBlockFields_AcfPortfolioBlock_Fragment | CommonBlockFields_AcfServicePush_Fragment | CommonBlockFields_AcfSlide_Fragment | CommonBlockFields_AcfSlideshow_Fragment | CommonBlockFields_AcfSubpageNavigation_Fragment | CommonBlockFields_AcfSurveyBlock_Fragment | CommonBlockFields_CoreAccordion_Fragment | CommonBlockFields_CoreAccordionHeading_Fragment | CommonBlockFields_CoreAccordionItem_Fragment | CommonBlockFields_CoreAccordionPanel_Fragment | CommonBlockFields_CoreArchives_Fragment | CommonBlockFields_CoreAudio_Fragment | CommonBlockFields_CoreAvatar_Fragment | CommonBlockFields_CoreBlock_Fragment | CommonBlockFields_CoreBreadcrumbs_Fragment | CommonBlockFields_CoreButton_Fragment | CommonBlockFields_CoreButtons_Fragment | CommonBlockFields_CoreCalendar_Fragment | CommonBlockFields_CoreCategories_Fragment | CommonBlockFields_CoreCode_Fragment | CommonBlockFields_CoreColumn_Fragment | CommonBlockFields_CoreColumns_Fragment | CommonBlockFields_CoreCommentAuthorName_Fragment | CommonBlockFields_CoreCommentContent_Fragment | CommonBlockFields_CoreCommentDate_Fragment | CommonBlockFields_CoreCommentEditLink_Fragment | CommonBlockFields_CoreCommentReplyLink_Fragment | CommonBlockFields_CoreCommentTemplate_Fragment | CommonBlockFields_CoreComments_Fragment | CommonBlockFields_CoreCommentsPagination_Fragment | CommonBlockFields_CoreCommentsPaginationNext_Fragment | CommonBlockFields_CoreCommentsPaginationNumbers_Fragment | CommonBlockFields_CoreCommentsPaginationPrevious_Fragment | CommonBlockFields_CoreCommentsTitle_Fragment | CommonBlockFields_CoreCover_Fragment | CommonBlockFields_CoreDetails_Fragment | CommonBlockFields_CoreEmbed_Fragment | CommonBlockFields_CoreFile_Fragment | CommonBlockFields_CoreFootnotes_Fragment | CommonBlockFields_CoreFreeform_Fragment | CommonBlockFields_CoreGallery_Fragment | CommonBlockFields_CoreGroup_Fragment | CommonBlockFields_CoreHeading_Fragment | CommonBlockFields_CoreHomeLink_Fragment | CommonBlockFields_CoreHtml_Fragment | CommonBlockFields_CoreIcon_Fragment | CommonBlockFields_CoreImage_Fragment | CommonBlockFields_CoreLatestComments_Fragment | CommonBlockFields_CoreLatestPosts_Fragment | CommonBlockFields_CoreLegacyWidget_Fragment | CommonBlockFields_CoreList_Fragment | CommonBlockFields_CoreListItem_Fragment | CommonBlockFields_CoreLoginout_Fragment | CommonBlockFields_CoreMath_Fragment | CommonBlockFields_CoreMediaText_Fragment | CommonBlockFields_CoreMissing_Fragment | CommonBlockFields_CoreMore_Fragment | CommonBlockFields_CoreNavigation_Fragment | CommonBlockFields_CoreNavigationLink_Fragment | CommonBlockFields_CoreNavigationOverlayClose_Fragment | CommonBlockFields_CoreNavigationSubmenu_Fragment | CommonBlockFields_CoreNextpage_Fragment | CommonBlockFields_CorePageList_Fragment | CommonBlockFields_CorePageListItem_Fragment | CommonBlockFields_CoreParagraph_Fragment | CommonBlockFields_CorePattern_Fragment | CommonBlockFields_CorePlaylist_Fragment | CommonBlockFields_CorePlaylistTrack_Fragment | CommonBlockFields_CorePostAuthor_Fragment | CommonBlockFields_CorePostAuthorBiography_Fragment | CommonBlockFields_CorePostAuthorName_Fragment | CommonBlockFields_CorePostComments_Fragment | CommonBlockFields_CorePostCommentsCount_Fragment | CommonBlockFields_CorePostCommentsForm_Fragment | CommonBlockFields_CorePostCommentsLink_Fragment | CommonBlockFields_CorePostContent_Fragment | CommonBlockFields_CorePostDate_Fragment | CommonBlockFields_CorePostExcerpt_Fragment | CommonBlockFields_CorePostFeaturedImage_Fragment | CommonBlockFields_CorePostNavigationLink_Fragment | CommonBlockFields_CorePostTemplate_Fragment | CommonBlockFields_CorePostTerms_Fragment | CommonBlockFields_CorePostTimeToRead_Fragment | CommonBlockFields_CorePostTitle_Fragment | CommonBlockFields_CorePreformatted_Fragment | CommonBlockFields_CorePullquote_Fragment | CommonBlockFields_CoreQuery_Fragment | CommonBlockFields_CoreQueryNoResults_Fragment | CommonBlockFields_CoreQueryPagination_Fragment | CommonBlockFields_CoreQueryPaginationNext_Fragment | CommonBlockFields_CoreQueryPaginationNumbers_Fragment | CommonBlockFields_CoreQueryPaginationPrevious_Fragment | CommonBlockFields_CoreQueryTitle_Fragment | CommonBlockFields_CoreQueryTotal_Fragment | CommonBlockFields_CoreQuote_Fragment | CommonBlockFields_CoreReadMore_Fragment | CommonBlockFields_CoreRss_Fragment | CommonBlockFields_CoreSearch_Fragment | CommonBlockFields_CoreSeparator_Fragment | CommonBlockFields_CoreShortcode_Fragment | CommonBlockFields_CoreSiteLogo_Fragment | CommonBlockFields_CoreSiteTagline_Fragment | CommonBlockFields_CoreSiteTitle_Fragment | CommonBlockFields_CoreSocialLink_Fragment | CommonBlockFields_CoreSocialLinks_Fragment | CommonBlockFields_CoreSpacer_Fragment | CommonBlockFields_CoreTabList_Fragment | CommonBlockFields_CoreTabPanel_Fragment | CommonBlockFields_CoreTabPanels_Fragment | CommonBlockFields_CoreTable_Fragment | CommonBlockFields_CoreTabs_Fragment | CommonBlockFields_CoreTagCloud_Fragment | CommonBlockFields_CoreTemplatePart_Fragment | CommonBlockFields_CoreTermCount_Fragment | CommonBlockFields_CoreTermDescription_Fragment | CommonBlockFields_CoreTermName_Fragment | CommonBlockFields_CoreTermTemplate_Fragment | CommonBlockFields_CoreTermsQuery_Fragment | CommonBlockFields_CoreTextColumns_Fragment | CommonBlockFields_CoreVerse_Fragment | CommonBlockFields_CoreVideo_Fragment | CommonBlockFields_CoreWidgetGroup_Fragment | CommonBlockFields_YoastFaqBlock_Fragment | CommonBlockFields_YoastHowToBlock_Fragment | CommonBlockFields_YoastSeoBreadcrumbs_Fragment;
 
 export type MediaDetailsFragmentFragment = { __typename?: 'MediaDetails', width?: number | null, height?: number | null, sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null };
 
@@ -22216,7 +23582,7 @@ export type PostsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'Roo
 export type ProjectImagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProjectImagesQuery = { __typename?: 'RootQuery', nhtblProjects?: { __typename?: 'RootQueryToNhtbl_projectConnection', nodes: Array<{ __typename?: 'Nhtbl_project', slug?: string | null, title?: string | null, uri?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null }> } | null, editorBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreImage', colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, altText?: string | null, name?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null }> } | null };
+export type ProjectImagesQuery = { __typename?: 'RootQuery', nhtblProjects?: { __typename?: 'RootQueryToNhtbl_projectConnection', nodes: Array<{ __typename?: 'Nhtbl_project', slug?: string | null, title?: string | null, uri?: string | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null }> } | null, editorBlocks?: Array<{ __typename?: 'AcfGalerie', name?: string | null } | { __typename?: 'AcfHomePageHero', name?: string | null } | { __typename?: 'AcfImageGallery', name?: string | null } | { __typename?: 'AcfLinkBlock', name?: string | null } | { __typename?: 'AcfPortfolioBlock', name?: string | null } | { __typename?: 'AcfServicePush', name?: string | null } | { __typename?: 'AcfSlide', name?: string | null } | { __typename?: 'AcfSlideshow', name?: string | null } | { __typename?: 'AcfSubpageNavigation', name?: string | null } | { __typename?: 'AcfSurveyBlock', name?: string | null } | { __typename?: 'CoreAccordion', name?: string | null } | { __typename?: 'CoreAccordionHeading', name?: string | null } | { __typename?: 'CoreAccordionItem', name?: string | null } | { __typename?: 'CoreAccordionPanel', name?: string | null } | { __typename?: 'CoreArchives', name?: string | null } | { __typename?: 'CoreAudio', name?: string | null } | { __typename?: 'CoreAvatar', name?: string | null } | { __typename?: 'CoreBlock', name?: string | null } | { __typename?: 'CoreBreadcrumbs', name?: string | null } | { __typename?: 'CoreButton', name?: string | null } | { __typename?: 'CoreButtons', name?: string | null } | { __typename?: 'CoreCalendar', name?: string | null } | { __typename?: 'CoreCategories', name?: string | null } | { __typename?: 'CoreCode', name?: string | null } | { __typename?: 'CoreColumn', name?: string | null } | { __typename?: 'CoreColumns', name?: string | null } | { __typename?: 'CoreCommentAuthorName', name?: string | null } | { __typename?: 'CoreCommentContent', name?: string | null } | { __typename?: 'CoreCommentDate', name?: string | null } | { __typename?: 'CoreCommentEditLink', name?: string | null } | { __typename?: 'CoreCommentReplyLink', name?: string | null } | { __typename?: 'CoreCommentTemplate', name?: string | null } | { __typename?: 'CoreComments', name?: string | null } | { __typename?: 'CoreCommentsPagination', name?: string | null } | { __typename?: 'CoreCommentsPaginationNext', name?: string | null } | { __typename?: 'CoreCommentsPaginationNumbers', name?: string | null } | { __typename?: 'CoreCommentsPaginationPrevious', name?: string | null } | { __typename?: 'CoreCommentsTitle', name?: string | null } | { __typename?: 'CoreCover', name?: string | null } | { __typename?: 'CoreDetails', name?: string | null } | { __typename?: 'CoreEmbed', name?: string | null } | { __typename?: 'CoreFile', name?: string | null } | { __typename?: 'CoreFootnotes', name?: string | null } | { __typename?: 'CoreFreeform', name?: string | null } | { __typename?: 'CoreGallery', name?: string | null } | { __typename?: 'CoreGroup', name?: string | null } | { __typename?: 'CoreHeading', name?: string | null } | { __typename?: 'CoreHomeLink', name?: string | null } | { __typename?: 'CoreHtml', name?: string | null } | { __typename?: 'CoreIcon', name?: string | null } | { __typename?: 'CoreImage', colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, altText?: string | null, name?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | { __typename?: 'CoreLatestComments', name?: string | null } | { __typename?: 'CoreLatestPosts', name?: string | null } | { __typename?: 'CoreLegacyWidget', name?: string | null } | { __typename?: 'CoreList', name?: string | null } | { __typename?: 'CoreListItem', name?: string | null } | { __typename?: 'CoreLoginout', name?: string | null } | { __typename?: 'CoreMath', name?: string | null } | { __typename?: 'CoreMediaText', name?: string | null } | { __typename?: 'CoreMissing', name?: string | null } | { __typename?: 'CoreMore', name?: string | null } | { __typename?: 'CoreNavigation', name?: string | null } | { __typename?: 'CoreNavigationLink', name?: string | null } | { __typename?: 'CoreNavigationOverlayClose', name?: string | null } | { __typename?: 'CoreNavigationSubmenu', name?: string | null } | { __typename?: 'CoreNextpage', name?: string | null } | { __typename?: 'CorePageList', name?: string | null } | { __typename?: 'CorePageListItem', name?: string | null } | { __typename?: 'CoreParagraph', name?: string | null } | { __typename?: 'CorePattern', name?: string | null } | { __typename?: 'CorePlaylist', name?: string | null } | { __typename?: 'CorePlaylistTrack', name?: string | null } | { __typename?: 'CorePostAuthor', name?: string | null } | { __typename?: 'CorePostAuthorBiography', name?: string | null } | { __typename?: 'CorePostAuthorName', name?: string | null } | { __typename?: 'CorePostComments', name?: string | null } | { __typename?: 'CorePostCommentsCount', name?: string | null } | { __typename?: 'CorePostCommentsForm', name?: string | null } | { __typename?: 'CorePostCommentsLink', name?: string | null } | { __typename?: 'CorePostContent', name?: string | null } | { __typename?: 'CorePostDate', name?: string | null } | { __typename?: 'CorePostExcerpt', name?: string | null } | { __typename?: 'CorePostFeaturedImage', name?: string | null } | { __typename?: 'CorePostNavigationLink', name?: string | null } | { __typename?: 'CorePostTemplate', name?: string | null } | { __typename?: 'CorePostTerms', name?: string | null } | { __typename?: 'CorePostTimeToRead', name?: string | null } | { __typename?: 'CorePostTitle', name?: string | null } | { __typename?: 'CorePreformatted', name?: string | null } | { __typename?: 'CorePullquote', name?: string | null } | { __typename?: 'CoreQuery', name?: string | null } | { __typename?: 'CoreQueryNoResults', name?: string | null } | { __typename?: 'CoreQueryPagination', name?: string | null } | { __typename?: 'CoreQueryPaginationNext', name?: string | null } | { __typename?: 'CoreQueryPaginationNumbers', name?: string | null } | { __typename?: 'CoreQueryPaginationPrevious', name?: string | null } | { __typename?: 'CoreQueryTitle', name?: string | null } | { __typename?: 'CoreQueryTotal', name?: string | null } | { __typename?: 'CoreQuote', name?: string | null } | { __typename?: 'CoreReadMore', name?: string | null } | { __typename?: 'CoreRss', name?: string | null } | { __typename?: 'CoreSearch', name?: string | null } | { __typename?: 'CoreSeparator', name?: string | null } | { __typename?: 'CoreShortcode', name?: string | null } | { __typename?: 'CoreSiteLogo', name?: string | null } | { __typename?: 'CoreSiteTagline', name?: string | null } | { __typename?: 'CoreSiteTitle', name?: string | null } | { __typename?: 'CoreSocialLink', name?: string | null } | { __typename?: 'CoreSocialLinks', name?: string | null } | { __typename?: 'CoreSpacer', name?: string | null } | { __typename?: 'CoreTabList', name?: string | null } | { __typename?: 'CoreTabPanel', name?: string | null } | { __typename?: 'CoreTabPanels', name?: string | null } | { __typename?: 'CoreTable', name?: string | null } | { __typename?: 'CoreTabs', name?: string | null } | { __typename?: 'CoreTagCloud', name?: string | null } | { __typename?: 'CoreTemplatePart', name?: string | null } | { __typename?: 'CoreTermCount', name?: string | null } | { __typename?: 'CoreTermDescription', name?: string | null } | { __typename?: 'CoreTermName', name?: string | null } | { __typename?: 'CoreTermTemplate', name?: string | null } | { __typename?: 'CoreTermsQuery', name?: string | null } | { __typename?: 'CoreTextColumns', name?: string | null } | { __typename?: 'CoreVerse', name?: string | null } | { __typename?: 'CoreVideo', name?: string | null } | { __typename?: 'CoreWidgetGroup', name?: string | null } | { __typename?: 'YoastFaqBlock', name?: string | null } | { __typename?: 'YoastHowToBlock', name?: string | null } | { __typename?: 'YoastSeoBreadcrumbs', name?: string | null } | null> | null }> } | null };
 
 export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -22333,7 +23699,6 @@ export const CommonBlockFieldsFragmentDoc = gql`
       fontFamily
       fontSize
       textColor
-      textAlign
       level
       align
     }
@@ -22416,7 +23781,7 @@ export const CommonBlockFieldsFragmentDoc = gql`
       textColor
     }
   }
-  ... on CoreAccordionPanel {
+  ... on CoreAccordionItem {
     attributes {
       openByDefault
     }
@@ -22438,7 +23803,6 @@ export const CommonBlockFieldsFragmentDoc = gql`
       fontFamily
       fontSize
       textColor
-      textAlign
       level
       align
     }

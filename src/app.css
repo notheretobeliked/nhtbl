@@ -133,9 +133,13 @@
 /* Content width is owned here, on the page container, rather than per block.
    Every top-level block (wrapper divs and bare prose alike) is capped at the
    content width and centred, unless it opts into a wider/full bucket via
-   alignwide/alignfull. */
+   alignwide/alignfull. This keeps wrapped and unwrapped blocks consistent.
+   856px matches the backend content width so the Gutenberg editor and the live
+   site render at the same width. Backend source of truth is the theme's
+   bud.config.js (app.wpjson layout.contentSize), which generates theme.json on
+   build — keep the two in sync there, not in theme.json directly. */
 .page-main > *:not(.alignfull):not(.alignwide) {
-	@apply max-w-[856px] mx-auto px-2 md:px-3; 
+	@apply max-w-[856px] mx-auto px-2 md:px-3;
 }
 
 .page-main > .core-group {
@@ -149,7 +153,8 @@
 	@apply w-full;
 }
 
-/* Wide blocks carry `.alignwide`; this is their cap. */
+/* Layout utilities — wide blocks carry `.alignwide`; this is their cap.
+   Matches theme.json wideSize (1300px) so the editor and live site agree. */
 .alignwide {
 	@apply max-w-[1300px] mx-auto;
 }

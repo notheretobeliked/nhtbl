@@ -2,7 +2,12 @@
 export const prerender = true
 
 import PageContent from '$lib/graphql/query/page.graphql?raw'
-import { checkResponse, graphqlQuery } from '$lib/utilities/graphql'
+import {
+	assertGraphQLSucceeded,
+	checkResponse,
+	graphqlQuery,
+	reportGraphQLErrors
+} from '$lib/utilities/graphql'
 import { error, isHttpError } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { EditorBlock } from '$lib/types/wp-types'
@@ -80,6 +85,14 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 		const pageResponse = await graphqlQuery(PageContent, { uri: uri })
 		checkResponse(pageResponse)
 		const pageData = await pageResponse.json()
+
+		// A rejected query has no `data` at all; that is a broken contract with the
+		// backend, not a missing page, so it must not fall through to the 404 below.
+		assertGraphQLSucceeded(pageData, `page ${uri}`)
+
+		// Partial failures come back as HTTP 200 with a populated `errors` array;
+		// surface them rather than silently rendering blocks with missing attributes.
+		reportGraphQLErrors(pageData, `page ${uri}`)
 
 		// Only throw 404 if we truly have no page data to work with
 		if (!pageData?.data?.nodeByUri) {
