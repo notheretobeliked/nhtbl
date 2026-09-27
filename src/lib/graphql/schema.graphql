@@ -2798,7 +2798,7 @@ interface ContentNode implements Node & UniformResourceIdentifiable {
   """
   True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
   """
-  noindex: Boolean!
+  noindex: Boolean
 
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
@@ -5186,7 +5186,7 @@ type MediaItem implements Node & ContentNode & UniformResourceIdentifiable & Dat
   """
   True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
   """
-  noindex: Boolean!
+  noindex: Boolean
 
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
@@ -5688,7 +5688,7 @@ interface HierarchicalContentNode implements Node & ContentNode & UniformResourc
   """
   True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
   """
-  noindex: Boolean!
+  noindex: Boolean
 
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
@@ -6775,7 +6775,7 @@ type Page implements Node & ContentNode & UniformResourceIdentifiable & Database
   """
   True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
   """
-  noindex: Boolean!
+  noindex: Boolean
 
   """The unique numeric identifier for the content node."""
   pageId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
@@ -7682,7 +7682,7 @@ type Post implements Node & ContentNode & UniformResourceIdentifiable & Database
   """
   True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
   """
-  noindex: Boolean!
+  noindex: Boolean
 
   """The parent of the content node."""
   parent: PostToParentConnectionEdge @deprecated(reason: "This content type is not hierarchical and typically will not have a parent")
