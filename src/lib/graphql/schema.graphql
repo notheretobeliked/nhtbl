@@ -3003,6 +3003,11 @@ interface ContentNode implements Node & UniformResourceIdentifiable {
   """
   modifiedGmt: String
 
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
+
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
 
@@ -5423,6 +5428,11 @@ type MediaItem implements Node & ContentNode & UniformResourceIdentifiable & Dat
   """
   modifiedGmt: String
 
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
+
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
 
@@ -5922,6 +5932,11 @@ interface HierarchicalContentNode implements Node & ContentNode & UniformResourc
   The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
   """
   modifiedGmt: String
+
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
 
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
@@ -7010,6 +7025,11 @@ type Nhtbl_project implements Node & ContentNode & UniformResourceIdentifiable &
 
   """The unique numeric identifier for the content node."""
   nhtbl_projectId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
+
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
 
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
@@ -9740,6 +9760,11 @@ type Page implements Node & ContentNode & UniformResourceIdentifiable & Database
   """
   modifiedGmt: String
 
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
+
   """The unique numeric identifier for the content node."""
   pageId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
 
@@ -10568,6 +10593,11 @@ type Post implements Node & ContentNode & UniformResourceIdentifiable & Database
   The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
   """
   modifiedGmt: String
+
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
 
   """The parent of the content node."""
   parent: PostToParentConnectionEdge @deprecated(reason: "This content type is not hierarchical and typically will not have a parent")
@@ -14304,6 +14334,11 @@ type Nhtbl_survey implements Node & ContentNode & UniformResourceIdentifiable & 
   """The unique numeric identifier for the content node."""
   nhtbl_surveyId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
 
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
+
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
 
@@ -14719,6 +14754,11 @@ type Nhtbl_surveyResponse implements Node & ContentNode & UniformResourceIdentif
 
   """The unique numeric identifier for the content node."""
   nhtbl_surveyResponseId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
+
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
 
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge

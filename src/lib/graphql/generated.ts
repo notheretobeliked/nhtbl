@@ -1767,6 +1767,8 @@ export type ContentNode = {
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique ID of the preview node */
@@ -10684,6 +10686,8 @@ export type HierarchicalContentNode = {
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /** The parent of the node. The parent object can be of various types */
   parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
   /** Database id of the parent node */
@@ -11262,6 +11266,8 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /** The parent of the node. The parent object can be of various types */
   parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
   /** Database id of the parent node */
@@ -12756,6 +12762,8 @@ export type Nhtbl_Project = ContentNode & DatabaseIdentifier & HierarchicalConte
    * @deprecated Deprecated in favor of the databaseId field
    */
   nhtbl_projectId: Scalars['Int']['output'];
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /** The parent of the node. The parent object can be of various types */
   parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
   /** Database id of the parent node */
@@ -13824,6 +13832,8 @@ export type Nhtbl_Survey = ContentNode & DatabaseIdentifier & HierarchicalConten
    * @deprecated Deprecated in favor of the databaseId field
    */
   nhtbl_surveyId: Scalars['Int']['output'];
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /** The parent of the node. The parent object can be of various types */
   parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
   /** Database id of the parent node */
@@ -13998,6 +14008,8 @@ export type Nhtbl_SurveyResponse = ContentNode & DatabaseIdentifier & Hierarchic
    * @deprecated Deprecated in favor of the databaseId field
    */
   nhtbl_surveyResponseId: Scalars['Int']['output'];
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /** The parent of the node. The parent object can be of various types */
   parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
   /** Database id of the parent node */
@@ -14491,6 +14503,8 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /**
    * The unique numeric identifier for the content node.
    * @deprecated Deprecated in favor of the databaseId field
@@ -15139,6 +15153,8 @@ export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & 
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings. */
+  noindex?: Maybe<Scalars['Boolean']['output']>;
   /**
    * The parent of the content node.
    * @deprecated This content type is not hierarchical and typically will not have a parent
@@ -23039,7 +23055,7 @@ export type PageMetaQueryVariables = Exact<{
 }>;
 
 
-export type PageMetaQuery = { __typename?: 'RootQuery', menus?: { __typename?: 'RootQueryToMenuConnection', nodes: Array<{ __typename?: 'Menu', name?: string | null, locations?: Array<MenuLocationEnum | null> | null, menuItems?: { __typename?: 'MenuToMenuItemConnection', nodes: Array<{ __typename?: 'MenuItem', label?: string | null, order?: number | null, uri?: string | null }> } | null }> } | null, page?: { __typename?: 'Category' } | { __typename?: 'Comment' } | { __typename?: 'ContentType' } | { __typename?: 'MediaItem' } | { __typename?: 'Nhtbl_client' } | { __typename?: 'Nhtbl_project', seo?: { __typename?: 'PostTypeSEO', metaDesc?: string | null, metaKeywords?: string | null, opengraphSiteName?: string | null, opengraphTitle?: string | null, opengraphPublisher?: string | null, opengraphUrl?: string | null, title?: string | null, twitterDescription?: string | null, twitterTitle?: string | null, breadcrumbs?: Array<{ __typename?: 'SEOPostTypeBreadcrumbs', text?: string | null, url?: string | null } | null> | null, twitterImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null, opengraphImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null } | null } | { __typename?: 'Nhtbl_service' } | { __typename?: 'Nhtbl_survey' } | { __typename?: 'Nhtbl_surveyResponse' } | { __typename?: 'Page', backgroundColour?: { __typename?: 'BackgroundColour', backgroundColour?: Array<string | null> | null, hideNavigation?: boolean | null } | null, seo?: { __typename?: 'PostTypeSEO', metaDesc?: string | null, metaKeywords?: string | null, opengraphSiteName?: string | null, opengraphTitle?: string | null, opengraphPublisher?: string | null, opengraphUrl?: string | null, title?: string | null, twitterDescription?: string | null, twitterTitle?: string | null, breadcrumbs?: Array<{ __typename?: 'SEOPostTypeBreadcrumbs', text?: string | null, url?: string | null } | null> | null, twitterImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null, opengraphImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null } | null } | { __typename?: 'Post' } | { __typename?: 'PostFormat' } | { __typename?: 'Tag' } | { __typename?: 'User' } | null };
+export type PageMetaQuery = { __typename?: 'RootQuery', menus?: { __typename?: 'RootQueryToMenuConnection', nodes: Array<{ __typename?: 'Menu', name?: string | null, locations?: Array<MenuLocationEnum | null> | null, menuItems?: { __typename?: 'MenuToMenuItemConnection', nodes: Array<{ __typename?: 'MenuItem', label?: string | null, order?: number | null, uri?: string | null }> } | null }> } | null, page?: { __typename?: 'Category' } | { __typename?: 'Comment' } | { __typename?: 'ContentType' } | { __typename?: 'MediaItem', noindex?: boolean | null } | { __typename?: 'Nhtbl_client' } | { __typename?: 'Nhtbl_project', noindex?: boolean | null, seo?: { __typename?: 'PostTypeSEO', metaDesc?: string | null, metaKeywords?: string | null, opengraphSiteName?: string | null, opengraphTitle?: string | null, opengraphPublisher?: string | null, opengraphUrl?: string | null, title?: string | null, twitterDescription?: string | null, twitterTitle?: string | null, breadcrumbs?: Array<{ __typename?: 'SEOPostTypeBreadcrumbs', text?: string | null, url?: string | null } | null> | null, twitterImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null, opengraphImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null } | null } | { __typename?: 'Nhtbl_service' } | { __typename?: 'Nhtbl_survey', noindex?: boolean | null } | { __typename?: 'Nhtbl_surveyResponse', noindex?: boolean | null } | { __typename?: 'Page', noindex?: boolean | null, backgroundColour?: { __typename?: 'BackgroundColour', backgroundColour?: Array<string | null> | null, hideNavigation?: boolean | null } | null, seo?: { __typename?: 'PostTypeSEO', metaDesc?: string | null, metaKeywords?: string | null, opengraphSiteName?: string | null, opengraphTitle?: string | null, opengraphPublisher?: string | null, opengraphUrl?: string | null, title?: string | null, twitterDescription?: string | null, twitterTitle?: string | null, breadcrumbs?: Array<{ __typename?: 'SEOPostTypeBreadcrumbs', text?: string | null, url?: string | null } | null> | null, twitterImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null, opengraphImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null } | null } | { __typename?: 'Post', noindex?: boolean | null } | { __typename?: 'PostFormat' } | { __typename?: 'Tag' } | { __typename?: 'User' } | null };
 
 export type SeoFragmentFragment = { __typename?: 'PostTypeSEO', metaDesc?: string | null, metaKeywords?: string | null, opengraphSiteName?: string | null, opengraphTitle?: string | null, opengraphPublisher?: string | null, opengraphUrl?: string | null, title?: string | null, twitterDescription?: string | null, twitterTitle?: string | null, breadcrumbs?: Array<{ __typename?: 'SEOPostTypeBreadcrumbs', text?: string | null, url?: string | null } | null> | null, twitterImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null, opengraphImage?: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } | null };
 
@@ -23589,10 +23605,12 @@ export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ProjectsQuery = { __typename?: 'RootQuery', nhtblProjects?: { __typename?: 'RootQueryToNhtbl_projectConnection', nodes: Array<{ __typename?: 'Nhtbl_project', excerpt?: string | null, slug?: string | null, uri?: string | null, title?: string | null, projectData?: { __typename?: 'ProjectData', startDate?: string | null, endDate?: string | null } | null, nhtblClients?: { __typename?: 'Nhtbl_projectToNhtbl_clientConnection', nodes: Array<{ __typename?: 'Nhtbl_client', name?: string | null, slug?: string | null, parentId?: string | null }> } | null, nhtblServices?: { __typename?: 'Nhtbl_projectToNhtbl_serviceConnection', nodes: Array<{ __typename?: 'Nhtbl_service', name?: string | null, slug?: string | null, parentId?: string | null }> } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, colorPalette?: Array<string | null> | null, dominantColor?: string | null, secondaryColor?: string | null, mediaDetails?: { __typename?: 'MediaDetails', sizes?: Array<{ __typename?: 'MediaSize', name?: string | null, sourceUrl?: string | null, width?: string | null, height?: string | null } | null> | null } | null } } | null }> } | null };
 
-export type SitemapQueryVariables = Exact<{ [key: string]: never; }>;
+export type SitemapQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type SitemapQuery = { __typename?: 'RootQuery', pages?: { __typename?: 'RootQueryToContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null }> } | null, posts?: { __typename?: 'RootQueryToContentNodeConnection', nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null }> } | null, projects?: { __typename?: 'RootQueryToNhtbl_projectConnection', nodes: Array<{ __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null }> } | null };
+export type SitemapQuery = { __typename?: 'RootQuery', contentNodes?: { __typename?: 'RootQueryToContentNodeConnection', pageInfo: { __typename?: 'RootQueryToContentNodeConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'MediaItem', uri?: string | null, modifiedGmt?: string | null, noindex?: boolean | null } | { __typename?: 'Nhtbl_project', uri?: string | null, modifiedGmt?: string | null, noindex?: boolean | null } | { __typename?: 'Nhtbl_survey', uri?: string | null, modifiedGmt?: string | null, noindex?: boolean | null } | { __typename?: 'Nhtbl_surveyResponse', uri?: string | null, modifiedGmt?: string | null, noindex?: boolean | null } | { __typename?: 'Page', uri?: string | null, modifiedGmt?: string | null, noindex?: boolean | null } | { __typename?: 'Post', uri?: string | null, modifiedGmt?: string | null, noindex?: boolean | null }> } | null };
 
 export const SeoFragmentFragmentDoc = gql`
     fragment SeoFragment on PostTypeSEO {
@@ -24163,6 +24181,9 @@ export const PageMetaDocument = gql`
     }
   }
   page: nodeByUri(uri: $uri) {
+    ... on ContentNode {
+      noindex
+    }
     ... on Page {
       backgroundColour {
         backgroundColour
@@ -24345,23 +24366,20 @@ export const ProjectsDocument = gql`
 }
     `;
 export const SitemapDocument = gql`
-    query Sitemap {
-  pages: contentNodes(where: {contentTypes: [PAGE], status: PUBLISH}, first: 500) {
-    nodes {
-      uri
-      modifiedGmt
+    query Sitemap($after: String) {
+  contentNodes(
+    first: 100
+    after: $after
+    where: {contentTypes: [PAGE, POST, PROJECT], status: PUBLISH}
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
     }
-  }
-  posts: contentNodes(where: {contentTypes: [POST], status: PUBLISH}, first: 500) {
     nodes {
       uri
       modifiedGmt
-    }
-  }
-  projects: nhtblProjects(where: {status: PUBLISH}, first: 500) {
-    nodes {
-      uri
-      modifiedGmt
+      noindex
     }
   }
 }
