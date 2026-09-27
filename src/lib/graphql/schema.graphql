@@ -84,6 +84,11 @@ type RootQuery {
     The content type the node is used for. Required when idType is set to "name" or "slug"
     """
     contentType: ContentTypeEnum
+
+    """
+    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
+    """
+    asPreview: Boolean @deprecated(reason: "Use the request-level preview context instead: send the `X-GraphQL-Preview` request header (or a `preview` object in the request `extensions`). When a request carries preview context, the context is applied and `asPreview` is ignored. This argument is planned for removal in a future major version.")
   ): ContentNode
 
   """Connection between the RootQuery type and the ContentNode type"""
@@ -154,6 +159,11 @@ type RootQuery {
 
     """Type of unique identifier to fetch by. Default is Global ID"""
     idType: MediaItemIdType
+
+    """
+    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
+    """
+    asPreview: Boolean @deprecated(reason: "Use the request-level preview context instead: send the `X-GraphQL-Preview` request header (or a `preview` object in the request `extensions`). When a request carries preview context, the context is applied and `asPreview` is ignored. This argument is planned for removal in a future major version.")
   ): MediaItem
 
   """A mediaItem object"""
@@ -280,6 +290,11 @@ type RootQuery {
 
     """Type of unique identifier to fetch by. Default is Global ID"""
     idType: PageIdType
+
+    """
+    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
+    """
+    asPreview: Boolean @deprecated(reason: "Use the request-level preview context instead: send the `X-GraphQL-Preview` request header (or a `preview` object in the request `extensions`). When a request carries preview context, the context is applied and `asPreview` is ignored. This argument is planned for removal in a future major version.")
   ): Page
 
   """A page object"""
@@ -354,6 +369,11 @@ type RootQuery {
 
     """Type of unique identifier to fetch by. Default is Global ID"""
     idType: PostIdType
+
+    """
+    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
+    """
+    asPreview: Boolean @deprecated(reason: "Use the request-level preview context instead: send the `X-GraphQL-Preview` request header (or a `preview` object in the request `extensions`). When a request carries preview context, the context is applied and `asPreview` is ignored. This argument is planned for removal in a future major version.")
   ): Post
 
   """A post object"""
@@ -833,6 +853,9 @@ input RootQueryToCategoryConnectionWhereArgs {
 
   """Array of slugs to return term(s) for. Default empty."""
   slug: [String]
+
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
 
   """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
@@ -1995,6 +2018,9 @@ input CategoryToCategoryConnectionWhereArgs {
 
   """Array of slugs to return term(s) for. Default empty."""
   slug: [String]
+
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
 
   """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
@@ -4066,6 +4092,9 @@ input UserToCommentConnectionWhereArgs {
   """Search term(s) to retrieve matching comments for."""
   search: String
 
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
+
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
 
@@ -4453,6 +4482,9 @@ input CommentToParentCommentConnectionWhereArgs {
   """Search term(s) to retrieve matching comments for."""
   search: String
 
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
+
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
 
@@ -4561,6 +4593,9 @@ input CommentToCommentConnectionWhereArgs {
 
   """Search term(s) to retrieve matching comments for."""
   search: String
+
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
 
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
@@ -6124,6 +6159,9 @@ input MediaItemToCommentConnectionWhereArgs {
   """Search term(s) to retrieve matching comments for."""
   search: String
 
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
+
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
 
@@ -6988,6 +7026,9 @@ input PageToCommentConnectionWhereArgs {
 
   """Search term(s) to retrieve matching comments for."""
   search: String
+
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
 
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
@@ -7935,6 +7976,9 @@ input PostToCategoryConnectionWhereArgs {
   slug: [String]
 
   """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
+
+  """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
 
   """Whether to prime meta caches for matched terms. Default true."""
@@ -8076,6 +8120,9 @@ input PostToCommentConnectionWhereArgs {
   """Search term(s) to retrieve matching comments for."""
   search: String
 
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
+
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
 
@@ -8212,6 +8259,9 @@ input PostToPostFormatConnectionWhereArgs {
 
   """Array of slugs to return term(s) for. Default empty."""
   slug: [String]
+
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
 
   """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
@@ -9127,6 +9177,9 @@ input PostToTagConnectionWhereArgs {
   slug: [String]
 
   """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
+
+  """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
 
   """Whether to prime meta caches for matched terms. Default true."""
@@ -9743,6 +9796,9 @@ input PostToTermNodeConnectionWhereArgs {
 
   """The Taxonomy to filter terms by"""
   taxonomies: [TaxonomyEnum]
+
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
 
   """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
@@ -10538,6 +10594,9 @@ input RootQueryToCommentConnectionWhereArgs {
 
   """Search term(s) to retrieve matching comments for."""
   search: String
+
+  """Comment status to limit results by."""
+  status: String @deprecated(reason: "Deprecated in favor of statusIn which accepts a list of one or more CommentStatusEnum values instead of a string")
 
   """One or more Comment Statuses to limit results by"""
   statusIn: [CommentStatusEnum]
@@ -11954,6 +12013,9 @@ input RootQueryToPostFormatConnectionWhereArgs {
   slug: [String]
 
   """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
+
+  """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
 
   """Whether to prime meta caches for matched terms. Default true."""
@@ -13021,6 +13083,9 @@ input RootQueryToTagConnectionWhereArgs {
   slug: [String]
 
   """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
+
+  """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
 
   """Whether to prime meta caches for matched terms. Default true."""
@@ -13220,6 +13285,9 @@ input RootQueryToTermNodeConnectionWhereArgs {
 
   """The Taxonomy to filter terms by"""
   taxonomies: [TaxonomyEnum]
+
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomId: [ID] @deprecated(reason: "Use `termTaxonomyId` instead. This will be removed in the next major version of WPGraphQL.")
 
   """Array of term taxonomy IDs, to match when querying terms."""
   termTaxonomyId: [ID]
@@ -27451,6 +27519,9 @@ type CreateCategoryPayload {
 
 """Input for the createComment mutation."""
 input CreateCommentInput {
+  """The approval status of the comment."""
+  approved: String @deprecated(reason: "Deprecated in favor of the status field")
+
   """The name of the comment's author."""
   author: String
 
@@ -28384,6 +28455,9 @@ type UpdateCategoryPayload {
 
 """Input for the updateComment mutation."""
 input UpdateCommentInput {
+  """The approval status of the comment."""
+  approved: String @deprecated(reason: "Deprecated in favor of the status field")
+
   """The name of the comment's author."""
   author: String
 
@@ -28712,6 +28786,9 @@ input UpdateSettingsInput {
 
   """Site title."""
   generalSettingsTitle: String
+
+  """Site URL."""
+  generalSettingsUrl: String @deprecated(reason: "The site URL is read-only and cannot be changed through the API.")
 
   """The ID of the page that should display the latest posts"""
   readingSettingsPageForPosts: Int

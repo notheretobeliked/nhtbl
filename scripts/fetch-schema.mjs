@@ -21,7 +21,12 @@ const response = await fetch(endpoint, {
 	method: 'POST',
 	headers: { 'content-type': 'application/json' },
 	// Descriptions are kept so codegen can carry them into generated.ts as JSDoc.
-	body: JSON.stringify({ query: getIntrospectionQuery({ descriptions: true }) })
+	// Deprecated arguments are kept too: introspection omits them by default, so the
+	// snapshot would reject arguments WordPress still accepts (e.g. `asPreview`,
+	// deprecated in WPGraphQL 2.x in favour of the X-GraphQL-Preview header).
+	body: JSON.stringify({
+		query: getIntrospectionQuery({ descriptions: true, inputValueDeprecation: true })
+	})
 })
 
 if (!response.ok) {
