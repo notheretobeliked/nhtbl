@@ -88,7 +88,6 @@ fragment CommonBlockFields on EditorBlock {
 			fontFamily
 			fontSize
 			textColor
-			textAlign
 			level
 			align
 		}
@@ -171,9 +170,9 @@ fragment CommonBlockFields on EditorBlock {
 			textColor
 		}
 	}
-	... on CoreAccordionPanel {
+	... on CoreAccordionItem {
 		attributes {
-			openByDefault
+		openByDefault
 		}
 	}
 	... on CoreAccordionHeading {
@@ -193,7 +192,6 @@ fragment CommonBlockFields on EditorBlock {
 			fontFamily
 			fontSize
 			textColor
-			textAlign
 			level
 			align
 		}
