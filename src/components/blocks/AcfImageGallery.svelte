@@ -20,6 +20,8 @@
 					caption?: string | null
 					fullWidth?: boolean | null
 					fullHeight?: boolean | null
+					imageBackground?: boolean | null
+					imageBackgroundColour?: string | string[] | null
 			  }
 			| undefined
 	)
@@ -30,6 +32,19 @@
 	let caption = $derived(group?.caption ?? '')
 	let fullWidth = $derived(Boolean(group?.fullWidth))
 	let fullHeight = $derived(Boolean(group?.fullHeight))
+
+	// Transparent images (PNG logos, icons) let the previous slide show through
+	// during and after the crossfade. With the switch on, each slide gets a solid
+	// background so the incoming one covers the outgoing one. The colour arrives
+	// as a one-item list (ACF select) and is one of the palette slugs safelisted
+	// in app.css.
+	const BACKGROUNDS = ['nhtbl-grey-base', 'white', 'black', 'nhtbl-green-base', 'nhtbl-purple-base', 'nhtbl-purple-light']
+	let slideBackground = $derived.by(() => {
+		if (!group?.imageBackground) return ''
+		const raw = group.imageBackgroundColour
+		const slug = (Array.isArray(raw) ? raw[0] : raw) ?? 'nhtbl-grey-base'
+		return `bg-${BACKGROUNDS.includes(slug) ? slug : 'nhtbl-grey-base'}`
+	})
 
 	// Two-image crossfade. The new active image fades in (0 → 1) on top of the
 	// previous one (held at opacity 1) so there's no transparent/blackout frame.
@@ -87,7 +102,7 @@
 			{#each images as image, i (i)}
 				{#if i === activeIndex || i === previousIndex}
 					<div
-						class="absolute inset-0 h-full w-full"
+						class="absolute inset-0 h-full w-full {slideBackground}"
 						style:z-index={i === activeIndex ? 1 : 0}
 						in:fade={{ duration: 800, easing: cubicInOut }}
 					>
