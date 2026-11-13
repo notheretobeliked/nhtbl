@@ -1,7 +1,7 @@
 import { WORDPRESS_URL } from '$env/static/private'
 import PreviewById from '$lib/graphql/query/preview-by-id.graphql?raw'
 import { checkResponse, graphqlQuery, reportGraphQLErrors } from '$lib/utilities/graphql'
-import { error, isHttpError, redirect } from '@sveltejs/kit'
+import { error, isHttpError, isRedirect, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { EditorBlock } from '$lib/types/wp-types'
 import { flatListToHierarchical, normalizeAssetUrlsInObject } from '$lib/server/utilities'
@@ -16,6 +16,40 @@ function formatYearRange(start?: string | null, end?: string | null): string {
 	const s = new Date(start!).getFullYear()
 	const e = new Date(end!).getFullYear()
 	return s === e ? `(${s})` : `(${s}–${String(e).slice(-2)})`
+}
+
+/**
+ * The backend's own preview URL for a post. WordPress checks the editor is
+ * signed in (sending them to log in if not), mints a fresh token and redirects
+ * back here, so it is where to go whenever we have no usable token.
+ */
+function backendPreviewUrl(url: URL, id: string): string {
+	const backend = new URL(WORDPRESS_URL)
+	backend.pathname = '/'
+	if (url.searchParams.has('page_id')) {
+		backend.searchParams.set('page_id', id)
+	} else {
+		backend.searchParams.set('p', id)
+		const postType = url.searchParams.get('post_type')
+		if (postType) backend.searchParams.set('post_type', postType)
+	}
+	backend.searchParams.set('preview', 'true')
+	return backend.href
+}
+
+/** Whether the backend still recognises a preview token (they last an hour). */
+async function tokenIsValid(token: string): Promise<boolean> {
+	try {
+		const response = await fetch(new URL('/wp-json/sveltekit/v1/validate-token', WORDPRESS_URL), {
+			method: 'POST',
+			headers: { 'X-Preview-Token': token },
+			cache: 'no-cache'
+		})
+		// Only a clear "no" counts: if the check itself fails, fall through to the 404.
+		return response.status !== 401
+	} catch {
+		return true
+	}
 }
 
 export const load: PageServerLoad = async function load({ url }) {
@@ -33,10 +67,10 @@ export const load: PageServerLoad = async function load({ url }) {
 				token: previewToken
 			}
 		} else {
-			// No token provided - redirect to WordPress to get one
-			const returnUrl = encodeURIComponent(url.href)
-			const loginUrl = `${WORDPRESS_URL}/wp/wp-login.php?redirect_to=${returnUrl}`
-			throw redirect(302, loginUrl)
+			// No token: the backend signs the editor in and sends them back with one.
+			// (wp-login.php can't do this itself, it refuses to redirect to another host.)
+			if (!previewId) error(400, 'Preview requires a post ID')
+			throw redirect(302, backendPreviewUrl(url, previewId))
 		}
 	}
 
@@ -73,11 +107,17 @@ export const load: PageServerLoad = async function load({ url }) {
 			: pageData?.data?.page || pageData?.data?.nhtblProject
 
 		if (!node) {
+			// An expired token looks the same as a missing post: the backend answers
+			// null. Editors hit this from a tab left open for over an hour. Ask the
+			// backend for a fresh token; a fresh one is valid, so this can't loop.
+			if (previewId && previewToken && !(await tokenIsValid(previewToken))) {
+				throw redirect(302, backendPreviewUrl(url, previewId))
+			}
 			error(404, `Preview not found for post ID: ${previewId}`)
 		}
 
 		// Validate preview status
-		if (node.status && !['publish', 'draft', 'private', 'pending', 'inherit'].includes(node.status)) {
+		if (node.status && !['publish', 'draft', 'auto-draft', 'private', 'pending', 'future', 'inherit'].includes(node.status)) {
 			error(404, 'Preview not available')
 		}
 
@@ -129,8 +169,8 @@ export const load: PageServerLoad = async function load({ url }) {
 			}
 		}
 	} catch (err: unknown) {
-		// Check if it's already an HTTP error (like a 404)
-		if (isHttpError(err)) {
+		// Check if it's already an HTTP error (like a 404) or a redirect
+		if (isHttpError(err) || isRedirect(err)) {
 			throw err
 		}
 
