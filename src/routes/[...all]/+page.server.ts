@@ -1,5 +1,9 @@
-// SSR with live data on every request (no ISR/caching at the app layer).
-export const prerender = true
+// Every published page is built on deploy (see `entries` below) and served as a
+// static file. 'auto' rather than true keeps a server fallback for paths that
+// were not in the build: a page published since the last deploy renders on
+// request, live from the backend, until the rebuild its publication triggered
+// replaces it with a static file. With true, that page 404s in the meantime.
+export const prerender = 'auto'
 
 import { fetchPublishedContent, uriToParam } from '$lib/server/content-index'
 import type { EntryGenerator } from './$types'
