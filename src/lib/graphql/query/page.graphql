@@ -477,6 +477,8 @@ fragment CommonBlockFields on EditorBlock {
 			caption
 			fullWidth
 			fullHeight
+			imageBackground
+			imageBackgroundColour
 			images {
 				nodes {
 					altText

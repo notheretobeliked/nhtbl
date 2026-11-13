@@ -14156,7 +14156,7 @@ interface MenuItemLinkableConnectionEdge implements Edge {
 }
 
 """Deprecated in favor of MenuItemLinkable Interface"""
-union MenuItemObjectUnion = Post | Page | Nhtbl_project | Nhtbl_survey | Nhtbl_surveyResponse | Category | Tag | Nhtbl_client | Nhtbl_service
+union MenuItemObjectUnion = Post | Page | Nhtbl_project | Nhtbl_survey | Category | Tag | Nhtbl_client | Nhtbl_service
 
 """The nhtbl_survey type"""
 type Nhtbl_survey implements Node & ContentNode & UniformResourceIdentifiable & DatabaseIdentifier & NodeWithTemplate & Previewable & NodeWithTitle & NodeWithRevisions & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & WithAcfSurvey {
@@ -14580,342 +14580,6 @@ interface Nhtbl_surveyConnectionPageInfo implements WPPageInfo & PageInfo {
 
   """When paginating backwards, the cursor to continue."""
   startCursor: String
-}
-
-"""The nhtbl_surveyResponse type"""
-type Nhtbl_surveyResponse implements Node & ContentNode & UniformResourceIdentifiable & DatabaseIdentifier & NodeWithTemplate & Previewable & NodeWithTitle & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & WithAcfSurveyResponse {
-  """
-  Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root).
-  """
-  ancestors(
-    """The number of items to return after the referenced "after" cursor"""
-    first: Int
-
-    """The number of items to return before the referenced "before" cursor"""
-    last: Int
-
-    """
-    Cursor used along with the "first" argument to reference where in the dataset to get data
-    """
-    after: String
-
-    """
-    Cursor used along with the "last" argument to reference where in the dataset to get data
-    """
-    before: String
-
-    """Arguments for filtering the connection"""
-    where: HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs
-  ): HierarchicalContentNodeToContentNodeAncestorsConnection
-
-  """
-  Connection between the HierarchicalContentNode type and the ContentNode type
-  """
-  children(
-    """The number of items to return after the referenced "after" cursor"""
-    first: Int
-
-    """The number of items to return before the referenced "before" cursor"""
-    last: Int
-
-    """
-    Cursor used along with the "first" argument to reference where in the dataset to get data
-    """
-    after: String
-
-    """
-    Cursor used along with the "last" argument to reference where in the dataset to get data
-    """
-    before: String
-
-    """Arguments for filtering the connection"""
-    where: HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs
-  ): HierarchicalContentNodeToContentNodeChildrenConnection
-
-  """Connection between the ContentNode type and the ContentType type"""
-  contentType: ContentNodeToContentTypeConnectionEdge
-
-  """The name of the Content Type the node belongs to"""
-  contentTypeName: String!
-
-  """The unique identifier stored in the database"""
-  databaseId: Int!
-
-  """Post publishing date."""
-  date: String
-
-  """The publishing date set in GMT."""
-  dateGmt: String
-
-  """The desired slug of the post"""
-  desiredSlug: String
-
-  """
-  If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
-  """
-  editingLockedBy: ContentNodeToEditLockConnectionEdge
-
-  """The RSS enclosure for the object"""
-  enclosure: String
-
-  """Connection between the ContentNode type and the EnqueuedScript type"""
-  enqueuedScripts(
-    """The number of items to return after the referenced "after" cursor"""
-    first: Int
-
-    """The number of items to return before the referenced "before" cursor"""
-    last: Int
-
-    """
-    Cursor used along with the "first" argument to reference where in the dataset to get data
-    """
-    after: String
-
-    """
-    Cursor used along with the "last" argument to reference where in the dataset to get data
-    """
-    before: String
-
-    """Arguments for filtering the connection"""
-    where: ContentNodeToEnqueuedScriptConnectionWhereArgs
-  ): ContentNodeToEnqueuedScriptConnection
-
-  """
-  Connection between the ContentNode type and the EnqueuedStylesheet type
-  """
-  enqueuedStylesheets(
-    """The number of items to return after the referenced "after" cursor"""
-    first: Int
-
-    """The number of items to return before the referenced "before" cursor"""
-    last: Int
-
-    """
-    Cursor used along with the "first" argument to reference where in the dataset to get data
-    """
-    after: String
-
-    """
-    Cursor used along with the "last" argument to reference where in the dataset to get data
-    """
-    before: String
-
-    """Arguments for filtering the connection"""
-    where: ContentNodeToEnqueuedStylesheetConnectionWhereArgs
-  ): ContentNodeToEnqueuedStylesheetConnection
-
-  """
-  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
-  """
-  guid: String
-
-  """Whether the survey_response object is password protected."""
-  hasPassword: Boolean
-
-  """The globally unique identifier of the survey_response object."""
-  id: ID!
-
-  """Whether the node is a Comment"""
-  isComment: Boolean!
-
-  """Whether the node is a Content Node"""
-  isContentNode: Boolean!
-
-  """Whether the node represents the front page."""
-  isFrontPage: Boolean!
-
-  """Whether  the node represents the blog page."""
-  isPostsPage: Boolean!
-
-  """Whether the object is a node in the preview state"""
-  isPreview: Boolean
-
-  """Whether the object is restricted from the current viewer"""
-  isRestricted: Boolean
-
-  """Whether the node is a Term"""
-  isTermNode: Boolean!
-
-  """The user that most recently edited the node"""
-  lastEditedBy: ContentNodeToEditLastConnectionEdge
-
-  """The permalink of the post"""
-  link: String
-
-  """
-  The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
-  """
-  modified: String
-
-  """
-  The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
-  """
-  modifiedGmt: String
-
-  """The unique numeric identifier for the content node."""
-  nhtbl_surveyResponseId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
-
-  """
-  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
-  """
-  noindex: Boolean
-
-  """The parent of the node. The parent object can be of various types"""
-  parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
-
-  """Database id of the parent node"""
-  parentDatabaseId: Int
-
-  """The globally unique identifier of the parent node."""
-  parentId: ID
-
-  """The password for the survey_response object."""
-  password: String
-
-  """
-  Connection between the nhtbl_surveyResponse type and the nhtbl_surveyResponse type
-  """
-  preview: Nhtbl_surveyResponseToPreviewConnectionEdge
-
-  """The database id of the preview node"""
-  previewRevisionDatabaseId: Int
-
-  """The globally unique ID of the preview node"""
-  previewRevisionId: ID
-
-  """The Yoast SEO data of the ContentNode"""
-  seo: PostTypeSEO
-
-  """
-  The URL-friendly, human-readable identifier for the content node, used in its permalink.
-  """
-  slug: String
-
-  """The current status of the object"""
-  status: String
-
-  """Fields of the SurveyResponse ACF Field Group"""
-  surveyResponse: SurveyResponse
-
-  """The template assigned to a node of content"""
-  template: ContentTemplate
-
-  """
-  The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made.
-  """
-  title(
-    """Format of the field output"""
-    format: PostObjectFieldFormatEnum
-  ): String
-
-  """The unique resource identifier path"""
-  uri: String
-}
-
-"""
-The &quot;SurveyResponse&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
-"""
-type SurveyResponse implements SurveyResponse_Fields & AcfFieldGroup & AcfFieldGroupFields {
-  """The name of the field group"""
-  fieldGroupName: String @deprecated(reason: "Use __typename instead")
-
-  """
-  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;SurveyResponse&quot; Field Group
-  """
-  responses: [SurveyResponseResponses]
-
-  """
-  Field of the &quot;date_time_picker&quot; Field Type added to the schema as part of the &quot;SurveyResponse&quot; Field Group (ACF Fields of the &quot;date_time_picker&quot; type return a date string according to the RFC3339 spec: https://datatracker.ietf.org/doc/html/rfc3339.)
-  """
-  submittedAt: String
-
-  """The page or post that contains the survey block"""
-  surveyReference(
-    """The number of items to return after the referenced "after" cursor"""
-    first: Int
-
-    """The number of items to return before the referenced "before" cursor"""
-    last: Int
-
-    """
-    Cursor used along with the "first" argument to reference where in the dataset to get data
-    """
-    after: String
-
-    """
-    Cursor used along with the "last" argument to reference where in the dataset to get data
-    """
-    before: String
-  ): AcfContentNodeConnection
-}
-
-"""
-Connection between the FeaturedProjects_Fields type and the ContentNode type
-"""
-type AcfContentNodeConnection implements ContentNodeConnection & Connection {
-  """Edges for the AcfContentNodeConnection connection"""
-  edges: [AcfContentNodeConnectionEdge!]!
-
-  """The nodes of the connection, without the edges"""
-  nodes: [ContentNode!]!
-
-  """Information about pagination in a connection."""
-  pageInfo: AcfContentNodeConnectionPageInfo!
-}
-
-"""An edge in a connection"""
-type AcfContentNodeConnectionEdge implements ContentNodeConnectionEdge & Edge {
-  """A cursor for use in pagination"""
-  cursor: String
-
-  """The item at the end of the edge"""
-  node: ContentNode!
-}
-
-"""
-Pagination metadata specific to &quot;AcfContentNodeConnection&quot; collections. Provides cursors and flags for navigating through sets of AcfContentNodeConnection Nodes.
-"""
-type AcfContentNodeConnectionPageInfo implements ContentNodeConnectionPageInfo & WPPageInfo & PageInfo {
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """Raw schema for page"""
-  seo: SEOPostTypePageInfo
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-}
-
-"""
-Connection between the nhtbl_surveyResponse type and the nhtbl_surveyResponse type
-"""
-type Nhtbl_surveyResponseToPreviewConnectionEdge implements OneToOneConnection & Edge & NhtblSurveyResponseConnectionEdge {
-  """
-  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
-  """
-  cursor: String
-
-  """The node of the connection, without the edges"""
-  node: Nhtbl_surveyResponse!
-}
-
-"""
-Represents a connection to a nhtbl_surveyResponse. Contains both the nhtbl_surveyResponse Node and metadata about the relationship.
-"""
-interface NhtblSurveyResponseConnectionEdge implements Edge {
-  """
-  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
-  """
-  cursor: String
-
-  """The connected nhtbl_surveyResponse Node"""
-  node: Nhtbl_surveyResponse!
 }
 
 """Connection between the MenuItem type and the Menu type"""
@@ -15594,6 +15258,342 @@ enum Nhtbl_surveyResponseIdType {
 
   """Identify a resource by the URI."""
   URI
+}
+
+"""The nhtbl_surveyResponse type"""
+type Nhtbl_surveyResponse implements Node & ContentNode & UniformResourceIdentifiable & DatabaseIdentifier & NodeWithTemplate & NodeWithTitle & HierarchicalContentNode & HierarchicalNode & WithAcfSurveyResponse {
+  """
+  Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root).
+  """
+  ancestors(
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+
+    """Arguments for filtering the connection"""
+    where: HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs
+  ): HierarchicalContentNodeToContentNodeAncestorsConnection
+
+  """
+  Connection between the HierarchicalContentNode type and the ContentNode type
+  """
+  children(
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+
+    """Arguments for filtering the connection"""
+    where: HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs
+  ): HierarchicalContentNodeToContentNodeChildrenConnection
+
+  """Connection between the ContentNode type and the ContentType type"""
+  contentType: ContentNodeToContentTypeConnectionEdge
+
+  """The name of the Content Type the node belongs to"""
+  contentTypeName: String!
+
+  """The unique identifier stored in the database"""
+  databaseId: Int!
+
+  """Post publishing date."""
+  date: String
+
+  """The publishing date set in GMT."""
+  dateGmt: String
+
+  """The desired slug of the post"""
+  desiredSlug: String
+
+  """
+  If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
+  """
+  editingLockedBy: ContentNodeToEditLockConnectionEdge
+
+  """The RSS enclosure for the object"""
+  enclosure: String
+
+  """Connection between the ContentNode type and the EnqueuedScript type"""
+  enqueuedScripts(
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+
+    """Arguments for filtering the connection"""
+    where: ContentNodeToEnqueuedScriptConnectionWhereArgs
+  ): ContentNodeToEnqueuedScriptConnection
+
+  """
+  Connection between the ContentNode type and the EnqueuedStylesheet type
+  """
+  enqueuedStylesheets(
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+
+    """Arguments for filtering the connection"""
+    where: ContentNodeToEnqueuedStylesheetConnectionWhereArgs
+  ): ContentNodeToEnqueuedStylesheetConnection
+
+  """
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
+  """
+  guid: String
+
+  """Whether the survey_response object is password protected."""
+  hasPassword: Boolean
+
+  """The globally unique identifier of the survey_response object."""
+  id: ID!
+
+  """Whether the node is a Comment"""
+  isComment: Boolean!
+
+  """Whether the node is a Content Node"""
+  isContentNode: Boolean!
+
+  """Whether the node represents the front page."""
+  isFrontPage: Boolean!
+
+  """Whether  the node represents the blog page."""
+  isPostsPage: Boolean!
+
+  """Whether the object is a node in the preview state"""
+  isPreview: Boolean
+
+  """Whether the object is restricted from the current viewer"""
+  isRestricted: Boolean
+
+  """Whether the node is a Term"""
+  isTermNode: Boolean!
+
+  """The user that most recently edited the node"""
+  lastEditedBy: ContentNodeToEditLastConnectionEdge
+
+  """The permalink of the post"""
+  link: String
+
+  """
+  The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
+  """
+  modified: String
+
+  """
+  The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
+  """
+  modifiedGmt: String
+
+  """The unique numeric identifier for the content node."""
+  nhtbl_surveyResponseId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
+
+  """
+  True when this item is set to be hidden from search engines (Yoast &gt; Advanced), ignoring site-wide indexing settings.
+  """
+  noindex: Boolean
+
+  """The parent of the node. The parent object can be of various types"""
+  parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
+
+  """Database id of the parent node"""
+  parentDatabaseId: Int
+
+  """The globally unique identifier of the parent node."""
+  parentId: ID
+
+  """The password for the survey_response object."""
+  password: String
+
+  """
+  Connection between the nhtbl_surveyResponse type and the nhtbl_surveyResponse type
+  """
+  preview: Nhtbl_surveyResponseToPreviewConnectionEdge @deprecated(reason: "The &quot;NhtblSurveyResponse&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.")
+
+  """The database id of the preview node"""
+  previewRevisionDatabaseId: Int
+
+  """The globally unique ID of the preview node"""
+  previewRevisionId: ID
+
+  """The Yoast SEO data of the ContentNode"""
+  seo: PostTypeSEO
+
+  """
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
+  """
+  slug: String
+
+  """The current status of the object"""
+  status: String
+
+  """Fields of the SurveyResponse ACF Field Group"""
+  surveyResponse: SurveyResponse
+
+  """The template assigned to a node of content"""
+  template: ContentTemplate
+
+  """
+  The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made.
+  """
+  title(
+    """Format of the field output"""
+    format: PostObjectFieldFormatEnum
+  ): String
+
+  """The unique resource identifier path"""
+  uri: String
+}
+
+"""
+The &quot;SurveyResponse&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type SurveyResponse implements SurveyResponse_Fields & AcfFieldGroup & AcfFieldGroupFields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;SurveyResponse&quot; Field Group
+  """
+  responses: [SurveyResponseResponses]
+
+  """
+  Field of the &quot;date_time_picker&quot; Field Type added to the schema as part of the &quot;SurveyResponse&quot; Field Group (ACF Fields of the &quot;date_time_picker&quot; type return a date string according to the RFC3339 spec: https://datatracker.ietf.org/doc/html/rfc3339.)
+  """
+  submittedAt: String
+
+  """The page or post that contains the survey block"""
+  surveyReference(
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+  ): AcfContentNodeConnection
+}
+
+"""
+Connection between the FeaturedProjects_Fields type and the ContentNode type
+"""
+type AcfContentNodeConnection implements ContentNodeConnection & Connection {
+  """Edges for the AcfContentNodeConnection connection"""
+  edges: [AcfContentNodeConnectionEdge!]!
+
+  """The nodes of the connection, without the edges"""
+  nodes: [ContentNode!]!
+
+  """Information about pagination in a connection."""
+  pageInfo: AcfContentNodeConnectionPageInfo!
+}
+
+"""An edge in a connection"""
+type AcfContentNodeConnectionEdge implements ContentNodeConnectionEdge & Edge {
+  """A cursor for use in pagination"""
+  cursor: String
+
+  """The item at the end of the edge"""
+  node: ContentNode!
+}
+
+"""
+Pagination metadata specific to &quot;AcfContentNodeConnection&quot; collections. Provides cursors and flags for navigating through sets of AcfContentNodeConnection Nodes.
+"""
+type AcfContentNodeConnectionPageInfo implements ContentNodeConnectionPageInfo & WPPageInfo & PageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """Raw schema for page"""
+  seo: SEOPostTypePageInfo
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+}
+
+"""
+Connection between the nhtbl_surveyResponse type and the nhtbl_surveyResponse type
+"""
+type Nhtbl_surveyResponseToPreviewConnectionEdge implements OneToOneConnection & Edge & NhtblSurveyResponseConnectionEdge {
+  """
+  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+  """
+  cursor: String
+
+  """The node of the connection, without the edges"""
+  node: Nhtbl_surveyResponse!
+}
+
+"""
+Represents a connection to a nhtbl_surveyResponse. Contains both the nhtbl_surveyResponse Node and metadata about the relationship.
+"""
+interface NhtblSurveyResponseConnectionEdge implements Edge {
+  """
+  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+  """
+  cursor: String
+
+  """The connected nhtbl_surveyResponse Node"""
+  node: Nhtbl_surveyResponse!
 }
 
 """
@@ -18645,6 +18645,14 @@ type ImageGallery implements ImageGallery_Fields & AcfFieldGroup & AcfFieldGroup
 
   """Stretch the gallery to fill the available width."""
   fullWidth: Boolean
+
+  """
+  Turn on for images with transparency (PNG logos, icons). Each image gets a solid background, so the previous image doesn&#039;t show through while the next one fades in.
+  """
+  imageBackground: Boolean
+
+  """Usually the same colour as the section the gallery sits in."""
+  imageBackgroundColour: [String]
 
   """
   Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;ImageGallery&quot; Field Group
@@ -33130,6 +33138,14 @@ interface ImageGallery_Fields implements AcfFieldGroup & AcfFieldGroupFields {
 
   """Stretch the gallery to fill the available width."""
   fullWidth: Boolean
+
+  """
+  Turn on for images with transparency (PNG logos, icons). Each image gets a solid background, so the previous image doesn&#039;t show through while the next one fades in.
+  """
+  imageBackground: Boolean
+
+  """Usually the same colour as the section the gallery sits in."""
+  imageBackgroundColour: [String]
 
   """
   Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;ImageGallery&quot; Field Group
