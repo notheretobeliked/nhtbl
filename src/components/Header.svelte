@@ -126,12 +126,14 @@
 			<!-- State 2: compact pill — the breadcrumb trail (which begins with the
 			     logo) on its own; no menu. Falls back to just the logo on pages with
 			     no trail (a true 48×48 circle, matching the burger pill). -->
-			{#if hasBreadcrumbs}
-				<div class="flex h-full items-center pl-1.5 {logoOnlyCrumb ? 'pr-1.5' : 'pr-4'}">
+			{#if hasBreadcrumbs && !logoOnlyCrumb}
+				<div class="flex h-full items-center pl-1.5 pr-4">
 					<Breadcrumbs {breadcrumbs} />
 				</div>
 			{:else}
-				<a href="/" aria-label="Home" class="flex h-full w-12 items-center justify-center">
+				<!-- Logo only (the homepage, or no trail): a fixed 48×48 box, so the
+				     pill is a circle whatever the browser makes of the content width. -->
+				<a href="/" aria-label="Home" class="flex size-12 shrink-0 items-center justify-center">
 					<img src="/Nhtbl-logo.webp" alt="Not here to be liked" class="h-6 w-6 max-w-none object-contain" />
 				</a>
 			{/if}
