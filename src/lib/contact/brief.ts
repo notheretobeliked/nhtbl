@@ -44,13 +44,15 @@ export const FINDINGS = {
 		source: 'YouGov, June 2019',
 		url: 'https://yougov.com/en-gb/articles/23691-concern-environment-record-highs'
 	},
-	// Social Change Lab's estimate for Extinction Rebellion: 0.1 to 71 (median 8)
-	// tonnes of CO2e abated per £ spent. NOT YET CHECKED AGAINST THE REPORT: the
-	// figures come from a search summary of this post, so no number is quoted.
+	// Social Change Lab, "Extinction Rebellion: preliminary cost-effectiveness
+	// analysis", Nov 2021: XR UK (July 2018 to May 2019) abated 0.3 to 71, median
+	// 8, tonnes of greenhouse gases per £ spent on advocacy. The report stresses
+	// "significant uncertainties". The comparison with offsets is ours, not the
+	// report's (it compares with the Clean Air Task Force: 0.2x to 18x, median 7x).
 	offset: {
-		text: 'Offsets are the expensive way to do it. One estimate is that money spent on Extinction Rebellion’s protests cut far more carbon per pound. It’s a rough estimate, but a big gap.',
-		source: 'Social Change Lab',
-		url: 'https://forum.effectivealtruism.org/posts/6WKBi5C9vhjRzAzPs'
+		text: 'Then skip the offsets. One estimate is that each pound spent on Extinction Rebellion’s first year of protests cut around 8 tonnes of greenhouse gases. It’s a rough, early figure, but a pound of offsets buys a fraction of a tonne.',
+		source: 'Social Change Lab, 2021',
+		url: 'https://docs.wixstatic.com/ugd/503ba4_a397c68864ad40a2ad89ca964e73c51c.pdf'
 	}
 } satisfies Record<string, Finding>
 
@@ -76,6 +78,20 @@ export const CHANGE_OPTIONS = [
 		...said('Fair enough. There’s room to tell us at the end.')
 	}
 ] as const satisfies readonly Option[]
+
+/**
+ * Where "My carbon footprint" ends: it isn't an enquiry, so instead of the
+ * other questions the visitor gets two places to put their money.
+ */
+export const FOOTPRINT_ID = 'footprint'
+export const FOOTPRINT_LINKS = [
+	{
+		label: 'Donate to the Climate Emergency Fund',
+		href: 'https://www.climateemergencyfund.org/donate',
+		external: true
+	},
+	{ label: 'Support our work', href: '/support-us', external: false }
+] as const
 
 /** "Who needs to notice?" Only the first has a figure; the rest are just us talking. */
 export const NOTICE_OPTIONS = [

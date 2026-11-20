@@ -16,15 +16,25 @@
 		briefMailto,
 		CONTACT_EMAIL,
 		CHANGE_OPTIONS,
+		FOOTPRINT_ID,
+		FOOTPRINT_LINKS,
 		NOTICE_OPTIONS,
 		WHEN_OPTIONS,
 		type Brief,
 		type Finding
 	} from '$lib/contact/brief'
 
-	type Step = 'change' | 'notice' | 'when' | 'budget' | 'details' | 'sent'
+	type Step = 'change' | 'footprint' | 'notice' | 'when' | 'budget' | 'details' | 'sent'
 
-	const blank = (): Brief => ({ change: '', notice: '', when: '', budget: '', more: '', name: '', email: '' })
+	const blank = (): Brief => ({
+		change: '',
+		notice: '',
+		when: '',
+		budget: '',
+		more: '',
+		name: '',
+		email: ''
+	})
 	let brief = $state<Brief>(blank())
 	let step = $state<Step>('change')
 	let website = $state('') // honeypot
@@ -43,7 +53,7 @@
 	const noticeOption = $derived(NOTICE_OPTIONS.find((o) => o.id === brief.notice))
 
 	const past = (s: Step) => {
-		const order: Step[] = ['change', 'notice', 'when', 'budget', 'details', 'sent']
+		const order: Step[] = ['change', 'footprint', 'notice', 'when', 'budget', 'details', 'sent']
 		return order.indexOf(step) > order.indexOf(s)
 	}
 
@@ -164,9 +174,13 @@
 		class="fixed right-2 bottom-20 left-2 z-40 flex max-h-[calc(100dvh-6.5rem)] flex-col overflow-hidden rounded-3xl border border-black bg-white font-sans text-black shadow-[0_8px_40px_rgba(0,0,0,0.25)] md:right-4 md:left-auto md:w-[400px] md:max-h-[min(680px,calc(100dvh-7rem))]"
 		transition:fly={{ y: 24, duration: 250 }}
 	>
-		<div class="flex items-baseline justify-between gap-4 border-b border-black bg-nhtbl-green-base px-4 py-3">
+		<div
+			class="flex items-baseline justify-between gap-4 border-b border-black bg-nhtbl-green-base px-4 py-3"
+		>
 			<h2 class="m-0 font-display text-lg">Talk to us</h2>
-			<a href="mailto:{CONTACT_EMAIL}" class="text-xs underline underline-offset-2">or just email us</a>
+			<a href="mailto:{CONTACT_EMAIL}" class="text-xs underline underline-offset-2"
+				>or just email us</a
+			>
 		</div>
 
 		<div bind:this={log} class="flex flex-1 flex-col gap-2 overflow-y-auto px-4 py-4">
@@ -174,7 +188,10 @@
 			{#if past('change') && changeOption}
 				{@render them(changeOption.label)}
 				{@render us(changeOption.reply, changeOption.finding)}
-
+			{/if}
+			{#if step === 'footprint'}
+				{@render ask('Where should the money go?')}
+			{:else if past('change') && changeOption}
 				{@render ask('Who needs to notice?')}
 				{#if past('notice') && noticeOption}
 					{@render them(noticeOption.label)}
@@ -190,7 +207,9 @@
 							{@render them(budgetOption.label)}
 							{@render us(budgetOption.reply)}
 							{#if budgetOption.paying}
-								<label class="flex max-w-[88%] cursor-pointer items-start gap-2 rounded-2xl rounded-bl-sm bg-nhtbl-grey-base px-3 py-2 text-sm leading-snug">
+								<label
+									class="flex max-w-[88%] cursor-pointer items-start gap-2 rounded-2xl rounded-bl-sm bg-nhtbl-grey-base px-3 py-2 text-sm leading-snug"
+								>
 									<input
 										type="checkbox"
 										checked={ticked}
@@ -209,7 +228,12 @@
 
 							{#if step === 'sent'}
 								{@render us('Sent. Thank you. We’ll write back to ' + brief.email + '.')}
-								<button type="button" onclick={restart} class="mt-1 w-fit cursor-pointer text-xs underline underline-offset-2">Start again</button>
+								<button
+									type="button"
+									onclick={restart}
+									class="mt-1 w-fit cursor-pointer text-xs underline underline-offset-2"
+									>Start again</button
+								>
 							{:else}
 								{@render ask('Last thing: who are you?')}
 							{/if}
@@ -224,8 +248,43 @@
 			<div class="border-t border-black px-3 py-3">
 				{@render chips(CHANGE_OPTIONS, (id) => {
 					brief.change = id as Brief['change']
-					advance('notice')
+					advance(id === FOOTPRINT_ID ? 'footprint' : 'notice')
 				})}
+			</div>
+		{:else if step === 'footprint'}
+			<div class="flex flex-col gap-2 border-t border-black px-3 py-3">
+				{#each FOOTPRINT_LINKS as link (link.href)}
+					<a
+						href={link.href}
+						target={link.external ? '_blank' : undefined}
+						rel={link.external ? 'noopener noreferrer' : undefined}
+						onclick={() => {
+							if (!link.external) contactWidget.open = false
+						}}
+						class="flex h-12 items-center justify-between gap-2 rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base"
+					>
+						{link.label}
+						<svg
+							viewBox="0 0 24 24"
+							class="size-5 shrink-0"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.25"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							{#if link.external}<path d="M8 16 17 7" /><path d="M9 7h8v8" />{:else}<path
+									d="M5 12h14"
+								/><path d="m13 6 6 6-6 6" />{/if}
+						</svg>
+					</a>
+				{/each}
+				<button
+					type="button"
+					onclick={restart}
+					class="w-fit cursor-pointer px-2 text-xs underline underline-offset-2">Start over</button
+				>
 			</div>
 		{:else if step === 'notice'}
 			<div class="border-t border-black px-3 py-3">
@@ -250,11 +309,53 @@
 			</div>
 		{:else if step === 'details'}
 			<form onsubmit={send} class="flex flex-col gap-2 border-t border-black px-3 py-3">
-				<input bind:this={field} bind:value={brief.name} name="name" autocomplete="name" maxlength="120" placeholder="Your name" aria-label="Your name" class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black" />
-				<input bind:value={brief.email} type="email" name="email" autocomplete="email" required maxlength="254" placeholder="Your email address" aria-label="Your email address" class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black" />
-				<textarea bind:value={brief.more} data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocomplete="off" rows="3" maxlength="4000" placeholder="Tell us a bit more (optional)" aria-label="Tell us a bit more" class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"></textarea>
+				<input
+					bind:this={field}
+					bind:value={brief.name}
+					name="name"
+					autocomplete="name"
+					maxlength="120"
+					placeholder="Your name"
+					aria-label="Your name"
+					class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
+				/>
+				<input
+					bind:value={brief.email}
+					type="email"
+					name="email"
+					autocomplete="email"
+					required
+					maxlength="254"
+					placeholder="Your email address"
+					aria-label="Your email address"
+					class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
+				/>
+				<textarea
+					bind:value={brief.more}
+					data-1p-ignore
+					data-lpignore="true"
+					data-bwignore
+					data-form-type="other"
+					autocomplete="off"
+					rows="3"
+					maxlength="4000"
+					placeholder="Tell us a bit more (optional)"
+					aria-label="Tell us a bit more"
+					class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
+				></textarea>
 				<!-- Honeypot: hidden from people, tempting to bots. -->
-				<input bind:value={website} name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0" />
+				<input
+					bind:value={website}
+					name="website"
+					tabindex="-1"
+					autocomplete="off"
+					data-1p-ignore
+					data-lpignore="true"
+					data-bwignore
+					data-form-type="other"
+					aria-hidden="true"
+					class="absolute -left-[9999px] h-0 w-0 opacity-0"
+				/>
 				<div class="flex gap-2">
 					<button
 						type="button"
@@ -263,7 +364,17 @@
 						title="Start over"
 						class="flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black bg-white transition-colors hover:bg-nhtbl-grey-base"
 					>
-						<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5" /><path d="M4.5 4.5v4.2h4.2" /></svg>
+						<svg
+							viewBox="0 0 24 24"
+							class="size-5"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.25"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+							><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5" /><path d="M4.5 4.5v4.2h4.2" /></svg
+						>
 					</button>
 					<button
 						class="h-12 flex-1 cursor-pointer rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-60"
@@ -274,7 +385,9 @@
 					<p class="m-0 text-sm" role="alert">
 						{error}
 						{#if fallback}
-							<a href={briefMailto(brief)} class="underline underline-offset-2">Send it from your own email instead</a>: your answers are already in the message.
+							<a href={briefMailto(brief)} class="underline underline-offset-2"
+								>Send it from your own email instead</a
+							>: your answers are already in the message.
 						{:else}
 							Check the address and try again.
 						{/if}
@@ -296,10 +409,30 @@
 	{#key contactWidget.open}
 		<span in:scale={{ duration: 180, start: 0.6 }} class="flex">
 			{#if contactWidget.open}
-				<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12" /><path d="M18 6 6 18" /></svg>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-5"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.25"
+					stroke-linecap="round"
+					aria-hidden="true"><path d="M6 6l12 12" /><path d="M18 6 6 18" /></svg
+				>
 			{:else}
 				<!-- Megaphone -->
-				<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10v4h3.5l8 4V6l-8 4H3.5z" /><path d="M7.5 14.2v4.3H10v-3.1" /><path d="M18 9.5a4 4 0 0 1 0 5" /><path d="M20.3 7.5a7 7 0 0 1 0 9" /></svg>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-5"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.25"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+					><path d="M3.5 10v4h3.5l8 4V6l-8 4H3.5z" /><path d="M7.5 14.2v4.3H10v-3.1" /><path
+						d="M18 9.5a4 4 0 0 1 0 5"
+					/><path d="M20.3 7.5a7 7 0 0 1 0 9" /></svg
+				>
 			{/if}
 		</span>
 	{/key}
