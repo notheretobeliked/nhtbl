@@ -75,7 +75,7 @@ export const CHANGE_OPTIONS = [
 	{
 		id: 'else',
 		label: 'Something else',
-		...said('Fair enough. There’s room to tell us at the end.')
+		...said('Fair enough.')
 	}
 ] as const satisfies readonly Option[]
 
@@ -84,6 +84,8 @@ export const CHANGE_OPTIONS = [
  * other questions the visitor gets two places to put their money.
  */
 export const FOOTPRINT_ID = 'footprint'
+/** "Something else" skips the remaining questions and goes straight to the form. */
+export const DIRECT_ID = 'else'
 export const FOOTPRINT_LINKS = [
 	{
 		label: 'Donate to the Climate Emergency Fund',

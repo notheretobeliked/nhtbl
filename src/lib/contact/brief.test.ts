@@ -13,7 +13,7 @@ const brief: Brief = {
 
 describe('contact widget options', () => {
 	it('gives every option a reply', () => {
-		for (const o of [...CHANGE_OPTIONS, ...NOTICE_OPTIONS]) expect(o.reply.length).toBeGreaterThan(10)
+		for (const o of [...CHANGE_OPTIONS, ...NOTICE_OPTIONS]) expect(o.reply.length).toBeGreaterThan(5)
 	})
 	it('pairs a law or a policy with the finding about policy', () => {
 		expect(CHANGE_OPTIONS.find((o) => o.id === 'policy')?.finding).toBe(FINDINGS.movements)

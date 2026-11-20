@@ -16,6 +16,7 @@
 		briefMailto,
 		CONTACT_EMAIL,
 		CHANGE_OPTIONS,
+		DIRECT_ID,
 		FOOTPRINT_ID,
 		FOOTPRINT_LINKS,
 		NOTICE_OPTIONS,
@@ -50,6 +51,7 @@
 	const whenOption = $derived(WHEN_OPTIONS.find((o) => o.id === brief.when))
 	const budgetOption = $derived(BUDGET_OPTIONS.find((o) => o.id === brief.budget))
 	const changeOption = $derived(CHANGE_OPTIONS.find((o) => o.id === brief.change))
+	const direct = $derived(brief.change === DIRECT_ID)
 	const noticeOption = $derived(NOTICE_OPTIONS.find((o) => o.id === brief.notice))
 
 	const past = (s: Step) => {
@@ -167,6 +169,19 @@
 	</div>
 {/snippet}
 
+{#snippet ending()}
+	{#if step === 'sent'}
+		{@render us('Sent. Thank you. We’ll write back to ' + brief.email + '.')}
+		<button
+			type="button"
+			onclick={restart}
+			class="mt-1 w-fit cursor-pointer text-xs underline underline-offset-2">Start again</button
+		>
+	{:else}
+		{@render ask('Last thing: who are you?')}
+	{/if}
+{/snippet}
+
 {#if contactWidget.open}
 	<div
 		role="dialog"
@@ -190,7 +205,14 @@
 				{@render us(changeOption.reply, changeOption.finding)}
 			{/if}
 			{#if step === 'footprint'}
-				{@render ask('Where should the money go?')}
+				{@render ask('Where should your money go?')}
+			{:else if direct && past('change')}
+				<!-- "Something else": no more questions, straight to the form. -->
+				{#if step === 'sent'}
+					{@render ending()}
+				{:else}
+					{@render ask('Tell us about it.')}
+				{/if}
 			{:else if past('change') && changeOption}
 				{@render ask('Who needs to notice?')}
 				{#if past('notice') && noticeOption}
@@ -226,17 +248,7 @@
 								</label>
 							{/if}
 
-							{#if step === 'sent'}
-								{@render us('Sent. Thank you. We’ll write back to ' + brief.email + '.')}
-								<button
-									type="button"
-									onclick={restart}
-									class="mt-1 w-fit cursor-pointer text-xs underline underline-offset-2"
-									>Start again</button
-								>
-							{:else}
-								{@render ask('Last thing: who are you?')}
-							{/if}
+							{@render ending()}
 						{/if}
 					{/if}
 				{/if}
@@ -248,7 +260,7 @@
 			<div class="border-t border-black px-3 py-3">
 				{@render chips(CHANGE_OPTIONS, (id) => {
 					brief.change = id as Brief['change']
-					advance(id === FOOTPRINT_ID ? 'footprint' : 'notice')
+					advance(id === FOOTPRINT_ID ? 'footprint' : id === DIRECT_ID ? 'details' : 'notice')
 				})}
 			</div>
 		{:else if step === 'footprint'}
@@ -339,7 +351,8 @@
 					autocomplete="off"
 					rows="3"
 					maxlength="4000"
-					placeholder="Tell us a bit more (optional)"
+					required={direct}
+					placeholder={direct ? 'What do you have in mind?' : 'Tell us a bit more (optional)'}
 					aria-label="Tell us a bit more"
 					class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
 				></textarea>
