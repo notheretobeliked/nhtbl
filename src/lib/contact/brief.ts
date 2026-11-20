@@ -2,6 +2,9 @@
  * The contact widget's script: the questions it asks, what it says back, and
  * how the answers become the message we receive.
  *
+ * Every question is answered by tapping an option; the only typing is the
+ * name, email and optional note at the end.
+ *
  * The replies quote research on what protest achieves. Each figure was checked
  * against its source in November 2026; keep the wording as careful as it is
  * here (see the notes on each finding) if you edit it.
@@ -43,21 +46,31 @@ export const FINDINGS = {
 	}
 } satisfies Record<string, Finding>
 
-const CAMPAIGN = /\b(campaign|protest|strike|blockade|occup|direct action|civil disobedience|march|demo|movement|organis(e|ing)|organiz(e|ing)|activis)/i
-const INSTITUTION = /\b(museum|gallery|galleries|universit|college|school|institution|organisation|organization|charity|ngo|foundation|trust|brand|company|business|audience|visitors|collection|festival|theatre|library|council|publisher|magazine)/i
-
-const CLIMATE = /\b(climate|fossil|oil|gas|coal|carbon|emission|net zero|environment|nature|ecolog|extinction|pollut|warming)/i
-
-/**
- * What the widget says after "What are you trying to change?". The climate
- * finding only answers a climate campaign; any other campaign gets the general
- * one, so a rent strike isn't told about climate polling.
- */
-export function replyToChange(answer: string): Finding {
-	if (CAMPAIGN.test(answer)) return CLIMATE.test(answer) ? FINDINGS.concern : FINDINGS.movements
-	if (INSTITUTION.test(answer)) return FINDINGS.flank
-	return CLIMATE.test(answer) ? FINDINGS.concern : FINDINGS.movements
+export interface Option {
+	id: string
+	label: string
+	reply: string
+	finding: Finding | null
 }
+
+const found = (f: Finding) => ({ reply: f.text, finding: f })
+const said = (reply: string) => ({ reply, finding: null })
+
+/** "What are you trying to change?" Each answer gets the finding that fits it. */
+export const CHANGE_OPTIONS = [
+	{ id: 'policy', label: 'A law or a policy', ...found(FINDINGS.movements) },
+	{ id: 'minds', label: 'What people think', ...found(FINDINGS.concern) },
+	{ id: 'seen', label: 'How we’re seen', ...found(FINDINGS.flank) },
+	{ id: 'else', label: 'Something else', ...said('Fair enough. There’s room to tell us at the end.') }
+] as const satisfies readonly Option[]
+
+/** "Who needs to notice?" Only the first has a figure; the rest are just us talking. */
+export const NOTICE_OPTIONS = [
+	{ id: 'public', label: 'The public', ...found(FINDINGS.noticed) },
+	{ id: 'power', label: 'People in power', ...said('They usually notice last. That can be fixed.') },
+	{ id: 'institution', label: 'A company or an institution', ...said('They notice when it has their name on it.') },
+	{ id: 'ours', label: 'Our own people', ...said('The toughest audience. A good place to start.') }
+] as const satisfies readonly Option[]
 
 export const WHEN_OPTIONS = [
 	{ id: 'yesterday', label: 'Yesterday', reply: 'Understood. Most things worth doing are late.' },
@@ -72,12 +85,14 @@ export const BUDGET_OPTIONS = [
 	{ id: 'none', label: 'No, we’re volunteers', reply: 'Good. So are most of the people we work with.', paying: false }
 ] as const
 
+export type ChangeId = (typeof CHANGE_OPTIONS)[number]['id']
+export type NoticeId = (typeof NOTICE_OPTIONS)[number]['id']
 export type WhenId = (typeof WHEN_OPTIONS)[number]['id']
 export type BudgetId = (typeof BUDGET_OPTIONS)[number]['id']
 
 export interface Brief {
-	change: string
-	notice: string
+	change: ChangeId | ''
+	notice: NoticeId | ''
 	when: WhenId | ''
 	budget: BudgetId | ''
 	more: string
@@ -93,23 +108,19 @@ export function briefAsText(b: Brief): string {
 	return [
 		`From: ${b.name || '(no name)'} <${b.email}>`,
 		'',
-		'What are you trying to change?',
-		b.change || '–',
-		'',
-		'Who needs to notice?',
-		b.notice || '–',
-		'',
+		`What are you trying to change? ${labelOf(CHANGE_OPTIONS, b.change)}`,
+		`Who needs to notice? ${labelOf(NOTICE_OPTIONS, b.notice)}`,
 		`By when? ${labelOf(WHEN_OPTIONS, b.when)}`,
 		`Is there a budget? ${labelOf(BUDGET_OPTIONS, b.budget)}`,
-		...(b.more.trim() ? ['', 'Anything else:', b.more.trim()] : [])
+		...(b.more.trim() ? ['', 'In their words:', b.more.trim()] : [])
 	].join('\n')
 }
 
-/** A short subject line from the first answer. */
+/** A subject line from the first answer and the name. */
 export function briefSubject(b: Brief): string {
-	const first = b.change.trim().replace(/\s+/g, ' ')
-	const short = first.length > 60 ? `${first.slice(0, 57).trimEnd()}…` : first
-	return `Via the website: ${short || 'new enquiry'}`
+	const what = CHANGE_OPTIONS.find((o) => o.id === b.change)?.label ?? 'new enquiry'
+	const who = b.name.trim().replace(/\s+/g, ' ').slice(0, 60)
+	return `Via the website: ${what}${who ? ` (${who})` : ''}`
 }
 
 export const CONTACT_EMAIL = 'welikeyou@nhtbl.studio'

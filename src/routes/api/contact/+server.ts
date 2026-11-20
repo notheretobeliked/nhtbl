@@ -7,6 +7,8 @@ import {
 	briefAsText,
 	briefSubject,
 	CONTACT_EMAIL,
+	CHANGE_OPTIONS,
+	NOTICE_OPTIONS,
 	WHEN_OPTIONS,
 	type Brief
 } from '$lib/contact/brief'
@@ -55,8 +57,8 @@ export const POST: RequestHandler = async ({ request }) => {
 	const when = WHEN_OPTIONS.find((o) => o.id === body.when)?.id ?? ''
 	const budget = BUDGET_OPTIONS.find((o) => o.id === body.budget)?.id ?? ''
 	const brief: Brief = {
-		change: text(body.change, 2000),
-		notice: text(body.notice, 2000),
+		change: CHANGE_OPTIONS.find((o) => o.id === body.change)?.id ?? '',
+		notice: NOTICE_OPTIONS.find((o) => o.id === body.notice)?.id ?? '',
 		when,
 		budget,
 		more: text(body.more, 4000),

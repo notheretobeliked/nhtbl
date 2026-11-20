@@ -3,7 +3,7 @@
 	 * The floating contact widget: a round button, bottom right on every page,
 	 * that opens a short conversation. It asks the questions we start every
 	 * project with (what are you trying to change, who needs to notice, by when)
-	 * and answers each with a finding about what protest achieves. The answers
+	 * as buttons to tap, and answers with findings about what protest achieves. The answers
 	 * arrive in our inbox as a brief. See $lib/contact/brief for the script.
 	 */
 	import { tick } from 'svelte'
@@ -15,8 +15,8 @@
 		BUDGET_OPTIONS,
 		briefMailto,
 		CONTACT_EMAIL,
-		FINDINGS,
-		replyToChange,
+		CHANGE_OPTIONS,
+		NOTICE_OPTIONS,
 		WHEN_OPTIONS,
 		type Brief,
 		type Finding
@@ -27,7 +27,6 @@
 	const blank = (): Brief => ({ change: '', notice: '', when: '', budget: '', more: '', name: '', email: '' })
 	let brief = $state<Brief>(blank())
 	let step = $state<Step>('change')
-	let draft = $state('')
 	let website = $state('') // honeypot
 	let status = $state<'idle' | 'sending' | 'error'>('idle')
 	let error = $state('')
@@ -40,7 +39,8 @@
 
 	const whenOption = $derived(WHEN_OPTIONS.find((o) => o.id === brief.when))
 	const budgetOption = $derived(BUDGET_OPTIONS.find((o) => o.id === brief.budget))
-	const changeReply = $derived<Finding | null>(brief.change ? replyToChange(brief.change) : null)
+	const changeOption = $derived(CHANGE_OPTIONS.find((o) => o.id === brief.change))
+	const noticeOption = $derived(NOTICE_OPTIONS.find((o) => o.id === brief.notice))
 
 	const past = (s: Step) => {
 		const order: Step[] = ['change', 'notice', 'when', 'budget', 'details', 'sent']
@@ -49,30 +49,9 @@
 
 	async function advance(to: Step) {
 		step = to
-		draft = ''
 		await tick()
 		log?.scrollTo({ top: log.scrollHeight, behavior: 'smooth' })
 		field?.focus()
-	}
-
-	function answerText(event: SubmitEvent) {
-		event.preventDefault()
-		const value = draft.trim()
-		if (!value) return
-		if (step === 'change') {
-			brief.change = value
-			advance('notice')
-		} else if (step === 'notice') {
-			brief.notice = value
-			advance('when')
-		}
-	}
-	// Enter sends a one-line answer; Shift+Enter makes a new line.
-	function onKey(event: KeyboardEvent) {
-		if (event.key === 'Enter' && !event.shiftKey) {
-			event.preventDefault()
-			;(event.currentTarget as HTMLElement).closest('form')?.requestSubmit()
-		}
 	}
 
 	async function send(event: SubmitEvent) {
@@ -192,14 +171,14 @@
 
 		<div bind:this={log} class="flex flex-1 flex-col gap-2 overflow-y-auto px-4 py-4">
 			{@render ask('What are you trying to change?')}
-			{#if past('change')}
-				{@render them(brief.change)}
-				{#if changeReply}{@render us(changeReply.text, changeReply)}{/if}
+			{#if past('change') && changeOption}
+				{@render them(changeOption.label)}
+				{@render us(changeOption.reply, changeOption.finding)}
 
 				{@render ask('Who needs to notice?')}
-				{#if past('notice')}
-					{@render them(brief.notice)}
-					{@render us(FINDINGS.noticed.text, FINDINGS.noticed)}
+				{#if past('notice') && noticeOption}
+					{@render them(noticeOption.label)}
+					{@render us(noticeOption.reply, noticeOption.finding)}
 
 					{@render ask('By when?')}
 					{#if past('when') && whenOption}
@@ -241,31 +220,20 @@
 		</div>
 
 		<!-- The answer area for the current step. -->
-		{#if step === 'change' || step === 'notice'}
-			<form onsubmit={answerText} class="flex items-end gap-2 border-t border-black px-3 py-3">
-				<textarea
-					bind:this={field}
-					data-1p-ignore
-					data-lpignore="true"
-					data-bwignore
-					data-form-type="other"
-					autocomplete="off"
-					bind:value={draft}
-					onkeydown={onKey}
-					rows="2"
-					maxlength="2000"
-					aria-label={step === 'change' ? 'What are you trying to change?' : 'Who needs to notice?'}
-					placeholder={step === 'change' ? 'A law, a brand, a street, a mind…' : 'A minister, a neighbourhood, a board…'}
-					class="min-h-12 flex-1 resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
-				></textarea>
-				<button
-					class="flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black bg-nhtbl-green-base transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-40 disabled:hover:bg-nhtbl-green-base disabled:hover:text-black"
-					disabled={!draft.trim()}
-					aria-label="Next"
-				>
-					<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
-				</button>
-			</form>
+		{#if step === 'change'}
+			<div class="border-t border-black px-3 py-3">
+				{@render chips(CHANGE_OPTIONS, (id) => {
+					brief.change = id as Brief['change']
+					advance('notice')
+				})}
+			</div>
+		{:else if step === 'notice'}
+			<div class="border-t border-black px-3 py-3">
+				{@render chips(NOTICE_OPTIONS, (id) => {
+					brief.notice = id as Brief['notice']
+					advance('when')
+				})}
+			</div>
 		{:else if step === 'when'}
 			<div class="border-t border-black px-3 py-3">
 				{@render chips(WHEN_OPTIONS, (id) => {
@@ -284,7 +252,7 @@
 			<form onsubmit={send} class="flex flex-col gap-2 border-t border-black px-3 py-3">
 				<input bind:this={field} bind:value={brief.name} name="name" autocomplete="name" maxlength="120" placeholder="Your name" aria-label="Your name" class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black" />
 				<input bind:value={brief.email} type="email" name="email" autocomplete="email" required maxlength="254" placeholder="Your email address" aria-label="Your email address" class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black" />
-				<textarea bind:value={brief.more} data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocomplete="off" rows="2" maxlength="4000" placeholder="Anything else we should know? (optional)" aria-label="Anything else we should know?" class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"></textarea>
+				<textarea bind:value={brief.more} data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocomplete="off" rows="3" maxlength="4000" placeholder="Tell us a bit more (optional)" aria-label="Tell us a bit more" class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"></textarea>
 				<!-- Honeypot: hidden from people, tempting to bots. -->
 				<input bind:value={website} name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0" />
 				<button
