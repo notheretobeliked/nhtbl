@@ -117,6 +117,16 @@
       .join(', ') ?? ''
   )
 
+  // List-only entries (a talk, a workshop…) have no content and so no page:
+  // the row is shown without a link. `hasContent` is absent on older payloads,
+  // so only an explicit false switches the link off.
+  const hasPage = $derived((project as any).hasContent !== false)
+
+  // What kind of entry this is (Workshop, Talk or teaching, Exhibition…).
+  const typeNames = $derived(
+    ((project as any).nhtblTypes?.nodes ?? []).map((t: any) => t?.name).filter(Boolean) as string[]
+  )
+
   // Get service names - only second level (children with parentId)
   const serviceNames = $derived(
     project.nhtblServices?.nodes
@@ -180,8 +190,19 @@
   </article>
 {:else if displayMode === 'grid'}
   <!-- Grid Mode: a columnar list row — year · client · title · description · services -->
-  <article class="featured-project group hover:bg-[var(--pf-fg)] transition-all rounded-lg hover:!text-[var(--pf-bg)]">
-    <a class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-start gap-4 px-3 py-2 text-sm" href={project.uri}>
+  <!-- `group` (which drives the inverted hover colours on the description and
+       tags) is only set on rows that link somewhere: a list-only row has no
+       hover background, so inverting its text would hide it. -->
+  <article
+    class="featured-project transition-all rounded-lg {hasPage
+      ? 'group hover:bg-[var(--pf-fg)] hover:!text-[var(--pf-bg)]'
+      : ''}"
+  >
+    <svelte:element
+      this={hasPage ? 'a' : 'div'}
+      class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-start gap-4 px-3 py-2 text-sm"
+      href={hasPage ? project.uri : undefined}
+    >
       <!-- Year -->
       <span class="font-display whitespace-nowrap">{yearPlain}</span>
 
@@ -196,9 +217,13 @@
         {@html project.excerpt ?? ''}
       </div>
 
-      <!-- Services -->
-      {#if showTags && serviceNames.length > 0}
+      <!-- Type + services -->
+      {#if showTags && (serviceNames.length > 0 || typeNames.length > 0)}
         <div class="services flex flex-row gap-1 flex-wrap">
+          {#each typeNames as typeName}
+            <!-- Filled chip, so a type reads differently from a service tag. -->
+            <div class="font-sans text-xs rounded-full border border-[var(--pf-fg)] bg-[var(--pf-fg)] text-[var(--pf-bg)] group-hover:border-[var(--pf-bg)] group-hover:bg-[var(--pf-bg)] group-hover:text-[var(--pf-fg)] px-2 py-0 whitespace-nowrap">{typeName}</div>
+          {/each}
           {#each serviceNames as serviceName}
             {#if onServiceClick}
               <button
@@ -221,7 +246,7 @@
       {:else}
         <span></span>
       {/if}
-    </a>
+    </svelte:element>
   </article>
 {:else}
   <!-- Block Mode -->

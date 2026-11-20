@@ -229,3 +229,39 @@
 .footnotes li::before {
 	content: counter(list-item) '— ';
 }
+
+/* Links inside running text (paragraphs, lists, quotes, captions) are underlined,
+   so they read as links. Buttons, the menu and the footer are not running text. */
+:is(.page-main, .portfolio-content) :is(p, li, blockquote, figcaption) a {
+	text-decoration: underline;
+	text-decoration-thickness: 0.07em;
+	text-underline-offset: 0.16em;
+}
+:is(.page-main, .portfolio-content) :is(p, li, blockquote, figcaption) a:hover {
+	text-decoration-thickness: 0.14em;
+}
+
+/* Statement links that filter the work list (href="#filter=…"), handled by
+   PortfolioBlock. Underlined at rest, highlighted on hover, inverted when active. */
+a[href*='#filter='] {
+	text-decoration: underline;
+	text-decoration-thickness: 0.07em;
+	text-underline-offset: 0.16em;
+	border-radius: 0.2em;
+	/* The highlight extends a little past the word without shifting the text.
+	   Less on the right, so it doesn't cover a comma or full stop that follows. */
+	padding: 0 0.03em 0 0.12em;
+	margin: 0 -0.03em 0 -0.12em;
+	cursor: pointer;
+	transition:
+		background-color 150ms,
+		color 150ms;
+}
+a[href*='#filter=']:hover {
+	background-color: var(--color-nhtbl-green-base);
+}
+a[href*='#filter='].filter-active {
+	background-color: var(--color-black);
+	color: var(--color-nhtbl-green-base);
+	text-decoration: none;
+}

@@ -11,7 +11,13 @@ export interface IndexedContent {
 interface SitemapPage {
 	contentNodes: {
 		pageInfo: { hasNextPage: boolean; endCursor: string | null }
-		nodes: Array<{ uri: string | null; modifiedGmt: string | null; noindex: boolean | null } | null>
+		nodes: Array<{
+			uri: string | null
+			modifiedGmt: string | null
+			noindex: boolean | null
+			/** Projects only. */
+			hasContent?: boolean | null
+		} | null>
 	} | null
 }
 
@@ -20,7 +26,9 @@ const MAX_PAGES = 100
 
 /**
  * Every published page and post, following the GraphQL cursor until the end.
- * Items without a URI (e.g. the posts page placeholder) are skipped.
+ * Items without a URI (e.g. the posts page placeholder) are skipped, as are
+ * list-only projects (a talk, a workshop… with no content): they appear as a row
+ * in the Work list but have no page to build or list.
  */
 export async function fetchPublishedContent(): Promise<IndexedContent[]> {
 	const items: IndexedContent[] = []
@@ -36,6 +44,7 @@ export async function fetchPublishedContent(): Promise<IndexedContent[]> {
 		const connection = (json.data as SitemapPage).contentNodes
 		for (const node of connection?.nodes ?? []) {
 			if (!node?.uri) continue
+			if (node.hasContent === false) continue
 			items.push({
 				uri: node.uri,
 				modifiedGmt: node.modifiedGmt ?? null,
