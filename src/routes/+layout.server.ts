@@ -4,6 +4,7 @@ import { checkResponse, graphqlQuery, reportGraphQLErrors } from '$lib/utilities
 import type { LayoutServerLoad } from './$types'
 import { error, isHttpError } from '@sveltejs/kit'
 import { PUBLIC_SITE_URL } from '$env/static/public'
+import { env } from '$env/dynamic/private'
 
 interface MenuItemWithCurrent {
 	label?: string | null
@@ -32,6 +33,8 @@ interface LoadReturn {
 	noindex: boolean
 	uri: string
 	breadcrumbs?: Array<{ text: string; url: string }>
+	/** Brevo is configured, so the footer can show the newsletter form. */
+	newsletterEnabled?: boolean
 }
 
 /** Routes that should not trigger a GraphQL query */
@@ -44,6 +47,15 @@ const systemRoutes = [
 	'/sitemap.xml',
 	'/sitemap',
 ]
+
+/** SEO for routes built in the frontend rather than as WordPress pages. */
+const staticSeo: Record<string, { title: string; metaDesc: string }> = {
+	'/subscribe': {
+		title: 'Subscribe - Not here to be liked',
+		metaDesc:
+			'Occasional emails from Not here to be liked: what we’re making and why, a few times a year.'
+	}
+}
 
 /** Normalize a path by stripping trailing slash (except root) */
 function normalizePath(path: string): string {
@@ -135,8 +147,8 @@ export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
 		} else {
 			// Provide fallback SEO data
 			seoData = {
-				title: '',
-				metaDesc: '',
+				title: staticSeo[normalizePath(uri)]?.title ?? '',
+				metaDesc: staticSeo[normalizePath(uri)]?.metaDesc ?? '',
 				opengraphUrl: `${PUBLIC_SITE_URL}${uri}`,
 				opengraphImage: null
 			}
@@ -167,7 +179,8 @@ export const load: LayoutServerLoad<LoadReturn> = async function load({ url }) {
 			seo: seoData,
 			noindex: pageNode?.noindex === true,
 			uri,
-			breadcrumbs
+			breadcrumbs,
+			newsletterEnabled: Boolean(env.BREVO_API_KEY && env.BREVO_LIST_ID)
 		} satisfies LoadReturn
 	} catch (err: unknown) {
 		// Let SvelteKit HttpErrors propagate (e.g. 404 from +page.server.ts)

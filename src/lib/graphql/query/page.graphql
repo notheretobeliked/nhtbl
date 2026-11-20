@@ -19,6 +19,7 @@ query PageContent($uri: String = "") {
 			databaseId
 			title
 			excerpt
+			hasContent
 			nhtblClients {
 				nodes {
 					name
@@ -38,17 +39,6 @@ query PageContent($uri: String = "") {
 			projectData {
 				startDate
 				endDate
-				imageGallery {
-					nodes {
-						altText
-						colorPalette
-						dominantColor
-						secondaryColor
-						mediaDetails {
-							...MediaDetailsFragment
-						}
-					}
-				}
 			}
 			editorBlocks {
 				...CommonBlockFields
@@ -521,6 +511,15 @@ fragment CommonBlockFields on EditorBlock {
 					}
 				}
 			}
+		}
+	}
+	... on AcfImageStrip {
+		attributes {
+			align
+		}
+		imageStrip {
+			maxImages
+			autoScroll
 		}
 	}
 	... on AcfSubpageNavigation {

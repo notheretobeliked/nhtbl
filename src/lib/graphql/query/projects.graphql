@@ -8,6 +8,13 @@ query Projects {
 			excerpt
 			slug
 			uri
+			hasContent
+			nhtblTypes {
+				nodes {
+					name
+					slug
+				}
+			}
 			nhtblClients {
 				nodes {
 					name

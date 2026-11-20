@@ -28,6 +28,44 @@ import type { EditorBlock } from '$lib/types/wp-types'
 import { flatListToHierarchical, normalizeAssetUrlsInObject } from '$lib/server/utilities'
 import { resolvePortfolioProjects } from '$lib/utilities/portfolioResolver'
 import { getAllProjects } from '$lib/utilities/projectsCache'
+import ProjectImages from '$lib/graphql/query/project-images.graphql?raw'
+import { extractProjectImages } from '$lib/utilities/imageExtractor'
+import { pickStripImages } from '$lib/utilities/imageStrip'
+
+/**
+ * Resolve acf/image-strip blocks server-side: pick a spread of images from
+ * across the portfolio and attach them as `resolvedImages` (read by
+ * AcfImageStrip.svelte). The project-images query is only run when a page
+ * actually has a strip.
+ */
+async function resolveImageStripBlocks(blocks: EditorBlock[]): Promise<void> {
+	const strips: any[] = []
+	const collect = (list: EditorBlock[]) => {
+		for (const b of list) {
+			if (b.name === 'acf/image-strip') strips.push(b)
+			if ((b as any).children) collect((b as any).children)
+		}
+	}
+	collect(blocks)
+	if (!strips.length) return
+
+	try {
+		const res = await graphqlQuery(ProjectImages)
+		checkResponse(res)
+		const body = await res.json()
+		const images = extractProjectImages(body?.data?.nhtblProjects?.nodes ?? [])
+		for (const b of strips) {
+			const max = Number(b.imageStrip?.maxImages) || 30
+			const picked = pickStripImages(images, max)
+			normalizeAssetUrlsInObject(picked)
+			b.resolvedImages = picked
+		}
+	} catch (err) {
+		// A strip is decoration: if its images can't be fetched, render the page without it.
+		console.error('Failed to resolve image strip:', err)
+		for (const b of strips) b.resolvedImages = []
+	}
+}
 
 /**
  * Resolve acf/portfolio-block project lists server-side, attaching the result as
@@ -113,6 +151,15 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 			error(404, `Page not found for URI: ${uri}`)
 		}
 
+		// List-only projects (no content beyond the excerpt) are rows in the Work
+		// list, not pages.
+		if (
+			pageData.data.nodeByUri.__typename === 'Nhtbl_project' &&
+			pageData.data.nodeByUri.hasContent === false
+		) {
+			error(404, `Page not found for URI: ${uri}`)
+		}
+
 		// Normalize asset URLs in page data if CDN is configured
 		normalizeAssetUrlsInObject(pageData)
 
@@ -144,6 +191,7 @@ export const load: PageServerLoad = async function load({ params, url, fetch }) 
 
 		// Resolve acf/portfolio-block project lists server-side.
 		editorBlocks = await resolvePortfolioBlocks(editorBlocks)
+		await resolveImageStripBlocks(editorBlocks)
 
 		// A page with a survey block is wrapped in <SurveyContainer> client-side.
 		const hasSurvey = (function check(list: EditorBlock[]): boolean {

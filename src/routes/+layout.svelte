@@ -6,6 +6,7 @@
 	import Twitter from '$components/SEO/Twitter.svelte'
 	import OpenGraph from '$components/SEO/OpenGraph.svelte'
 	import Header from '$components/Header.svelte';
+	import Footer from '$components/Footer.svelte';
 
 	interface Props {
 		data: LayoutData;
@@ -46,3 +47,11 @@
 <main id="main-content" class="md:px-0">
 	{@render children?.()}
 </main>
+{#if showHeader}
+	<!-- /subscribe has its own form, so the footer doesn't repeat it there. -->
+	<Footer
+		{menuItems}
+		newsletterEnabled={(data as any).newsletterEnabled === true &&
+			$page.url.pathname !== '/subscribe'}
+	/>
+{/if}

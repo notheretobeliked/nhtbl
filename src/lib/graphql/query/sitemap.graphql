@@ -11,6 +11,9 @@ query Sitemap($after: String) {
 			uri
 			modifiedGmt
 			noindex
+			... on Nhtbl_project {
+				hasContent
+			}
 		}
 	}
 }
