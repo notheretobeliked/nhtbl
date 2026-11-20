@@ -4,7 +4,6 @@
 	import Breadcrumbs from '$components/Breadcrumbs.svelte'
 	import { slide } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import { contactWidget } from '$lib/contact/widget.svelte'
 
 	interface Props {
 		menuItems?: MenuItem[]
@@ -65,23 +64,13 @@
 		}))
 	)
 
-	// The Contact link is rendered separately as a CTA pill, so keep it out of the
-	// main menu list (desktop + mobile overlay).
+	// Contact is the round button at the top right (ContactWidget.svelte), which
+	// opens the widget, so keep the menu's Contact link out of the list.
 	const CONTACT_URI = '/connect'
 	const mainMenuItems = $derived(menuItems.filter((item) => item.uri !== CONTACT_URI))
-	const contactItem = $derived(menuItems.find((item) => item.uri === CONTACT_URI))
 
 	const toggleMenu = () => {
 		open = !open
-	}
-
-	// Contact opens the floating widget in place. The link keeps its address, so
-	// it still works without JavaScript and when opened in a new tab.
-	function openContact(event: MouseEvent) {
-		if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
-		event.preventDefault()
-		open = false
-		contactWidget.open = true
 	}
 </script>
 
@@ -131,7 +120,7 @@
 	<nav
 		class="h-12 fixed top-4 left-2 md:left-4 w-fit {collapsed
 			? 'md:w-fit md:right-auto'
-			: 'md:w-auto md:right-40'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-all duration-500 ease-in-out"
+			: 'md:w-auto md:right-20'} border-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 rounded-full backdrop-blur-md z-30 overflow-hidden transition-all duration-500 ease-in-out"
 	>
 		{#if collapsed}
 			<!-- State 2: compact pill — the breadcrumb trail (which begins with the
@@ -152,7 +141,7 @@
 				{#if atTop}
 					<a href="/" class="z-30 flex gap-2 font-display items-center text-base md:text-lg whitespace-nowrap">
 						<img src="/Nhtbl-logo.webp" alt="A happy earth with smiley layered on top" class="h-6 w-6 max-w-none" />
-						<span>Not here to be liked</span>
+						<span class="max-[359px]:hidden">Not here to be liked</span>
 					</a>
 				{:else}
 					<Breadcrumbs {breadcrumbs} />
@@ -168,21 +157,6 @@
 			</div>
 		{/if}
 	</nav>
-
-	<!-- Contact CTA pill — separate from the nav so the collapse can't clip it.
-	     Desktop only, pinned top-right in every state (top / scrolled / collapsed).
-	     On a phone there's no room beside the wordmark, so Contact is the last
-	     item in the burger menu instead. -->
-	{#if contactItem}
-		<a
-			href={contactItem.uri ?? CONTACT_URI}
-			onclick={openContact}
-			aria-current={contactItem.current ? 'page' : undefined}
-			class="fixed top-4 right-4 z-30 hidden md:flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-nhtbl-green-base px-5 font-sans text-base lg:text-lg text-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] transition-[filter] duration-200 hover:brightness-95"
-		>
-			{contactItem.label}
-		</a>
-	{/if}
 
 	<!-- Burger gets its own pill at the far right on mobile, so it survives the
 	     nav collapsing to a circle. -->
@@ -205,18 +179,6 @@
 					{@render navLink(menuItem, () => (open = false))}
 				</li>
 			{/each}
-			{#if contactItem}
-				<li class="menu-item mt-2" style="animation-delay: {100 + mainMenuItems.length * 50}ms;">
-					<a
-						href={contactItem.uri ?? CONTACT_URI}
-						onclick={openContact}
-						aria-current={contactItem.current ? 'page' : undefined}
-						class="flex h-12 items-center rounded-full bg-nhtbl-green-base px-6 font-sans text-xl text-black"
-					>
-						{contactItem.label}
-					</a>
-				</li>
-			{/if}
 		</ul>
 	{/if}
 </header>

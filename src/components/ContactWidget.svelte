@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * The floating contact widget: a round button, bottom right on every page,
+	 * The contact widget: a round button in the header, top right on every page,
 	 * that opens a short conversation. It asks the questions we start every
 	 * project with (what are you trying to change, who needs to notice, by when)
 	 * as buttons to tap, and answers with findings about what protest achieves. The answers
@@ -186,8 +186,8 @@
 	<div
 		role="dialog"
 		aria-label="Talk to us"
-		class="fixed right-2 bottom-20 left-2 z-40 flex max-h-[calc(100dvh-6.5rem)] flex-col overflow-hidden rounded-3xl border border-black bg-white font-sans text-black shadow-[0_8px_40px_rgba(0,0,0,0.25)] md:right-4 md:left-auto md:w-[400px] md:max-h-[min(680px,calc(100dvh-7rem))]"
-		transition:fly={{ y: 24, duration: 250 }}
+		class="fixed top-20 right-2 left-2 z-40 flex max-h-[calc(100dvh-6rem)] flex-col overflow-hidden rounded-3xl border border-black bg-white font-sans text-black shadow-[0_8px_40px_rgba(0,0,0,0.25)] md:right-4 md:left-auto md:w-[400px] md:max-h-[min(680px,calc(100dvh-6rem))]"
+		transition:fly={{ y: -16, duration: 250 }}
 	>
 		<div
 			class="flex items-baseline justify-between gap-4 border-b border-black bg-nhtbl-green-base px-4 py-3"
@@ -417,7 +417,8 @@
 	onclick={toggle}
 	aria-label={contactWidget.open ? 'Close' : 'Talk to us'}
 	aria-expanded={contactWidget.open}
-	class="fixed right-2 bottom-4 z-40 flex size-14 cursor-pointer items-center justify-center rounded-full border border-black bg-nhtbl-green-base text-black shadow-[0_2px_30px_rgba(0,0,0,0.2)] transition-transform duration-200 hover:scale-105 md:right-4"
+	title={contactWidget.open ? 'Close' : 'Talk to us'}
+	class="fixed top-4 right-16 z-40 flex size-12 cursor-pointer items-center justify-center rounded-full bg-nhtbl-green-base text-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] transition-[filter] duration-200 hover:brightness-95 md:right-4"
 >
 	{#key contactWidget.open}
 		<span in:scale={{ duration: 180, start: 0.6 }} class="flex">
