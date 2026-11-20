@@ -189,7 +189,10 @@
     </a>
   </article>
 {:else if displayMode === 'grid'}
-  <!-- Grid Mode: a columnar list row — year · client · title · description · services -->
+  <!-- Grid Mode: a columnar list row — year · client · title · description · services.
+       On a phone the columns don't fit, so the row stacks: year and client on one
+       small line, then the title, then the description. The service tags are
+       left out there. -->
   <!-- `group` (which drives the inverted hover colours on the description and
        tags) is only set on rows that link somewhere: a list-only row has no
        hover background, so inverting its text would hide it. -->
@@ -200,26 +203,26 @@
   >
     <svelte:element
       this={hasPage ? 'a' : 'div'}
-      class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-start gap-4 px-3 py-2 text-sm"
+      class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 px-1 py-3 md:grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] md:items-start md:gap-4 md:px-3 md:py-2 text-sm"
       href={hasPage ? project.uri : undefined}
     >
       <!-- Year -->
-      <span class="font-display whitespace-nowrap">{yearPlain}</span>
+      <span class="font-display whitespace-nowrap text-xs md:text-sm">{yearPlain}</span>
 
       <!-- Client -->
-      <span>{clientNames}</span>
+      <span class="text-xs md:text-sm">{clientNames}</span>
 
       <!-- Title -->
-      <span class="font-display">{project.title}</span>
+      <span class="col-span-2 md:col-span-1 font-display text-base md:text-sm">{project.title}</span>
 
       <!-- Description -->
-      <div class="group-hover:text-[var(--pf-bg)] line-clamp-3 [&_p]:m-0">
+      <div class="col-span-2 md:col-span-1 group-hover:text-[var(--pf-bg)] line-clamp-3 [&_p]:m-0">
         {@html project.excerpt ?? ''}
       </div>
 
       <!-- Type + services -->
       {#if showTags && (serviceNames.length > 0 || typeNames.length > 0)}
-        <div class="services flex flex-row gap-1 flex-wrap">
+        <div class="services hidden md:flex flex-row gap-1 flex-wrap">
           {#each typeNames as typeName}
             <!-- Filled chip, so a type reads differently from a service tag. -->
             <div class="font-sans text-xs rounded-full border border-[var(--pf-fg)] bg-[var(--pf-fg)] text-[var(--pf-bg)] group-hover:border-[var(--pf-bg)] group-hover:bg-[var(--pf-bg)] group-hover:text-[var(--pf-fg)] px-2 py-0 whitespace-nowrap">{typeName}</div>
@@ -244,7 +247,7 @@
           {/each}
         </div>
       {:else}
-        <span></span>
+        <span class="hidden md:inline"></span>
       {/if}
     </svelte:element>
   </article>

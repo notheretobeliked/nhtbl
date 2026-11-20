@@ -160,20 +160,21 @@
 	</nav>
 
 	<!-- Contact CTA pill — separate from the nav so the collapse can't clip it.
-	     Desktop: pinned top-right. Mobile: sits just left of the burger. Stays put
-	     in every state (top / scrolled / collapsed). -->
+	     Desktop only, pinned top-right in every state (top / scrolled / collapsed).
+	     On a phone there's no room beside the wordmark, so Contact is the last
+	     item in the burger menu instead. -->
 	{#if contactItem}
 		<a
 			href={contactItem.uri ?? CONTACT_URI}
 			aria-current={contactItem.current ? 'page' : undefined}
-			class="fixed top-4 right-18 md:right-4 z-30 flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-nhtbl-green-base px-5 font-sans text-base lg:text-lg text-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] transition-[filter] duration-200 hover:brightness-95"
+			class="fixed top-4 right-4 z-30 hidden md:flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-nhtbl-green-base px-5 font-sans text-base lg:text-lg text-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] transition-[filter] duration-200 hover:brightness-95"
 		>
 			{contactItem.label}
 		</a>
 	{/if}
 
-	<!-- Burger gets its own pill at the far right on mobile, so the Contact pill
-	     can sit to its left and both survive the nav collapsing to a circle. -->
+	<!-- Burger gets its own pill at the far right on mobile, so it survives the
+	     nav collapsing to a circle. -->
 	<div
 		class="md:hidden fixed top-4 right-2 h-12 w-12 z-40 flex items-center justify-center rounded-full shadow-[0_2px_30px_rgba(0,0,0,0.1)] bg-white/60 backdrop-blur-md"
 	>
@@ -193,6 +194,18 @@
 					{@render navLink(menuItem, () => (open = false))}
 				</li>
 			{/each}
+			{#if contactItem}
+				<li class="menu-item mt-2" style="animation-delay: {100 + mainMenuItems.length * 50}ms;">
+					<a
+						href={contactItem.uri ?? CONTACT_URI}
+						onclick={() => (open = false)}
+						aria-current={contactItem.current ? 'page' : undefined}
+						class="flex h-12 items-center rounded-full bg-nhtbl-green-base px-6 font-sans text-xl text-black"
+					>
+						{contactItem.label}
+					</a>
+				</li>
+			{/if}
 		</ul>
 	{/if}
 </header>
