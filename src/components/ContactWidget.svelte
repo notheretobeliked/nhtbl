@@ -245,6 +245,11 @@
 			<form onsubmit={answerText} class="flex items-end gap-2 border-t border-black px-3 py-3">
 				<textarea
 					bind:this={field}
+					data-1p-ignore
+					data-lpignore="true"
+					data-bwignore
+					data-form-type="other"
+					autocomplete="off"
 					bind:value={draft}
 					onkeydown={onKey}
 					rows="2"
@@ -279,9 +284,9 @@
 			<form onsubmit={send} class="flex flex-col gap-2 border-t border-black px-3 py-3">
 				<input bind:this={field} bind:value={brief.name} name="name" autocomplete="name" maxlength="120" placeholder="Your name" aria-label="Your name" class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black" />
 				<input bind:value={brief.email} type="email" name="email" autocomplete="email" required maxlength="254" placeholder="Your email address" aria-label="Your email address" class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black" />
-				<textarea bind:value={brief.more} rows="2" maxlength="4000" placeholder="Anything else we should know? (optional)" aria-label="Anything else we should know?" class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"></textarea>
+				<textarea bind:value={brief.more} data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocomplete="off" rows="2" maxlength="4000" placeholder="Anything else we should know? (optional)" aria-label="Anything else we should know?" class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"></textarea>
 				<!-- Honeypot: hidden from people, tempting to bots. -->
-				<input bind:value={website} name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0" />
+				<input bind:value={website} name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0" />
 				<button
 					class="h-12 cursor-pointer rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-60"
 					disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send'}</button
