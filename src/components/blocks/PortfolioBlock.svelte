@@ -446,7 +446,10 @@
   })
 
   // Masonry settings
-  let minColWidth = $state(300)
+  // Narrower columns on a phone, so the grid keeps two. Read before the first
+  // render where possible: the grid remembers which column each tile was first
+  // given, so starting wide (one column) would leave every tile in the first.
+  let minColWidth = $state(typeof window !== 'undefined' && window.innerWidth < 768 ? 120 : 300)
   let maxColWidth = $state(600)
   let gap = $state(30)
 
@@ -814,8 +817,10 @@
   <!-- Masonry Layout -->
   <div class="portfolio-masonry my-16 full-width-breakout">
     {#if visualProjects.length > 0}
-      {#key gridKey}
-        <Masonry items={visualProjects} {minColWidth} {maxColWidth} {gap} idKey="slug" order={gridIsFiltered ? 'balanced' : 'balanced-stable'} animate>
+      <!-- Also keyed on the column width, so crossing the phone/desktop
+           breakpoint lays the grid out afresh instead of keeping old columns. -->
+      {#key `${gridKey}|${minColWidth}`}
+        <Masonry items={visualProjects} {minColWidth} {maxColWidth} gap={minColWidth < 300 ? 12 : gap} idKey="slug" order={gridIsFiltered ? 'balanced' : 'balanced-stable'} animate>
           {#snippet children({ item }: { item: any })}
             <div use:staggerReveal>
               <FeaturedProject displayMode="masonryBlock" project={item} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
@@ -833,7 +838,9 @@
   <!-- List Layout -->
   <div class="portfolio-list {alignmentClass} my-8">
     <!-- Sortable column headers (aligned to FeaturedProject's grid template) -->
-    <div class="grid grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-center gap-4 px-3 py-2 mb-2 border-b border-[var(--pf-border)] text-xs uppercase tracking-wide">
+    <!-- On a phone the rows stack (see FeaturedProject), so only the two sort
+         buttons show here. -->
+    <div class="flex gap-5 md:grid md:grid-cols-[4rem_1fr_1.5fr_2.5fr_1.5fr] items-center md:gap-4 px-1 md:px-3 py-2 mb-2 border-b border-[var(--pf-border)] text-xs uppercase tracking-wide">
       {#each [{ key: 'year', label: 'Year' }, { key: 'client', label: 'With' }] as col}
         <button
           class="flex items-center gap-1 text-left"
@@ -843,12 +850,12 @@
           <span class="text-[0.65rem]">{sortKey === col.key ? (sortDir === 'asc' ? '↑' : '↓') : '↕'}</span>
         </button>
       {/each}
-      <span>Title</span>
-      <span>Description</span>
-      <span>Services</span>
+      <span class="hidden md:inline">Title</span>
+      <span class="hidden md:inline">Description</span>
+      <span class="hidden md:inline">Services</span>
     </div>
 
-    <div class="space-y-5">
+    <div class="divide-y divide-[var(--pf-border)] md:divide-y-0 md:space-y-5">
       {#each sortedProjects as project (project.slug)}
         <div use:staggerReveal>
           <FeaturedProject displayMode="grid" {project} {enableSearch} {showTags} {selectedServices} onServiceClick={handleServiceClick} />
