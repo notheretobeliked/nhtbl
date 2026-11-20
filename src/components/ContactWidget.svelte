@@ -263,7 +263,7 @@
 					disabled={!draft.trim()}
 					aria-label="Next"
 				>
-					<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+					<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
 				</button>
 			</form>
 		{:else if step === 'when'}
@@ -317,10 +317,10 @@
 	{#key contactWidget.open}
 		<span in:scale={{ duration: 180, start: 0.6 }} class="flex">
 			{#if contactWidget.open}
-				<svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12" /><path d="M18 6 6 18" /></svg>
+				<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12" /><path d="M18 6 6 18" /></svg>
 			{:else}
-				<!-- Speech bubble -->
-				<svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 20 17.5h-8.5L7 21v-3.5H4A1.5 1.5 0 0 1 2.5 16V7A1.5 1.5 0 0 1 4 5.5z" /><path d="M7.5 10h9" /><path d="M7.5 13.5h6" /></svg>
+				<!-- Megaphone -->
+				<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10v4h3.5l8 4V6l-8 4H3.5z" /><path d="M7.5 14.2v4.3H10v-3.1" /><path d="M18 9.5a4 4 0 0 1 0 5" /><path d="M20.3 7.5a7 7 0 0 1 0 9" /></svg>
 			{/if}
 		</span>
 	{/key}
