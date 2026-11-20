@@ -261,7 +261,7 @@
 						onclick={() => {
 							if (!link.external) contactWidget.open = false
 						}}
-						class="flex h-12 items-center justify-between gap-2 rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base"
+						class="flex min-h-12 items-center justify-between gap-2 rounded-3xl border border-black bg-nhtbl-green-base px-5 py-2 text-base leading-tight transition-colors hover:bg-black hover:text-nhtbl-green-base"
 					>
 						{link.label}
 						<svg
