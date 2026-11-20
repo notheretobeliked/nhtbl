@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit'
 import { env } from '$env/dynamic/private'
 import type { RequestHandler } from './$types'
 import { createNameToken } from '$lib/server/newsletter-token'
+import { verifyTurnstile } from '$lib/server/turnstile'
 
 // Newsletter signup → Brevo. Configured by env (see .env.example):
 //   BREVO_API_KEY          required
@@ -12,22 +13,6 @@ import { createNameToken } from '$lib/server/newsletter-token'
 //   TURNSTILE_SECRET_KEY   optional – when set, signups need a valid Cloudflare
 //                          Turnstile token (site key: PUBLIC_TURNSTILE_SITE_KEY).
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-/** Ask Cloudflare whether a Turnstile token is genuine. Any failure counts as no. */
-async function verifyTurnstile(token: string, secret: string): Promise<boolean> {
-	try {
-		const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-			method: 'POST',
-			body: new URLSearchParams({ secret, response: token })
-		})
-		const data = await res.json()
-		if (!data?.success) console.error('Turnstile rejected a signup:', data?.['error-codes'])
-		return data?.success === true
-	} catch (err) {
-		console.error('Turnstile verification failed:', err)
-		return false
-	}
-}
 
 export const POST: RequestHandler = async ({ request, url }) => {
 	const apiKey = env.BREVO_API_KEY

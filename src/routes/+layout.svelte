@@ -7,6 +7,7 @@
 	import OpenGraph from '$components/SEO/OpenGraph.svelte'
 	import Header from '$components/Header.svelte';
 	import Footer from '$components/Footer.svelte';
+	import ContactWidget from '$components/ContactWidget.svelte';
 
 	interface Props {
 		data: LayoutData;
@@ -54,4 +55,5 @@
 		newsletterEnabled={(data as any).newsletterEnabled === true &&
 			$page.url.pathname !== '/subscribe'}
 	/>
+	<ContactWidget />
 {/if}

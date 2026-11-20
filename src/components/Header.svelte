@@ -4,6 +4,7 @@
 	import Breadcrumbs from '$components/Breadcrumbs.svelte'
 	import { slide } from 'svelte/transition'
 	import { onMount } from 'svelte'
+	import { contactWidget } from '$lib/contact/widget.svelte'
 
 	interface Props {
 		menuItems?: MenuItem[]
@@ -72,6 +73,15 @@
 
 	const toggleMenu = () => {
 		open = !open
+	}
+
+	// Contact opens the floating widget in place. The link keeps its address, so
+	// it still works without JavaScript and when opened in a new tab.
+	function openContact(event: MouseEvent) {
+		if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+		event.preventDefault()
+		open = false
+		contactWidget.open = true
 	}
 </script>
 
@@ -166,6 +176,7 @@
 	{#if contactItem}
 		<a
 			href={contactItem.uri ?? CONTACT_URI}
+			onclick={openContact}
 			aria-current={contactItem.current ? 'page' : undefined}
 			class="fixed top-4 right-4 z-30 hidden md:flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-nhtbl-green-base px-5 font-sans text-base lg:text-lg text-black shadow-[0_2px_30px_rgba(0,0,0,0.1)] transition-[filter] duration-200 hover:brightness-95"
 		>
@@ -198,7 +209,7 @@
 				<li class="menu-item mt-2" style="animation-delay: {100 + mainMenuItems.length * 50}ms;">
 					<a
 						href={contactItem.uri ?? CONTACT_URI}
-						onclick={() => (open = false)}
+						onclick={openContact}
 						aria-current={contactItem.current ? 'page' : undefined}
 						class="flex h-12 items-center rounded-full bg-nhtbl-green-base px-6 font-sans text-xl text-black"
 					>
