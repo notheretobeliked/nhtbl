@@ -43,6 +43,14 @@ export const FINDINGS = {
 		text: 'People do notice. In the weeks after Extinction Rebellion’s April 2019 protests, the share of Britons naming the environment a top-three issue rose from 17% to a record 27%.',
 		source: 'YouGov, June 2019',
 		url: 'https://yougov.com/en-gb/articles/23691-concern-environment-record-highs'
+	},
+	// Social Change Lab's estimate for Extinction Rebellion: 0.1 to 71 (median 8)
+	// tonnes of CO2e abated per £ spent. NOT YET CHECKED AGAINST THE REPORT: the
+	// figures come from a search summary of this post, so no number is quoted.
+	offset: {
+		text: 'Offsets are the expensive way to do it. One estimate is that money spent on Extinction Rebellion’s protests cut far more carbon per pound. It’s a rough estimate, but a big gap.',
+		source: 'Social Change Lab',
+		url: 'https://forum.effectivealtruism.org/posts/6WKBi5C9vhjRzAzPs'
 	}
 } satisfies Record<string, Finding>
 
@@ -61,14 +69,27 @@ export const CHANGE_OPTIONS = [
 	{ id: 'policy', label: 'A law or a policy', ...found(FINDINGS.movements) },
 	{ id: 'minds', label: 'What people think', ...found(FINDINGS.concern) },
 	{ id: 'seen', label: 'How we’re seen', ...found(FINDINGS.flank) },
-	{ id: 'else', label: 'Something else', ...said('Fair enough. There’s room to tell us at the end.') }
+	{ id: 'footprint', label: 'My carbon footprint', ...found(FINDINGS.offset) },
+	{
+		id: 'else',
+		label: 'Something else',
+		...said('Fair enough. There’s room to tell us at the end.')
+	}
 ] as const satisfies readonly Option[]
 
 /** "Who needs to notice?" Only the first has a figure; the rest are just us talking. */
 export const NOTICE_OPTIONS = [
 	{ id: 'public', label: 'The public', ...found(FINDINGS.noticed) },
-	{ id: 'power', label: 'People in power', ...said('They usually notice last. That can be fixed.') },
-	{ id: 'institution', label: 'A company or an institution', ...said('They notice when it has their name on it.') },
+	{
+		id: 'power',
+		label: 'People in power',
+		...said('They usually notice last. That can be fixed.')
+	},
+	{
+		id: 'institution',
+		label: 'A company or an institution',
+		...said('They notice when it has their name on it.')
+	},
 	{ id: 'ours', label: 'Our own people', ...said('The toughest audience. A good place to start.') }
 ] as const satisfies readonly Option[]
 
@@ -82,7 +103,12 @@ export const WHEN_OPTIONS = [
 export const BUDGET_OPTIONS = [
 	{ id: 'yes', label: 'Yes', reply: 'Thank you for saying so.', paying: true },
 	{ id: 'some', label: 'A little', reply: 'That’s a start.', paying: true },
-	{ id: 'none', label: 'No, we’re volunteers', reply: 'Good. So are most of the people we work with.', paying: false }
+	{
+		id: 'none',
+		label: 'No, we’re volunteers',
+		reply: 'Good. So are most of the people we work with.',
+		paying: false
+	}
 ] as const
 
 export type ChangeId = (typeof CHANGE_OPTIONS)[number]['id']
