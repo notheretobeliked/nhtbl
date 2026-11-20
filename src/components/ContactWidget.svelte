@@ -255,10 +255,21 @@
 				<textarea bind:value={brief.more} data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocomplete="off" rows="3" maxlength="4000" placeholder="Tell us a bit more (optional)" aria-label="Tell us a bit more" class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"></textarea>
 				<!-- Honeypot: hidden from people, tempting to bots. -->
 				<input bind:value={website} name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0" />
-				<button
-					class="h-12 cursor-pointer rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-60"
-					disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send'}</button
-				>
+				<div class="flex gap-2">
+					<button
+						type="button"
+						onclick={restart}
+						aria-label="Start over"
+						title="Start over"
+						class="flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black bg-white transition-colors hover:bg-nhtbl-grey-base"
+					>
+						<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5" /><path d="M4.5 4.5v4.2h4.2" /></svg>
+					</button>
+					<button
+						class="h-12 flex-1 cursor-pointer rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-60"
+						disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send'}</button
+					>
+				</div>
 				{#if status === 'error'}
 					<p class="m-0 text-sm" role="alert">
 						{error}
