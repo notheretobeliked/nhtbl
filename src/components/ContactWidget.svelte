@@ -134,7 +134,7 @@
 
 {#snippet us(text: string, finding: Finding | null = null)}
 	<div class="max-w-[88%] rounded-2xl rounded-bl-sm bg-nhtbl-grey-base px-3 py-2">
-		<p class="m-0 text-base leading-snug">{text}</p>
+		<p class="m-0 text-sm leading-snug">{text}</p>
 		{#if finding}
 			<a
 				href={finding.url}
@@ -148,12 +148,12 @@
 
 {#snippet them(text: string)}
 	<div class="ml-auto max-w-[88%] rounded-2xl rounded-br-sm bg-nhtbl-purple-base px-3 py-2">
-		<p class="m-0 text-base leading-snug whitespace-pre-line">{text}</p>
+		<p class="m-0 text-sm leading-snug whitespace-pre-line">{text}</p>
 	</div>
 {/snippet}
 
 {#snippet ask(text: string)}
-	<p class="m-0 mt-2 font-display text-lg leading-tight">{text}</p>
+	<p class="m-0 mt-2 font-display text-base leading-tight">{text}</p>
 {/snippet}
 
 {#snippet chips(options: readonly { id: string; label: string }[], pick: (id: string) => void)}
@@ -162,7 +162,7 @@
 			<button
 				type="button"
 				onclick={() => pick(o.id)}
-				class="cursor-pointer rounded-full border border-black bg-white px-4 py-2 text-base transition-colors hover:bg-nhtbl-green-base"
+				class="cursor-pointer rounded-full border border-black bg-white px-4 py-2 text-sm transition-colors hover:bg-nhtbl-green-base"
 				>{o.label}</button
 			>
 		{/each}
@@ -192,7 +192,7 @@
 		<div
 			class="flex items-baseline justify-between gap-4 border-b border-black bg-nhtbl-green-base px-4 py-3"
 		>
-			<h2 class="m-0 font-display text-lg">Talk to us</h2>
+			<h2 class="m-0 font-display text-base">Talk to us</h2>
 			<a href="mailto:{CONTACT_EMAIL}" class="text-xs underline underline-offset-2"
 				>or just email us</a
 			>
@@ -230,7 +230,7 @@
 							{@render us(budgetOption.reply)}
 							{#if budgetOption.paying}
 								<label
-									class="flex max-w-[88%] cursor-pointer items-start gap-2 rounded-2xl rounded-bl-sm bg-nhtbl-grey-base px-3 py-2 text-sm leading-snug"
+									class="flex max-w-[88%] cursor-pointer items-start gap-2 rounded-2xl rounded-bl-sm bg-nhtbl-grey-base px-3 py-2 text-xs leading-snug"
 								>
 									<input
 										type="checkbox"
@@ -273,7 +273,7 @@
 						onclick={() => {
 							if (!link.external) contactWidget.open = false
 						}}
-						class="flex min-h-12 items-center justify-between gap-2 rounded-3xl border border-black bg-nhtbl-green-base px-5 py-2 text-base leading-tight transition-colors hover:bg-black hover:text-nhtbl-green-base"
+						class="flex min-h-12 items-center justify-between gap-2 rounded-3xl border border-black bg-nhtbl-green-base px-5 py-2 text-sm leading-tight transition-colors hover:bg-black hover:text-nhtbl-green-base"
 					>
 						{link.label}
 						<svg
@@ -329,7 +329,7 @@
 					maxlength="120"
 					placeholder="Your name"
 					aria-label="Your name"
-					class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
+					class="h-12 rounded-full border border-black px-4 text-base md:text-sm placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
 				/>
 				<input
 					bind:value={brief.email}
@@ -340,7 +340,7 @@
 					maxlength="254"
 					placeholder="Your email address"
 					aria-label="Your email address"
-					class="h-12 rounded-full border border-black px-4 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
+					class="h-12 rounded-full border border-black px-4 text-base md:text-sm placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
 				/>
 				<textarea
 					bind:value={brief.more}
@@ -354,7 +354,7 @@
 					required={direct}
 					placeholder={direct ? 'What do you have in mind?' : 'Tell us a bit more (optional)'}
 					aria-label="Tell us a bit more"
-					class="resize-none rounded-2xl border border-black px-3 py-2 text-base placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
+					class="resize-none rounded-2xl border border-black px-3 py-2 text-base md:text-sm placeholder:text-black/40 focus:outline-2 focus:outline-offset-1 focus:outline-black"
 				></textarea>
 				<!-- Honeypot: hidden from people, tempting to bots. -->
 				<input
@@ -390,12 +390,12 @@
 						>
 					</button>
 					<button
-						class="h-12 flex-1 cursor-pointer rounded-full border border-black bg-nhtbl-green-base px-5 text-base transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-60"
+						class="h-12 flex-1 cursor-pointer rounded-full border border-black bg-nhtbl-green-base px-5 text-sm transition-colors hover:bg-black hover:text-nhtbl-green-base disabled:cursor-default disabled:opacity-60"
 						disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send'}</button
 					>
 				</div>
 				{#if status === 'error'}
-					<p class="m-0 text-sm" role="alert">
+					<p class="m-0 text-xs" role="alert">
 						{error}
 						{#if fallback}
 							<a href={briefMailto(brief)} class="underline underline-offset-2"
